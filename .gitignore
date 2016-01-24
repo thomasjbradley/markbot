@@ -1,3 +1,4 @@
 node_modules
-Markbot-*
+build
+dist
 vendor
