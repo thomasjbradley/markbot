@@ -1,0 +1,396 @@
+html {
+  box-sizing: border-box;
+
+  font-size: 12px;
+  font-family: Menlo, monospace;
+  line-height: 1.5;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.overlay {
+  height: 100vh;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100vw;
+  z-index: 200;
+
+  background-color: #d9d8e3;
+
+  text-align: center;
+}
+
+.overlay[data-state="hidden"] {
+  display: none;
+}
+
+.overlay-contents {
+  position: absolute;
+  width: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.ants {
+  left: 30px;
+  height: calc(100% - 80px);
+  position: absolute;
+  top: 50px;
+  width: calc(100% - 60px);
+
+  border: 4px dotted #a8a6af;
+  border-radius: 20px;
+}
+
+.logo {
+  width: 120px;
+}
+
+#dropbox .logo {
+  animation: bounce 2s linear infinite;
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  25% { transform: translateY(-5px); }
+  50% { transform: translateY(0px); }
+  75% { transform: translateY(5px); }
+  100% { transform: translateY(0); }
+}
+
+.username-label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.username-input {
+  display: block;
+  margin: 0 auto 10px;
+  padding: .3em;
+
+  border: 3px solid #a8a6af;
+  border-radius: 6px;
+
+  font-family: inherit;
+  font-size: 18px;
+  text-align: center;
+}
+
+.username-input:focus {
+  outline: none;
+}
+
+.btn {
+  position: absolute;
+  left: -10em;
+}
+
+#checks {
+  left: 0;
+  height: 100%;
+  padding: 28px 13px 13px;
+  position: absolute;
+  top: 0;
+  width: 275px;
+
+  background-color: #f5f2f0;
+  border-right: 1px solid #dfdcda;
+  overflow-y: auto;
+}
+
+#checks::before {
+  content: " ";
+  height: 35px;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 275px;
+  z-index: 100;
+
+  background-image: linear-gradient(to bottom, #f5f2f0, #f5f2f0 78%, rgba(245, 242, 240, 0));
+}
+
+#checks h2 {
+  margin: 9px 0 8px;
+  padding: 0;
+
+  background-image: linear-gradient(to bottom, #f5f2f0 0%, #f5f2f0 47%, #dfdcda 46%, #dfdcda 54%, #f5f2f0 55%, #f5f2f0 100%);
+
+  color: #63666a;
+  font-size: 12px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
+.title-wrap {
+  display: inline-block;
+  padding-right: 6px;
+
+  background-color: #f5f2f0;
+}
+
+#checks ul {
+  margin: 0 0 16px;
+  padding: 0;
+
+  list-style-type: none;
+}
+
+#checks li {
+  margin-bottom: 4px;
+  position: relative;
+}
+
+#checks ul span {
+  display: inline-block;
+  margin-left: 16px;
+  padding: 4px 8px 3px;
+
+  background-color: #ffefab;
+  border: 1px solid #ffd30d;
+  border-radius: 0 12px 12px 0;
+
+  color: #b09000;
+  font-size: 11px;
+  line-height: 11px;
+  text-transform: uppercase;
+}
+
+#checks ul span::before {
+  content: " ";
+  bottom: -2px;
+  left: 0;
+  position: absolute;
+  top: -2px;
+  width: 22px;
+
+  background: transparent none no-repeat center center / contain;
+}
+
+#checks span[data-status="start"]::before {
+  background-image: url("images/start.svg");
+}
+
+#checks span[data-status="end"] {
+  border-color: #6dd110;
+  background-color: #c1e89b;
+  color: #417d0a;
+}
+
+#checks span[data-status="end"]::before {
+  background-image: url("images/check.svg");
+}
+
+#checks span[data-status="errors"] {
+  border-color: #f33;
+  background-color: #ff9494;
+  color: #991f1f;
+}
+
+#checks span[data-status="errors"]::before {
+  background-image: url("images/error.svg");
+}
+
+#message-wrapper {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: calc(100% - 275px);
+
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+[data-state="hidden"] {
+  display: none;
+}
+
+[data-state="visible"] {
+  display: block;
+}
+
+#message-header {
+  padding: 42px 0 22px 0;
+
+  background-color: #63666a;
+  border-bottom: 1px solid #333;
+
+  color: #a8a6af;
+  text-align: center;
+}
+
+#message-header h2 {
+  display: none;
+  margin: 0;
+
+  color: #fff;
+  font-size: 16px;
+}
+
+#message-header[data-state="computing"] .computing,
+#message-header[data-state="no-errors"] .no-errors,
+#message-header[data-state="errors"] .errors {
+  display: block;
+}
+
+#folder {
+  right: 13px;
+  position: absolute;
+  top: 10px;
+}
+
+#folder::before {
+  content: " ";
+  height: 18px;
+  left: -22px;
+  position: absolute;
+  top: -1px;
+  width: 18px;
+
+  background: transparent url("images/folder.svg") no-repeat center center / contain;
+}
+
+.robot-logo {
+  margin-bottom: 10px;
+  width: 75px;
+}
+
+.hex-mask-path {
+  fill: none;
+}
+
+.robot {
+  clip-path: url(#hex-mask);
+}
+
+.hex-border {
+  fill: #b09000;
+}
+
+.hex {
+  fill: #ffd30d;
+}
+
+.robot-part {
+  fill: #ffefab;
+}
+
+#message-header[data-state="no-errors"] .hex-border {
+  fill: #417d0a;
+}
+
+#message-header[data-state="no-errors"] .hex {
+  fill: #6dd110;
+}
+
+#message-header[data-state="no-errors"] .robot-part {
+  fill: #c1e89b;
+}
+
+#message-header[data-state="errors"] .hex-border {
+  fill: #991f1f;
+}
+
+#message-header[data-state="errors"] .hex {
+  fill: #f33;
+}
+
+#message-header[data-state="errors"] .robot-part {
+  fill: #ff9494;
+}
+
+#messages {
+  padding: 5px 13px 13px;
+}
+
+#messages h2 {
+  margin: 15px 0 0 0;
+  padding: 12px 0 10px 20px;
+
+  background: transparent url("images/error.svg") no-repeat left center / 16px 16px;
+  border-top: 3px solid #f5f2f0;
+
+  color: #991f1f;
+  font-size: 14px;
+}
+
+#messages ul {
+  margin: 0;
+  padding: 0 0 0 20px;
+  list-style-type: none;
+}
+
+#messages li {
+  position: relative;
+}
+
+#messages li::before {
+  content: "•";
+  left: -20px;
+  position: absolute;
+  width: 16px;
+
+  color: #f33;
+  text-align: center;
+}
+
+#submit {
+  padding-top: 20px;
+  text-align: center;
+}
+
+#submit p {
+  margin: 20px 0;
+}
+
+.submit-btn {
+  padding: .4em .8em;
+
+  background: #c1e89b none no-repeat 5px center / 32px 32px;
+  border: 1px solid #6dd110;
+  border-radius: 25px;
+  cursor: pointer;
+
+  color: #417d0a;
+  font-size: 20px;
+}
+
+.submit-btn:disabled {
+  opacity: .5;
+  cursor: default;
+  pointer-events: none;
+}
+
+.submit-btn[data-state="processing"] {
+  padding-left: 44px;
+
+  background-image: url("images/spinner.gif");
+}
+
+.submit-btn[data-state="done"] {
+  padding-left: 44px;
+
+  background-image: url("images/check.svg");
+}
+
+.submit-btn:hover {
+  background-color: #6dd110;
+  color: #fff;
+}

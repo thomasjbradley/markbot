@@ -1,0 +1,24 @@
+{
+  "name": "Markbot",
+  "main": "markbot.js",
+  "devDependencies": {
+    "cheerio": "^0.19.0",
+    "css": "^2.2.1",
+    "diff": "^2.2.1",
+    "electron-packager": "^5.2.1",
+    "electron-prebuilt": "^0.36.5",
+    "git-commits": "^1.1.1",
+    "htmlcs": "^0.1.10",
+    "js-beautify": "^1.5.10",
+    "js-yaml": "^3.5.2",
+    "mocha": "^2.3.4",
+    "node-dir": "^0.1.11",
+    "stylelint": "^3.2.1",
+    "w3c-css": "^1.0.0",
+    "w3cjs": "^0.3.0"
+  },
+  "scripts": {
+    "start": "electron markbot.js",
+    "build": "electron-packager ./ --app-version=2.0.0 --platform=darwin --arch=x64 --version=0.36.5 --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools --overwrite --icon=icon.icns"
+  }
+}
