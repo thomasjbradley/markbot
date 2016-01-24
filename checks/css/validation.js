@@ -1,4 +1,5 @@
 var
+  path = require('path'),
   util = require('util'),
   exec = require('child_process').exec,
   xmlParser = require('xml2js').parseString,
@@ -36,10 +37,12 @@ const shouldIncludeError = function (message, line, lines) {
   return true;
 };
 
-module.exports.check = function (fullContent, path, lines, group, cb) {
+module.exports.check = function (fullContent, fullPath, lines, group, cb) {
+  var validatorPath = path.resolve(__dirname + '/../../vendor');
+
   cb('validation', group, 'start', 'Validation');
 
-  exec('java -jar vendor/css-validator.jar --output=soap12 file://' + path, function (err, data) {
+  exec('java -jar ' + validatorPath + '/css-validator.jar --output=soap12 file://' + fullPath, function (err, data) {
     var xml = data.trim().replace(/^\{.*\}/, '').trim();
 
     xmlParser(xml, function (err, result) {

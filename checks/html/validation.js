@@ -2,6 +2,7 @@
 
 var
   util = require('util'),
+  path = require('path'),
   exec = require('child_process').exec
 ;
 
@@ -21,10 +22,12 @@ const shouldIncludeError = function (message, line) {
   return true;
 };
 
-module.exports.check = function (fileContents, path, group, cb) {
+module.exports.check = function (fileContents, fullPath, group, cb) {
+  var validatorPath = path.resolve(__dirname + '/../../vendor');
+
   cb('validation', group, 'start', 'Validation');
 
-  exec('java -jar vendor/vnu.jar --errors-only --format json ' + path, function (err, data) {
+  exec('java -jar ' + validatorPath + '/vnu.jar --errors-only --format json ' + fullPath, function (err, data) {
     var
       messages = {},
       errors = []
