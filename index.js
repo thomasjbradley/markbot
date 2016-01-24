@@ -65,6 +65,7 @@ const displayErrors = function (group, label, errors) {
 
 const displaySummary = function () {
   $messageHeader.dataset.state = 'computing';
+  $submit.dataset.state = 'hidden';
 
   if (hasErrors && checksCompleted >= checksCount) {
     $messageHeader.dataset.state = 'errors';
@@ -135,8 +136,12 @@ const reset = function () {
   $checks.innerHTML = '';
   $messageHeader.dataset.state = 'computing';
   $submit.dataset.state = 'hidden';
+  $canvasBtn.removeAttribute('disabled');
+  $canvasBtn.dataset.state = '';
   groups = {};
   checks = {};
+  checksCount = 0;
+  checksCompleted = 0;
 };
 
 const startChecks = function () {
