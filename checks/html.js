@@ -28,7 +28,7 @@ module.exports.check = function (path, file, group, cb) {
   cb('exists', group, 'end', 'Exists');
 
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
-    if (file.valid) validation.check(fileContents, group, cb);
+    if (file.valid) validation.check(fileContents, fullPath, group, cb);
 
     if (file.bestPractices) {
       bestPractices.check(fileContents, group, cb);

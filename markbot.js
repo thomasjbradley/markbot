@@ -61,26 +61,30 @@ exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallbac
   repoCallback(false, config.repo);
 
   if (config.naming) {
-    groupCallback('naming', 'Naming conventions');
-    naming.check(path, 'naming', checkCallback);
+    groupCallback('naming', 'Naming conventions', function () {
+      naming.check(path, 'naming', checkCallback);
+    });
   }
 
   if (config.commits) {
-    groupCallback('commits', 'Git commits');
-    commits.check(path, config.commits, 'commits', checkCallback);
+    groupCallback('commits', 'Git commits', function () {
+      commits.check(path, config.commits, 'commits', checkCallback);
+    });
   }
 
   if (config.html) {
     config.html.forEach(function (file) {
-      groupCallback(file.path, file.path);
-      html.check(path, file, file.path, checkCallback);
+      groupCallback(file.path, file.path, function () {
+        html.check(path, file, file.path, checkCallback);
+      });
     });
   }
 
   if (config.css) {
     config.css.forEach(function (file) {
-      groupCallback(file.path, file.path);
-      css.check(path, file, file.path, checkCallback);
+      groupCallback(file.path, file.path, function () {
+        css.check(path, file, file.path, checkCallback);
+      });
     });
   }
 };

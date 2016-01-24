@@ -1,6 +1,7 @@
 var
   util = require('util'),
-  validator = require('w3c-css'),
+  exec = require('child_process').exec,
+  xmlParser = require('xml2js').parseString,
   previousLineCausedIgnorableError = false
 ;
 
@@ -35,24 +36,37 @@ const shouldIncludeError = function (message, line, lines) {
   return true;
 };
 
-module.exports.check = function (fileContents, lines, group, cb) {
+module.exports.check = function (fullContent, path, lines, group, cb) {
   cb('validation', group, 'start', 'Validation');
 
-  validator.validate({text: fileContents, warning: 'no'}, function (err, data) {
-    var errors = [];
+  exec('java -jar vendor/css-validator.jar --output=soap12 file://' + path, function (err, data) {
+    var xml = data.trim().replace(/^\{.*\}/, '').trim();
 
-    if (data.errors && data.errors.length > 0) {
-      data.errors.forEach(function (item) {
-        var message = cleanMessage(item.message);
+    xmlParser(xml, function (err, result) {
+      var
+        results = result['env:Envelope']['env:Body'][0]['m:cssvalidationresponse'][0]['m:result'][0]['m:errors'][0],
+        errorCount = parseInt(results['m:errorcount'][0], 10),
+        errorsList = results['m:errorlist'][0]['m:error'],
+        errors = [],
+        prevError = false
+      ;
 
-        if (shouldIncludeError(message, item.line, lines)) {
-          errors.push(util.format('Line %d: %s', item.line, message));
-        }
-      });
+      if (errorCount > 0) {
+        errorsList.forEach(function (error) {
+          var
+            line = error['m:line'][0],
+            message = error['m:message'][0].trim().replace(/\s*\:$/, '.')
+          ;
 
-      // setTimeout(function () {
+          if (shouldIncludeError(message, line, lines)) {
+            errors.push(util.format('Line %d: %s', line, message));
+          }
+
+          prevError = message;
+        });
+      }
+
       cb('validation', group, 'end', 'Validation', errors);
-      // }, 2000);
-    }
+    });
   });
 };

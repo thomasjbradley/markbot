@@ -2,7 +2,7 @@
 
 var
   util = require('util'),
-  exec = require('child_process').exec
+  validator = require('w3cjs')
 ;
 
 const shouldIncludeError = function (message, line) {
@@ -21,25 +21,23 @@ const shouldIncludeError = function (message, line) {
   return true;
 };
 
-module.exports.check = function (fileContents, path, group, cb) {
+module.exports.check = function (fileContents, group, cb) {
   cb('validation', group, 'start', 'Validation');
 
-  exec('java -jar vendor/vnu.jar --errors-only --format json ' + path, function (err, data) {
-    var
-      messages = {},
-      errors = []
-    ;
+  validator.validate({
+    input: fileContents,
+    callback: function (res) {
+      var errors = [];
 
-    if (err) {
-      messages = JSON.parse(err.message.split('\n')[1].trim()).messages;
+      if (res.messages.length > 2) {
+        res.messages.forEach(function (item) {
+          if (shouldIncludeError(item.message, item.line)) {
+            errors.push(util.format('Line %d: %s', item.lastLine, item.message));
+          }
+        });
+      }
 
-      messages.forEach(function (item) {
-        if (shouldIncludeError(item.message, item.line)) {
-          errors.push(util.format('Line %d: %s', item.lastLine, item.message));
-        }
-      });
+      cb('validation', group, 'end', 'Validation', errors);
     }
-
-    cb('validation', group, 'end', 'Validation', errors);
   });
 };

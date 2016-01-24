@@ -29,7 +29,7 @@ module.exports.check = function (path, file, group, cb) {
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
     var lines = fileContents.toString().split('\n');
 
-    if (file.valid) validation.check(fileContents, lines, group, cb);
+    if (file.valid) validation.check(fileContents, fullPath, lines, group, cb);
 
     if (file.bestPractices) bestPractices.check(fileContents, group, cb);
 

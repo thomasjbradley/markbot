@@ -77,7 +77,7 @@ const displaySummary = function () {
   }
 };
 
-const checkGroup = function (id, label) {
+const checkGroup = function (id, label, cb) {
   var
     $groupHead = document.createElement('h2'),
     $groupTitle = document.createElement('span')
@@ -94,6 +94,8 @@ const checkGroup = function (id, label) {
   $groupHead.appendChild($groupTitle);
   $checks.appendChild($groupHead);
   $checks.appendChild(groups[id].elem);
+
+  cb();
 };
 
 const check = function (id, group, status, label, errors) {
@@ -128,13 +130,13 @@ const repo = function (err, name) {
 };
 
 const reset = function () {
-  groups = {};
-  checks = {};
   hasErrors = false;
   $messages.innerHTML = '';
   $checks.innerHTML = '';
   $messageHeader.dataset.state = 'computing';
   $submit.dataset.state = 'hidden';
+  groups = {};
+  checks = {};
 };
 
 const startChecks = function () {
