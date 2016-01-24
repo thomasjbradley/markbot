@@ -20,13 +20,13 @@
   "scripts": {
     "start": "electron markbot.js",
 
-    "clean": "rm -rf ./dist",
-    "clean:osx": "rm -rf ./dist/osx",
-    "clean:win": "rm -rf ./dist/win",
+    "clean": "rm -Rf ./dist",
+    "clean:osx": "rm -Rf ./dist/osx",
+    "clean:win": "rm -Rf ./dist/win",
 
     "pack": "npm run clean && npm run pack:osx && npm run pack:win",
-    "pack:osx": "npm run clean:osx && electron-packager ./ --overwrite --app-version=2.0.0 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --version=0.36.5 --icon=icon.icns --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
-    "pack:win": "npm run clean:win && electron-packager ./ --overwrite --app-version=2.0.0 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --version=0.36.5 --icon=icon.ico --version-string={ProductName:'Markbot'}",
+    "pack:osx": "npm run clean:osx && electron-packager ./ --overwrite --app-version=2.0.0 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --version=0.36.5 --ignore='(dist/osx|dist/win)' --icon=icon.icns --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
+    "pack:win": "npm run clean:win && electron-packager ./ --overwrite --app-version=2.0.0 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --version=0.36.5 --ignore='(dist/osx|dist/win)' --icon=icon.ico --version-string={ProductName:'Markbot'}",
 
     "build": "npm run build:osx && npm run build:win",
     "build:osx": "npm run pack:osx && electron-builder \"dist/osx/Markbot-darwin-x64/Markbot.app\" --platform=osx --out=\"dist/osx\" --config=builder.json",
