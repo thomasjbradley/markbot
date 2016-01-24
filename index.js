@@ -127,7 +127,12 @@ const check = function (id, group, status, label, errors) {
 };
 
 const repo = function (err, name) {
-  if (!err) $repoName.innerHTML = name;
+  if (err) {
+    reset();
+    $dropbox.dataset.state = 'visible';
+  } else {
+    $repoName.innerHTML = name;
+  }
 };
 
 const reset = function () {
