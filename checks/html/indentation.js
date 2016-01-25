@@ -20,9 +20,14 @@ module.exports.check = function (fileContents, group, cb) {
     max_preserve_newlines: 10,
     wrap_line_length: 0,
     end_with_newline: true,
-    extra_liners: []
+    extra_liners: [],
+    unformatted: [
+      'a', 'span', 'img', 'bdo', 'em', 'strong', 'dfn', 'code', 'samp', 'kbd', 'data',
+      'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike',
+      'var', 'ins', 'del', 'pre', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+    ]
   });
-
+console.log(beautified);
   if (fileContents != beautified) {
     diffLines = differ.diffLines(fileContents, beautified);
 
