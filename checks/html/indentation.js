@@ -1,15 +1,19 @@
 'use strict';
 
 var
-  beautifier = require('js-beautify').html,
-  differ = require('diff')
+  util = require('util'),
+  beautifier = require('js-beautify').html
 ;
 
-module.exports.check = function (fileContents, group, cb) {
+module.exports.check = function (fileContents, lines, group, cb) {
   var
     diffLines, lineCount = 0, skipNext = false,
     errors = [],
-    beautified = ''
+    beautified = '',
+    beautifiedLines = [],
+    i = 0, total = 0,
+    orgFrontSpace = false,
+    goodFrontSpace = false
   ;
 
   cb('indentation', group, 'start', 'Indentation');
@@ -22,27 +26,29 @@ module.exports.check = function (fileContents, group, cb) {
     end_with_newline: true,
     extra_liners: [],
     unformatted: [
+      // Replace all unformatted to support newer elements and SVG
       'a', 'span', 'img', 'bdo', 'em', 'strong', 'dfn', 'code', 'samp', 'kbd', 'data',
       'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike',
-      'var', 'ins', 'del', 'pre', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'
+      'var', 'ins', 'del', 'pre', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
+      'path', 'use',
     ]
   });
-console.log(beautified);
+
   if (fileContents != beautified) {
-    diffLines = differ.diffLines(fileContents, beautified);
+    total = lines.length;
+    beautifiedLines = beautified.toString().split('\n');
 
-    diffLines.forEach(function (item) {
-      if (!skipNext) {
-        lineCount += item.count;
+    for (i; i < total; i++) {
+      orgFrontSpace = lines[i].match(/^(\s*)/);
 
-        if (item.added || item.removed) {
-          skipNext = true;
-          errors.push('Line ' + lineCount);
-        }
-      } else {
-        skipNext = false;
+      if (!beautifiedLines[i]) continue;
+
+      goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
+
+      if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
+        errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i+1, goodFrontSpace[1].length));
       }
-    });
+    }
   }
 
   cb('indentation', group, 'end', 'Indentation', errors);

@@ -28,11 +28,13 @@ module.exports.check = function (path, file, group, cb) {
   cb('exists', group, 'end', 'Exists');
 
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
+    var lines = fileContents.toString().split('\n');
+
     if (file.valid) validation.check(fileContents, fullPath, group, cb);
 
     if (file.bestPractices) {
       bestPractices.check(fileContents, group, cb);
-      indentation.check(fileContents, group, cb);
+      indentation.check(fileContents, lines, group, cb);
     }
 
     if (file.has) elements.check(fileContents, file.has, group, cb);
