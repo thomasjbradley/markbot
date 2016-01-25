@@ -36,8 +36,8 @@ module.exports = {
       'feColorMatrix',
       'feGaussianBlur',
       'animate',
-      'animateTransform'
-      'mpath'
+      'animateTransform',
+      'mpath',
     ];
 
     var stack = [];
