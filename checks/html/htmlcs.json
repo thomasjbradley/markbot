@@ -1,6 +1,5 @@
 {
   "asset-type": true,
-  "attr-lowercase": true,
   "attr-no-duplication": true,
   "attr-value-double-quotes": true,
   "bool-attribute-value": true,
@@ -26,7 +25,6 @@
   "spec-char-escape": true,
   "style-content": true,
   "style-disabled": true,
-  "tag-pair": true,
   "tagname-lowercase": true,
   "title-required": true,
   "unique-id": true,
@@ -34,5 +32,10 @@
   "max-error": 0,
   "format": {},
   "linters": {},
-  "default": true
+  "default": true,
+
+  "attr-lowercase": false,
+  "adv-attr-lowercase": true,
+  "tag-pair": false,
+  "adv-tag-pair": true
 }

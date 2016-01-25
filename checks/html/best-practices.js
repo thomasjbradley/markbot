@@ -13,6 +13,10 @@ module.exports.check = function (fileContents, group, cb) {
 
   cb('best-practices', group, 'start', 'Best practices');
 
+  // Replace the lowercase attr & tag pairing rules to support embedded SVG
+  linter.addRule(require('./rule-adv-attr-lowercase'));
+  linter.addRule(require('./rule-adv-tag-pair'));
+
   lintResults = linter.hint(fileContents, require('./htmlcs.json'))
 
   if (lintResults.length > 0) {
