@@ -12,6 +12,20 @@ const cleanMessage = function (message) {
 };
 
 const shouldIncludeError = function (message, line, lines) {
+  var
+    svgCssProps = [
+      'alignment-baseline', 'baseline-shift', 'clip', 'clip-path', 'clip-rule', 'color-interpolation',
+      'color-interpolation-filters', 'color-profile', 'color-rendering', 'dominant-baseline',
+      'enable-background', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'flood-color',
+      'flood-opacity', 'glyph-orientation-horizontal', 'glyph-orientation-vertical', 'image-rendering',
+      'kerning', 'lighting-color', 'marker', 'marker-end', 'marker-mid', 'marker-start',
+      'mask', 'pointer-events', 'shape-rendering', 'stop-color', 'stop-opacity', 'stroke',
+      'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin',
+      'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'text-anchor', 'unicode-bidi',
+    ],
+    nonExistingPropMatch = null
+  ;
+
   if (previousLineCausedIgnorableError) {
     previousLineCausedIgnorableError = false;
     return false;
@@ -33,6 +47,11 @@ const shouldIncludeError = function (message, line, lines) {
       return false;
     }
   }
+
+  // SVG properties in CSS
+  nonExistingPropMatch = message.match(/Property ([\w-]+) doesn't exist./);
+
+  if (nonExistingPropMatch && nonExistingPropMatch.length > 1 && svgCssProps.indexOf(nonExistingPropMatch[1]) != -1) return false;
 
   return true;
 };
