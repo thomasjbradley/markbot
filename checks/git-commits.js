@@ -20,10 +20,17 @@ module.exports.check = function (path, commitNum, group, cb) {
     repoPath = path + '/.git',
     studentCommits = 0,
     errors = [],
-    label = 'Number of commits'
+    label = 'Number of commits',
+    exists = false
   ;
 
-  if (!fs.statSync(repoPath).isDirectory()) {
+  try {
+    exists = fs.statSync(repoPath).isDirectory();
+  } catch (e) {
+    exists = false;
+  }
+
+  if (!exists) {
     cb('commits', group, 'end', label, ['Not a Git repository']);
     return;
   }

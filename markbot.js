@@ -52,7 +52,10 @@ app.on('activate', function () {
 exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallback) {
   var configPath = path + '/' + MARKBOT_CONFIG;
 
-  if (!exists.check(configPath)) repoCallback(true, null);
+  if (!exists.check(configPath)) {
+    repoCallback(true, null);
+    return;
+  }
 
   mainWindow.setRepresentedFilename(path);
   mainWindow.setTitle(path.split(/\//).pop() + ' — Markbot');
