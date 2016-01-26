@@ -57,11 +57,14 @@ const shouldIncludeError = function (message, line, lines) {
 };
 
 module.exports.check = function (fullContent, fullPath, lines, group, cb) {
-  var validatorPath = path.resolve(__dirname + '/../../vendor');
+  var
+    validatorPath = path.resolve(__dirname + '/../../vendor'),
+    execPath = 'java -jar "' + validatorPath + '/css-validator.jar" --output=soap12 "file://' + fullPath + '"'
+  ;
 
   cb('validation', group, 'start', 'Validation');
 
-  exec('java -jar ' + validatorPath + '/css-validator.jar --output=soap12 file://' + fullPath, function (err, data) {
+  exec(execPath, function (err, data) {
     var xml = data.trim().replace(/^\{.*\}/, '').trim();
 
     xmlParser(xml, function (err, result) {

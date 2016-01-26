@@ -23,11 +23,14 @@ const shouldIncludeError = function (message, line) {
 };
 
 module.exports.check = function (fileContents, fullPath, group, cb) {
-  var validatorPath = path.resolve(__dirname + '/../../vendor');
+  var
+    validatorPath = path.resolve(__dirname + '/../../vendor'),
+    execPath = 'java -jar "' + validatorPath + '/vnu.jar" --errors-only --format json "' + fullPath + '"'
+  ;
 
   cb('validation', group, 'start', 'Validation');
 
-  exec('java -jar ' + validatorPath + '/vnu.jar --errors-only --format json ' + fullPath, function (err, data) {
+  exec(execPath, function (err, data) {
     var
       messages = {},
       errors = []
