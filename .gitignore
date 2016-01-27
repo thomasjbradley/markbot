@@ -1,4 +1,6 @@
 node_modules
 build
 dist
-vendor
+vendor/*.jar
+vendor/lib/*.jar
+!vendor/README.md
