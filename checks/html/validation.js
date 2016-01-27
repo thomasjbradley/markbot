@@ -6,6 +6,10 @@ var
   exec = require('child_process').exec
 ;
 
+const escapeShell = function(cmd) {
+  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
+};
+
 const shouldIncludeError = function (message, line) {
   // The standard info: using HTML parser
   if (!line && message.match(/content-type.*text\/html/i)) return false;
@@ -25,7 +29,7 @@ const shouldIncludeError = function (message, line) {
 module.exports.check = function (fileContents, fullPath, group, cb) {
   var
     validatorPath = path.resolve(__dirname + '/../../vendor'),
-    execPath = 'java -jar "' + validatorPath + '/vnu.jar" --errors-only --format json "' + fullPath + '"'
+    execPath = 'java -jar ' + escapeShell(validatorPath + '/vnu.jar') + ' --errors-only --format json ' + escapeShell(fullPath)
   ;
 
   cb('validation', group, 'start', 'Validation');

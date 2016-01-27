@@ -6,6 +6,10 @@ var
   previousLineCausedIgnorableError = false
 ;
 
+const escapeShell = function(cmd) {
+  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
+};
+
 const cleanMessage = function (message) {
   message = message.replace(/\s+/g, ' ');
   return message;
@@ -59,7 +63,7 @@ const shouldIncludeError = function (message, line, lines) {
 module.exports.check = function (fullContent, fullPath, lines, group, cb) {
   var
     validatorPath = path.resolve(__dirname + '/../../vendor'),
-    execPath = 'java -jar "' + validatorPath + '/css-validator.jar" --output=soap12 "file://' + fullPath + '"'
+    execPath = 'java -jar ' + escapeShell(validatorPath + '/css-validator.jar') + ' --output=soap12 ' + escapeShell('file://' + fullPath)
   ;
 
   cb('validation', group, 'start', 'Validation');
