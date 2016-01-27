@@ -8,12 +8,24 @@ var
 const notProperLineBreaks = function (line) {
   var
     forceLineBreak = [
+      // HTML
       'header', 'nav', 'footer', 'main', 'section', 'article', 'aside',
       'ul', 'ol', 'li', 'dl', 'dt', 'dd',
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote',
       'figure', 'figcaption', 'picture', 'video', 'audio', 'source', 'track',
       'div', 'hr',
-      'html', 'head', 'body', 'title', 'link', 'meta', 'p'
+      'html', 'head', 'body', 'title', 'link', 'meta',
+      // SVG
+      'svg', 'circle', 'rect', 'path', 'line', 'image', 'ellipse', 'polyline', 'polygon',
+      'tref', 'fePointLight', 'feColorMatrix', 'feGaussianBlur', 'animate', 'animateTransform',
+      'mpath', 'clipPath', 'defs', 'linearGradient', 'desc', 'feBlend', 'feComponentTransfer',
+      'feComposite', 'feConvolveMatrix', 'feDiffuseLighting', 'feDisplacementMap',
+      'feFlood', 'feFuncA', 'feFuncB', 'feFuncG', 'feFuncR', 'feImage', 'feMerge',
+      'feMergeNode', 'feMorphology', 'feOffset', 'feSpecularLighting', 'feSpotlight',
+      'feTile', 'feTurbulence', 'filter', 'g', 'marker', 'mask', 'pattern', 'radialGradient',
+      'stop', 'symbol', 'text', 'textPath',
+      // <p> needs to be last because it’s really grabby
+      'p',
     ],
     lineRegEx = '\<\/?(' + forceLineBreak.join('|') + ')[^>]*\>\\s*\<\/?(' + forceLineBreak.join('|') + ')',
     generalChecks = line.match(new RegExp(lineRegEx)),
