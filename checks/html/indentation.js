@@ -5,15 +5,47 @@ var
   beautifier = require('js-beautify').html
 ;
 
+const notProperLineBreaks = function (line) {
+  var
+    forceLineBreak = [
+      'header', 'nav', 'footer', 'main', 'section', 'article', 'aside',
+      'ul', 'ol', 'li', 'dl', 'dt', 'dd',
+      'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote',
+      'figure', 'figcaption', 'picture', 'video', 'audio', 'source', 'track',
+      'div', 'hr',
+      'html', 'head', 'body', 'title', 'link', 'meta', 'p'
+    ],
+    lineRegEx = '\<\/?(' + forceLineBreak.join('|') + ')[^>]*\>\\s*\<\/?(' + forceLineBreak.join('|') + ')',
+    generalChecks = line.match(new RegExp(lineRegEx)),
+    specificLineBreakChecks = [
+      '\<\/?(figure)[^>]*\>\\s*\<\/?(img)',
+      '\<\/?(img)[^>]*\>\\s*\<\/?(figcaption)',
+      '\<\/?(div)[^>]*\>\\s*\<\/?(img)'
+    ],
+    i = 0, total = specificLineBreakChecks.length,
+    specificCheck
+  ;
+
+  if (generalChecks) return generalChecks;
+
+  for (i ; i < total; i++) {
+    specificCheck = line.match(new RegExp(specificLineBreakChecks[i]));
+
+    if (specificCheck) return specificCheck;
+  };
+
+  return false;
+}
+
 module.exports.check = function (fileContents, lines, group, cb) {
   var
-    diffLines, lineCount = 0, skipNext = false,
     errors = [],
     beautified = '',
-    beautifiedLines = [],
-    i = 0, total = 0,
+    i = 0,
+    total = lines.length,
     orgFrontSpace = false,
-    goodFrontSpace = false
+    goodFrontSpace = false,
+    beautifiedLines
   ;
 
   cb('indentation', group, 'start', 'Indentation');
@@ -34,20 +66,23 @@ module.exports.check = function (fileContents, lines, group, cb) {
     ]
   });
 
-  if (fileContents != beautified) {
-    total = lines.length;
+  for (i; i < total; i++) {
+    let lineBreakIssues = notProperLineBreaks(lines[i]);
+
+    if (lineBreakIssues) {
+      errors.push(util.format('Line %d: The %s and %s elements should be on different lines—further indentation checks skipped', i+1, lineBreakIssues[1], lineBreakIssues[2]));
+      break;
+    }
+
+    orgFrontSpace = lines[i].match(/^(\s*)/);
     beautifiedLines = beautified.toString().split('\n');
 
-    for (i; i < total; i++) {
-      orgFrontSpace = lines[i].match(/^(\s*)/);
+    if (!beautifiedLines[i]) continue;
 
-      if (!beautifiedLines[i]) continue;
+    goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
 
-      goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
-
-      if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
-        errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i+1, goodFrontSpace[1].length));
-      }
+    if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
+      errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i+1, goodFrontSpace[1].length));
     }
   }
 
