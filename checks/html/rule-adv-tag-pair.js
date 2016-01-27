@@ -35,6 +35,7 @@ module.exports = {
       'fePointLight',
       'feColorMatrix',
       'feGaussianBlur',
+      'stop',
       'animate',
       'animateTransform',
       'mpath',
