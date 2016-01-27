@@ -3,4 +3,3 @@ build
 dist
 vendor/*.jar
 vendor/lib/*.jar
-!vendor/README.md
