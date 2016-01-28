@@ -72,7 +72,7 @@ exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallbac
 
   if (markbotFile.commits) {
     groupCallback('commits', 'Git commits', function () {
-      commits.check(path, markbotFile.commits, 'commits', checkCallback);
+      commits.check(path, markbotFile.commits, config.ignoreCommitEmails, 'commits', checkCallback);
     });
   }
 

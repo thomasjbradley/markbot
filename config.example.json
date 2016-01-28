@@ -1,3 +1,6 @@
 {
-  "proxyUrl": "https://your-markbot-server.com/grade?%s"
+  "proxyUrl": "https://your-markbot-server.com/grade?%s",
+  "ignoreCommitEmails": [
+    "your-git@email-address.ca"
+  ]
 }

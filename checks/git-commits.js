@@ -7,15 +7,11 @@ var
   exists = require('./file-exists')
 ;
 
-const matchesProfEmail = function (email) {
-  return ![
-    'hey@thomasjbradley.ca',
-    'theman@thomasjbradley.ca',
-    'bradlet@thomasjbradley.ca'
-  ].indexOf(email);
+const matchesProfEmail = function (email, profEmails) {
+  return !profEmails.indexOf(email);
 };
 
-module.exports.check = function (path, commitNum, group, cb) {
+module.exports.check = function (path, commitNum, ignoreCommitEmails, group, cb) {
   var
     repoPath = path + '/.git',
     studentCommits = 0,
@@ -39,7 +35,7 @@ module.exports.check = function (path, commitNum, group, cb) {
 
   gitCommits(repoPath)
     .on('data', function (commit) {
-      if (!matchesProfEmail(commit.author.email)) studentCommits++;
+      if (!matchesProfEmail(commit.author.email, ignoreCommitEmails)) studentCommits++;
     })
     .on('end', function () {
       if (studentCommits < commitNum) {
