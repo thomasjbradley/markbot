@@ -13,8 +13,13 @@ const notProperLineBreaks = function (line) {
       'ul', 'ol', 'li', 'dl', 'dt', 'dd',
       'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'blockquote',
       'figure', 'figcaption', 'picture', 'video', 'audio', 'source', 'track',
-      'div', 'hr',
-      'html', 'head', 'body', 'title', 'link', 'meta',
+      'div', 'hr', 'canvas',
+      'html', 'head', 'body', 'title', 'link', 'meta', 'script', 'noscript', 'template',
+      'iframe', 'embed', 'object', 'param', 'map', 'area',
+      'table', 'thead', 'tbody', 'tfoot', 'tr', 'td',
+      'form', 'fieldset', 'label', 'input', 'button', 'select', 'datalist',
+      'option', 'optgroup', 'textarea', 'keygen', 'output', 'progress',
+      'meter', 'legend', 'details', 'summary', 'menu', 'menuitem', 'dialog',
       // SVG
       'svg', 'circle', 'rect', 'path', 'line', 'image', 'ellipse', 'polyline', 'polygon',
       'tref', 'fePointLight', 'feColorMatrix', 'feGaussianBlur', 'animate', 'animateTransform',
@@ -24,8 +29,8 @@ const notProperLineBreaks = function (line) {
       'feMergeNode', 'feMorphology', 'feOffset', 'feSpecularLighting', 'feSpotlight',
       'feTile', 'feTurbulence', 'filter', 'g', 'marker', 'mask', 'pattern', 'radialGradient',
       'stop', 'symbol', 'text', 'textPath',
-      // <p> needs to be last because it’s really grabby
-      'p',
+      // <p> & <th> needs to be last because they're really grabby
+      'p', 'th'
     ],
     lineRegEx = '\<\/?(' + forceLineBreak.join('|') + ')[^>]*\>\\s*\<\/?(' + forceLineBreak.join('|') + ')',
     generalChecks = line.match(new RegExp(lineRegEx)),
@@ -71,10 +76,10 @@ module.exports.check = function (fileContents, lines, group, cb) {
     extra_liners: [],
     unformatted: [
       // Replace all unformatted to support newer elements and SVG
-      'a', 'span', 'img', 'bdo', 'em', 'strong', 'dfn', 'code', 'samp', 'kbd', 'data',
-      'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'big', 'small', 'u', 's', 'strike',
+      'a', 'span', 'img', 'bdo', 'em', 'strong', 'dfn', 'code', 'samp', 'kbd', 'data', 'time',
+      'cite', 'abbr', 'acronym', 'q', 'sub', 'sup', 'tt', 'i', 'b', 'small', 'u', 's', 'strike',
       'var', 'ins', 'del', 'pre', 'address', 'dt', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
-      'path', 'use',
+      'path', 'use', 'ruby', 'rt', 'rp', 'mark', 'bdi', 'br', 'wbr'
     ]
   });
 
