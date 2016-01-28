@@ -6,14 +6,15 @@ const Menu = electron.Menu;
 const dialog = electron.dialog;
 const BrowserWindow = electron.BrowserWindow;
 
-const MARKBOT_CONFIG = '.markbot.yml';
+const MARKBOT_FILE = '.markbot.yml';
 
 var
   fs = require('fs'),
   util = require('util'),
   https = require('https'),
   yaml = require('js-yaml'),
-  config = {},
+  config = require('./config.json'),
+  markbotFile = {},
   exists = require('./checks/file-exists'),
   naming = require('./checks/naming-conventions'),
   commits = require('./checks/git-commits'),
@@ -50,9 +51,9 @@ app.on('activate', function () {
 });
 
 exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallback) {
-  var configPath = path + '/' + MARKBOT_CONFIG;
+  var markbotFilePath = path + '/' + MARKBOT_FILE;
 
-  if (!exists.check(configPath)) {
+  if (!exists.check(markbotFilePath)) {
     repoCallback(true, null);
     return;
   }
@@ -60,31 +61,31 @@ exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallbac
   mainWindow.setRepresentedFilename(path);
   mainWindow.setTitle(path.split(/\//).pop() + ' — Markbot');
 
-  config = yaml.safeLoad(fs.readFileSync(configPath, 'utf8'));
-  repoCallback(false, config.repo);
+  markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
+  repoCallback(false, markbotFile.repo);
 
-  if (config.naming) {
+  if (markbotFile.naming) {
     groupCallback('naming', 'Naming conventions', function () {
       naming.check(path, 'naming', checkCallback);
     });
   }
 
-  if (config.commits) {
+  if (markbotFile.commits) {
     groupCallback('commits', 'Git commits', function () {
-      commits.check(path, config.commits, 'commits', checkCallback);
+      commits.check(path, markbotFile.commits, 'commits', checkCallback);
     });
   }
 
-  if (config.html) {
-    config.html.forEach(function (file) {
+  if (markbotFile.html) {
+    markbotFile.html.forEach(function (file) {
       groupCallback(file.path, file.path, function () {
         html.check(path, file, file.path, checkCallback);
       });
     });
   }
 
-  if (config.css) {
-    config.css.forEach(function (file) {
+  if (markbotFile.css) {
+    markbotFile.css.forEach(function (file) {
       groupCallback(file.path, file.path, function () {
         css.check(path, file, file.path, checkCallback);
       });
@@ -93,16 +94,14 @@ exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallbac
 };
 
 exports.submitToCanvas = function (ghUsername, cb) {
-  var proxyUrl = 'https://markbot-canvas-proxy.appspot.com/grade?%s';
-
   var getVars = [
-    util.format('gh_repo=%s', encodeURI(config.repo)),
+    util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
     util.format('gh_username=%s', encodeURI(ghUsername)),
-    util.format('canvas_course=%s', config.canvasCourse),
-    util.format('canvas_assignment=%s', config.canvasAssignment)
+    util.format('canvas_course=%s', markbotFile.canvasCourse),
+    util.format('canvas_assignment=%s', markbotFile.canvasAssignment)
   ];
 
-  https.get(util.format(proxyUrl, getVars.join('&')), function (res) {
+  https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {
     res.on('data', function (data) {
       cb(false);
     });
