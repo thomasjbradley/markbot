@@ -10,9 +10,9 @@
     ]
   },
   "win" : {
-    "title" : "Markbot",
-    "version" : "2.1.0",
+    "title": "Markbot",
+    "version": "2.1.0",
     "publisher": "Thomas J Bradley",
-    "icon" : "icon.ico"
+    "icon": "icon.ico"
   }
 }
