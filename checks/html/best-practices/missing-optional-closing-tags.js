@@ -21,7 +21,7 @@ module.exports.check = function (fileContents, lines) {
     },
     onimpliedclosetag: function (name) {
       var errorLines = stack.split('\n');
-      errors.push(util.format('Line %d: Missing closing %s tag.', errorLines.length - 1, name));
+      errors.push(util.format('Line %d: Missing closing %s tag', errorLines.length - 1, name));
     },
     onclosetag: function (name) {
       stack += '</' + name + '[^>]*>';

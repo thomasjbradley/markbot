@@ -20,7 +20,7 @@ module.exports.check = function (fileContents, lines) {
 
   for (check in checks) {
     if (!fileContents.match(new RegExp(check, 'gim'))) {
-      errors.push(util.format('Missing tag: %s.', checks[check]));
+      errors.push(util.format('Missing tag: %s', checks[check]));
     }
   }
 

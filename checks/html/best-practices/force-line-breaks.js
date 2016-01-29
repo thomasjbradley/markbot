@@ -36,7 +36,7 @@ module.exports.check = function (fileContents, lines) {
     let lineBreakIssues = notProperLineBreaks(lines[i]);
 
     if (lineBreakIssues) {
-      errors.push(util.format('Line %d: The %s and %s elements should be on different lines.', i+1, lineBreakIssues[1], lineBreakIssues[2]));
+      errors.push(util.format('Line %d: The %s and %s elements should be on different lines', i+1, lineBreakIssues[1], lineBreakIssues[2]));
       break;
     }
   }

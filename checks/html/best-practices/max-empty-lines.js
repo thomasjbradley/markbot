@@ -21,7 +21,7 @@ module.exports.check = function (fileContents, lines) {
       emptyCount++
 
       if (emptyCount > emptyMax) {
-        errors = [util.format('Line %d: Exceeded recommended number of empty lines (has %d, expected %d).', i, emptyCount, emptyMax)];
+        errors = [util.format('Line %d: Exceeded recommended number of empty lines (has %d, expected %d)', i, emptyCount, emptyMax)];
       }
     } else {
       emptyCount = 0;

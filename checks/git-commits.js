@@ -39,7 +39,7 @@ module.exports.check = function (listener, path, commitNum, ignoreCommitEmails, 
     })
     .on('end', function () {
       if (studentCommits < commitNum) {
-        errors.push(util.format('Not enough commits to the repository (has %d, expecting %d).', studentCommits, commitNum));
+        errors.push(util.format('Not enough commits to the repository (has %d, expecting %d)', studentCommits, commitNum));
       }
 
       listener.send('check-group:item-complete', group, 'commits', label, errors);
