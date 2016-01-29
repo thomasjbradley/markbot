@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Code samples for expected code when confusing indentation is found.
+
+### Fixed
+
+- Error message consistency in the user of periods at the end of sentences.
+
+---
+
 ## [2.2.1] — 2016-01-29
 
 ### Fixed
