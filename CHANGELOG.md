@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [2.2.1] — 2016-01-29
+
+### Fixed
+
+- Change the `<p>` tag selection regex to not grab SVGs `<path>` tags also.
+- Stopped the code style checker from performing indentation checks because they aren’t good enough.
+
+---
+
 ## [2.2.0] — 2016-01-29
 
 ### Added

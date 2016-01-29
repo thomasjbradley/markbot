@@ -9,12 +9,12 @@ module.exports.check = function (fileContents, lines) {
     errors = [],
     check,
     checks = {
-      '<html': 'Open <html> tag',
-      '<head(?!er)': 'Open <head> tag',
-      '</head>': 'Close <head> tag',
-      '<body': 'Open <body> tag',
-      '</body>': 'Close <body> tag',
-      '</html>': 'Close <html> tag',
+      '<html': 'Opening <html> tag',
+      '<head(?!er)': 'Opening <head> tag',
+      '</head>': 'Closing <head> tag',
+      '<body': 'Opening <body> tag',
+      '</body>': 'Closing <body> tag',
+      '</html>': 'Closing <html> tag',
     }
   ;
 
