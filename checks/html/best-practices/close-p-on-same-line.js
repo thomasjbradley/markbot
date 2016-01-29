@@ -9,7 +9,7 @@ module.exports.check = function (fileContents, lines) {
     errors = [],
     i = 0, total = lines.length,
     onlyP = /^<p[^>]*>$/i,
-    startsWithP = /^<p/i,
+    startsWithP = /^<p[\s>]/i,
     hasBreak = /<br/i,
     endsWithP = /<\/p>$/i
   ;
