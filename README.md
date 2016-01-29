@@ -59,11 +59,11 @@ It also works for non-pass/fail assignments but the grade submission component w
 
 There’s a few things you’ll need to do to set the repo up properly for Markbot.
 
-1. Create a [build of the Markbot.app]() that points to your version of [Markbot Server](#markbot-server).
+1. Create a [build of the Markbot.app](#building-markbot) that points to your version of [Markbot Server](#markbot-server).
 2. Create a repo on GitHub with a `.markbot.yml` file inside—[see Markbot configuration below](#configuration-with-markbot-files).
-3. I usually put `.editorconfig` and `.gitignore` files in the repo to help the students not make stupid mistakes. [See the Markbot repo template on GitHub.]()
+3. I usually put `.editorconfig` and `.gitignore` files in the repo to help the students not make stupid mistakes. [See the Markbot repo template on GitHub.](https://github.com/thomasjbradley/markbot-template)
 4. I usually make sure the repo is set up with `gh-pages` so it is a live website for the students.
-5. Get the students to [download Markbot and it’s dependencies onto their computers]().
+5. Get the students to [download Markbot and it’s dependencies onto their computers](#installation-on-student-computers).
 6. Use Markbot while coding…
 
 ---
@@ -269,7 +269,7 @@ That’s it, Markbot should be ready to go.
 
 It’s used for the purpose of connecting Markbot to Canvas. Everything is on a separate server to keep my own personal Canvas API key secret, and to create a mapping for student GitHub usernames to Canvas student IDs.
 
-[**Find out more about Markbot Server.**]()
+[**Find out more about Markbot Server.**](https://github.com/thomasjbradley/markbot-server)
 
 ---
 
