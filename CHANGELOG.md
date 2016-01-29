@@ -5,7 +5,23 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.2.0] — 2016-01-29
+
+### Added
+
+- Checks to confirm `<p>` tags are closed on the same line.
+- Checks to confirm all the document tags (`<head>`, `<body>`, etc.) are in place.
+- Checks for missing optional closing tags like `<li>`.
+- Checks for maximum number of empty lines.
+
+### Changed
+
+- Refactored the whole main process/render process messaging system to use events instead of callbacks.
+- No HTML or CSS best practice checks will be completed until after the files are completely valid. Display greyed-out messages stating so to users.
+
+### Fixed
+
+- Change the whole HTML best practices process by doing lots of checks before getting to indentation—students were having lots of problems.
 
 ---
 
