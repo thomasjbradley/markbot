@@ -2,11 +2,26 @@
 
 var
   util = require('util'),
-  linter = require('stylelint')
+  linter = require('stylelint'),
+  listener,
+  checkGroup,
+  checkLabel = 'Best practices & indentation',
+  checkId = 'best-practices'
 ;
 
-module.exports.check = function (fileContents, group, cb) {
-  cb('best-practices', group, 'start', 'Best practices & indentation');
+module.exports.init = function (lstnr, group) {
+  listener = lstnr;
+  checkGroup = group;
+
+  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+};
+
+module.exports.bypass = function () {
+  listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because validation errors were found.']);
+};
+
+module.exports.check = function (fullPath, fileContents, lines) {
+  listener.send('check-group:item-computing', checkGroup, checkId);
 
   linter.lint({code: fileContents, config: require('./stylelint.json')}).then(function (data) {
     var errors = [];
@@ -17,6 +32,6 @@ module.exports.check = function (fileContents, group, cb) {
       });
     }
 
-    cb('best-practices', group, 'end', 'Best practices & indentation', errors);
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
   });
 };

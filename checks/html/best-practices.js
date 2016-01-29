@@ -2,28 +2,92 @@
 
 var
   util = require('util'),
-  linter = require('htmlcs')
+  documentTagChecker = require('./best-practices/document-tags'),
+  lineBreakChecker = require('./best-practices/force-line-breaks'),
+  pTagCloseChecker = require('./best-practices/close-p-on-same-line'),
+  missingOptionalTagChecker = require('./best-practices/missing-optional-closing-tags'),
+  codeStyleChecker = require('./best-practices/code-style'),
+  emptyLineChecker = require('./best-practices/max-empty-lines'),
+  indentationChecker = require('./best-practices/indentation'),
+  listener,
+  checkGroup,
+  checkLabel = 'Best practices & indentation',
+  checkId = 'best-practices'
 ;
 
-// Replace the lowercase attr & tag pairing rules to support embedded SVG
-linter.addRule(require('./rule-adv-attr-lowercase'));
-linter.addRule(require('./rule-adv-tag-pair'));
+module.exports.init = function (lstnr, group) {
+  listener = lstnr;
+  checkGroup = group;
 
-module.exports.check = function (fileContents, group, cb) {
+  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+};
+
+module.exports.bypass = function () {
+  listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because validation errors were found.']);
+};
+
+module.exports.check = function (fullPath, fileContents, lines) {
   var
-    lintResults = '',
-    errors = []
+    missingDocumentTags,
+    forceLineBreaks,
+    checkClosingPSameLine,
+    checkMissingOptionalTags,
+    checkCodeStyle,
+    checkEmptyLines,
+    checkIndentation,
+    indentation
   ;
 
-  cb('best-practices', group, 'start', 'Best practices');
+  listener.send('check-group:item-computing', checkGroup, checkId);
 
-  lintResults = linter.hint(fileContents, require('./htmlcs.json'))
+  missingDocumentTags = documentTagChecker.check(fileContents, lines);
 
-  if (lintResults.length > 0) {
-    lintResults.forEach(function (item) {
-      errors.push(util.format('Line %d: %s', item.line, item.message));
-    });
+  if (missingDocumentTags && missingDocumentTags.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, missingDocumentTags, 'skip');
+    return;
   }
 
-  cb('best-practices', group, 'end', 'Best practices', errors);
+  forceLineBreaks = lineBreakChecker.check(fileContents, lines);
+
+  if (forceLineBreaks && forceLineBreaks.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, forceLineBreaks, 'skip');
+    return;
+  }
+
+  checkClosingPSameLine = pTagCloseChecker.check(fileContents, lines);
+
+  if (checkClosingPSameLine && checkClosingPSameLine.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkClosingPSameLine, 'skip');
+    return;
+  }
+
+  checkMissingOptionalTags = missingOptionalTagChecker.check(fileContents, lines);
+
+  if (checkMissingOptionalTags && checkMissingOptionalTags.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkMissingOptionalTags, 'skip');
+    return;
+  }
+
+  checkCodeStyle = codeStyleChecker.check(fileContents);
+
+  if (checkCodeStyle && checkCodeStyle.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkCodeStyle, 'skip');
+    return;
+  }
+
+  checkEmptyLines = emptyLineChecker.check(fileContents, lines);
+
+  if (checkEmptyLines && checkEmptyLines.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkEmptyLines, 'skip');
+    return;
+  }
+
+  checkIndentation = indentationChecker.check(fileContents, lines);
+
+  if (checkIndentation && checkIndentation.length > 0) {
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkIndentation);
+    return;
+  }
+
+  listener.send('check-group:item-complete', checkGroup, checkId, checkLabel);
 };

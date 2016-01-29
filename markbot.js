@@ -19,10 +19,10 @@ var
   naming = require('./checks/naming-conventions'),
   commits = require('./checks/git-commits'),
   html = require('./checks/html'),
-  css = require('./checks/css')
+  css = require('./checks/css'),
+  mainWindow,
+  listener
 ;
-
-let mainWindow;
 
 const createWindow = function () {
   mainWindow = new BrowserWindow({
@@ -37,6 +37,8 @@ const createWindow = function () {
     mainWindow = null;
   });
 
+  listener = mainWindow.webContents;
+
   Menu.setApplicationMenu(Menu.buildFromTemplate(getMenuTemplate()));
 }
 
@@ -50,11 +52,11 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow();
 });
 
-exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallback) {
+exports.onFileDropped = function(path) {
   var markbotFilePath = path + '/' + MARKBOT_FILE;
 
   if (!exists.check(markbotFilePath)) {
-    repoCallback(true, null);
+    listener.send('app:file-missing');
     return;
   }
 
@@ -62,33 +64,29 @@ exports.onFileDropped = function(path, groupCallback, checkCallback, repoCallbac
   mainWindow.setTitle(path.split(/\//).pop() + ' — Markbot');
 
   markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
-  repoCallback(false, markbotFile.repo);
+  listener.send('app:file-exists', markbotFile.repo);
 
   if (markbotFile.naming) {
-    groupCallback('naming', 'Naming conventions', function () {
-      naming.check(path, 'naming', checkCallback);
-    });
+    listener.send('check-group:new', 'naming', 'Naming conventions');
+    naming.check(listener, path, 'naming');
   }
 
   if (markbotFile.commits) {
-    groupCallback('commits', 'Git commits', function () {
-      commits.check(path, markbotFile.commits, config.ignoreCommitEmails, 'commits', checkCallback);
-    });
+    listener.send('check-group:new', 'commits', 'Git commits');
+    commits.check(listener, path, markbotFile.commits, config.ignoreCommitEmails, 'commits');
   }
 
   if (markbotFile.html) {
     markbotFile.html.forEach(function (file) {
-      groupCallback(file.path, file.path, function () {
-        html.check(path, file, file.path, checkCallback);
-      });
+      listener.send('check-group:new', file.path, file.path);
+      html.check(listener, path, file, file.path);
     });
   }
 
   if (markbotFile.css) {
     markbotFile.css.forEach(function (file) {
-      groupCallback(file.path, file.path, function () {
-        css.check(path, file, file.path, checkCallback);
-      });
+      listener.send('check-group:new', file.path, file.path);
+      css.check(listener, path, file, file.path);
     });
   }
 };
@@ -121,9 +119,9 @@ const getMenuTemplate = function () {
           click: function (item, focusedWindow) {
             dialog.showOpenDialog({ title: 'Open Repository…', properties: ['openDirectory']}, function (paths) {
               if (paths && paths.length > 0) {
-                mainWindow.webContents.send('open-repo', paths[0]);
+                listener.send('app:open-repo', paths[0]);
               } else {
-                mainWindow.webContents.send('open-repo', false);
+                listener.send('app:file-missing');
               }
             });
           }
@@ -135,7 +133,7 @@ const getMenuTemplate = function () {
           label: 'Run Checks',
           accelerator: 'CmdOrCtrl+R',
           click: function (item, focusedWindow) {
-            mainWindow.webContents.send('re-run');
+            listener.send('app:re-run');
           }
         },
       ]
@@ -172,8 +170,7 @@ const getMenuTemplate = function () {
         {
           label: 'Sign Out',
           click:  function(item, focusedWindow) {
-            mainWindow.webContents.send('sign-out');
-            mainWindow.reload();
+            listener.send('app:sign-out');
           }
         },
         {
@@ -183,7 +180,7 @@ const getMenuTemplate = function () {
           label: 'Force Reload',
           accelerator: 'CmdOrCtrl+Alt+R',
           click: function(item, focusedWindow) {
-            mainWindow.reload();
+            listener.send('app:force-reload');
           }
         },
         {

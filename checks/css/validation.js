@@ -3,10 +3,15 @@ var
   util = require('util'),
   exec = require('child_process').exec,
   xmlParser = require('xml2js').parseString,
-  previousLineCausedIgnorableError = false
+  svgCssProps = require('./validation/svg-css-props.json'),
+  previousLineCausedIgnorableError = false,
+  listener,
+  checkGroup,
+  checkId = 'validation',
+  checkLabel = 'Validation'
 ;
 
-const escapeShell = function(cmd) {
+const escapeShell = function (cmd) {
   return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
 };
 
@@ -16,19 +21,7 @@ const cleanMessage = function (message) {
 };
 
 const shouldIncludeError = function (message, line, lines) {
-  var
-    svgCssProps = [
-      'alignment-baseline', 'baseline-shift', 'clip', 'clip-path', 'clip-rule', 'color-interpolation',
-      'color-interpolation-filters', 'color-profile', 'color-rendering', 'dominant-baseline',
-      'enable-background', 'fill', 'fill-opacity', 'fill-rule', 'filter', 'flood-color',
-      'flood-opacity', 'glyph-orientation-horizontal', 'glyph-orientation-vertical', 'image-rendering',
-      'kerning', 'lighting-color', 'marker', 'marker-end', 'marker-mid', 'marker-start',
-      'mask', 'pointer-events', 'shape-rendering', 'stop-color', 'stop-opacity', 'stroke',
-      'stroke-dasharray', 'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin',
-      'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 'text-anchor', 'unicode-bidi',
-    ],
-    nonExistingPropMatch = null
-  ;
+  var nonExistingPropMatch = null;
 
   if (previousLineCausedIgnorableError) {
     previousLineCausedIgnorableError = false;
@@ -60,13 +53,20 @@ const shouldIncludeError = function (message, line, lines) {
   return true;
 };
 
-module.exports.check = function (fullContent, fullPath, lines, group, cb) {
+module.exports.init = function (lstnr, group) {
+  listener = lstnr;
+  checkGroup = group;
+
+  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+};
+
+module.exports.check = function (listener, fullPath, fullContent, lines, cb) {
   var
     validatorPath = path.resolve(__dirname + '/../../vendor'),
     execPath = 'java -jar ' + escapeShell(validatorPath + '/css-validator.jar') + ' --output=soap12 ' + escapeShell('file://' + fullPath)
   ;
 
-  cb('validation', group, 'start', 'Validation');
+  listener.send('check-group:item-computing', checkGroup, checkId);
 
   exec(execPath, function (err, data) {
     var xml = data.trim().replace(/^\{.*\}/, '').trim();
@@ -95,7 +95,8 @@ module.exports.check = function (fullContent, fullPath, lines, group, cb) {
         });
       }
 
-      cb('validation', group, 'end', 'Validation', errors);
+      listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+      cb(errors);
     });
   });
 };

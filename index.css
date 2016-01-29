@@ -162,11 +162,11 @@ body {
   margin-left: 16px;
   padding: 4px 8px 3px;
 
-  background-color: #ffefab;
-  border: 1px solid #ffd30d;
+  background-color: #d9d8e3;
+  border: 1px solid #a8a6af;
   border-radius: 0 12px 12px 0;
 
-  color: #b09000;
+  color: #63666a;
   font-size: 11px;
   line-height: 11px;
   text-transform: uppercase;
@@ -180,30 +180,40 @@ body {
   top: -2px;
   width: 22px;
 
-  background: transparent none no-repeat center center / contain;
+  background: transparent url("images/pending.svg") no-repeat center center / contain;
 }
 
-#checks span[data-status="start"]::before {
-  background-image: url("images/start.svg");
+#checks span[data-status="bypassed"]::before {
+  background-image: url("images/bypassed.svg");
 }
 
-#checks span[data-status="end"] {
+#checks span[data-status="computing"] {
+  background-color: #ffefab;
+  border-color: #ffd30d;
+  color: #b09000;
+}
+
+#checks span[data-status="computing"]::before {
+  background-image: url("images/computing.svg");
+}
+
+#checks span[data-status="succeeded"] {
   border-color: #6dd110;
   background-color: #c1e89b;
   color: #417d0a;
 }
 
-#checks span[data-status="end"]::before {
+#checks span[data-status="succeeded"]::before {
   background-image: url("images/check.svg");
 }
 
-#checks span[data-status="errors"] {
+#checks span[data-status="failed"] {
   border-color: #f33;
   background-color: #ff9494;
   color: #991f1f;
 }
 
-#checks span[data-status="errors"]::before {
+#checks span[data-status="failed"]::before {
   background-image: url("images/error.svg");
 }
 
@@ -331,6 +341,11 @@ body {
   font-size: 14px;
 }
 
+#messages [data-state="bypassed"] h2 {
+  background-image: url("images/bypassed.svg");
+  color: #63666a;
+}
+
 #messages ul {
   margin: 0;
   padding: 0 0 0 20px;
@@ -349,6 +364,14 @@ body {
 
   color: #f33;
   text-align: center;
+}
+
+#messages [data-state="bypassed"] li::before {
+  color: #a8a6af;
+}
+
+#messages li[data-state="skipped"]::before {
+  color: #a8a6af;
 }
 
 #submit {

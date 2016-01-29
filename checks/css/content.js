@@ -2,11 +2,10 @@
 
 var
   util = require('util'),
-  cheerio = require('cheerio'),
   listener,
   checkGroup,
-  checkLabel = 'Required elements',
-  checkId = 'elements'
+  checkLabel = 'Expected content',
+  checkId = 'content'
 ;
 
 module.exports.init = function (lstnr, group) {
@@ -16,18 +15,14 @@ module.exports.init = function (lstnr, group) {
   listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
 };
 
-module.exports.check = function (fileContents, sels) {
-  var
-    $ = null,
-    errors = []
-  ;
+module.exports.check = function (fileContents, regexes) {
+  var errors = [];
 
   listener.send('check-group:item-computing', checkGroup, checkId);
-  $ = cheerio.load(fileContents);
 
-  sels.forEach(function (sel) {
-    if ($(sel).length <= 0) {
-      errors.push(util.format('Expected to see this element: `%s`', sel));
+  regexes.forEach(function (regex) {
+    if (!fileContents.match(new RegExp(regex, 'gm'))) {
+      errors.push(util.format('Expected to see this content: “%s”', regex));
     }
   });
 

@@ -2,30 +2,8 @@
 
 const
   markbot = require('electron').remote.require('./markbot'),
-  listener = require('electron').ipcRenderer
-;
-
-const successMessages = [
-  'Booyakasha',
-  'Way to go',
-  'Super-duper',
-  'Awesome',
-  'Cowabunga',
-  'Rad',
-  'Amazeballs',
-  'Sweet',
-  'Cool',
-  'Nice',
-  'Fantastic',
-  'Geronimo',
-  'Whamo',
-  'Superb',
-  'Stupendous',
-  'Mathmatical',
-  'All clear'
-];
-
-var
+  listener = require('electron').ipcRenderer,
+  successMessages = require('./lib/success-messages.json'),
   $body = document.querySelector('body'),
   $dropbox = document.getElementById('dropbox'),
   $checks = document.getElementById('checks'),
@@ -35,7 +13,10 @@ var
   $repoName = document.getElementById('folder'),
   $signin = document.getElementById('sign-in'),
   $submit = document.getElementById('submit'),
-  $canvasBtn = document.getElementById('submit-btn'),
+  $canvasBtn = document.getElementById('submit-btn')
+;
+
+var
   groups = {},
   checks = {},
   fullPath = false,
@@ -44,8 +25,9 @@ var
   checksCompleted = 0
 ;
 
-const displayErrors = function (group, label, errors) {
-  var
+const displayErrors = function (group, label, errors, status) {
+  const
+    $errorGroup = document.createElement('div'),
     $groupHead = document.createElement('h2'),
     $messageList = document.createElement('ul')
   ;
@@ -54,13 +36,26 @@ const displayErrors = function (group, label, errors) {
   $groupHead.textContent = groups[group].label + ' — ' + label;
 
   errors.forEach(function (err) {
-    var li = document.createElement('li');
+    const li = document.createElement('li');
     li.textContent = err;
     $messageList.appendChild(li)
   });
 
-  $messages.appendChild($groupHead);
-  $messages.appendChild($messageList);
+  switch (status) {
+    case 'bypassed':
+      $errorGroup.dataset.state = 'bypassed';
+      break;
+    case 'skip':
+      let skipLi = document.createElement('li');
+      skipLi.textContent = 'More checks skipped because of the above errors.';
+      skipLi.dataset.state = 'skipped';
+      $messageList.appendChild(skipLi)
+      break;
+  }
+
+  $errorGroup.appendChild($groupHead);
+  $errorGroup.appendChild($messageList);
+  $messages.appendChild($errorGroup);
 };
 
 const displaySummary = function () {
@@ -75,63 +70,6 @@ const displaySummary = function () {
     $messageHeader.dataset.state = 'no-errors';
     $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
     $submit.dataset.state = 'visible';
-  }
-};
-
-const checkGroup = function (id, label, cb) {
-  var
-    $groupHead = document.createElement('h2'),
-    $groupTitle = document.createElement('span')
-  ;
-
-  groups[id] = {
-    label: label,
-    elem: document.createElement('ul')
-  };
-
-  $groupTitle.classList.add('title-wrap');
-  $groupTitle.textContent = label;
-
-  $groupHead.appendChild($groupTitle);
-  $checks.appendChild($groupHead);
-  $checks.appendChild(groups[id].elem);
-
-  cb();
-};
-
-const check = function (id, group, status, label, errors) {
-  var
-    checkLi = null,
-    checkId = group + id
-  ;
-
-  if(status == 'start') checksCount++;
-  if(status == 'end') checksCompleted++;
-
-  if (!checks[checkId]) {
-    checks[checkId] = document.createElement('span');
-    checkLi = document.createElement('li');
-    checkLi.appendChild(checks[checkId]);
-    groups[group].elem.appendChild(checkLi);
-  }
-
-  if (errors && errors.length > 0) {
-    checks[checkId].dataset.status = 'errors';
-    displayErrors(group, label, errors);
-  } else {
-    checks[checkId].dataset.status = status;
-  }
-
-  checks[checkId].textContent = label;
-  displaySummary();
-};
-
-const repo = function (err, name) {
-  if (err) {
-    reset();
-    $dropbox.dataset.state = 'visible';
-  } else {
-    $repoName.innerHTML = name;
   }
 };
 
@@ -150,7 +88,7 @@ const reset = function () {
 };
 
 const startChecks = function () {
-  markbot.onFileDropped(fullPath, checkGroup, check, repo);
+  markbot.onFileDropped(fullPath);
 };
 
 $body.ondragover = function (e) {
@@ -205,16 +143,91 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
   }
 });
 
-listener.on('open-repo', function (event, path) {
-  if (path) {
-    reset();
-    fullPath = path;
-    startChecks();
-    $dropbox.dataset.state = 'hidden';
-  }
+listener.on('app:file-missing', function (event) {
+  reset();
+  $dropbox.dataset.state = 'visible';
 });
 
-listener.on('re-run', function (event) {
+listener.on('app:file-exists', function (event, repo) {
+  $repoName.innerHTML = repo;
+});
+
+listener.on('check-group:new', function (event, id, label) {
+  const
+    $groupHead = document.createElement('h2'),
+    $groupTitle = document.createElement('span')
+  ;
+
+  groups[id] = {
+    label: label,
+    elem: document.createElement('ul')
+  };
+
+  $groupTitle.classList.add('title-wrap');
+  $groupTitle.textContent = label;
+
+  $groupHead.appendChild($groupTitle);
+  $checks.appendChild($groupHead);
+  $checks.appendChild(groups[id].elem);
+});
+
+listener.on('check-group:item-new', function (event, group, id, label) {
+  var checkLi = null, checkId = group + id;
+
+  checksCount++;
+
+  if (!checks[checkId]) {
+    checks[checkId] = document.createElement('span');
+    checkLi = document.createElement('li');
+    checkLi.appendChild(checks[checkId]);
+    groups[group].elem.appendChild(checkLi);
+  }
+
+  checks[checkId].textContent = label;
+  displaySummary();
+});
+
+listener.on('check-group:item-computing', function (event, group, id) {
+  var checkId = group + id;
+
+  checks[checkId].dataset.status = 'computing';
+
+  displaySummary();
+});
+
+listener.on('check-group:item-bypass', function (event, group, id, label, errors) {
+  var checkId = group + id;
+
+  checksCompleted++;
+  checks[checkId].dataset.status = 'bypassed';
+  displayErrors(group, label, errors, 'bypassed');
+
+  displaySummary();
+});
+
+listener.on('check-group:item-complete', function (event, group, id, label, errors, skip) {
+  var checkId = group + id;
+
+  checksCompleted++;
+
+  if (errors && errors.length > 0) {
+    checks[checkId].dataset.status = 'failed';
+    displayErrors(group, label, errors, skip);
+  } else {
+    checks[checkId].dataset.status = 'succeeded';
+  }
+
+  displaySummary();
+})
+
+listener.on('app:open-repo', function (event, path) {
+  reset();
+  fullPath = path;
+  startChecks();
+  $dropbox.dataset.state = 'hidden';
+});
+
+listener.on('app:re-run', function (event) {
   if (fullPath) {
     reset();
     startChecks();
@@ -222,9 +235,14 @@ listener.on('re-run', function (event) {
   }
 });
 
-listener.on('sign-out', function (event) {
+listener.on('app:sign-out', function (event) {
   localStorage.clear();
+  window.location.reload();
 });
+
+listener.on('app:force-reload', function (event) {
+  window.location.reload();
+})
 
 if (localStorage.getItem('github-username')) {
   $signin.dataset.state = 'hidden';

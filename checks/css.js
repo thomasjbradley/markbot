@@ -7,34 +7,51 @@ var
   validation = require('./css/validation'),
   bestPractices = require('./css/best-practices'),
   properties = require('./css/properties'),
-  content = require('./content')
+  content = require('./css/content')
 ;
 
-module.exports.check = function (path, file, group, cb) {
+const initChecks = function (listener, file, group) {
+  if (file.valid) {
+    validation.init(listener, group);
+    if (file.bestPractices) bestPractices.init(listener, group);
+  }
+
+  if (file.has) properties.init(listener, group);
+  if (file.search) content.init(listener, group);
+};
+
+module.exports.check = function (listener, path, file, group) {
   var
     errors = [],
     fullPath = path + '/' + file.path,
     fileContents = ''
   ;
 
-  cb('exists', group, 'start', 'Exists');
+  listener.send('check-group:item-new', group, 'exists', 'Exists');
+
+  initChecks(listener, file, group);
 
   if (!exists.check(fullPath)) {
-    cb('exists', group, 'end', 'Exists', [util.format('The file `%s` is missing or misspelled', file.path)]);
+    listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is missing or misspelled', file.path)]);
     return;
   }
 
-  cb('exists', group, 'end', 'Exists');
+  listener.send('check-group:item-complete', group, 'exists', 'Exists');
 
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
     var lines = fileContents.toString().split('\n');
 
-    if (file.valid) validation.check(fileContents, fullPath, lines, group, cb);
+    if (file.valid) {
+      validation.check(listener, fullPath, fileContents, lines, function (err) {
+        if (!err || err.length <= 0) {
+          if (file.bestPractices) bestPractices.check(fullPath, fileContents, lines);
+        } else {
+          bestPractices.bypass();
+        }
+      });
+    }
 
-    if (file.bestPractices) bestPractices.check(fileContents, group, cb);
-
-    if (file.has) properties.check(fileContents, file.has, group, cb);
-
-    if (file.search) content.check(fileContents, file.search, group, cb);
+    if (file.has) properties.check(fileContents, file.has);
+    if (file.search) content.check(fileContents, file.search);
   });
 };

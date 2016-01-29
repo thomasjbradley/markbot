@@ -9,10 +9,11 @@ var stripPath = function (file, path) {
   return file.replace(path + '/', '');
 };
 
-module.exports.check = function (path, group, cb) {
+module.exports.check = function (listener, path, group, cb) {
   var label = 'Consistent naming';
 
-  cb('naming', group, 'start', label);
+  listener.send('check-group:item-new', group, 'naming', label);
+  listener.send('check-group:item-computing', group, 'naming');
 
   dir.files(path, function(err, files) {
     var errors = [];
@@ -37,6 +38,6 @@ module.exports.check = function (path, group, cb) {
       }
     });
 
-    cb('naming', group, 'end', label, errors);
+    listener.send('check-group:item-complete', group, 'naming', label, errors);
   });
 };

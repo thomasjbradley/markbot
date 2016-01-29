@@ -2,10 +2,21 @@
 
 var
   util = require('util'),
-  css = require('css')
+  css = require('css'),
+  listener,
+  checkGroup,
+  checkLabel = 'Required properties',
+  checkId = 'properties'
 ;
 
-module.exports.check = function (fileContents, sels, group, cb) {
+module.exports.init = function (lstnr, group) {
+  listener = lstnr;
+  checkGroup = group;
+
+  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+};
+
+module.exports.check = function (fileContents, sels) {
   var
     code = {},
     errors = [],
@@ -14,7 +25,7 @@ module.exports.check = function (fileContents, sels, group, cb) {
     decs = []
   ;
 
-  cb('properties', group, 'start', 'Required properties');
+  listener.send('check-group:item-computing', checkGroup, checkId);
 
   code = css.parse(fileContents);
 
@@ -48,5 +59,5 @@ module.exports.check = function (fileContents, sels, group, cb) {
     }
   }
 
-  cb('properties', group, 'end', 'Required properties', errors);
+  listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
 };

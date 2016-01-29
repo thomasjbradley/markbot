@@ -11,7 +11,7 @@ const matchesProfEmail = function (email, profEmails) {
   return !profEmails.indexOf(email);
 };
 
-module.exports.check = function (path, commitNum, ignoreCommitEmails, group, cb) {
+module.exports.check = function (listener, path, commitNum, ignoreCommitEmails, group) {
   var
     repoPath = path + '/.git',
     studentCommits = 0,
@@ -20,6 +20,8 @@ module.exports.check = function (path, commitNum, ignoreCommitEmails, group, cb)
     exists = false
   ;
 
+  listener.send('check-group:item-new', group, 'commits', label);
+
   try {
     exists = fs.statSync(repoPath).isDirectory();
   } catch (e) {
@@ -27,11 +29,9 @@ module.exports.check = function (path, commitNum, ignoreCommitEmails, group, cb)
   }
 
   if (!exists) {
-    cb('commits', group, 'end', label, ['Not a Git repository']);
+    listener.send('check-group:item-complete', group, 'commits', label, ['Not a Git repository']);
     return;
   }
-
-  cb('commits', group, 'start', label);
 
   gitCommits(repoPath)
     .on('data', function (commit) {
@@ -39,10 +39,10 @@ module.exports.check = function (path, commitNum, ignoreCommitEmails, group, cb)
     })
     .on('end', function () {
       if (studentCommits < commitNum) {
-        errors.push(util.format('Not enough commits to the repository (has %d, expecting %d)', studentCommits, commitNum));
+        errors.push(util.format('Not enough commits to the repository (has %d, expecting %d).', studentCommits, commitNum));
       }
 
-      cb('commits', group, 'end', label, errors);
+      listener.send('check-group:item-complete', group, 'commits', label, errors);
     })
   ;
 };

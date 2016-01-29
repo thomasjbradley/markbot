@@ -3,10 +3,14 @@
 var
   util = require('util'),
   path = require('path'),
-  exec = require('child_process').exec
+  exec = require('child_process').exec,
+  listener,
+  checkGroup,
+  checkId = 'validation',
+  checkLabel = 'Validation'
 ;
 
-const escapeShell = function(cmd) {
+const escapeShell = function (cmd) {
   return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
 };
 
@@ -26,13 +30,20 @@ const shouldIncludeError = function (message, line) {
   return true;
 };
 
-module.exports.check = function (fileContents, fullPath, group, cb) {
+module.exports.init = function (lstnr, group) {
+  listener = lstnr;
+  checkGroup = group;
+
+  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+};
+
+module.exports.check = function (listener, fullPath, fullContent, lines, cb) {
   var
     validatorPath = path.resolve(__dirname + '/../../vendor'),
     execPath = 'java -jar ' + escapeShell(validatorPath + '/vnu.jar') + ' --errors-only --format json ' + escapeShell(fullPath)
   ;
 
-  cb('validation', group, 'start', 'Validation');
+  listener.send('check-group:item-computing', checkGroup, checkId);
 
   exec(execPath, function (err, data) {
     var
@@ -50,6 +61,7 @@ module.exports.check = function (fileContents, fullPath, group, cb) {
       });
     }
 
-    cb('validation', group, 'end', 'Validation', errors);
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+    cb(errors);
   });
 };
