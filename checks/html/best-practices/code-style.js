@@ -10,6 +10,12 @@ var
 linter.addRule(require('./rule-adv-attr-lowercase'));
 linter.addRule(require('./rule-adv-tag-pair'));
 
+const shouldIgnoreError = function (message) {
+  if (message.match(/indent/ig)) return true;
+
+  return false;
+};
+
 module.exports.check = function (fileContents) {
   var
     lintResults,
@@ -20,7 +26,9 @@ module.exports.check = function (fileContents) {
 
   if (lintResults.length > 0) {
     lintResults.forEach(function (item) {
-      errors.push(util.format('Line %d: %s', item.line, item.message));
+      if (!shouldIgnoreError(item.message)) {
+        errors.push(util.format('Line %d: %s', item.line, item.message));
+      }
     });
   }
 
