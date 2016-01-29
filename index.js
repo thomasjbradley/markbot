@@ -25,6 +25,59 @@ var
   checksCompleted = 0
 ;
 
+const buildErrorMessageFromArray = function (err, li) {
+  var
+    message = document.createElement('span'),
+    code = document.createElement('section'),
+    sawDiv = document.createElement('div'),
+    expectedDiv = document.createElement('div'),
+    sawHead = document.createElement('strong'),
+    expectedHead = document.createElement('strong'),
+    sawPre = document.createElement('pre'),
+    expectedPre = document.createElement('pre')
+  ;
+
+  message.textContent = err[0];
+
+  code.classList.add('error-code-block');
+  sawDiv.classList.add('error-sample-saw');
+  expectedDiv.classList.add('error-sample-expected');
+  sawHead.textContent = 'Saw in your code:';
+  expectedHead.textContent = 'Expected to see:';
+  sawHead.classList.add('error-sample-head');
+  expectedHead.classList.add('error-sample-head');
+
+  err[1].saw.forEach(function (line, i) {
+    var tag = document.createElement('code');
+    tag.textContent = line;
+
+    if (i == err[1].line) tag.classList.add('error-sample-line');
+
+    sawPre.innerHTML += tag.outerHTML;
+  });
+
+  err[1].expected.forEach(function (line, i) {
+    var tag = document.createElement('code');
+    tag.textContent = line;
+
+    if (i == err[1].line) tag.classList.add('error-sample-line');
+
+    expectedPre.innerHTML += tag.outerHTML;
+  });
+
+  li.appendChild(message);
+
+  sawDiv.appendChild(sawHead);
+  sawDiv.appendChild(sawPre);
+  expectedDiv.appendChild(expectedHead);
+  expectedDiv.appendChild(expectedPre);
+
+  code.appendChild(sawDiv);
+  code.appendChild(expectedDiv);
+
+  li.appendChild(code);
+};
+
 const displayErrors = function (group, label, errors, status) {
   const
     $errorGroup = document.createElement('div'),
@@ -37,7 +90,12 @@ const displayErrors = function (group, label, errors, status) {
 
   errors.forEach(function (err) {
     const li = document.createElement('li');
-    li.textContent = err;
+
+    if (Array.isArray(err)) {
+      buildErrorMessageFromArray(err, li);
+    } else {
+      li.textContent = err;
+    }
     $messageList.appendChild(li)
   });
 

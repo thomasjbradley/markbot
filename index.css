@@ -374,6 +374,54 @@ body {
   color: #a8a6af;
 }
 
+pre, code {
+  display: block;
+
+  color: #63666a;
+  font-size: 11px;
+  font-family: Menlo, monospace;
+  line-height: 1.5;
+}
+
+.error-code-block {
+  display: flex;
+}
+
+.error-sample-saw {
+  margin-top: 8px;
+  overflow: hidden;
+  width: 50%;
+}
+
+.error-sample-saw pre {
+  border-left: 1px dotted #dfdcda;
+}
+
+.error-sample-expected {
+  margin-top: 8px;
+  overflow: hidden;
+  width: 50%;
+}
+
+.error-sample-expected pre {
+  border-left: 1px dotted #dfdcda;
+  border-right: 1px dotted #dfdcda;
+}
+
+.error-sample-line {
+  background-color: #f8f6f5;
+}
+
+.error-sample-head {
+  display: block;
+
+  color: #000;
+  font-size: 11px;
+  font-weight: normal;
+  font-style: italic;
+  line-height: 1.5;
+}
+
 #submit {
   padding-top: 20px;
   text-align: center;
