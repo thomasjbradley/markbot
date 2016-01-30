@@ -93,6 +93,7 @@ const displayErrors = function (group, label, errors, status) {
 
     if (Array.isArray(err)) {
       buildErrorMessageFromArray(err, li);
+
       if (err[2] && err[2].type) status = err[2].type;
     } else {
       li.textContent = err;
