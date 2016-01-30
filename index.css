@@ -383,10 +383,6 @@ pre, code {
   line-height: 1.5;
 }
 
-pre {
-  overflow-x: auto;
-}
-
 .error-code-block {
   display: flex;
 }
