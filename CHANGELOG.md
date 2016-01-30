@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Error message consistency in the use of periods at the end of sentences.
+- The CSS validation script would throw an error when there was absolutely no CSS validation errors—I was only testing when there were errors to be ignored.
 
 ---
 
