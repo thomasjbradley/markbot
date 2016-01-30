@@ -60,7 +60,8 @@ module.exports.check = function (fileContents, lines) {
     if (lines[i].trim() != beautifiedLines[i].trim()) {
       errors.push([
         util.format('Around line %d: Unexpected indentation', i + 1),
-        grabChunk(i, lines, beautifiedLines)
+        grabChunk(i, lines, beautifiedLines),
+        { type: 'skip' }
       ]);
       break;
     }
