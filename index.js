@@ -105,7 +105,7 @@ const displayErrors = function (group, label, errors, status) {
       break;
     case 'skip':
       let skipLi = document.createElement('li');
-      skipLi.textContent = 'More checks skipped because of the above errors.';
+      skipLi.textContent = 'More checks skipped because of the above errors';
       skipLi.dataset.state = 'skipped';
       $messageList.appendChild(skipLi)
       break;
