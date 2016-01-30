@@ -75,12 +75,14 @@ module.exports.check = function (listener, fullPath, fullContent, lines, cb) {
       var
         results = result['env:Envelope']['env:Body'][0]['m:cssvalidationresponse'][0]['m:result'][0]['m:errors'][0],
         errorCount = parseInt(results['m:errorcount'][0], 10),
-        errorsList = results['m:errorlist'][0]['m:error'],
+        errorsList,
         errors = [],
         prevError = false
       ;
 
       if (errorCount > 0) {
+        errorsList = results['m:errorlist'][0]['m:error'];
+
         errorsList.forEach(function (error) {
           var
             line = error['m:line'][0],
