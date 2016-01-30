@@ -13,7 +13,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Error message consistency in the user of periods at the end of sentences.
+- Error message consistency in the use of periods at the end of sentences.
 
 ---
 
