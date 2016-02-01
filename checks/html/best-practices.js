@@ -68,7 +68,7 @@ module.exports.check = function (fullPath, fileContents, lines) {
     return;
   }
 
-  checkCodeStyle = codeStyleChecker.check(fileContents);
+  checkCodeStyle = codeStyleChecker.check(fileContents, lines);
 
   if (checkCodeStyle && checkCodeStyle.length > 0) {
     listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkCodeStyle, 'skip');
