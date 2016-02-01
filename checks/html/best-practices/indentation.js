@@ -37,6 +37,12 @@ const grabChunk = function (line, lines, beautifiedLines) {
   return hunk;
 };
 
+const shouldIncludeError = function (line1, line2) {
+  if (line1.replace(/\/>$/, '').trim() == line2.replace(/\/>$/, '').trim() ) return false;
+
+  return true;
+};
+
 module.exports.check = function (fileContents, lines) {
   var
     errors = [],
@@ -58,18 +64,20 @@ module.exports.check = function (fileContents, lines) {
     if (!beautifiedLines[i]) continue;
 
     if (lines[i].trim() != beautifiedLines[i].trim()) {
-      errors.push([
-        util.format('Around line %d: Unexpected indentation', i + 1),
-        grabChunk(i, lines, beautifiedLines),
-        { type: 'skip' }
-      ]);
-      break;
-    }
+      if (shouldIncludeError(lines[i].trim(), beautifiedLines[i].trim())) {
+        errors.push([
+          util.format('Around line %d: Unexpected indentation', i + 1),
+          grabChunk(i, lines, beautifiedLines),
+          { type: 'skip' }
+        ]);
+        break;
+      }
+    } else {
+      goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
 
-    goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
-
-    if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
-      errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i + 1, goodFrontSpace[1].length));
+      if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
+        errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i + 1, goodFrontSpace[1].length));
+      }
     }
   }
 
