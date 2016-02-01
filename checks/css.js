@@ -20,6 +20,13 @@ const initChecks = function (listener, file, group) {
   if (file.search) content.init(listener, group);
 };
 
+const bypassAllChecks = function (file) {
+  if (file.valid) validation.bypass();
+  if (file.bestPractices) bestPractices.bypass();
+  if (file.has) properties.bypass();
+  if (file.search) content.bypass();
+};
+
 module.exports.check = function (listener, path, file, group) {
   var
     errors = [],
@@ -33,6 +40,7 @@ module.exports.check = function (listener, path, file, group) {
 
   if (!exists.check(fullPath)) {
     listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is missing or misspelled', file.path)]);
+    bypassAllChecks(file);
     return;
   }
 

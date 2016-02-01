@@ -17,7 +17,7 @@ module.exports.init = function (lstnr, group) {
 };
 
 module.exports.bypass = function () {
-  listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because validation errors were found']);
+  listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
 module.exports.check = function (fullPath, fileContents, lines) {

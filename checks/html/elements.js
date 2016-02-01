@@ -16,6 +16,10 @@ module.exports.init = function (lstnr, group) {
   listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
 };
 
+module.exports.bypass = function () {
+  listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
+};
+
 module.exports.check = function (fileContents, sels) {
   var
     $ = null,
