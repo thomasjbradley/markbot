@@ -5,16 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.3.0] — 2016-01-31
 
 ### Added
 
 - Code samples for expected code when confusing indentation is found.
+- Better support for SVG—allowing uppercase letters in tags and ignoring closing `/>` in self-closing tags.
 
 ### Fixed
 
 - Error message consistency in the use of periods at the end of sentences.
 - The CSS validation script would throw an error when there was absolutely no CSS validation errors—I was only testing when there were errors to be ignored.
+- Checks didn’t finish if the file doesn’t exist—they now all bypass with skip messages.
 
 ---
 
