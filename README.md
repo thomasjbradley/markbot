@@ -72,7 +72,7 @@ There’s a few things you’ll need to do to set the repo up properly for Markb
 
 The students will fork repos then drop into Markbot which will automate the marking.
 
-[**Check out this tutorial for the students to see how it works.**](http://tasks.learn-the-web.algonquindesign.ca/web-dev-1/using-markbot/)
+[**Check out this tutorial for the students to see how it works.**](http://learn-the-web.algonquindesign.ca/courses/web-dev-1/using-markbot/)
 
 ---
 
@@ -109,7 +109,7 @@ html:
 
     # Check its best practices & indentation (double quoting attributes, having a <title>, indented children, etc.)
     # Can be further configured in the `htmlcs.json` file
-    # Will be skipped if validation isn’t also check—the document must be valid before best practices are tested
+    # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
     bestPractices: true
 
     # Can be used to test for specific elements; each entry should be a valid CSS selector
@@ -136,7 +136,7 @@ css:
 
     # Check it’s best practices & indentation (spaces after colons, new lines after closing blocks, etc.)
     # Can be further configured in the `stylelint.json` file
-    # Will be skipped if validation isn’t also check—the document must be valid before best practices are tested
+    # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
     bestPractices: true
 
     # Can be used to test for specific selectors, properties & values
@@ -161,7 +161,7 @@ Before getting Markbot working on student machines, these two things should be d
 
 ### Git
 
-Use Terminal and install the command line tools with `xcode-select --install`
+Use the Mac OS X Terminal and install the command line tools with `xcode-select --install`
 
 ### JDK
 
@@ -175,7 +175,7 @@ Check out my lesson for the students on installing it on their computers.
 
 *Specifically starting at set 13:*
 
-[**Student Markbot installation lesson.**](http://tasks.learn-the-web.algonquindesign.ca/web-dev-1/install-all-the-things/#step-13)
+[**Student Markbot installation lesson.**](http://learn-the-web.algonquindesign.ca/courses/web-dev-1/install-all-the-things/#step-13)
 
 ---
 
