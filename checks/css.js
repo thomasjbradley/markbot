@@ -44,7 +44,6 @@ module.exports.check = function (listener, path, file, group) {
     return;
   }
 
-
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
     var lines;
 
