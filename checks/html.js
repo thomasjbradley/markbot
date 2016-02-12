@@ -44,10 +44,17 @@ module.exports.check = function (listener, path, file, group) {
     return;
   }
 
-  listener.send('check-group:item-complete', group, 'exists', 'Exists');
-
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
-    var lines = fileContents.toString().split('\n');
+    var lines;
+
+    if (fileContents.trim() == '') {
+      listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is empty', file.path)]);
+      bypassAllChecks(file);
+      return;
+    }
+
+    listener.send('check-group:item-complete', group, 'exists', 'Exists');
+    lines = fileContents.toString().split('\n');
 
     if (file.valid) {
       validation.check(listener, fullPath, fileContents, lines, function (err) {
