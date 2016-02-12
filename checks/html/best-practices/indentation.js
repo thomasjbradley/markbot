@@ -38,7 +38,8 @@ const grabChunk = function (line, lines, beautifiedLines) {
 };
 
 const shouldIncludeError = function (line1, line2) {
-  if (line1.replace(/\/>$/, '').trim() == line2.replace(/\/>$/, '').trim() ) return false;
+  // Ignore addition of space before self-closing slash, like `/>`
+  if (line1.replace(/\/>$/, '').trimRight() == line2.replace(/\/>$/, '').trimRight()) return false;
 
   return true;
 };
@@ -64,7 +65,7 @@ module.exports.check = function (fileContents, lines) {
     if (!beautifiedLines[i]) continue;
 
     if (lines[i].trim() != beautifiedLines[i].trim()) {
-      if (shouldIncludeError(lines[i].trim(), beautifiedLines[i].trim())) {
+      if (shouldIncludeError(lines[i], beautifiedLines[i])) {
         errors.push([
           util.format('Around line %d: Unexpected indentation', i + 1),
           grabChunk(i, lines, beautifiedLines),

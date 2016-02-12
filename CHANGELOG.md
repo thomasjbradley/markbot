@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Some SVG attributes with uppercase letters were missing, causing validation errors.
+- With SVG self closing tags, the error skipping was too aggressive and missed actual indentation errors.
 - An error was thrown when the CSS file was empty. Markbot now checks that both HTML & CSS have contents before passing “Exists” test.
 
 ---
