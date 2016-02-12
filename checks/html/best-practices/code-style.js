@@ -13,6 +13,7 @@ linter.addRule(require('./rule-adv-attr-lowercase'));
 linter.addRule(require('./rule-adv-tag-pair'));
 
 const shouldIncludeError = function (line, message, lines) {
+  // Don’t want indent checking from this library, use Beautify instead
   if (message.match(/indent/ig)) return false;
 
   if (message.match(/tagname.*lowercase/ig)) {
