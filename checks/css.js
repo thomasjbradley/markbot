@@ -2,6 +2,7 @@
 
 var
   fs = require('fs'),
+  path = require('path'),
   util = require('util'),
   exists = require('./file-exists'),
   validation = require('./css/validation'),
@@ -27,10 +28,10 @@ const bypassAllChecks = function (file) {
   if (file.search) content.bypass();
 };
 
-module.exports.check = function (listener, path, file, group) {
+module.exports.check = function (listener, filePath, file, group) {
   var
     errors = [],
-    fullPath = path + '/' + file.path,
+    fullPath = path.resolve(filePath + '/' + file.path),
     fileContents = ''
   ;
 

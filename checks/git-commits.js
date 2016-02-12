@@ -2,6 +2,7 @@
 
 var
   fs = require('fs'),
+  path = require('path'),
   util = require('util'),
   gitCommits = require('git-commits'),
   exists = require('./file-exists')
@@ -11,9 +12,9 @@ const matchesProfEmail = function (email, profEmails) {
   return !profEmails.indexOf(email);
 };
 
-module.exports.check = function (listener, path, commitNum, ignoreCommitEmails, group) {
+module.exports.check = function (listener, filePath, commitNum, ignoreCommitEmails, group) {
   var
-    repoPath = path + '/.git',
+    repoPath = path.resolve(filePath + '/.git'),
     studentCommits = 0,
     errors = [],
     label = 'Number of commits',

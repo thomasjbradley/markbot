@@ -10,6 +10,7 @@ const MARKBOT_FILE = '.markbot.yml';
 
 var
   fs = require('fs'),
+  path = require('path'),
   util = require('util'),
   https = require('https'),
   yaml = require('js-yaml'),
@@ -52,41 +53,41 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow();
 });
 
-exports.onFileDropped = function(path) {
-  var markbotFilePath = path + '/' + MARKBOT_FILE;
+exports.onFileDropped = function(filePath) {
+  var markbotFilePath = path.resolve(filePath + '/' + MARKBOT_FILE);
 
   if (!exists.check(markbotFilePath)) {
     listener.send('app:file-missing');
     return;
   }
 
-  mainWindow.setRepresentedFilename(path);
-  mainWindow.setTitle(path.split(/\//).pop() + ' — Markbot');
+  mainWindow.setRepresentedFilename(filePath);
+  mainWindow.setTitle(filePath.split(/\//).pop() + ' — Markbot');
 
   markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
   listener.send('app:file-exists', markbotFile.repo);
 
   if (markbotFile.naming) {
     listener.send('check-group:new', 'naming', 'Naming conventions');
-    naming.check(listener, path, 'naming');
+    naming.check(listener, filePath, 'naming');
   }
 
   if (markbotFile.commits) {
     listener.send('check-group:new', 'commits', 'Git commits');
-    commits.check(listener, path, markbotFile.commits, config.ignoreCommitEmails, 'commits');
+    commits.check(listener, filePath, markbotFile.commits, config.ignoreCommitEmails, 'commits');
   }
 
   if (markbotFile.html) {
     markbotFile.html.forEach(function (file) {
       listener.send('check-group:new', file.path, file.path);
-      html.check(listener, path, file, file.path);
+      html.check(listener, filePath, file, file.path);
     });
   }
 
   if (markbotFile.css) {
     markbotFile.css.forEach(function (file) {
       listener.send('check-group:new', file.path, file.path);
-      css.check(listener, path, file, file.path);
+      css.check(listener, filePath, file, file.path);
     });
   }
 };
