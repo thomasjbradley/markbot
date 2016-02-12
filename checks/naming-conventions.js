@@ -7,7 +7,7 @@ var
 ;
 
 var stripPath = function (file, fullPath) {
-  return file.replace(fullPath + '/', '');
+  return file.replace(fullPath, '').replace(/^[\/\\]/, '');
 };
 
 module.exports.check = function (listener, filePath, group, cb) {
@@ -37,7 +37,7 @@ module.exports.check = function (listener, filePath, group, cb) {
     files.forEach(function (file) {
       var cleanFile = stripPath(file, fullPath);
 
-      if (cleanFile !== cleanFile.replace(/[^a-z0-9\-\.\/]/g, '')) {
+      if (cleanFile !== cleanFile.replace(/[^a-z0-9\-\.\/\\]/g, '')) {
         errors.push(util.format('`%s`: Doesn’t follow naming conventions', cleanFile));
       }
     });
