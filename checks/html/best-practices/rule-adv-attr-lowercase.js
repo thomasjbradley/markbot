@@ -13,10 +13,12 @@ module.exports = {
         'limitingconeangle', 'markerheight', 'markerunits', 'markerwidth', 'maskcontentunits',
         'maskunits', 'numoctaves', 'pathlength', 'patterncontentunits', 'patterntransform',
         'patternunits', 'pointsatx', 'pointsaty', 'pointsatz', 'preservealpha',
-        'preserveaspectratio', 'primitiveunits', 'repeatcount', 'repeatdir', 'requiredfeatures',
+        'preserveaspectratio', 'primitiveunits', 'repeatcount', 'repeatdur', 'requiredfeatures',
         'specularconstant', 'specularexponent', 'stddeviation', 'stitchtiles',
         'surfacescale', 'targetx', 'targety', 'textlength', 'viewbox', 'xchannelselector',
-        'ychannelselector',
+        'ychannelselector', 'allowreorder', 'autoreverse', 'baseprofile', 'lengthadjust',
+        'keypoints', 'requiredextensions', 'spreadmethod', 'startoffset', 'zoomandpan',
+        'viewtarget', 'tablevalues', 'systemlanguage'
       ];
 
       if (!getCfg()) return;
