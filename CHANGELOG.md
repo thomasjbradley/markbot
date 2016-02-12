@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Some SVG attributes with uppercase letters were missing, causing validation errors.
+
+---
+
 ## [2.3.0] — 2016-01-31
 
 ### Added
