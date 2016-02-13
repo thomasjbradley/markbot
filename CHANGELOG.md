@@ -11,6 +11,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Some SVG attributes with uppercase letters were missing, causing validation errors.
 - With SVG self closing tags, the error skipping was too aggressive and missed actual indentation errors.
+- When working with embedded SVG, paths can get extremely long, Beautifier’s `max_line_length` is actually `32786`, which is sometimes too short. Changed to `Number.MAX_SAFE_INTEGER`.
 - An error was thrown when the CSS file was empty. Markbot now checks that both HTML & CSS have contents before passing “Exists” test.
 
 ---
