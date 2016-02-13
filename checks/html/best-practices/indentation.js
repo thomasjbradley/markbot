@@ -37,9 +37,9 @@ const grabChunk = function (line, lines, beautifiedLines) {
   return hunk;
 };
 
-const shouldIncludeError = function (line1, line2) {
+const shouldThrowBreakingError = function (line1, line2) {
   // Ignore addition of space before self-closing slash, like `/>`
-  if (line1.replace(/\/>$/, '').trimRight() == line2.replace(/\/>$/, '').trimRight()) return false;
+  if (line1.trim().replace(/\/>$/, '').trim() == line2.trim().replace(/\/>$/, '').trim()) return false;
 
   return true;
 };
@@ -55,7 +55,6 @@ module.exports.check = function (fileContents, lines) {
     beautifiedLines
   ;
 
-
   beautified = beautifier(fileContents, beautifierOptions);
   beautifiedLines = beautified.toString().split('\n');
 
@@ -65,7 +64,7 @@ module.exports.check = function (fileContents, lines) {
     if (!beautifiedLines[i]) continue;
 
     if (lines[i].trim() != beautifiedLines[i].trim()) {
-      if (shouldIncludeError(lines[i], beautifiedLines[i])) {
+      if (shouldThrowBreakingError(lines[i], beautifiedLines[i])) {
         errors.push([
           util.format('Around line %d: Unexpected indentation', i + 1),
           grabChunk(i, lines, beautifiedLines),
@@ -73,12 +72,12 @@ module.exports.check = function (fileContents, lines) {
         ]);
         break;
       }
-    } else {
-      goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
+    }
 
-      if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
-        errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i + 1, goodFrontSpace[1].length));
-      }
+    goodFrontSpace = beautifiedLines[i].match(/^(\s*)/);
+
+    if (orgFrontSpace[1].length != goodFrontSpace[1].length) {
+      errors.push(util.format('Line %d: Expected indentation depth of %d spaces', i + 1, goodFrontSpace[1].length));
     }
   }
 
