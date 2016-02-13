@@ -6,6 +6,12 @@ var
   beautifierOptions = require('./beautifier.json')
 ;
 
+// Work around for Beautifier’s wrap max limit of 32786
+// https://github.com/beautify-web/js-beautify/blob/master/js/lib/beautify-html.js#L118
+if (beautifierOptions.wrap_line_length == 0) {
+  beautifierOptions.wrap_line_length = Number.MAX_SAFE_INTEGER;
+}
+
 const grabChunk = function (line, lines, beautifiedLines) {
   var hunk = { saw: [], expected: [], line: 0 };
 
