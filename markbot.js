@@ -64,6 +64,14 @@ menuCallbacks.revealFolder = function () {
   }
 };
 
+exports.showDevelopMenu = function () {
+  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, mainWindow, listener, menuCallbacks, {
+    showDevelop: true
+  })));
+
+  if (!mainWindow.isDevToolsOpened()) mainWindow.openDevTools();
+};
+
 exports.onFileDropped = function(filePath) {
   var markbotFilePath = path.resolve(filePath + '/' + MARKBOT_FILE);
 

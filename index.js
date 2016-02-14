@@ -204,6 +204,15 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
   }
 });
 
+document.addEventListener('keydown', function (e) {
+  let
+    macShortcut = (e.keyCode == 73 && e.altKey && e.metaKey),
+    winShortcut = (e.keyCode == 73 && e.shiftKey && e.ctrlKey)
+  ;
+
+  if (macShortcut || winShortcut) markbot.showDevelopMenu();
+});
+
 listener.on('app:file-missing', function (event) {
   reset();
   $dropbox.dataset.state = 'visible';
