@@ -28,6 +28,7 @@ var
   listener,
   menuCallbacks = {},
   menuOptions = {
+    openRepo: false,
     runChecks: false,
     revealFolder: false,
     signOut: false,
@@ -89,12 +90,14 @@ exports.disableFolderMenuFeatures = function () {
 };
 
 exports.disableSignOut = function () {
+  menuOptions.openRepo = false;
   menuOptions.signOut = false;
   menuOptions.signOutUsername = false;
   updateAppMenu();
 };
 
 exports.enableSignOut = function (username) {
+  menuOptions.openRepo = true;
   menuOptions.signOut = true;
   menuOptions.signOutUsername = username;
   updateAppMenu();

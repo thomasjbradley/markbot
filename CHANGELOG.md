@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [2.4.1] — 2016-02-14
+
+### Fixed
+
+- Made the “Open Repo” only be enabled when the user is signed in.
+
+---
+
 ## [2.4.0] — 2016-02-14
 
 ### Added
