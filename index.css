@@ -280,6 +280,8 @@ body {
 .robot-logo {
   margin-bottom: 10px;
   width: 75px;
+
+  cursor: pointer;
 }
 
 .hex-mask-path {

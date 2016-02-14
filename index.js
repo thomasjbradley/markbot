@@ -9,6 +9,7 @@ const
   $checks = document.getElementById('checks'),
   $messages = document.getElementById('messages'),
   $messageHeader = document.getElementById('message-header'),
+  $robotLogo = document.querySelector('.robot-logo'),
   $messageHeading = document.querySelector('h2.no-errors'),
   $repoName = document.getElementById('folder'),
   $signin = document.getElementById('sign-in'),
@@ -22,7 +23,8 @@ var
   fullPath = false,
   hasErrors = false,
   checksCount = 0,
-  checksCompleted = 0
+  checksCompleted = 0,
+  checksRunning = false
 ;
 
 const buildErrorMessageFromArray = function (err, li) {
@@ -125,12 +127,14 @@ const displaySummary = function () {
 
   if (hasErrors && checksCompleted >= checksCount) {
     $messageHeader.dataset.state = 'errors';
+    checksRunning = false;
   }
 
   if (!hasErrors && checksCompleted >= checksCount) {
     $messageHeader.dataset.state = 'no-errors';
     $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
     $submit.dataset.state = 'visible';
+    checksRunning = false;
   }
 };
 
@@ -146,9 +150,11 @@ const reset = function () {
   checks = {};
   checksCount = 0;
   checksCompleted = 0;
+  checksRunning = false;
 };
 
 const startChecks = function () {
+  checksRunning = true;
   markbot.onFileDropped(fullPath);
 };
 
@@ -190,7 +196,7 @@ document.getElementById('username-form').addEventListener('submit', function (e)
 document.getElementById('submit-btn').addEventListener('click', function (e) {
   e.preventDefault();
 
-  if (!hasErrors && checksCompleted >= checksCount) {
+  if (!hasErrors && !checksRunning) {
     $canvasBtn.dataset.state = 'processing';
     $canvasBtn.setAttribute('disabled', true);
 
@@ -299,7 +305,15 @@ listener.on('app:open-repo', function (event, path) {
 });
 
 listener.on('app:re-run', function (event) {
-  if (fullPath) {
+  if (fullPath && !checksRunning) {
+    reset();
+    startChecks();
+    $dropbox.dataset.state = 'hidden';
+  }
+});
+
+$robotLogo.addEventListener('click', function (e) {
+  if (fullPath && !checksRunning) {
     reset();
     startChecks();
     $dropbox.dataset.state = 'hidden';
