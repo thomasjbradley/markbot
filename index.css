@@ -264,6 +264,12 @@ body {
   right: 13px;
   position: absolute;
   top: 10px;
+
+  cursor: pointer;
+}
+
+#folder:hover {
+  color: #ccc;
 }
 
 #folder::before {
@@ -274,7 +280,14 @@ body {
   top: -1px;
   width: 18px;
 
-  background: transparent url("images/folder.svg") no-repeat center center / contain;
+  background:
+    url("images/folder.svg") no-repeat center center / contain,
+    url("images/folder-hover.svg") no-repeat 25px center / contain transparent
+  ;
+}
+
+#folder:hover::before {
+  background-position: 25px center, center center;
 }
 
 .robot-logo {

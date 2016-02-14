@@ -68,11 +68,12 @@ app.on('activate', function () {
   if (mainWindow === null) createWindow();
 });
 
-menuCallbacks.revealFolder = function () {
+exports.revealFolder = function () {
   if (currentFolderPath) {
     shell.showItemInFolder(currentFolderPath);
   }
 };
+menuCallbacks.revealFolder = exports.revealFolder;
 
 exports.showDevelopMenu = function () {
   menuOptions.showDevelop = true;

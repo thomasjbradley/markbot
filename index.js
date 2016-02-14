@@ -220,6 +220,11 @@ document.addEventListener('keydown', function (e) {
   if (macShortcut || winShortcut) markbot.showDevelopMenu();
 });
 
+$repoName.addEventListener('click', function (e) {
+  e.preventDefault();
+  markbot.revealFolder();
+});
+
 listener.on('app:file-missing', function (event) {
   reset();
   $dropbox.dataset.state = 'visible';
