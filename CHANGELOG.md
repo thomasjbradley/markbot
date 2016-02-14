@@ -7,6 +7,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Clicking the robot head will now rerun the tests.
+- Certain menu items are now enabled and disabled on demand.
+
+---
+
+## [2.3.1] — 2016-02-14
+
 ### Fixed
 
 - Some SVG attributes with uppercase letters were missing, causing validation errors.
