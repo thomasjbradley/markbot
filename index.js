@@ -303,7 +303,11 @@ listener.on('app:sign-out', function (event) {
 
 listener.on('app:force-reload', function (event) {
   window.location.reload();
-})
+});
+
+listener.on('debug', function (event, ...args) {
+  console.log.apply(console, args);
+});
 
 if (localStorage.getItem('github-username')) {
   $signin.dataset.state = 'hidden';
