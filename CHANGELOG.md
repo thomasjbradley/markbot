@@ -12,6 +12,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Clicking the robot head will now rerun the tests.
 - Certain menu items are now enabled and disabled on demand.
 - Clicking the pill buttons will jump down and highlight the associated error messages.
+- Clicking the folder name will now reveal the folder (also includes a menu item).
 
 ---
 
@@ -24,6 +25,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - When working with embedded SVG, paths can get extremely long, Beautifier’s `max_line_length` is actually `32786`, which is sometimes too short. Changed to `Number.MAX_SAFE_INTEGER`.
 - An error was thrown when the CSS file was empty. Markbot now checks that both HTML & CSS have contents before passing “Exists” test.
 - Add missing menu items on Windows to support all of Markbot’s features and refactor menu code to clean it up.
+- Fixes the Windows naming convention checking by normalizing paths and properly ignoring everything before the current folder.
 - Fixes the Windows CSS validator issue: the validator was looking for a valid URL, not a path, so no backslashes.
 
 ---
