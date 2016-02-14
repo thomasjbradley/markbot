@@ -157,7 +157,7 @@ body {
   position: relative;
 }
 
-#checks ul span {
+#checks ul a {
   display: inline-block;
   margin-left: 16px;
   padding: 4px 8px 3px;
@@ -165,14 +165,16 @@ body {
   background-color: #d9d8e3;
   border: 1px solid #a8a6af;
   border-radius: 0 12px 12px 0;
+  cursor: pointer;
 
   color: #63666a;
   font-size: 11px;
   line-height: 11px;
   text-transform: uppercase;
+  text-decoration: none;
 }
 
-#checks ul span::before {
+#checks ul a::before {
   content: " ";
   bottom: -2px;
   left: 0;
@@ -183,37 +185,37 @@ body {
   background: transparent url("images/pending.svg") no-repeat center center / contain;
 }
 
-#checks span[data-status="bypassed"]::before {
+#checks a[data-status="bypassed"]::before {
   background-image: url("images/bypassed.svg");
 }
 
-#checks span[data-status="computing"] {
+#checks a[data-status="computing"] {
   background-color: #ffefab;
   border-color: #ffd30d;
   color: #b09000;
 }
 
-#checks span[data-status="computing"]::before {
+#checks a[data-status="computing"]::before {
   background-image: url("images/computing.svg");
 }
 
-#checks span[data-status="succeeded"] {
+#checks a[data-status="succeeded"] {
   border-color: #6dd110;
   background-color: #c1e89b;
   color: #417d0a;
 }
 
-#checks span[data-status="succeeded"]::before {
+#checks a[data-status="succeeded"]::before {
   background-image: url("images/check.svg");
 }
 
-#checks span[data-status="failed"] {
+#checks a[data-status="failed"] {
   border-color: #f33;
   background-color: #ff9494;
   color: #991f1f;
 }
 
-#checks span[data-status="failed"]::before {
+#checks a[data-status="failed"]::before {
   background-image: url("images/error.svg");
 }
 
@@ -354,6 +356,16 @@ body {
 
   color: #991f1f;
   font-size: 14px;
+}
+
+#messages h2:target {
+  border-color: #f33;
+  animation: border-fade-out 500ms linear forwards;
+}
+
+@keyframes border-fade-out {
+  0% { border-color: #f33; }
+  100% { border-color: #f5f2f0; }
 }
 
 #messages [data-state="bypassed"] h2 {

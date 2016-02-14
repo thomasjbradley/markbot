@@ -27,6 +27,10 @@ var
   checksRunning = false
 ;
 
+const classify = function (str) {
+  return str.replace(/[^a-z0-9\-]/ig, '-').replace(/\-+/g, '-').toLowerCase();
+};
+
 const buildErrorMessageFromArray = function (err, li) {
   var
     message = document.createElement('span'),
@@ -80,7 +84,7 @@ const buildErrorMessageFromArray = function (err, li) {
   li.appendChild(code);
 };
 
-const displayErrors = function (group, label, errors, status) {
+const displayErrors = function (group, label, linkId, errors, status) {
   const
     $errorGroup = document.createElement('div'),
     $groupHead = document.createElement('h2'),
@@ -89,6 +93,7 @@ const displayErrors = function (group, label, errors, status) {
 
   hasErrors = true;
   $groupHead.textContent = groups[group].label + ' — ' + label;
+  $groupHead.id = linkId;
 
   errors.forEach(function (err) {
     const li = document.createElement('li');
@@ -254,12 +259,18 @@ listener.on('check-group:new', function (event, id, label) {
 });
 
 listener.on('check-group:item-new', function (event, group, id, label) {
-  var checkLi = null, checkId = group + id;
+  var
+    checkLi = null,
+    checkId = group + id,
+    checkClass = classify(checkId)
+  ;
 
   checksCount++;
 
   if (!checks[checkId]) {
-    checks[checkId] = document.createElement('span');
+    checks[checkId] = document.createElement('a');
+    checks[checkId].href = '#' + checkClass;
+    checks[checkId].dataset.id = checkClass;
     checkLi = document.createElement('li');
     checkLi.appendChild(checks[checkId]);
     groups[group].elem.appendChild(checkLi);
@@ -282,7 +293,7 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
 
   checksCompleted++;
   checks[checkId].dataset.status = 'bypassed';
-  displayErrors(group, label, errors, 'bypassed');
+  displayErrors(group, label, checks[checkId].dataset.id, errors, 'bypassed');
 
   displaySummary();
 });
@@ -294,7 +305,7 @@ listener.on('check-group:item-complete', function (event, group, id, label, erro
 
   if (errors && errors.length > 0) {
     checks[checkId].dataset.status = 'failed';
-    displayErrors(group, label, errors, skip);
+    displayErrors(group, label, checks[checkId].dataset.id, errors, skip);
   } else {
     checks[checkId].dataset.status = 'succeeded';
   }
