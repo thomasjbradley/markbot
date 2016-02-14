@@ -5,12 +5,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.4.0] — 2016-02-14
 
 ### Added
 
 - Clicking the robot head will now rerun the tests.
 - Certain menu items are now enabled and disabled on demand.
+- Clicking the pill buttons will jump down and highlight the associated error messages.
 
 ---
 
