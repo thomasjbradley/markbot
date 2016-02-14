@@ -38,7 +38,7 @@ module.exports.check = function (listener, filePath, group, cb) {
       var cleanFile = stripPath(file, fullPath);
 
       if (cleanFile !== cleanFile.replace(/[^a-z0-9\-\.\/\\]/g, '')) {
-        errors.push(util.format('`%s`: Doesn’t follow naming conventions', cleanFile));
+        errors.push(util.format('`%s`: Doesn’t follow naming conventions', cleanFile.replace(/\\/, '/')));
       }
     });
 
