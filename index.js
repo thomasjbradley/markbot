@@ -156,7 +156,7 @@ $body.ondragover = function (e) {
   e.stopImmediatePropagation();
   e.stopPropagation();
   e.preventDefault();
-  e.dataTransfer.dropEffect = 'copy';
+  e.dataTransfer.dropEffect = 'none';
   return false;
 };
 
