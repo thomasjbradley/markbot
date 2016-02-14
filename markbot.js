@@ -27,8 +27,19 @@ var
   mainWindow,
   listener,
   menuCallbacks = {},
+  menuOptions = {
+    runChecks: false,
+    revealFolder: false,
+    signOut: false,
+    signOutUsername: false,
+    showDevelop: false
+  },
   currentFolderPath
 ;
+
+const updateAppMenu = function () {
+  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, mainWindow, listener, menuCallbacks, menuOptions)));
+};
 
 const createWindow = function () {
   mainWindow = new BrowserWindow({
@@ -44,8 +55,7 @@ const createWindow = function () {
   });
 
   listener = mainWindow.webContents;
-
-  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, mainWindow, listener, menuCallbacks)));
+  updateAppMenu();
 }
 
 app.on('ready', createWindow);
@@ -65,11 +75,28 @@ menuCallbacks.revealFolder = function () {
 };
 
 exports.showDevelopMenu = function () {
-  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, mainWindow, listener, menuCallbacks, {
-    showDevelop: true
-  })));
+  menuOptions.showDevelop = true;
+  updateAppMenu();
 
   if (!mainWindow.isDevToolsOpened()) mainWindow.openDevTools();
+};
+
+exports.disableFolderMenuFeatures = function () {
+  menuOptions.runChecks = false;
+  menuOptions.revealFolder = false;
+  updateAppMenu();
+};
+
+exports.disableSignOut = function () {
+  menuOptions.signOut = false;
+  menuOptions.signOutUsername = false;
+  updateAppMenu();
+};
+
+exports.enableSignOut = function (username) {
+  menuOptions.signOut = true;
+  menuOptions.signOutUsername = username;
+  updateAppMenu();
 };
 
 exports.onFileDropped = function(filePath) {
@@ -77,10 +104,16 @@ exports.onFileDropped = function(filePath) {
 
   if (!exists.check(markbotFilePath)) {
     listener.send('app:file-missing');
+    exports.disableFolderMenuFeatures();
     return;
   }
 
   currentFolderPath = filePath;
+
+  menuOptions.runChecks = true;
+  menuOptions.revealFolder = true;
+  updateAppMenu();
+
   mainWindow.setRepresentedFilename(filePath);
   mainWindow.setTitle(filePath.split(/\//).pop() + ' — Markbot');
 

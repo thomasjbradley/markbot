@@ -183,6 +183,7 @@ $body.ondrop = function (e) {
 document.getElementById('username-form').addEventListener('submit', function (e) {
   e.preventDefault();
   localStorage.setItem('github-username', document.getElementById('username').value);
+  markbot.enableSignOut(localStorage.getItem('github-username'));
   $signin.dataset.state = 'hidden';
 });
 
@@ -307,10 +308,13 @@ listener.on('app:re-run', function (event) {
 
 listener.on('app:sign-out', function (event) {
   localStorage.clear();
+  markbot.disableSignOut();
+  markbot.disableFolderMenuFeatures();
   window.location.reload();
 });
 
 listener.on('app:force-reload', function (event) {
+  markbot.disableFolderMenuFeatures();
   window.location.reload();
 });
 
@@ -320,4 +324,5 @@ listener.on('debug', function (event, ...args) {
 
 if (localStorage.getItem('github-username')) {
   $signin.dataset.state = 'hidden';
+  markbot.enableSignOut(localStorage.getItem('github-username'));
 }
