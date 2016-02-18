@@ -135,7 +135,7 @@ css:
     # Whether to validate it or not
     valid: true
 
-    # Check it’s best practices & indentation (spaces after colons, new lines after closing blocks, etc.)
+    # Check its best practices & indentation (spaces after colons, new lines after closing blocks, etc.)
     # Can be further configured in the `stylelint.json` file
     # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
     bestPractices: true
@@ -165,7 +165,7 @@ js:
     # Can be further configured in the `validation/eslint.json` file
     valid: true
 
-    # Check it’s best practices & indentation (spacing around brackets, etc.)
+    # Check its best practices & indentation (semicolons, spacing around brackets, etc.)
     # Can be further configured in the `best-practices/eslint.json` file
     # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
     bestPractices: true
