@@ -7,7 +7,7 @@ var
   exists = require('./file-exists'),
   validation = require('./js/validation'),
   // bestPractices = require('./html/best-practices'),
-  content = require('./content')
+  content = require('./js/content')
 ;
 
 const initChecks = function (listener, file, group) {
