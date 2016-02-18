@@ -24,6 +24,7 @@ var
   commits = require('./checks/git-commits'),
   html = require('./checks/html'),
   css = require('./checks/css'),
+  js = require('./checks/javascript'),
   mainWindow,
   listener,
   menuCallbacks = {},
@@ -145,6 +146,13 @@ exports.onFileDropped = function(filePath) {
     markbotFile.css.forEach(function (file) {
       listener.send('check-group:new', file.path, file.path);
       css.check(listener, filePath, file, file.path);
+    });
+  }
+
+  if (markbotFile.js) {
+    markbotFile.js.forEach(function (file) {
+      listener.send('check-group:new', file.path, file.path);
+      js.check(listener, filePath, file, file.path);
     });
   }
 };
