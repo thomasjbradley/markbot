@@ -8,7 +8,7 @@ var
   validation = require('./html/validation'),
   bestPractices = require('./html/best-practices'),
   elements = require('./html/elements'),
-  content = require('./html/content')
+  content = require('./content')
 ;
 
 const initChecks = function (listener, file, group) {
