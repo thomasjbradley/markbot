@@ -17,6 +17,7 @@ Built with Javascript, Node.js & Electron.
 - [Repo configuration with Markbot files](#repo-configuration-with-markbot-files)
   - [HTML file tests](#html-file-tests)
   - [CSS file tests](#css-file-tests)
+  - [JS file tests](#javascript-file-tests)
 - [Installation on student computers](#installation-on-student-computers)
   - [Git](#git)
   - [JDK](#jdk)
@@ -91,7 +92,7 @@ Here are the properties that you can use in the Markbot file for testing:
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
 - `html` — [for testing HTML files.](#html-file-tests)
 - `css` — [for testing CSS files.](#css-file-tests)
-
+- `js` — [for testing Javascript files.](#javascript-file-tests)
 
 ### HTML file tests
 
@@ -149,6 +150,30 @@ css:
     # Regex searches on the file
     search:
       - '@keyframes'
+```
+
+### Javascript file tests
+
+Use the `js` entry to test Javascript files, with many of the same options as the HTML.
+
+```yml
+js:
+    # The JS file’s path
+  - path: 'js/main.js'
+
+    # Whether to validate/lint it or not using a series of best practices
+    # Can be further configured in the `validation/eslint.json` file
+    valid: true
+
+    # Check it’s best practices & indentation (spacing around brackets, etc.)
+    # Can be further configured in the `best-practices/eslint.json` file
+    # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
+    bestPractices: true
+
+    # Regex searches on the file
+    search:
+      - 'querySelector'
+      - 'addEventListener'
 ```
 
 *If you plan on using the Canvas auto-grading feature, check out [Markbot Server](#markbot-server).*
