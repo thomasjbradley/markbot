@@ -1,6 +1,12 @@
 {
   "name": "Markbot",
   "version": "2.4.1",
+  "license": "GPL",
+  "description": "An automated marking application for code projects in the Algonquin College Graphic Design program.",
+  "author": "Thomas J Bradley <hey@thomasjbradley.ca>",
+  "homepage": "https://github.com/thomasjbradley/markbot",
+  "bugs": "https://github.com/thomasjbradley/markbot/issues",
+  "private": true,
   "main": "markbot.js",
   "devDependencies": {
     "cheerio": "^0.19.0",
@@ -29,5 +35,9 @@
     "build": "npm run build:osx && npm run build:win",
     "build:osx": "npm run pack:osx && electron-builder \"dist/osx/Markbot-darwin-x64/Markbot.app\" --platform=osx --out=\"dist/osx\" --config=builder.json",
     "build:win": "npm run pack:win && electron-builder \"dist/win/Markbot-win32-ia32\" --platform=win --out=\"dist/win\" --config=builder.json"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomasjbradley/markbot.git"
+  },
 }
