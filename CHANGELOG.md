@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [2.5.0] — 2016-02-18
+
+### Added
+
+- Markbot is now capable of linting and stylistically checking Javascript with ESLint.
+
+---
+
 ## [2.4.1] — 2016-02-14
 
 ### Fixed
