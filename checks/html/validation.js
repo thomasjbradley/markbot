@@ -41,7 +41,7 @@ module.exports.bypass = function () {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-module.exports.check = function (listener, fullPath, fullContent, lines, cb) {
+module.exports.check = function (fullPath, fullContent, lines, cb) {
   var
     validatorPath = path.resolve(__dirname + '/../../vendor'),
     execPath = 'java -jar ' + escapeShell(validatorPath + '/vnu.jar') + ' --errors-only --format json ' + escapeShell(fullPath)

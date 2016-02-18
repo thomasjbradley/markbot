@@ -58,7 +58,7 @@ module.exports.check = function (listener, filePath, file, group) {
     lines = fileContents.toString().split('\n');
 
     if (file.valid) {
-      validation.check(listener, fullPath, fileContents, lines, function (err) {
+      validation.check(fullPath, fileContents, lines, function (err) {
         if (!err || err.length <= 0) {
           if (file.bestPractices) bestPractices.check(fullPath, fileContents, lines);
         } else {
