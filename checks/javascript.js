@@ -6,14 +6,14 @@ var
   util = require('util'),
   exists = require('./file-exists'),
   validation = require('./js/validation'),
-  // bestPractices = require('./html/best-practices'),
+  bestPractices = require('./js/best-practices'),
   content = require('./js/content')
 ;
 
 const initChecks = function (listener, file, group) {
   if (file.valid) {
     validation.init(listener, group);
-    // if (file.bestPractices) bestPractices.init(listener, group);
+    if (file.bestPractices) bestPractices.init(listener, group);
   }
 
   if (file.search) content.init(listener, group);
@@ -21,7 +21,7 @@ const initChecks = function (listener, file, group) {
 
 const bypassAllChecks = function (file) {
   if (file.valid) validation.bypass();
-  // if (file.bestPractices) bestPractices.bypass();
+  if (file.bestPractices) bestPractices.bypass();
   if (file.search) content.bypass();
 };
 
@@ -57,9 +57,9 @@ module.exports.check = function (listener, filePath, file, group) {
     if (file.valid) {
       validation.check(fullPath, fileContents, lines, function (err) {
         if (!err || err.length <= 0) {
-          // if (file.bestPractices) bestPractices.check(fullPath, fileContents, lines);
+          if (file.bestPractices) bestPractices.check(fullPath, fileContents, lines);
         } else {
-  //         bestPractices.bypass();
+          bestPractices.bypass();
         }
       });
     }

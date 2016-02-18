@@ -2,14 +2,12 @@
 
 var
   util = require('util'),
-  path = require('path'),
-  exec = require('child_process').exec,
   linter = require('eslint').linter,
-  linterConfig = require('./validation/eslint.json'),
+  linterConfig = require('./best-practices/eslint.json'),
   listener,
   checkGroup,
-  checkId = 'validation',
-  checkLabel = 'Validation'
+  checkLabel = 'Best practices & indentation',
+  checkId = 'best-practices'
 ;
 
 module.exports.init = function (lstnr, group) {
@@ -23,14 +21,14 @@ module.exports.bypass = function () {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-module.exports.check = function (fullPath, fullContent, lines, cb) {
+module.exports.check = function (fullPath, fileContents, lines) {
   var
     messages = {},
     errors = []
   ;
 
   listener.send('check-group:item-computing', checkGroup, checkId);
-  messages = linter.verify(fullContent, linterConfig);
+  messages = linter.verify(fileContents, linterConfig);
 
   if (messages) {
     messages.forEach(function (item) {
@@ -39,5 +37,4 @@ module.exports.check = function (fullPath, fullContent, lines, cb) {
   }
 
   listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
-  cb(errors);
 };
