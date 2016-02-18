@@ -15,6 +15,7 @@
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.5",
     "entities": "^1.1.1",
+    "eslint": "^2.1.0",
     "git-commits": "^1.1.1",
     "htmlcs": "^0.1.10",
     "js-beautify": "^1.5.10",
