@@ -25,6 +25,7 @@ var
   html = require('./checks/html'),
   css = require('./checks/css'),
   js = require('./checks/javascript'),
+  screenshots = require('./checks/screenshots'),
   mainWindow,
   listener,
   menuCallbacks = {},
@@ -104,6 +105,14 @@ exports.enableSignOut = function (username) {
   updateAppMenu();
 };
 
+exports.diffScreenshots = function (genRefScreens) {
+  markbotFile.screenshots.forEach(function (file) {
+    listener.send('check-group:new', 'screenshots', 'Screenshots');
+    screenshots.check(listener, currentFolderPath, file, 'screenshots', genRefScreens);
+  });
+};
+menuCallbacks.diffScreenshots = exports.diffScreenshots;
+
 exports.onFileDropped = function(filePath) {
   var markbotFilePath = path.resolve(filePath + '/' + MARKBOT_FILE);
 
@@ -154,6 +163,10 @@ exports.onFileDropped = function(filePath) {
       listener.send('check-group:new', file.path, file.path);
       js.check(listener, filePath, file, file.path);
     });
+  }
+
+  if (markbotFile.screenshots) {
+    exports.diffScreenshots();
   }
 };
 
