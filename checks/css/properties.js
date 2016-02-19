@@ -2,25 +2,14 @@
 
 var
   util = require('util'),
-  css = require('css'),
-  listener,
-  checkGroup,
-  checkLabel = 'Required properties',
-  checkId = 'properties'
+  css = require('css')
 ;
 
-module.exports.init = function (lstnr, group) {
-  listener = lstnr;
-  checkGroup = group;
-
-  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
-};
-
-module.exports.bypass = function () {
+const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-module.exports.check = function (fileContents, sels) {
+const check = function (listener, checkGroup, checkId, checkLabel, fileContents, sels) {
   var
     code = {},
     errors = [],
@@ -64,4 +53,26 @@ module.exports.check = function (fileContents, sels) {
   }
 
   listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+};
+
+module.exports.init = function (lstnr, group) {
+  return (function (l, g) {
+    let
+      listener = l,
+      checkGroup = g,
+      checkLabel = 'Required properties',
+      checkId = 'properties'
+    ;
+
+    listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+
+    return {
+      check: function (fileContents, sels) {
+        check(listener, checkGroup, checkId, checkLabel, fileContents, sels);
+      },
+      bypass: function () {
+        bypass(listener, checkGroup, checkId, checkLabel);
+      }
+    };
+  }(lstnr, group));
 };

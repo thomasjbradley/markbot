@@ -1,26 +1,21 @@
 'use strict';
 
 var
-  util = require('util'),
-  cheerio = require('cheerio')
+  util = require('util')
 ;
 
 const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-const check = function (listener, checkGroup, checkId, checkLabel, fileContents, sels) {
-  var
-    $ = null,
-    errors = []
-  ;
+const check = function (listener, checkGroup, checkId, checkLabel, fileContents, regexes) {
+  var errors = [];
 
   listener.send('check-group:item-computing', checkGroup, checkId);
-  $ = cheerio.load(fileContents);
 
-  sels.forEach(function (sel) {
-    if ($(sel).length <= 0) {
-      errors.push(util.format('Expected to see this element: `%s`', sel));
+  regexes.forEach(function (regex) {
+    if (!fileContents.match(new RegExp(regex, 'gm'))) {
+      errors.push(util.format('Expected to see this content: “%s”', regex));
     }
   });
 
@@ -32,15 +27,15 @@ module.exports.init = function (lstnr, group) {
     let
       listener = l,
       checkGroup = g,
-      checkLabel = 'Required elements',
-      checkId = 'elements'
+      checkLabel = 'Expected content',
+      checkId = 'content'
     ;
 
     listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
 
     return {
-      check: function (fileContents, sels) {
-        check(listener, checkGroup, checkId, checkLabel, fileContents, sels);
+      check: function (fileContents, regexes) {
+        check(listener, checkGroup, checkId, checkLabel, fileContents, regexes);
       },
       bypass: function () {
         bypass(listener, checkGroup, checkId, checkLabel);

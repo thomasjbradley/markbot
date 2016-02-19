@@ -8,25 +8,14 @@ var
   missingOptionalTagChecker = require('./best-practices/missing-optional-closing-tags'),
   codeStyleChecker = require('./best-practices/code-style'),
   emptyLineChecker = require('./best-practices/max-empty-lines'),
-  indentationChecker = require('./best-practices/indentation'),
-  listener,
-  checkGroup,
-  checkLabel = 'Best practices & indentation',
-  checkId = 'best-practices'
+  indentationChecker = require('./best-practices/indentation')
 ;
 
-module.exports.init = function (lstnr, group) {
-  listener = lstnr;
-  checkGroup = group;
-
-  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
-};
-
-module.exports.bypass = function () {
+const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-module.exports.check = function (fullPath, fileContents, lines) {
+const check = function (listener, checkGroup, checkId, checkLabel, fileContents, lines) {
   var
     missingDocumentTags,
     forceLineBreaks,
@@ -90,4 +79,26 @@ module.exports.check = function (fullPath, fileContents, lines) {
   }
 
   listener.send('check-group:item-complete', checkGroup, checkId, checkLabel);
+};
+
+module.exports.init = function (lstnr, group) {
+  return (function (l, g) {
+    let
+      listener = l,
+      checkGroup = g,
+      checkLabel = 'Best practices & indentation',
+      checkId = 'best-practices'
+    ;
+
+    listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+
+    return {
+      check: function (fileContents, lines) {
+        check(listener, checkGroup, checkId, checkLabel, fileContents, lines);
+      },
+      bypass: function () {
+        bypass(listener, checkGroup, checkId, checkLabel);
+      }
+    };
+  }(lstnr, group));
 };

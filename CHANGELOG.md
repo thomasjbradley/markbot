@@ -5,7 +5,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.5.1] — 2016-02-19
+
+### Fixed
+
+- Multiple file checking now works as expected, previously only the last file would be properly checked.
 
 ---
 

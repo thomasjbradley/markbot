@@ -5,32 +5,21 @@ var
   path = require('path'),
   exec = require('child_process').exec,
   linter = require('eslint').linter,
-  linterConfig = require('./validation/eslint.json'),
-  listener,
-  checkGroup,
-  checkId = 'validation',
-  checkLabel = 'Validation'
+  linterConfig = require('./validation/eslint.json')
 ;
 
-module.exports.init = function (lstnr, group) {
-  listener = lstnr;
-  checkGroup = group;
-
-  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
-};
-
-module.exports.bypass = function () {
+const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-module.exports.check = function (fullPath, fullContent, lines, cb) {
+const check = function (listener, checkGroup, checkId, checkLabel, fileContents, lines, cb) {
   var
     messages = {},
     errors = []
   ;
 
   listener.send('check-group:item-computing', checkGroup, checkId);
-  messages = linter.verify(fullContent, linterConfig);
+  messages = linter.verify(fileContents, linterConfig);
 
   if (messages) {
     messages.forEach(function (item) {
@@ -40,4 +29,26 @@ module.exports.check = function (fullPath, fullContent, lines, cb) {
 
   listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
   cb(errors);
+};
+
+module.exports.init = function (lstnr, group) {
+  return (function (l, g) {
+    let
+      listener = l,
+      checkGroup = g,
+      checkId = 'validation',
+      checkLabel = 'Validation'
+    ;
+
+    listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+
+    return {
+      check: function (fileContents, lines, cb) {
+        check(listener, checkGroup, checkId, checkLabel, fileContents, lines, cb);
+      },
+      bypass: function () {
+        bypass(listener, checkGroup, checkId, checkLabel);
+      }
+    };
+  }(lstnr, group));
 };

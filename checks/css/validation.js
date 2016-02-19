@@ -5,12 +5,7 @@ var
   util = require('util'),
   exec = require('child_process').exec,
   xmlParser = require('xml2js').parseString,
-  svgCssProps = require('./validation/svg-css-props.json'),
-  previousLineCausedIgnorableError = false,
-  listener,
-  checkGroup,
-  checkId = 'validation',
-  checkLabel = 'Validation'
+  svgCssProps = require('./validation/svg-css-props.json')
 ;
 
 /**
@@ -35,51 +30,61 @@ const cleanMessage = function (message) {
   return message;
 };
 
-const shouldIncludeError = function (message, line, lines) {
+const shouldIncludeError = function (message, line, lines, fileContents) {
   var nonExistingPropMatch = null;
 
-  if (previousLineCausedIgnorableError) {
-    previousLineCausedIgnorableError = false;
-    return false;
-  }
-
   // Caused by @viewport
-  if (message == 'Parse Error' && line == 1) return false;
+  if (message == 'Parse Error' && lines[line].match(/viewport/)) return false;
   if (message.match(/at-rule @.*viewport/i)) return false;
 
-  if (message.match(/text-size-adjust/i)) return false;
+  if (message.match(/text-size-adjust/)) return false;
+  if (message.match(/text-rendering/)) return false;
+
+  // Vendor prefixes
+  if (message.match(/-webkit-/)) return false;
+  if (message.match(/-moz-/)) return false;
+  if (message.match(/-ms-/)) return false;
+  if (message.match(/-o-/)) return false;
 
   // Works around validator's calc() bug
   if (message.match(/value error.*parse error/i)) return false;
 
   if (message.match(/parse error/i)) {
     // Another work around for validator's calc() bug
-    if (lines[line - 1].match(/calc/)) {
-      previousLineCausedIgnorableError = true;
+    if (lines[line - 1].match(/calc/) || lines[line - 2].match(/calc/)) {
       return false;
+    }
+
+    // Work around for validator's attr() bug
+    if (lines[line - 1].match(/attr/) || lines[line - 2].match(/attr/)) {
+      return false;
+    }
+
+    // This also works around some weird attr() bugs, it's really hinky, don't trust it
+    if(lines[line - 1] == '}' && fileContents.match(/attr/)) {
+      return false
     }
   }
 
   // SVG properties in CSS
   nonExistingPropMatch = message.match(/Property ([\w-]+) doesn't exist./);
 
-  if (nonExistingPropMatch && nonExistingPropMatch.length > 1 && svgCssProps.indexOf(nonExistingPropMatch[1]) != -1) return false;
+  if (
+    nonExistingPropMatch
+    && nonExistingPropMatch.length > 1
+    && svgCssProps.indexOf(nonExistingPropMatch[1]) != -1
+  ) {
+    return false;
+  }
 
   return true;
 };
 
-module.exports.init = function (lstnr, group) {
-  listener = lstnr;
-  checkGroup = group;
-
-  listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
-};
-
-module.exports.bypass = function () {
+const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-module.exports.check = function (fullPath, fullContent, lines, cb) {
+const check = function (listener, checkGroup, checkId, checkLabel, fullPath, fileContents, lines, cb) {
   var
     validatorPath = path.resolve(__dirname + '/../../vendor'),
     execPath = 'java -jar ' + escapeShell(validatorPath + '/css-validator.jar') + ' --output=soap12 ' + escapeShell('file://' + convertToUrl(fullPath))
@@ -95,8 +100,7 @@ module.exports.check = function (fullPath, fullContent, lines, cb) {
         results = result['env:Envelope']['env:Body'][0]['m:cssvalidationresponse'][0]['m:result'][0]['m:errors'][0],
         errorCount = parseInt(results['m:errorcount'][0], 10),
         errorsList,
-        errors = [],
-        prevError = false
+        errors = []
       ;
 
       if (errorCount > 0) {
@@ -108,11 +112,9 @@ module.exports.check = function (fullPath, fullContent, lines, cb) {
             message = error['m:message'][0].trim().replace(/\s*\:$/, '.')
           ;
 
-          if (shouldIncludeError(message, line, lines)) {
+          if (shouldIncludeError(message, line, lines, fileContents)) {
             errors.push(util.format('Line %d: %s', line, message));
           }
-
-          prevError = message;
         });
       }
 
@@ -120,4 +122,26 @@ module.exports.check = function (fullPath, fullContent, lines, cb) {
       cb(errors);
     });
   });
+};
+
+module.exports.init = function (lstnr, group) {
+  return (function (l, g) {
+    let
+      listener = l,
+      checkGroup = g,
+      checkId = 'validation',
+      checkLabel = 'Validation'
+    ;
+
+    listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
+
+    return {
+      check: function (fullPath, fileContents, lines, cb) {
+        check(listener, checkGroup, checkId, checkLabel, fullPath, fileContents, lines, cb);
+      },
+      bypass: function () {
+        bypass(listener, checkGroup, checkId, checkLabel);
+      }
+    };
+  }(lstnr, group));
 };

@@ -8,36 +8,36 @@ var
   validation = require('./css/validation'),
   bestPractices = require('./css/best-practices'),
   properties = require('./css/properties'),
-  content = require('./css/content')
+  content = require('./content')
 ;
-
-const initChecks = function (listener, file, group) {
-  if (file.valid) {
-    validation.init(listener, group);
-    if (file.bestPractices) bestPractices.init(listener, group);
-  }
-
-  if (file.has) properties.init(listener, group);
-  if (file.search) content.init(listener, group);
-};
-
-const bypassAllChecks = function (file) {
-  if (file.valid) validation.bypass();
-  if (file.bestPractices) bestPractices.bypass();
-  if (file.has) properties.bypass();
-  if (file.search) content.bypass();
-};
 
 module.exports.check = function (listener, filePath, file, group) {
   var
     errors = [],
     fullPath = path.resolve(filePath + '/' + file.path),
-    fileContents = ''
+    fileContents = '',
+    validationChecker,
+    bestPracticesChecker,
+    propertiesChecker,
+    contentChecker
   ;
+
+  const bypassAllChecks = function (f) {
+    if (f.valid) validationChecker.bypass();
+    if (f.bestPractices) bestPracticesChecker.bypass();
+    if (f.has) propertiesChecker.bypass();
+    if (f.search) contentChecker.bypass();
+  };
 
   listener.send('check-group:item-new', group, 'exists', 'Exists');
 
-  initChecks(listener, file, group);
+  if (file.valid) {
+    validationChecker = validation.init(listener, group);
+    if (file.bestPractices) bestPracticesChecker = bestPractices.init(listener, group);
+  }
+
+  if (file.has) propertiesChecker = properties.init(listener, group);
+  if (file.search) contentChecker = content.init(listener, group);
 
   if (!exists.check(fullPath)) {
     listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is missing or misspelled', file.path)]);
@@ -58,16 +58,16 @@ module.exports.check = function (listener, filePath, file, group) {
     lines = fileContents.toString().split('\n');
 
     if (file.valid) {
-      validation.check(fullPath, fileContents, lines, function (err) {
+      validationChecker.check(fullPath, fileContents, lines, function (err) {
         if (!err || err.length <= 0) {
-          if (file.bestPractices) bestPractices.check(fullPath, fileContents, lines);
+          if (file.bestPractices) bestPracticesChecker.check(fileContents, lines);
         } else {
-          bestPractices.bypass();
+          bestPracticesChecker.bypass();
         }
       });
     }
 
-    if (file.has) properties.check(fileContents, file.has);
-    if (file.search) content.check(fileContents, file.search);
+    if (file.has) propertiesChecker.check(fileContents, file.has);
+    if (file.search) contentChecker.check(fileContents, file.search);
   });
 };
