@@ -3,6 +3,7 @@
 const
   markbot = require('electron').remote.require('./markbot'),
   listener = require('electron').ipcRenderer,
+  shell = require('electron').shell,
   successMessages = require('./lib/success-messages.json'),
   $body = document.querySelector('body'),
   $dropbox = document.getElementById('dropbox'),
@@ -87,14 +88,20 @@ const buildCodeDiffErrorMessage = function (err, li) {
 const buildImageDiffErrorMessage = function (err, li) {
   var
     message = document.createElement('span'),
+    div = document.createElement('div'),
+    inDiv = document.createElement('div'),
     img = document.createElement('img')
   ;
 
   message.textContent = err.message;
+  div.classList.add('img-wrap');
+  inDiv.classList.add('img-wrap-inner');
   img.src = err.image + '?' + Date.now();
 
+  div.appendChild(img);
+  div.appendChild(inDiv);
   li.appendChild(message);
-  li.appendChild(img);
+  li.appendChild(div);
 };
 
 const buildErrorMessageFromObject = function (err, li) {
@@ -247,6 +254,20 @@ document.addEventListener('keydown', function (e) {
   ;
 
   if (macShortcut || winShortcut) markbot.showDevelopMenu();
+});
+
+document.addEventListener('click', function (e) {
+  if (e.target.matches('.img-wrap-inner')) {
+    let imgPath = e
+      .target
+      .parentNode
+      .querySelector('img')
+      .src
+      .replace(/\?\d+$/, '')
+      .replace(/file\:\/\//, '')
+      ;
+    shell.openItem(imgPath);
+  }
 });
 
 $repoName.addEventListener('click', function (e) {

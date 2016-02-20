@@ -401,9 +401,27 @@ body {
   color: #a8a6af;
 }
 
+#messages .img-wrap {
+  margin-top: 0.4rem;
+  max-height: 400px;
+  overflow: hidden;
+  position: relative;
+
+  border: 1px solid #dfdcda;
+  border-radius: 4px;
+  cursor: zoom-in;
+}
+
+#messages .img-wrap-inner {
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+}
+
 #messages img {
   display: block;
-  margin-top: 0.4rem;
   width: 100%;
 }
 
