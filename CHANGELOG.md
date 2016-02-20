@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Reference screenshots can be generated from the “Develop” menu.
+- Screenshot differences can now be compared against reference files.
 
 ---
 
