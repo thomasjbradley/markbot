@@ -97,7 +97,7 @@ Here are the properties that you can use in the Markbot file for testing:
 - `js` — [for testing Javascript files.](#javascript-file-tests)
 - `screenshots` — [for comparing visual differences with screenshots.](#screenshot-comparisons)
 
-*If you plan on using the **Canvas auto-grading feature, check out [Markbot Server](#markbot-server).***
+**If you plan on using the Canvas auto-grading feature, check out [Markbot Server](#markbot-server).**
 
 ### HTML file tests
 
