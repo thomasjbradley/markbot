@@ -18,6 +18,7 @@ Built with Javascript, Node.js & Electron.
   - [HTML file tests](#html-file-tests)
   - [CSS file tests](#css-file-tests)
   - [JS file tests](#javascript-file-tests)
+  - [Screenshot comparisons](#screenshot-comparisons)
 - [Installation on student computers](#installation-on-student-computers)
   - [Git](#git)
   - [JDK](#jdk)
@@ -29,6 +30,7 @@ Built with Javascript, Node.js & Electron.
     - [CSS validator](#css-validator)
       - [Compiling the CSS validator](#compiling-the-css-validator)
   - [Running Markbot](#running-markbot)
+- [Debugging Markbot](#debugging-markbot)
 - [Markbot Server](#markbot-server)
 - [License & copyright](#license--copyright)
 
@@ -93,6 +95,9 @@ Here are the properties that you can use in the Markbot file for testing:
 - `html` — [for testing HTML files.](#html-file-tests)
 - `css` — [for testing CSS files.](#css-file-tests)
 - `js` — [for testing Javascript files.](#javascript-file-tests)
+- `screenshots` — [for comparing visual differences with screenshots.](#screenshot-comparisons)
+
+*If you plan on using the **Canvas auto-grading feature, check out [Markbot Server](#markbot-server).***
 
 ### HTML file tests
 
@@ -176,7 +181,27 @@ js:
       - 'addEventListener'
 ```
 
-*If you plan on using the Canvas auto-grading feature, check out [Markbot Server](#markbot-server).*
+### Screenshot comparisons
+
+Markbot can be used to compare student work against reference screenshots included in the repository.
+
+```yml
+screenshots:
+    # The path to the HTML file that will be screenshot
+  - path: 'index.html'
+    # An array of different screen widths for taking screenshots
+    sizes: [400, 650, 960]
+```
+
+*Markbot will look in the `screenshots` folder for images to compare against.*
+
+The screenshots should be generated using Markbot itself for the most consistency—trigger the “Develop” menu (`Command+Shift+Esc`) and press “Generate Reference Screenshots”.
+
+Markbot will display differences to students highlighted in a bright colour. Difference percentages are calculated and **anything with a difference greater than 10% is considered an error.**
+
+![](readme/visual-diff.png)
+
+*An example of screenshot difference errors.*
 
 ---
 
@@ -285,6 +310,14 @@ npm run build:win
 ```
 
 That’s it, Markbot should be ready to go.
+
+---
+
+## Debugging Markbot
+
+Markbot has access to the developer tools and web inspector as well as a few other tools hidden in the “Develop” menu.
+
+**To enable the “Develop” menu press `Command+Shift+Esc` or `Ctrl+Shift+Esc`.**
 
 ---
 
