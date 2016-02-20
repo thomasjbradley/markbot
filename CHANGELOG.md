@@ -12,6 +12,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Screenshots in error list now have a maximum height and can be zoomed (opened in default image viewer) by clicking.
 - Markbot will send its current version number to Markbot Server to help prevent students from using outdated versions of Markbot.
 
+### Fixed
+
+- Refactored screenshot diffing system to support Windows and better support slower events and processing.
+
 ---
 
 ## [2.6.0] — 2016-02-19

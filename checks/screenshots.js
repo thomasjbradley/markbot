@@ -48,27 +48,34 @@ const saveScreenshot = function (filePath, width, img, refScreenPath) {
   return fullPath;
 }
 
+const takeScreenshotAtWidth = function (win, filePath, sizes, refScreenPath, savedPaths, cb) {
+  if (sizes.length > 0) {
+    let width = sizes.shift();
+
+    win.setSize(width, defaultHeight);
+    win.webContents.executeJavaScript(util.format(
+      'window.resizeTo(%d, (document.documentElement.offsetHeight > %d) ? document.documentElement.offsetHeight : %d)',
+      width,
+      defaultHeight,
+      defaultHeight
+    ));
+
+    // Artificial delay to wait for the resized browser to re-render
+    setTimeout(function () {
+      win.capturePage(function (img) {
+        savedPaths.push(saveScreenshot(filePath, width, img, refScreenPath));
+        takeScreenshotAtWidth(win, filePath, sizes, refScreenPath, savedPaths, cb);
+      });
+    }, 300);
+  } else {
+    if (cb) cb(savedPaths);
+  }
+};
+
 const takeScreenshots = function (win, file, refScreenPath, cb) {
-  let
-    totalSizes = file.sizes.length,
-    completionTimer,
-    savedScreenshots = []
-    ;
-
-  file.sizes.forEach(function (width, i) {
-    if (i !== 0) win.setSize(width, defaultHeight);
-
-    win.capturePage({x: 0, y: 0, width: width, height: win.getContentSize()[1]}, function (img) {
-      savedScreenshots.push(saveScreenshot(file.path, width, img, refScreenPath));
-    });
+  takeScreenshotAtWidth(win, file.path, file.sizes.slice(0), refScreenPath, [], function (paths) {
+    cb(paths);
   });
-
-  completionTimer = setInterval(function () {
-    if (savedScreenshots.length >= totalSizes) {
-      clearInterval(completionTimer);
-      cb(savedScreenshots);
-    }
-  }, 50);
 };
 
 const findMatchingScreenshots = function (screenshotPaths, refScreenPath) {
@@ -77,7 +84,7 @@ const findMatchingScreenshots = function (screenshotPaths, refScreenPath) {
   screenshotPaths.forEach(function (file) {
     let
       filename,
-      filenameMatches = file.match(new RegExp(util.format('\/%s-(.+)\.png$', screenshotPrefix))),
+      filenameMatches = file.match(new RegExp(util.format('%s-(.+)\.png$', screenshotPrefix))),
       imgPath = path.resolve(refScreenPath + '/' + refScreenFolder)
       ;
 
@@ -113,8 +120,13 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
       nodeIntegration: false,
       defaultEncoding: 'UTF-8'
     }),
-    refScreenPath = (genRefScreens) ? path.resolve(fullPath) : false
+    refScreenPath = (genRefScreens) ? path.resolve(fullPath) : false,
+    differs = {}
     ;
+
+  file.sizes.forEach(function (size) {
+    differs[size] = differ.init(listener, group, file.path, size);
+  });
 
   win.loadURL(pageUrl);
 
@@ -124,18 +136,23 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     var loadingTimer = setInterval(function () {
       if (!win.webContents.isLoading()) {
         clearInterval(loadingTimer);
-        takeScreenshots(win, file, refScreenPath, function (screenshotPaths) {
-          win.destroy();
-          win = null;
 
-          if (!genRefScreens) {
-            let bothScreens = findMatchingScreenshots(screenshotPaths, path.resolve(fullPath));
-            file.sizes.forEach(function (size) {
-              let diffChecker = differ.init(listener, group, file.path, size);
-              diffChecker.check(bothScreens[size]);
-            });
-          }
-        });
+        // Artificial delay for final rendering bits, sometimes a little slower than isLoading() call
+        setTimeout(function () {
+          takeScreenshots(win, file, refScreenPath, function (screenshotPaths) {
+            win.destroy();
+            win = null;
+
+            if (!genRefScreens) {
+              let bothScreens = findMatchingScreenshots(screenshotPaths, path.resolve(fullPath));
+
+              file.sizes.forEach(function (size) {
+                differs[size].check(bothScreens[size]);
+              });
+            }
+          });
+        }, 200);
+
       }
     }, 100);
   });

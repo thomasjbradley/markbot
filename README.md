@@ -195,7 +195,7 @@ screenshots:
 
 *Markbot will look in the `screenshots` folder for images to compare against.*
 
-The screenshots should be generated using Markbot itself for the most consistency—trigger the “Develop” menu (`Command+Shift+Esc`) and press “Generate Reference Screenshots”.
+The screenshots should be generated using Markbot itself for the most consistency—trigger the “Develop” menu (`Shift+Esc`) and press “Generate Reference Screenshots”.
 
 Markbot will display differences to students highlighted in a bright colour. Difference percentages are calculated and **anything with a difference greater than 10% is considered an error.**
 
@@ -317,7 +317,7 @@ That’s it, Markbot should be ready to go.
 
 Markbot has access to the developer tools and web inspector as well as a few other tools hidden in the “Develop” menu.
 
-**To enable the “Develop” menu press `Command+Shift+Esc` or `Ctrl+Shift+Esc`.**
+**To enable the “Develop” menu press `Shift+Esc`.**
 
 ---
 

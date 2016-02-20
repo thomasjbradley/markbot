@@ -249,12 +249,9 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 });
 
 document.addEventListener('keydown', function (e) {
-  let
-    macShortcut = (e.keyCode == 27 && e.metaKey),
-    winShortcut = (e.keyCode == 27 && e.ctrlKey)
-  ;
+  let shortcut = (e.keyCode == 27 && e.shiftKey);
 
-  if (macShortcut || winShortcut) markbot.showDevelopMenu();
+  if (shortcut) markbot.showDevelopMenu();
 });
 
 document.addEventListener('click', function (e) {
@@ -266,6 +263,7 @@ document.addEventListener('click', function (e) {
       .src
       .replace(/\?\d+$/, '')
       .replace(/file\:\/\//, '')
+      .replace(/^\/(\w\:)/, '$1') // Remove first slash on Windows
       ;
     shell.openItem(imgPath);
   }
