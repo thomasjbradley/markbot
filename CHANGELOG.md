@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Screenshots in error list now have a maximum height and can be zoomed (opened in default image viewer) by clicking.
+
+---
+
 ## [2.6.0] — 2016-02-19
 
 ### Added
