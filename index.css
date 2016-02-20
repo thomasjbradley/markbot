@@ -202,6 +202,7 @@ body {
 #checks a[data-status="succeeded"] {
   border-color: #6dd110;
   background-color: #c1e89b;
+  pointer-events: none;
   color: #417d0a;
 }
 
