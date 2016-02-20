@@ -327,6 +327,8 @@ Markbot has access to the developer tools and web inspector as well as a few oth
 
 It’s used for the purpose of connecting Markbot to Canvas. Everything is on a separate server to keep my own personal Canvas API key secret, and to create a mapping for student GitHub usernames to Canvas student IDs.
 
+Markbot will send its current version number to Markbot Server to help prevent students from using outdated versions of Markbot.
+
 [**Find out more about Markbot Server.**](https://github.com/thomasjbradley/markbot-server)
 
 ---

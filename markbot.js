@@ -17,6 +17,7 @@ var
   util = require('util'),
   https = require('https'),
   yaml = require('js-yaml'),
+  appPkg = require('./package.json'),
   config = require('./config.json'),
   markbotFile = {},
   exists = require('./checks/file-exists'),
@@ -176,12 +177,13 @@ exports.submitToCanvas = function (ghUsername, cb) {
     util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
     util.format('gh_username=%s', encodeURI(ghUsername)),
     util.format('canvas_course=%s', markbotFile.canvasCourse),
-    util.format('canvas_assignment=%s', markbotFile.canvasAssignment)
+    util.format('canvas_assignment=%s', markbotFile.canvasAssignment),
+    util.format('markbot_version=%s', appPkg.version)
   ];
 
   https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {
     res.on('data', function (data) {
-      cb(false);
+      cb(false, JSON.parse(data.toString('utf8')));
     });
   }).on('error', function (e) {
     cb(true);

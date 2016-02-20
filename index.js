@@ -237,11 +237,12 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
     $canvasBtn.setAttribute('disabled', true);
 
     markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
-      if (!err) {
+      if (!err && data.code == 200) {
         $canvasBtn.dataset.state = 'done';
       } else {
         $canvasBtn.dataset.state = '';
         $canvasBtn.removeAttribute('disabled');
+        if (data.message) alert(data.message);
       }
     });
   }

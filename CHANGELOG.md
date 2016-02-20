@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Screenshots in error list now have a maximum height and can be zoomed (opened in default image viewer) by clicking.
+- Markbot will send its current version number to Markbot Server to help prevent students from using outdated versions of Markbot.
 
 ---
 
