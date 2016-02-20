@@ -87,17 +87,11 @@ const buildCodeDiffErrorMessage = function (err, li) {
 const buildImageDiffErrorMessage = function (err, li) {
   var
     message = document.createElement('span'),
-    details = document.createElement('details'),
-    summary = document.createElement('summary'),
     img = document.createElement('img')
   ;
 
   message.textContent = err.message;
   img.src = err.image + '?' + Date.now();
-  summary.textContent = 'See screenshot differences…';
-
-  details.appendChild(summary);
-  details.appendChild(img);
 
   li.appendChild(message);
   li.appendChild(img);
