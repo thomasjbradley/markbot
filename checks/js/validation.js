@@ -3,7 +3,6 @@
 var
   util = require('util'),
   path = require('path'),
-  exec = require('child_process').exec,
   linter = require('eslint').linter,
   linterConfig = require('./validation/eslint.json')
 ;

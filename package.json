@@ -23,6 +23,7 @@
     "mkdirp": "^0.5.1",
     "mocha": "^2.3.4",
     "node-dir": "^0.1.11",
+    "node-resemble-js": "0.0.5",
     "stylelint": "^3.2.1",
     "xml2js": "^0.4.16"
   },

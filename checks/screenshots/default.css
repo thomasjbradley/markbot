@@ -1,0 +1,6 @@
+*, *::before, *::after {
+  -webkit-animation: none !important;
+  animation: none !important;
+  -webkit-transition: none !important;
+  transition: none !important;
+}

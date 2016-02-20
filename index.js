@@ -31,7 +31,7 @@ const classify = function (str) {
   return str.replace(/[^a-z0-9\-]/ig, '-').replace(/\-+/g, '-').toLowerCase();
 };
 
-const buildErrorMessageFromArray = function (err, li) {
+const buildCodeDiffErrorMessage = function (err, li) {
   var
     message = document.createElement('span'),
     code = document.createElement('section'),
@@ -43,7 +43,7 @@ const buildErrorMessageFromArray = function (err, li) {
     expectedPre = document.createElement('pre')
   ;
 
-  message.textContent = err[0];
+  message.textContent = err.message;
 
   code.classList.add('error-code-block');
   sawDiv.classList.add('error-sample-saw');
@@ -53,20 +53,20 @@ const buildErrorMessageFromArray = function (err, li) {
   sawHead.classList.add('error-sample-head');
   expectedHead.classList.add('error-sample-head');
 
-  err[1].saw.forEach(function (line, i) {
+  err.code.saw.forEach(function (line, i) {
     var tag = document.createElement('code');
     tag.textContent = line;
 
-    if (i == err[1].line) tag.classList.add('error-sample-line');
+    if (i == err.code.line) tag.classList.add('error-sample-line');
 
     sawPre.innerHTML += tag.outerHTML;
   });
 
-  err[1].expected.forEach(function (line, i) {
+  err.code.expected.forEach(function (line, i) {
     var tag = document.createElement('code');
     tag.textContent = line;
 
-    if (i == err[1].line) tag.classList.add('error-sample-line');
+    if (i == err.code.line) tag.classList.add('error-sample-line');
 
     expectedPre.innerHTML += tag.outerHTML;
   });
@@ -84,6 +84,36 @@ const buildErrorMessageFromArray = function (err, li) {
   li.appendChild(code);
 };
 
+const buildImageDiffErrorMessage = function (err, li) {
+  var
+    message = document.createElement('span'),
+    details = document.createElement('details'),
+    summary = document.createElement('summary'),
+    img = document.createElement('img')
+  ;
+
+  message.textContent = err.message;
+  img.src = err.image + '?' + Date.now();
+  summary.textContent = 'See screenshot differences…';
+
+  details.appendChild(summary);
+  details.appendChild(img);
+
+  li.appendChild(message);
+  li.appendChild(img);
+};
+
+const buildErrorMessageFromObject = function (err, li) {
+  switch (err.type) {
+    case 'code-diff':
+      buildCodeDiffErrorMessage(err, li);
+      break;
+    case 'image-diff':
+      buildImageDiffErrorMessage(err, li);
+      break;
+  }
+};
+
 const displayErrors = function (group, label, linkId, errors, status) {
   const
     $errorGroup = document.createElement('div'),
@@ -98,10 +128,10 @@ const displayErrors = function (group, label, linkId, errors, status) {
   errors.forEach(function (err) {
     const li = document.createElement('li');
 
-    if (Array.isArray(err)) {
-      buildErrorMessageFromArray(err, li);
+    if (typeof err == 'object') {
+      buildErrorMessageFromObject(err, li);
 
-      if (err[2] && err[2].type) status = err[2].type;
+      if (err.status) status = err.status;
     } else {
       li.textContent = err;
     }
@@ -218,8 +248,8 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 
 document.addEventListener('keydown', function (e) {
   let
-    macShortcut = (e.keyCode == 73 && e.altKey && e.metaKey),
-    winShortcut = (e.keyCode == 73 && e.shiftKey && e.ctrlKey)
+    macShortcut = (e.keyCode == 27 && e.metaKey),
+    winShortcut = (e.keyCode == 27 && e.ctrlKey)
   ;
 
   if (macShortcut || winShortcut) markbot.showDevelopMenu();

@@ -41,7 +41,7 @@ var
 ;
 
 const updateAppMenu = function () {
-  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, mainWindow, listener, menuCallbacks, menuOptions)));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, listener, menuCallbacks, menuOptions)));
 };
 
 const createWindow = function () {
@@ -81,8 +81,6 @@ menuCallbacks.revealFolder = exports.revealFolder;
 exports.showDevelopMenu = function () {
   menuOptions.showDevelop = true;
   updateAppMenu();
-
-  if (!mainWindow.isDevToolsOpened()) mainWindow.openDevTools();
 };
 
 exports.disableFolderMenuFeatures = function () {
@@ -107,7 +105,10 @@ exports.enableSignOut = function (username) {
 
 exports.diffScreenshots = function (genRefScreens) {
   markbotFile.screenshots.forEach(function (file) {
-    listener.send('check-group:new', 'screenshots', 'Screenshots');
+    if (!genRefScreens) {
+      listener.send('check-group:new', 'screenshots', 'Screenshots');
+    }
+
     screenshots.check(listener, currentFolderPath, file, 'screenshots', genRefScreens);
   });
 };

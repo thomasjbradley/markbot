@@ -401,6 +401,12 @@ body {
   color: #a8a6af;
 }
 
+#messages img {
+  display: block;
+  margin-top: 0.4rem;
+  width: 100%;
+}
+
 pre, code {
   display: block;
 

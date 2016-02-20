@@ -71,11 +71,12 @@ module.exports.check = function (fileContents, lines) {
 
     if (lines[i].trim() != beautifiedLines[i].trim()) {
       if (shouldThrowBreakingError(lines[i], beautifiedLines[i])) {
-        errors.push([
-          util.format('Around line %d: Unexpected indentation', i + 1),
-          grabChunk(i, lines, beautifiedLines),
-          { type: 'skip' }
-        ]);
+        errors.push({
+          type: 'code-diff',
+          message: util.format('Around line %d: Unexpected indentation', i + 1),
+          code: grabChunk(i, lines, beautifiedLines),
+          status: true
+        });
         break;
       }
     }
