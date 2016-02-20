@@ -64,7 +64,7 @@ There’s a few things you’ll need to do to set the repo up properly for Markb
 
 1. Create a [build of the Markbot.app](#building-markbot) that points to your version of [Markbot Server](#markbot-server).
 2. Create a repo on GitHub with a `.markbot.yml` file inside—[see Markbot configuration below](#configuration-with-markbot-files).
-3. I usually put `.editorconfig` and `.gitignore` files in the repo to help the students not make stupid mistakes. [See the Markbot repo template on GitHub.](https://github.com/thomasjbradley/markbot-template)
+3. I usually put `.editorconfig` and `.gitignore` files in the repo to help the students not make simple mistakes. [See the Markbot repo template on GitHub.](https://github.com/thomasjbradley/markbot-template)
 4. I usually make sure the repo is set up with `gh-pages` so it is a live website for the students.
 5. Get the students to [download Markbot and it’s dependencies onto their computers](#installation-on-student-computers).
 6. Use Markbot while coding…
@@ -213,6 +213,8 @@ Before getting Markbot working on student machines, these two things should be d
 
 Use the Mac OS X Terminal and install the command line tools with `xcode-select --install`
 
+On Windows, [install Git directly from the website](https://git-scm.com/download/win). *When installing, on the “Adjusting your PATH environment” screen, switch to “Use Git from the Windows Command Prompt”.*
+
 ### JDK
 
 Because Markbot shells out to two JAR files, the JDK must be available on the user’s computer.
@@ -223,9 +225,7 @@ Because Markbot shells out to two JAR files, the JDK must be available on the us
 
 Check out my lesson for the students on installing it on their computers.
 
-*Specifically starting at set 13:*
-
-[**Student Markbot installation lesson.**](http://learn-the-web.algonquindesign.ca/courses/web-dev-1/install-all-the-things/#step-13)
+*Specifically starting at set 13:* [**Student Markbot installation lesson.**](http://learn-the-web.algonquindesign.ca/courses/web-dev-1/install-all-the-things/#step-13)
 
 ---
 
