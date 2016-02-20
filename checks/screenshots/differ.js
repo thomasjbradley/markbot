@@ -5,7 +5,7 @@ var
   path = require('path'),
   util = require('util'),
   resemble = require('node-resemble-js'),
-  ALLOWABLE_DIFFERENCES = 9 // Percentage defined by Resemble.js
+  ALLOWABLE_DIFFERENCES = 10 // Percentage defined by Resemble.js
 ;
 
 const bypass = function (listener, checkGroup, checkId, checkLabel) {
@@ -32,7 +32,7 @@ const check = function (listener, checkGroup, checkId, checkLabel, paths) {
       misMatch = parseFloat(data.misMatchPercentage),
       diffImgPath = paths.new.replace(/\.png$/, '-diff.png')
       ;
-console.log(misMatch, data, diffImgPath);
+
     if (misMatch > ALLOWABLE_DIFFERENCES) {
       let
         errors = [],
