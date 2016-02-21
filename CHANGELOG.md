@@ -14,6 +14,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - When screenshots are taken for multiple files only one “Screenshots” group heading is shown.
+- Screenshot diffing will now round the mismatch percentage up and throw an error at exactly 10%, not above 10%.
+
+### Fixed
+
+- Markbot will display an error when trying to check screenshots if the HTML file is missing.
 
 ---
 

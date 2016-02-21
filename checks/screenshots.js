@@ -110,7 +110,8 @@ const findMatchingScreenshots = function (screenshotPaths, refScreenPath) {
 
 module.exports.check = function (listener, fullPath, file, group, genRefScreens) {
   let
-    pageUrl = 'file:///' + path.resolve(fullPath + '/' + file.path),
+    pagePath = path.resolve(fullPath + '/' + file.path),
+    pageUrl = 'file:///' + pagePath,
     win = new BrowserWindow({
       width: file.sizes[0],
       height: defaultHeight,
@@ -127,6 +128,13 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
   file.sizes.forEach(function (size) {
     differs[size] = differ.init(listener, group, file.path, size);
   });
+
+  if (!fileExists.check(pagePath)) {
+    file.sizes.forEach(function (size) {
+      differs[size].missing();
+    });
+    return;
+  }
 
   win.loadURL(pageUrl);
 

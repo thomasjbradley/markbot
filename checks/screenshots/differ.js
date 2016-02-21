@@ -8,6 +8,10 @@ var
   ALLOWABLE_DIFFERENCES = 10 // Percentage defined by Resemble.js
 ;
 
+const missing = function (listener, checkGroup, checkId, checkLabel) {
+  listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, ['The file is missing or misspelled']);
+};
+
 const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
@@ -72,6 +76,9 @@ module.exports.init = function (lstnr, group, fp, size) {
       },
       bypass: function () {
         bypass(listener, checkGroup, checkId, checkLabel);
+      },
+      missing: function () {
+        missing(listener, checkGroup, checkId, checkLabel);
       }
     };
   }(lstnr, group, fp, size));
