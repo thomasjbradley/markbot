@@ -29,11 +29,11 @@ const check = function (listener, checkGroup, checkId, checkLabel, paths) {
 
   diff = resemble(paths.new).compareTo(paths.ref).ignoreAntialiasing().onComplete(function (data) {
     let
-      misMatch = parseFloat(data.misMatchPercentage),
+      misMatch = Math.ceil(parseFloat(data.misMatchPercentage)),
       diffImgPath = paths.new.replace(/\.png$/, '-diff.png')
       ;
 
-    if (misMatch > ALLOWABLE_DIFFERENCES) {
+    if (misMatch >= ALLOWABLE_DIFFERENCES) {
       let
         errors = [],
         diffImg = data.getDiffImage(),
