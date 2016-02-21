@@ -106,10 +106,6 @@ exports.enableSignOut = function (username) {
 
 exports.diffScreenshots = function (genRefScreens) {
   markbotFile.screenshots.forEach(function (file) {
-    if (!genRefScreens) {
-      listener.send('check-group:new', 'screenshots', 'Screenshots');
-    }
-
     screenshots.check(listener, currentFolderPath, file, 'screenshots', genRefScreens);
   });
 };
@@ -168,6 +164,7 @@ exports.onFileDropped = function(filePath) {
   }
 
   if (markbotFile.screenshots) {
+    listener.send('check-group:new', 'screenshots', 'Screenshots');
     exports.diffScreenshots();
   }
 };

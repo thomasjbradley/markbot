@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- When screenshots are taken for multiple files only one “Screenshots” group heading is shown.
+
+---
+
 ## [2.6.1] — 2016-02-20
 
 ### Added
