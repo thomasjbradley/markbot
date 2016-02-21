@@ -152,6 +152,13 @@ css:
       - ['.super', 'background-image']
       - ['.thang', 'width', '50px']
 
+    # Can be used to test that specific selectors do not contain certain properties
+    # I would use this for ensuring as little CSS duplication as possible, like forcing students to use multiple classes
+    #   [selector, [property, property, etc.]]
+    has_not:
+      - ['.btn-ghost', ['display']]
+      - ['.btn-subtle', ['font-size', 'text-decoration']]
+
     # Regex searches on the file
     search:
       - '@keyframes'

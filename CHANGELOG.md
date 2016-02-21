@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- CSS can now be checked, using the `has_not` Markbot property, to make sure certain selectors don’t have specific properties—to enforce DRY.
+
 ### Changed
 
 - When screenshots are taken for multiple files only one “Screenshots” group heading is shown.

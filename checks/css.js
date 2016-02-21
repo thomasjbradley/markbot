@@ -25,7 +25,7 @@ module.exports.check = function (listener, filePath, file, group) {
   const bypassAllChecks = function (f) {
     if (f.valid) validationChecker.bypass();
     if (f.bestPractices) bestPracticesChecker.bypass();
-    if (f.has) propertiesChecker.bypass();
+    if (f.has || f.has_not) propertiesChecker.bypass();
     if (f.search) contentChecker.bypass();
   };
 
@@ -36,7 +36,7 @@ module.exports.check = function (listener, filePath, file, group) {
     if (file.bestPractices) bestPracticesChecker = bestPractices.init(listener, group);
   }
 
-  if (file.has) propertiesChecker = properties.init(listener, group);
+  if (file.has || file.has_not) propertiesChecker = properties.init(listener, group);
   if (file.search) contentChecker = content.init(listener, group);
 
   if (!exists.check(fullPath)) {
@@ -67,7 +67,12 @@ module.exports.check = function (listener, filePath, file, group) {
       });
     }
 
-    if (file.has) propertiesChecker.check(fileContents, file.has);
+    if (file.has || file.has_not) {
+      if (file.has && !file.has_not) propertiesChecker.check(fileContents, file.has, []);
+      if (!file.has && file.has_not) propertiesChecker.check(fileContents, [], file.has_not);
+      if (file.has && file.has_not) propertiesChecker.check(fileContents, file.has, file.has_not);
+    }
+
     if (file.search) contentChecker.check(fileContents, file.search);
   });
 };
