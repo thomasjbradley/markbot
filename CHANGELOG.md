@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Screenshot difference percentages are now always sent to the console window for debugging.
+
 ### Changed
 
 - Updated the checking dependencies to fix a few errors.
