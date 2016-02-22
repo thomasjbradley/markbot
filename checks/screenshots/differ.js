@@ -37,6 +37,8 @@ const check = function (listener, checkGroup, checkId, checkLabel, paths) {
       diffImgPath = paths.new.replace(/\.png$/, '-diff.png')
       ;
 
+    listener.send('debug', util.format('%d diff — %s', misMatch, paths.new));
+
     if (misMatch >= ALLOWABLE_DIFFERENCES) {
       let
         errors = [],

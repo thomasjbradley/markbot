@@ -117,6 +117,7 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
       height: defaultHeight,
       show: false,
       frame: false,
+      enableLargerThanScreen: true,
       backgroundColor: '#fff',
       nodeIntegration: false,
       defaultEncoding: 'UTF-8'
