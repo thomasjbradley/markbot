@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Errors related to `svg:not(:root)` will now be ignored when the root specific rules are turned on.
+
+---
+
 ## [2.7.1] — 2016-02-23
 
 ### Added

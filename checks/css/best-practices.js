@@ -5,6 +5,14 @@ var
   linter = require('stylelint')
 ;
 
+const shouldIncludeError = function (message, line, lines, fileContents) {
+  /* SVG overflow: hidden CSS */
+  if (message.match(/selector-root-no-composition/) && lines[line - 1] && lines[line - 1].match(/svg/)) return false;
+  if (message.match(/root-no-standard-properties/) && lines[line - 2] && lines[line - 2].match(/svg/)) return false;
+
+  return true;
+};
+
 const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
@@ -17,7 +25,9 @@ const check = function (listener, checkGroup, checkId, checkLabel, fileContents,
 
     if (data.results) {
       data.results[0].warnings.forEach(function (item) {
-        errors.push(util.format('Line %d: %s', item.line, item.text));
+        if (shouldIncludeError(item.text, item.line, lines, fileContents)) {
+          errors.push(util.format('Line %d: %s', item.line, item.text));
+        }
       });
     }
 
