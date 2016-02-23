@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Updated the checking dependencies to fix a few errors.
+- Stop forcing the `<script>` tag onto separate lines.
 
 ### Fixed
 
