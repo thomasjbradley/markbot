@@ -15,6 +15,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Updated the checking dependencies to fix a few errors.
 
+### Fixed
+
+- When `@viewport` without vendor prefixes was the first line in the file a Javascript error was thrown.
+
 ---
 
 ## [2.7.0] — 2016-02-21

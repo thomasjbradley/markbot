@@ -34,7 +34,7 @@ const shouldIncludeError = function (message, line, lines, fileContents) {
   var nonExistingPropMatch = null;
 
   // Caused by @viewport
-  if (message == 'Parse Error' && lines[line].match(/viewport/)) return false;
+  if (message.match(/parse error/i) && lines[line].match(/viewport/) || (lines[line - 1] && lines[line - 1].match(/viewport/))) return false;
   if (message.match(/at-rule @.*viewport/i)) return false;
 
   if (message.match(/text-size-adjust/)) return false;
