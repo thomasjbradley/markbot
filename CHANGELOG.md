@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Improved the installer DMG window graphics.
+
 ### Fixed
 
 - Errors related to `svg:not(:root)` will now be ignored when the root specific rules are turned on.
