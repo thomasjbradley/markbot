@@ -4,7 +4,7 @@ var
   fs = require('fs'),
   path = require('path'),
   util = require('util'),
-  resemble = require('node-resemble-js'),
+  // resemble = require('node-resemble-js'),
   ALLOWABLE_DIFFERENCES = 10 // Percentage defined by Resemble.js
 ;
 
@@ -30,7 +30,7 @@ const check = function (listener, checkGroup, checkId, checkLabel, paths) {
     listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, ['Reference screenshot not found']);
     return;
   }
-
+/*
   diff = resemble(paths.new).compareTo(paths.ref).ignoreAntialiasing().onComplete(function (data) {
     let
       misMatch = Math.ceil(parseFloat(data.misMatchPercentage)),
@@ -61,6 +61,7 @@ const check = function (listener, checkGroup, checkId, checkLabel, paths) {
       listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, []);
     }
   });
+*/
 };
 
 module.exports.init = function (lstnr, group, fp, size) {

@@ -15,11 +15,11 @@
     "eslint": "^2.2.0",
     "git-commits": "^1.1.1",
     "htmlcs": "^0.1.11",
+    "jimp": "^0.2.21",
     "js-beautify": "^1.6.2",
     "js-yaml": "^3.5.3",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.11",
-    "node-resemble-js": "0.0.5",
     "stylelint": "^4.4.0",
     "xml2js": "^0.4.16"
   },

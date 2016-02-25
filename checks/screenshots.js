@@ -7,6 +7,7 @@ var
   mkdirp = require('mkdirp'),
   app = require('electron').app,
   BrowserWindow = require('electron').BrowserWindow,
+  jimp = require('jimp'),
   fileExists = require('./file-exists'),
   differ = require('./screenshots/differ'),
   defaultScreenshotCSS = fs.readFileSync(path.resolve(__dirname + '/screenshots/default.css'), 'utf8'),
@@ -31,7 +32,13 @@ const getScreenshotFileName = function (filePath, width, prefix) {
 };
 
 const saveScreenshot = function (filePath, width, img, refScreenPath) {
-  var filename, imgPath, fullPath;
+  var
+    filename,
+    imgPath,
+    fullPath,
+    imgBuffer,
+    imgSize = img.getSize()
+    ;
 
   if (refScreenPath) {
     filename = getScreenshotFileName(filePath, width);
@@ -43,7 +50,17 @@ const saveScreenshot = function (filePath, width, img, refScreenPath) {
     fullPath = path.resolve(app.getPath('temp') + '/' + filename);
   }
 
-  fs.writeFileSync(fullPath, img.toPng());
+  if (imgSize.width > width) {
+    // Handle screenshots taken on retina displays
+    jimp.read(img.buffer, function (err, image) {
+      image
+        .resize(width, jimp.AUTO)
+        .write(fullPath)
+        ;
+    });
+  } else {
+    fs.writeFile(fullPath, img.toPng());
+  }
 
   return fullPath;
 }
