@@ -15,6 +15,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Errors related to `svg:not(:root)` will now be ignored when the root specific rules are turned on.
+- The Canvas submission button still displayed hover effects when disabled.
 
 ---
 
