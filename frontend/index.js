@@ -1,9 +1,9 @@
 'use strict';
 
 const
-  markbot = require('electron').remote.require('./markbot'),
-  listener = require('electron').ipcRenderer,
-  shell = require('electron').shell,
+  electron = require('electron'),
+  markbot = electron.remote.require('./markbot'),
+  listener = electron.ipcRenderer,
   successMessages = require('./success-messages.json'),
   $body = document.querySelector('body'),
   $dropbox = document.getElementById('dropbox'),
@@ -85,23 +85,37 @@ const buildCodeDiffErrorMessage = function (err, li) {
   li.appendChild(code);
 };
 
+const displayDiffWindow = function (imgs, width) {
+  markbot.showDifferWindow(imgs, width);
+};
+
 const buildImageDiffErrorMessage = function (err, li) {
   var
     message = document.createElement('span'),
+    diff = document.createElement('span'),
     div = document.createElement('div'),
-    inDiv = document.createElement('div'),
-    img = document.createElement('img')
+    imgWrap = document.createElement('div'),
+    img = document.createElement('img'),
+    expectedPercent = Math.ceil(err.diff.expectedPercent * 100),
+    percent = Math.ceil(err.diff.percent * 100)
   ;
 
+  div.classList.add('diff-wrap');
   message.textContent = err.message;
-  div.classList.add('img-wrap');
-  inDiv.classList.add('img-wrap-inner');
-  img.src = err.image + '?' + Date.now();
+  diff.innerHTML = `${percent}% difference<br>Expecting less than ${expectedPercent}%`;
+  imgWrap.classList.add('diff-img-wrap');
+  img.src = `${err.images.diff}?${Date.now()}`;
 
-  div.appendChild(img);
-  div.appendChild(inDiv);
+  imgWrap.appendChild(img);
+  div.appendChild(imgWrap);
+  div.appendChild(diff);
+
   li.appendChild(message);
   li.appendChild(div);
+
+  div.addEventListener('click', function () {
+    displayDiffWindow(JSON.stringify(err.images), err.width);
+  });
 };
 
 const buildErrorMessageFromObject = function (err, li) {
@@ -255,21 +269,6 @@ document.addEventListener('keydown', function (e) {
   let shortcut = (e.keyCode == 27 && e.shiftKey);
 
   if (shortcut) markbot.showDevelopMenu();
-});
-
-document.addEventListener('click', function (e) {
-  if (e.target.matches('.img-wrap-inner')) {
-    let imgPath = e
-      .target
-      .parentNode
-      .querySelector('img')
-      .src
-      .replace(/\?\d+$/, '')
-      .replace(/file\:\/\//, '')
-      .replace(/^\/(\w\:)/, '$1') // Remove first slash on Windows
-      ;
-    shell.openItem(imgPath);
-  }
 });
 
 $repoName.addEventListener('click', function (e) {

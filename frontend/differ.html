@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-ca">
+<head>
+  <meta charset="utf-8">
+  <title>Screenshot Differences · Markbot</title>
+  <link href="common.css" rel="stylesheet">
+  <link href="differ.css" rel="stylesheet">
+</head>
+<body>
+  <input class="invisible" checked type="radio" id="radio-split" name="diff-split">
+  <input class="invisible" type="radio" id="radio-difference" name="diff-split">
+  <input class="invisible" checked type="radio" id="radio-diff-ref" name="diff">
+  <input class="invisible" type="radio" id="radio-diff-new" name="diff">
+
+  <main>
+    <section class="tab tab-difference" id="difference">
+      <div class="scrollable">
+        <img class="img-ref" id="diff-img-ref" src="#" alt="">
+        <img class="img-new" id="diff-img-new" src="#" alt="">
+        <img class="img-diff" id="diff-img-diff" src="#" alt="">
+      </div>
+      <label class="split-label split-label-ref" for="radio-diff-ref">Reference</label>
+      <label class="split-label split-label-new" for="radio-diff-new">Yours</label>
+      <label for="diff-range" class="invisible-text">Opacity</label>
+      <input type="range" min="0.0" max="1.0" step="0.01" id="diff-range">
+    </section>
+    <section class="tab tab-split" id="split">
+      <div class="scrollable">
+        <img class="img-ref" id="split-img-ref" src="#" alt="">
+        <img class="img-new" id="split-img-new" src="#" alt="">
+      </div>
+      <div class="splitter">Drag to see the differences</div>
+      <strong class="split-label split-label-ref">Reference</strong>
+      <strong class="split-label split-label-new">Yours</strong>
+    </section>
+  </main>
+
+  <footer>
+    <nav>
+      <ul class="tabs">
+        <li><label for="radio-split">Split</label></li>
+        <li><label for="radio-difference">Difference</label></li>
+      </ul>
+    </nav>
+  </footer>
+
+  <script src="differ.js"></script>
+</body>
+</html>
