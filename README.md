@@ -1,8 +1,8 @@
-# ![](readme/markbot-logo.png) Markbot
+# ![](.readme/markbot-logo.png) Markbot
 
 *Your friendly neighbourhood marking robot.*
 
-![](readme/screenshot.png)
+![](.readme/screenshot.png)
 
 **This is an application I use that automatically tests and marks student code assignments in Algonquin College Graphic Design’s Web Dev courses.**
 
@@ -206,7 +206,7 @@ The screenshots should be generated using Markbot itself for the most consistenc
 
 Markbot will display differences to students highlighted in a bright colour. Difference percentages are calculated and **anything with a difference greater than 10% is considered an error.**
 
-![](readme/visual-diff.png)
+![](.readme/visual-diff.png)
 
 *An example of screenshot difference errors.*
 

@@ -52,7 +52,7 @@ const createWindow = function () {
     titleBarStyle: 'hidden-inset'
   });
 
-  mainWindow.loadURL('file://' + __dirname + '/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/frontend/index.html');
 
   mainWindow.on('closed', function() {
     mainWindow = null;

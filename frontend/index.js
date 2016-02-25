@@ -4,7 +4,7 @@ const
   markbot = require('electron').remote.require('./markbot'),
   listener = require('electron').ipcRenderer,
   shell = require('electron').shell,
-  successMessages = require('./lib/success-messages.json'),
+  successMessages = require('./success-messages.json'),
   $body = document.querySelector('body'),
   $dropbox = document.getElementById('dropbox'),
   $checks = document.getElementById('checks'),

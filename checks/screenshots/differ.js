@@ -80,6 +80,7 @@ const compare = function (distance, percent, imgPaths) {
           ref: `file:///${imgPaths.ref}`,
           new: `file:///${imgPaths.new}`,
           diff: `file:///${imgPaths.diff}`
+        }
       }]
     });
   } else {
