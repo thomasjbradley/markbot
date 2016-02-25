@@ -61,10 +61,10 @@ const bypass = function () {
   });
 };
 
-const compare = function (imgPath, distance, percent) {
+const compare = function (distance, percent, imgPaths) {
   process.send({
     type: 'debug',
-    debug: ['distance', distance, 'percent', percent, imgPath]
+    debug: ['distance', distance, 'percent', percent, imgPaths.diff]
   });
 
   if (distance >= ALLOWED_DISTANCE_DIFFERENCE || percent >= ALLOWED_PERCENT_DIFFERENCE) {
@@ -76,7 +76,10 @@ const compare = function (imgPath, distance, percent) {
       errors: [{
         type: 'image-diff',
         message: `Too visually different from screenshot`,
-        image: 'file:///' + imgPath
+        images: {
+          ref: `file:///${imgPaths.ref}`,
+          new: `file:///${imgPaths.new}`,
+          diff: `file:///${imgPaths.diff}`
       }]
     });
   } else {
@@ -124,7 +127,11 @@ const check = function (paths) {
       distance = jimp.distance(refImg, newImg);
       diff = jimp.diff(refImg, newImg);
       diff.image.write(diffImgPath, function () {
-        compare(diffImgPath, distance, diff.percent);
+        compare(distance, diff.percent, {
+          ref: paths.ref,
+          new: paths.new,
+          diff: diffImgPath
+        });
       });
     });
   });
