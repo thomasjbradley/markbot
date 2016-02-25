@@ -4,12 +4,12 @@ var
   fs = require('fs'),
   path = require('path'),
   util = require('util'),
+  fork = require('child_process').fork,
   mkdirp = require('mkdirp'),
   app = require('electron').app,
   BrowserWindow = require('electron').BrowserWindow,
   jimp = require('jimp'),
   fileExists = require('./file-exists'),
-  differ = require('./screenshots/differ'),
   defaultScreenshotCSS = fs.readFileSync(path.resolve(__dirname + '/screenshots/default.css'), 'utf8'),
   screenshotPrefix = 'markbot',
   defaultHeight = 400,
@@ -31,7 +31,7 @@ const getScreenshotFileName = function (filePath, width, prefix) {
   );
 };
 
-const saveScreenshot = function (filePath, width, img, refScreenPath) {
+const saveScreenshot = function (filePath, width, img, refScreenPath, cb) {
   var
     filename,
     imgPath,
@@ -55,35 +55,36 @@ const saveScreenshot = function (filePath, width, img, refScreenPath) {
     jimp.read(img.buffer, function (err, image) {
       image
         .resize(width, jimp.AUTO)
-        .write(fullPath)
+        .write(fullPath, function () {
+          cb(fullPath);
+        })
         ;
     });
   } else {
-    fs.writeFile(fullPath, img.toPng());
+    fs.writeFile(fullPath, img.toPng(), function () {
+      cb(fullPath);
+    });
   }
-
-  return fullPath;
 }
 
 const takeScreenshotAtWidth = function (win, filePath, sizes, refScreenPath, savedPaths, cb) {
   if (sizes.length > 0) {
-    let width = sizes.shift();
+    let
+      width = sizes.shift(),
+      js = `window.resizeTo(${width}, (document.documentElement.offsetHeight > ${defaultHeight}) ? document.documentElement.offsetHeight : ${defaultHeight})`
+      ;
 
-    win.setSize(width, defaultHeight);
-    win.webContents.executeJavaScript(util.format(
-      'window.resizeTo(%d, (document.documentElement.offsetHeight > %d) ? document.documentElement.offsetHeight : %d)',
-      width,
-      defaultHeight,
-      defaultHeight
-    ));
+    win.webContents.executeJavaScript(js);
 
     // Artificial delay to wait for the resized browser to re-render
     setTimeout(function () {
       win.capturePage(function (img) {
-        savedPaths.push(saveScreenshot(filePath, width, img, refScreenPath));
-        takeScreenshotAtWidth(win, filePath, sizes, refScreenPath, savedPaths, cb);
+        saveScreenshot(filePath, width, img, refScreenPath, function (path) {
+          savedPaths.push(path);
+          takeScreenshotAtWidth(win, filePath, sizes, refScreenPath, savedPaths, cb);
+        });
       });
-    }, 300);
+    }, 600);
   } else {
     if (cb) cb(savedPaths);
   }
@@ -144,12 +145,38 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     ;
 
   file.sizes.forEach(function (size) {
-    differs[size] = differ.init(listener, group, file.path, size);
+    differs[size] = fork(`${__dirname}/screenshots/differ`, {
+      cwd: path.resolve(__dirname, '../node_modules'),
+      env: {
+        NODE_PATH: path.resolve(__dirname, '../node_modules')
+      }
+    });
+
+    differs[size].send({
+      type: 'init',
+      filePath: file.path,
+      size: size
+    });
+
+    differs[size].on('message', function (message) {
+      switch (message.type) {
+        case 'kill':
+          differs[size].kill();
+          delete differs[size];
+          break;
+        case 'debug':
+          listener.send('debug', message.debug.join(' '));
+          break;
+        default:
+          listener.send(message.id, group, message.checkId, message.checkLabel, message.errors);
+          break;
+      }
+    });
   });
 
   if (!fileExists.check(pagePath)) {
     file.sizes.forEach(function (size) {
-      differs[size].missing();
+      differs[size].send({type: 'missing'});
     });
     return;
   }
@@ -173,7 +200,10 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
               let bothScreens = findMatchingScreenshots(screenshotPaths, path.resolve(fullPath));
 
               file.sizes.forEach(function (size) {
-                differs[size].check(bothScreens[size]);
+                differs[size].send({
+                  type: 'check',
+                  paths: bothScreens[size]
+                });
               });
             }
           });
