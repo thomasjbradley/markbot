@@ -28,6 +28,7 @@ var
   js = require('./checks/javascript'),
   screenshots = require('./checks/screenshots'),
   mainWindow,
+  differWindow,
   listener,
   menuCallbacks = {},
   menuOptions = {
@@ -54,7 +55,8 @@ const createWindow = function () {
 
   mainWindow.loadURL('file://' + __dirname + '/frontend/index.html');
 
-  mainWindow.on('closed', function() {
+  mainWindow.on('closed', function () {
+    if (differWindow) differWindow.destroy();
     mainWindow = null;
   });
 
@@ -167,6 +169,37 @@ exports.onFileDropped = function(filePath) {
     listener.send('check-group:new', 'screenshots', 'Screenshots');
     exports.diffScreenshots();
   }
+};
+
+exports.showDifferWindow = function (imgs, width) {
+  let js = `setImages('${imgs}')`;
+
+  if (!differWindow) {
+    differWindow = new BrowserWindow({
+      width: 320,
+      height: 400,
+      minWidth: 320,
+      maxHeight: 2000,
+      show: false
+    });
+
+    differWindow.loadURL(`file://${__dirname}/frontend/differ.html`);
+
+    differWindow.on('close', function (e) {
+      e.preventDefault();
+      differWindow.hide();
+      e.returnValue = false;
+    });
+
+    differWindow.on('closed', function () {
+      differWindow = null;
+    });
+  }
+
+  differWindow.setSize(width, 400);
+  differWindow.setMaximumSize(width, 2000);
+  differWindow.webContents.executeJavaScript(js);
+  differWindow.show();
 };
 
 exports.submitToCanvas = function (ghUsername, cb) {
