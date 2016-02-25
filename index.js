@@ -187,9 +187,12 @@ const reset = function () {
   checksCount = 0;
   checksCompleted = 0;
   checksRunning = false;
+  console.groupEnd();
+  console.group();
 };
 
 const startChecks = function () {
+  console.log(fullPath);
   checksRunning = true;
   markbot.onFileDropped(fullPath);
 };
