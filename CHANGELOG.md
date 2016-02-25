@@ -11,11 +11,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Improved the installer DMG window graphics.
 - Moved to using the `asar` packing format to decrease loading and copying times.
+- Rewrote the screenshot comparison functionality for better performance and accuracy.
+- Debugging console messages are now grouped together to more easily see.
 
 ### Fixed
 
 - Errors related to `svg:not(:root)` will now be ignored when the root specific rules are turned on.
 - The Canvas submission button still displayed hover effects when disabled.
+- Add screenshot resizing to support retina displays.
 
 ---
 
