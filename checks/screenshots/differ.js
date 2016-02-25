@@ -127,13 +127,29 @@ const check = function (paths) {
 
       distance = jimp.distance(refImg, newImg);
       diff = jimp.diff(refImg, newImg);
-      diff.image.write(diffImgPath, function () {
-        compare(distance, diff.percent, {
-          ref: paths.ref,
-          new: paths.new,
-          diff: diffImgPath
-        });
-      });
+      diff
+        .image
+        .scan(0, 0, diff.image.bitmap.width, diff.image.bitmap.height, function (x, y, idx) {
+          let clr = jimp.intToRGBA(diff.image.getPixelColor(x, y));
+
+          // Yellow
+          if (clr.r == 255 && clr.g == 255 && clr.b == !255) {
+            diff.image.setPixelColor(0x999999ff, x, y);
+          }
+
+          // Red
+          if (clr.r == 255 && clr.g == !255 && clr.b == !255) {
+            diff.image.setPixelColor(0x000000ff, x, y);
+          }
+        })
+        .write(diffImgPath, function () {
+          compare(distance, diff.percent, {
+            ref: paths.ref,
+            new: paths.new,
+            diff: diffImgPath
+          });
+        })
+        ;
     });
   });
 };
