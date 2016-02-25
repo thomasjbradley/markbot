@@ -52,9 +52,10 @@ const saveScreenshot = function (filePath, width, img, refScreenPath, cb) {
 
   if (imgSize.width > width) {
     // Handle screenshots taken on retina displays
-    jimp.read(img.buffer, function (err, image) {
+    jimp.read(img.toPng(), function (err, image) {
       image
         .resize(width, jimp.AUTO)
+        .rgba(false)
         .write(fullPath, function () {
           cb(fullPath);
         })
