@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- The screenshot comparison results are now presented with a split view and difference window to make it easier to tell what’s wrong.
+
 ### Changed
 
 - Improved the installer DMG window graphics.
