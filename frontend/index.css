@@ -1,28 +1,3 @@
-html {
-  box-sizing: border-box;
-
-  font-size: 12px;
-  font-family: Menlo, monospace;
-  line-height: 1.5;
-}
-
-*, *::before, *::after {
-  box-sizing: inherit;
-}
-
-body {
-  height: 100vh;
-  margin: 0;
-  padding: 0;
-  width: 100vw;
-
-  cursor: default;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
 .overlay {
   height: 100vh;
   left: 0;
@@ -402,10 +377,12 @@ body {
   color: #a8a6af;
 }
 
-#messages .img-wrap {
+#messages .diff-wrap {
+  display: block;
   margin-top: 0.4rem;
-  max-height: 400px;
+  height: 150px;
   overflow: hidden;
+  padding: 6px;
   position: relative;
 
   border: 1px solid #dfdcda;
@@ -413,12 +390,29 @@ body {
   cursor: zoom-in;
 }
 
-#messages .img-wrap-inner {
-  position: absolute;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
+#messages .diff-wrap:hover {
+  background-color: #f2f2f2;
+}
+
+#messages .diff-img-wrap {
+  display: inline-block;
+  height: 136px;
+  margin-right: 0.7em;
+  width: 136px;
+
+  background-color: #fff;
+  border-radius: 4px;
+  overflow: hidden;
+
+  vertical-align: middle;
+}
+
+#messages .diff-wrap span {
+  display: inline-block;
+  vertical-align: middle;
+
+  font-size: 11px;
+  font-style: italic;
 }
 
 #messages img {

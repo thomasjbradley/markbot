@@ -1,0 +1,37 @@
+:root {
+  --color-purple-light: #d9d8e3;
+  --color-purple-medium: #a8a6af;
+
+  --color-beige-light: #f5f2f0;
+  --color-beige-medium: #dfdcda;
+
+  --color-grey-light: #ccc;
+  --color-grey: #a8a6af;
+  --color-grey-medium: #63666a;
+  --color-grey-dark: #333;
+}
+
+html {
+  box-sizing: border-box;
+
+  font-size: 12px;
+  font-family: Menlo, monospace;
+  line-height: 1.5;
+}
+
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
