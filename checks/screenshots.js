@@ -146,12 +146,8 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     ;
 
   file.sizes.forEach(function (size) {
-    differs[size] = fork(`${__dirname}/screenshots/differ`, {
-      cwd: path.resolve(__dirname, '../node_modules'),
-      env: {
-        NODE_PATH: path.resolve(__dirname, '../node_modules')
-      }
-    });
+
+    differs[size] = fork(`${__dirname}/screenshots/differ`);
 
     differs[size].send({
       type: 'init',
