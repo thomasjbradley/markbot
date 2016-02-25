@@ -517,3 +517,8 @@ pre, code {
   background-color: #6dd110;
   color: #fff;
 }
+
+.submit-btn:disabled:hover {
+  background-color: #c1e89b;
+  color: #417d0a;
+}
