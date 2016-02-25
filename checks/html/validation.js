@@ -32,10 +32,11 @@ const bypass = function (listener, checkGroup, checkId, checkLabel) {
 
 const check = function (listener, checkGroup, checkId, checkLabel, fullPath, fileContents, lines, cb) {
   var
-    validatorPath = path.resolve(__dirname + '/../../vendor'),
+    validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../vendor'),
     execPath = 'java -jar ' + escapeShell(validatorPath + '/vnu.jar') + ' --errors-only --format json ' + escapeShell(fullPath)
   ;
 
+  listener.send('debug', validatorPath);
   listener.send('check-group:item-computing', checkGroup, checkId);
 
   exec(execPath, function (err, data) {

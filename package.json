@@ -8,12 +8,9 @@
   "bugs": "https://github.com/thomasjbradley/markbot/issues",
   "private": true,
   "main": "markbot.js",
-  "devDependencies": {
+  "dependencies": {
     "cheerio": "^0.19.0",
     "css": "^2.2.1",
-    "electron-builder": "^2.7.2",
-    "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.36.8",
     "entities": "^1.1.1",
     "eslint": "^2.2.0",
     "git-commits": "^1.1.1",
@@ -26,13 +23,18 @@
     "stylelint": "^4.4.0",
     "xml2js": "^0.4.16"
   },
+  "devDependencies": {
+    "electron-builder": "^2.7.2",
+    "electron-packager": "^5.2.1",
+    "electron-prebuilt": "^0.36.8"
+  },
   "scripts": {
     "start": "electron markbot.js",
     "clean": "rm -Rf ./dist",
     "clean:osx": "rm -Rf ./dist/osx",
     "clean:win": "rm -Rf ./dist/win",
     "pack": "npm run clean && npm run pack:osx && npm run pack:win",
-    "pack:osx": "npm run clean:osx && electron-packager ./ --overwrite --app-version=2.7.1 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --version=0.36.5 --ignore='(dist/osx|dist/win)' --icon=images/icon.icns --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
+    "pack:osx": "npm run clean:osx && electron-packager ./ --overwrite --app-version=2.7.1 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --asar --asar-unpack-dir=vendor --version=0.36.5 --ignore='(dist/osx|dist/win)' --icon=images/icon.icns --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
     "pack:win": "npm run clean:win && electron-packager ./ --overwrite --app-version=2.7.1 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --version=0.36.5 --ignore='(dist/osx|dist/win)' --icon=images/icon.ico --version-string={ProductName:'Markbot'}",
     "build": "npm run build:osx && npm run build:win",
     "build:osx": "npm run pack:osx && electron-builder \"dist/osx/Markbot-darwin-x64/Markbot.app\" --platform=osx --out=\"dist/osx\" --config=builder.json",

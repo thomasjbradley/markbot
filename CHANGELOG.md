@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Improved the installer DMG window graphics.
+- Moved to using the `asar` packing format to decrease loading and copying times.
 
 ### Fixed
 
