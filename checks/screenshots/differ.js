@@ -61,7 +61,7 @@ const bypass = function () {
   });
 };
 
-const compare = function (distance, percent, imgPaths) {
+const compare = function (distance, percent, imgPaths, width) {
   process.send({
     type: 'debug',
     debug: ['distance', distance, 'percent', percent, imgPaths.diff]
@@ -76,6 +76,13 @@ const compare = function (distance, percent, imgPaths) {
       errors: [{
         type: 'image-diff',
         message: `Too visually different from screenshot`,
+        diff: {
+          distance: distance,
+          percent: percent,
+          expectedDistance: ALLOWED_DISTANCE_DIFFERENCE,
+          expectedPercent: ALLOWED_PERCENT_DIFFERENCE
+        },
+        width: width,
         images: {
           ref: `file:///${imgPaths.ref}`,
           new: `file:///${imgPaths.new}`,
@@ -147,7 +154,7 @@ const check = function (paths) {
             ref: paths.ref,
             new: paths.new,
             diff: diffImgPath
-          });
+          }, diff.image.bitmap.width);
         })
         ;
     });
