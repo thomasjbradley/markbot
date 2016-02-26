@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- The labels on the diff window are more visible than before.
+- The “Force Reload” menu item will now reload the focused window.
+
+---
+
 ## [2.8.3] — 2016-02-26
 
 ### Fixed
