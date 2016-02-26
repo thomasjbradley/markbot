@@ -91,7 +91,8 @@ label {
 
 #radio-diff-ref:checked ~ main [for="radio-diff-ref"],
 #radio-diff-new:checked ~ main [for="radio-diff-new"] {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(99, 102, 106, .9);
+  border-color: #333;
   color: #fff;
 }
 
@@ -172,8 +173,8 @@ label {
   padding: 5px 9px 5px;
   position: absolute;
 
-  background-color: rgba(255, 255, 255, .8);
-  opacity: .8;
+  background-color: rgba(255, 255, 255, .9);
+  border: 2px solid #63666a;
 
   color: #333;
   font-size: 12px;
@@ -184,11 +185,13 @@ label {
 
 .split-label-ref {
   left: 0;
+  border-left: 0;
   border-radius: 0 12px 12px 0;
 }
 
 .split-label-new {
   right: 0;
+  border-right: 0;
   border-radius: 12px 0 0 12px;
 }
 
