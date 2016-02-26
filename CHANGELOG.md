@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [2.8.3] — 2016-02-26
+
+### Fixed
+
+- Fixed a bug when trying to check CSS properties: they are now not checked until the CSS is valid. Did the same for HTML for consistency.
+
+---
+
 ## [2.8.2] — 2016-02-26
 
 ### Fixed

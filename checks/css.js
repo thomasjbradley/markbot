@@ -61,16 +61,17 @@ module.exports.check = function (listener, filePath, file, group) {
       validationChecker.check(fullPath, fileContents, lines, function (err) {
         if (!err || err.length <= 0) {
           if (file.bestPractices) bestPracticesChecker.check(fileContents, lines);
+
+          if (file.has || file.has_not) {
+            if (file.has && !file.has_not) propertiesChecker.check(fileContents, file.has, []);
+            if (!file.has && file.has_not) propertiesChecker.check(fileContents, [], file.has_not);
+            if (file.has && file.has_not) propertiesChecker.check(fileContents, file.has, file.has_not);
+          }
         } else {
           bestPracticesChecker.bypass();
+          propertiesChecker.bypass();
         }
       });
-    }
-
-    if (file.has || file.has_not) {
-      if (file.has && !file.has_not) propertiesChecker.check(fileContents, file.has, []);
-      if (!file.has && file.has_not) propertiesChecker.check(fileContents, [], file.has_not);
-      if (file.has && file.has_not) propertiesChecker.check(fileContents, file.has, file.has_not);
     }
 
     if (file.search) contentChecker.check(fileContents, file.search);

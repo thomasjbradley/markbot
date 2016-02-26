@@ -115,10 +115,11 @@ html:
 
     # Check its best practices & indentation (double quoting attributes, having a <title>, indented children, etc.)
     # Can be further configured in the `htmlcs.json` file
-    # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
+    # Will be skipped if validation isn’t also checked—the document must be valid first
     bestPractices: true
 
     # Can be used to test for specific elements; each entry should be a valid CSS selector
+    # Will be skipped if validation isn’t also checked—the document must be valid first
     has:
       - 'header nav[role="navigation"]'
       - 'main'
@@ -142,11 +143,12 @@ css:
 
     # Check its best practices & indentation (spaces after colons, new lines after closing blocks, etc.)
     # Can be further configured in the `stylelint.json` file
-    # Will be skipped if validation isn’t also checked—the document must be valid before best practices are tested
+    # Will be skipped if validation isn’t also checked—the document must be valid first
     bestPractices: true
 
     # Can be used to test for specific selectors, properties & values
     #   [selector, property (optional), value (optional)]
+    # Will be skipped if validation isn’t also checked—the document must be valid first
     has:
       - ['.thing']
       - ['.super', 'background-image']
