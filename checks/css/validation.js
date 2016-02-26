@@ -51,17 +51,17 @@ const shouldIncludeError = function (message, line, lines, fileContents) {
 
   if (message.match(/parse error/i)) {
     // Another work around for validator's calc() bug
-    if (lines[line - 1].match(/calc/) || lines[line - 2].match(/calc/)) {
+    if ((lines[line - 1] && lines[line - 1].match(/calc/)) || (lines[line - 2] && lines[line - 2].match(/calc/))) {
       return false;
     }
 
     // Work around for validator's attr() bug
-    if (lines[line - 1].match(/attr/) || lines[line - 2].match(/attr/)) {
+    if ((lines[line - 1] && lines[line - 1].match(/attr/)) || (lines[line - 2] && lines[line - 2].match(/attr/))) {
       return false;
     }
 
     // This also works around some weird attr() bugs, it's really hinky, don't trust it
-    if(lines[line - 1] == '}' && fileContents.match(/attr/)) {
+    if(lines[line - 1] && lines[line - 1] == '}' && fileContents.match(/attr/)) {
       return false
     }
   }

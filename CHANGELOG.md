@@ -5,7 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.8.1] — 2016-02-25
+
+### Fixed
+
+- CSS validator parse error message issue when it was the first line of the CSS file.
+
+---
+
+## [2.8.0] — 2016-02-25
 
 ### Added
 
