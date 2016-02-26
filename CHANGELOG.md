@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [2.8.2] — 2016-02-26
+
+### Fixed
+
+- When the user’s screenshot was shorter than the reference, the reference one would show through into the user’s and cause confusion.
+
+---
+
 ## [2.8.1] — 2016-02-25
 
 ### Fixed
