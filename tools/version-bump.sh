@@ -7,4 +7,4 @@ sed -i '' "s/--build-version=[0-9]*.[0-9]*.[0-9]*/--build-version=$1/g" package.
 git add package.json
 git add builder.json
 git commit -m "Bump version to $1"
-git tag "v$1"
+git tag -f "v$1"
