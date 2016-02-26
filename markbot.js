@@ -8,6 +8,8 @@ const
   shell = electron.shell
 ;
 
+const MARKBOT_DEVELOP_MENU = process.env.MARKBOT_DEVELOP_MENU || false;
+const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
 const appMenu = require('./lib/menu');
 const MARKBOT_FILE = '.markbot.yml';
 
