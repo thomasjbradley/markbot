@@ -91,6 +91,7 @@ exports.disableFolderMenuFeatures = function () {
   menuOptions.revealFolder = false;
   updateAppMenu();
 };
+menuCallbacks.disableFolderMenuFeatures = exports.disableFolderMenuFeatures;
 
 exports.disableSignOut = function () {
   menuOptions.openRepo = false;

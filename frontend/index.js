@@ -389,11 +389,6 @@ listener.on('app:sign-out', function (event) {
   window.location.reload();
 });
 
-listener.on('app:force-reload', function (event) {
-  markbot.disableFolderMenuFeatures();
-  window.location.reload();
-});
-
 listener.on('debug', function (event, ...args) {
   console.log.apply(console, args);
 });
