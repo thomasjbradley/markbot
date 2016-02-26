@@ -4,6 +4,7 @@ let
   diffWrap = document.querySelector('.tab-split'),
   splitter = document.querySelector('.splitter'),
   splitImgNew = document.getElementById('split-img-new'),
+  splitImgRefCover = document.getElementById('split-img-ref-cover'),
   diffRange = document.getElementById('diff-range'),
   diff = document.getElementById('diff-img-diff')
   ;
@@ -15,6 +16,7 @@ const moveSplitter = function (x) {
 const cropImage = function (x) {
   let newX = x + splitter.offsetWidth / 2;
   splitImgNew.style.webkitClipPath = `polygon(${newX}px 0%, 100% 0%, 100% 100%, ${newX}px 100%)`;
+  splitImgRefCover.style.webkitClipPath = `polygon(${newX}px 0%, 100% 0%, 100% 100%, ${newX}px 100%)`;
 };
 
 const moveDiffer = function (x) {

@@ -15,9 +15,12 @@
   <main>
     <section class="tab tab-difference" id="difference">
       <div class="scrollable">
-        <img class="img-ref" id="diff-img-ref" src="#" alt="">
-        <img class="img-new" id="diff-img-new" src="#" alt="">
-        <img class="img-diff" id="diff-img-diff" src="#" alt="">
+        <div class="scrollable-wrap">
+          <img class="img-ref" id="diff-img-ref" src="#" alt="">
+          <div id="diff-img-ref-cover"></div>
+          <img class="img-new" id="diff-img-new" src="#" alt="">
+          <img class="img-diff" id="diff-img-diff" src="#" alt="">
+        </div>
       </div>
       <label class="split-label split-label-ref" for="radio-diff-ref">Reference</label>
       <label class="split-label split-label-new" for="radio-diff-new">Yours</label>
@@ -26,8 +29,11 @@
     </section>
     <section class="tab tab-split" id="split">
       <div class="scrollable">
-        <img class="img-ref" id="split-img-ref" src="#" alt="">
-        <img class="img-new" id="split-img-new" src="#" alt="">
+        <div class="scrollable-wrap">
+          <img class="img-ref" id="split-img-ref" src="#" alt="">
+          <div id="split-img-ref-cover"></div>
+          <img class="img-new" id="split-img-new" src="#" alt="">
+        </div>
       </div>
       <div class="splitter">Drag to see the differences</div>
       <strong class="split-label split-label-ref">Reference</strong>

@@ -79,6 +79,11 @@ label {
   overflow-y: auto;
 }
 
+.scrollable-wrap {
+  position: relative;
+  overflow: hidden;
+}
+
 #radio-split:checked ~ main #split,
 #radio-difference:checked ~ main #difference {
   display: block;
@@ -104,6 +109,7 @@ label {
   width: 100%;
 }
 
+#diff-img-ref-cover,
 #diff-img-new {
   display: none;
 }
@@ -112,6 +118,7 @@ label {
   opacity: .5;
 }
 
+#radio-diff-new:checked ~ main #diff-img-ref-cover,
 #radio-diff-new:checked ~ main #diff-img-new {
   display: block;
 }
@@ -121,6 +128,23 @@ label {
 }
 
 #split-img-new {
+  -webkit-clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
+}
+
+#diff-img-ref-cover,
+#split-img-ref-cover {
+  bottom: 0;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+
+  background-color: #fff;
+}
+
+#split-img-ref-cover {
   -webkit-clip-path: polygon(50% 0%, 100% 0%, 100% 100%, 50% 100%);
 }
 
