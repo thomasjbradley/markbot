@@ -33,7 +33,7 @@ const adjustDiff = function (opacity) {
 }
 
 const setImages = function (imgsJson) {
-  let imgs = JSON.parse(imgsJson);
+  let imgs = JSON.parse(imgsJson.replace(/\\/g, '/'));
 
   document.getElementById('split-img-ref').src = `${imgs.ref}?${Date.now()}`;
   document.getElementById('split-img-new').src = `${imgs.new}?${Date.now()}`;
