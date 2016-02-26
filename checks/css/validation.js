@@ -90,9 +90,9 @@ const check = function (listener, checkGroup, checkId, checkLabel, fullPath, fil
     execPath = 'java -jar ' + escapeShell(validatorPath + '/css-validator.jar') + ' --output=soap12 ' + escapeShell('file://' + convertToUrl(fullPath))
   ;
 
+  listener.send('check-group:item-computing', checkGroup, checkId);
   listener.send('debug', validatorPath);
   listener.send('debug', execPath);
-  listener.send('check-group:item-computing', checkGroup, checkId);
 
   exec(execPath, function (err, data) {
     var xml = data.trim().replace(/^\{.*\}/, '').trim();
