@@ -11,7 +11,7 @@
   },
   "win" : {
     "title": "Markbot",
-    "version": "2.8.0",
+    "version": "2.8.1",
     "publisher": "Thomas J Bradley",
     "icon": "images/icon.ico"
   }
