@@ -99,11 +99,21 @@ const check = function (listener, checkGroup, checkId, checkLabel, fullPath, fil
 
     xmlParser(xml, function (err, result) {
       var
-        results = result['env:Envelope']['env:Body'][0]['m:cssvalidationresponse'][0]['m:result'][0]['m:errors'][0],
-        errorCount = parseInt(results['m:errorcount'][0], 10),
+        results,
+        errorCount,
         errorsList,
         errors = []
       ;
+
+      if (!result) {
+        errors.push('There was a problem with the CSS validator — please try again');
+        listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+        cb(errors);
+        return;
+      }
+
+      results = result['env:Envelope']['env:Body'][0]['m:cssvalidationresponse'][0]['m:result'][0]['m:errors'][0];
+      errorCount = parseInt(results['m:errorcount'][0], 10);
 
       if (errorCount > 0) {
         errorsList = results['m:errorlist'][0]['m:error'];
