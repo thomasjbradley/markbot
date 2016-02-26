@@ -24,7 +24,7 @@
     "xml2js": "^0.4.16"
   },
   "devDependencies": {
-    "electron-builder": "^2.7.2",
+    "electron-builder": "^2.8.3",
     "electron-packager": "^5.2.1",
     "electron-prebuilt": "^0.36.8"
   },
