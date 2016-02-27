@@ -40,7 +40,7 @@ var
     revealFolder: false,
     signOut: false,
     signOutUsername: false,
-    showDevelop: false
+    showDevelop: MARKBOT_DEVELOP_MENU
   },
   currentFolderPath
 ;
@@ -83,11 +83,6 @@ exports.revealFolder = function () {
   }
 };
 menuCallbacks.revealFolder = exports.revealFolder;
-
-exports.showDevelopMenu = function () {
-  menuOptions.showDevelop = MARKBOT_DEVELOP_MENU;
-  updateAppMenu();
-};
 
 exports.disableFolderMenuFeatures = function () {
   menuOptions.runChecks = false;

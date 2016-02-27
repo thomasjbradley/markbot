@@ -265,12 +265,6 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
   }
 });
 
-document.addEventListener('keydown', function (e) {
-  let shortcut = (e.keyCode == 27 && e.shiftKey);
-
-  if (shortcut) markbot.showDevelopMenu();
-});
-
 $repoName.addEventListener('click', function (e) {
   e.preventDefault();
   markbot.revealFolder();

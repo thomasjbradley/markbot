@@ -25,6 +25,8 @@ Built with Javascript, Node.js & Electron.
   - [Student installation tutorial](#student-installation-tutorial)
 - [Building Markbot](#building-markbot)
   - [Configure the Markbot application](#configure-the-markbot-application)
+    - [Environment variables](#environment-variables)
+    - [App config file](#app-config-file)
   - [Markbot dependencies](#markbot-dependencies)
     - [HTML validator](#html-validator)
     - [CSS validator](#css-validator)
@@ -204,7 +206,7 @@ screenshots:
 
 *Markbot will look in the `screenshots` folder for images to compare against.*
 
-The screenshots should be generated using Markbot itself for the most consistency—trigger the “Develop” menu (`Shift+Esc`) and press “Generate Reference Screenshots”.
+The screenshots should be generated using Markbot itself for the most consistency—trigger the “Develop” menu ([See Environment variables](#environment-variables)) and press “Generate Reference Screenshots”.
 
 Markbot will display differences to students highlighted in a bright colour. Difference percentages are calculated and **anything with a difference greater than 10% is considered an error.**
 
@@ -263,6 +265,20 @@ brew install wine
 ```
 
 ### Configure the Markbot application
+
+There’s a few things you need to do to develop Markbot on your computer.
+
+#### Environment variables
+
+Start by making an environment variable on your computer like this:
+
+```
+export MARKBOT_DEVELOP_MENU="on"
+```
+
+*This will allow you to enable the “Develop” menu on your computer.*
+
+#### App config file
 
 To configure your installation of Markbot you’ll need to adjust the config file.
 
@@ -332,7 +348,7 @@ That’s it, Markbot should be ready to go.
 
 Markbot has access to the developer tools and web inspector as well as a few other tools hidden in the “Develop” menu.
 
-**To enable the “Develop” menu press `Shift+Esc`.**
+[**To enable the “Develop” menu make sure you have the correct environment variable.**](#environment-variables)
 
 ---
 
