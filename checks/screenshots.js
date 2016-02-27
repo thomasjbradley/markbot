@@ -11,6 +11,7 @@ var
   jimp = require('jimp'),
   fileExists = require('./file-exists'),
   defaultScreenshotCSS = fs.readFileSync(path.resolve(__dirname + '/screenshots/default.css'), 'utf8'),
+  defaultScreenshotJS = require('./screenshots/default'),
   screenshotPrefix = 'markbot',
   defaultHeight = 400,
   refScreenFolder = 'screenshots'
@@ -72,7 +73,7 @@ const takeScreenshotAtWidth = function (win, filePath, sizes, refScreenPath, sav
   if (sizes.length > 0) {
     let
       width = sizes.shift(),
-      js = `window.resizeTo(${width}, (document.documentElement.offsetHeight > ${defaultHeight}) ? document.documentElement.offsetHeight : ${defaultHeight})`
+      js = defaultScreenshotJS(width, defaultHeight)
       ;
 
     win.webContents.executeJavaScript(js);
