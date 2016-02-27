@@ -13,6 +13,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The “Force Reload” menu item will now reload the focused window.
 - The “Develop” menu can only be displayed with the `MARKBOT_DEVELOP_MENU` environment variable now.
 
+### Fixed
+
+- Markbot would attempt to bypass some checks without them every being initialized.
+- Fix screenshot window resizing to support shorter screens after longer screens.
+- Fix the differ’s split slider so that it’s properly centred on load.
+
 ---
 
 ## [2.8.3] — 2016-02-26
