@@ -256,6 +256,12 @@ cd markbot
 npm install
 ```
 
+You’ll also need [Wine](https://www.winehq.org/) to make the Windows version on your make:
+
+```
+brew install wine
+```
+
 ### Configure the Markbot application
 
 To configure your installation of Markbot you’ll need to adjust the config file.
