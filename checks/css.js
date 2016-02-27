@@ -68,8 +68,8 @@ module.exports.check = function (listener, filePath, file, group) {
             if (file.has && file.has_not) propertiesChecker.check(fileContents, file.has, file.has_not);
           }
         } else {
-          bestPracticesChecker.bypass();
-          propertiesChecker.bypass();
+          if (file.bestPractices) bestPracticesChecker.bypass();
+          if (file.has || file.has_not) propertiesChecker.bypass();
         }
       });
     }

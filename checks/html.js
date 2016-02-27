@@ -63,8 +63,8 @@ module.exports.check = function (listener, filePath, file, group) {
           if (file.bestPractices) bestPracticesChecker.check(fileContents, lines);
           if (file.has) elementsChecker.check(fileContents, file.has);
         } else {
-          bestPracticesChecker.bypass();
-          elementsChecker.bypass();
+          if (file.bestPractices) bestPracticesChecker.bypass();
+          if (file.has) elementsChecker.bypass();
         }
       });
     }
