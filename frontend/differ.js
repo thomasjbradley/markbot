@@ -10,13 +10,13 @@ let
   ;
 
 const moveSplitter = function (x) {
-  splitter.style.left = `${x}px`;
+  let newX = x - splitter.offsetWidth / 2;
+  splitter.style.left = `${newX}px`;
 };
 
 const cropImage = function (x) {
-  let newX = x + splitter.offsetWidth / 2;
-  splitImgNew.style.webkitClipPath = `polygon(${newX}px 0%, 100% 0%, 100% 100%, ${newX}px 100%)`;
-  splitImgRefCover.style.webkitClipPath = `polygon(${newX}px 0%, 100% 0%, 100% 100%, ${newX}px 100%)`;
+  splitImgNew.style.webkitClipPath = `polygon(${x}px 0%, 100% 0%, 100% 100%, ${x}px 100%)`;
+  splitImgRefCover.style.webkitClipPath = `polygon(${x}px 0%, 100% 0%, 100% 100%, ${x}px 100%)`;
 };
 
 const moveDiffer = function (x) {
