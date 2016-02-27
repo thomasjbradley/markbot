@@ -8,7 +8,7 @@ const
   shell = electron.shell
 ;
 
-const MARKBOT_DEVELOP_MENU = process.env.MARKBOT_DEVELOP_MENU || false;
+const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
 const appMenu = require('./lib/menu');
 const MARKBOT_FILE = '.markbot.yml';
@@ -84,7 +84,7 @@ exports.revealFolder = function () {
 menuCallbacks.revealFolder = exports.revealFolder;
 
 exports.showDevelopMenu = function () {
-  menuOptions.showDevelop = true;
+  menuOptions.showDevelop = MARKBOT_DEVELOP_MENU;
   updateAppMenu();
 };
 
