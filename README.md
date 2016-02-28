@@ -126,6 +126,13 @@ html:
       - 'header nav[role="navigation"]'
       - 'main'
 
+    # Can be used to test that specific selectors are not used in the HTML
+    # I would use this for ensuring that `<hr>` tags aren’t used when borders should be or that `<br>` tags aren’t used
+    #   [selector, [property, property, etc.]]
+    has_not:
+      - ['hr']
+      - ['br']
+
     # Regex searches on the file, for confirming specific content
     search:
       - 'Hello World!'
