@@ -8,7 +8,7 @@ var
   checkId,
   checkLabel,
   ALLOWED_DISTANCE_DIFFERENCE = 0.22,
-  ALLOWED_PERCENT_DIFFERENCE = 0.10
+  ALLOWED_PERCENT_DIFFERENCE = 0.13
 ;
 
 const computing = function () {
