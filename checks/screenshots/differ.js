@@ -37,7 +37,7 @@ const newNotFound = function () {
     id: 'check-group:item-complete',
     checkId: checkId,
     checkLabel: checkLabel,
-    errors: ['Screenshot of your website not found']
+    errors: ['Screenshot of your website not found, please try again']
   });
 };
 
@@ -123,6 +123,16 @@ const check = function (paths) {
   jimp.read(paths.ref, function (err, refImg) {
     jimp.read(paths.new, function (err, newImg) {
       let distance, diff;
+
+      if (!newImg.bitmap) {
+        newNotFound();
+        return;
+      }
+
+      if (!refImg.bitmap) {
+        refNotFound();
+        return;
+      }
 
       if (newImg.bitmap.height > refImg.bitmap.height) {
         newImg.crop(0, 0, newImg.bitmap.width, refImg.bitmap.height);

@@ -15,7 +15,7 @@ var
   defaultScreenshotJS = require('./screenshots/default'),
   screenshotPrefix = 'markbot',
   minWindowHeight = 400,
-  maxWindowHeight = 2500,
+  maxWindowHeight = 10000,
   refScreenFolder = 'screenshots'
 ;
 
@@ -78,17 +78,16 @@ const takeScreenshotAtWidth = function (win, filePath, sizes, refScreenPath, sav
       js = defaultScreenshotJS(width, minWindowHeight)
       ;
 
-    win.setSize(width, minWindowHeight);
+    win.setSize(width, maxWindowHeight);
     win.webContents.executeJavaScript(js);
-
-    electron.ipcMain.once('webpage-height', function (e, height) {
-      // win.setSize(width, (height > maxWindowHeight) ? maxWindowHeight : height);
-      win.setSize(width, height);
-    });
 
     // Artificial delay to wait for the resized browser to re-render
     setTimeout(function () {
-      win.capturePage(function (img) {
+      // Using the <title> to pass information back and forth is super hacky
+      // But the async ways were causing way too many problems
+      let height = parseInt(win.webContents.getTitle(), 10) || minWindowHeight;
+
+      win.capturePage({x: 0, y:0, width: width, height: height}, function (img) {
         saveScreenshot(filePath, width, img, refScreenPath, function (path) {
           savedPaths.push(path);
           takeScreenshotAtWidth(win, filePath, sizes, refScreenPath, savedPaths, cb);

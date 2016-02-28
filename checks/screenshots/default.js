@@ -6,21 +6,21 @@ module.exports = function (width, defaultHeight) {
       setTimeout(function () {
         if (document.documentElement.offsetHeight < window.innerHeight) {
           if (document.documentElement.offsetHeight < ${defaultHeight}) {
-            require('electron').ipcRenderer.send('webpage-height', ${defaultHeight});
+            document.title = ${defaultHeight};
           } else {
-            require('electron').ipcRenderer.send('webpage-height', document.documentElement.offsetHeight);
+            document.title = document.documentElement.offsetHeight;
           }
 
           return;
         }
 
         if (document.documentElement.offsetHeight > ${defaultHeight}) {
-          require('electron').ipcRenderer.send('webpage-height', document.documentElement.offsetHeight);
+          document.title = document.documentElement.offsetHeight;
           return;
         }
 
         if (document.documentElement.offsetHeight < ${defaultHeight}) {
-          require('electron').ipcRenderer.send('webpage-height', ${defaultHeight});
+          document.title = ${defaultHeight};
           return;
         }
       }, 100);
