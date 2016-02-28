@@ -6,14 +6,16 @@ var
   util = require('util'),
   fork = require('child_process').fork,
   mkdirp = require('mkdirp'),
-  app = require('electron').app,
+  electron = require('electron'),
+  app = electron.app,
   BrowserWindow = require('electron').BrowserWindow,
   jimp = require('jimp'),
   fileExists = require('./file-exists'),
   defaultScreenshotCSS = fs.readFileSync(path.resolve(__dirname + '/screenshots/default.css'), 'utf8'),
   defaultScreenshotJS = require('./screenshots/default'),
   screenshotPrefix = 'markbot',
-  defaultHeight = 400,
+  minWindowHeight = 400,
+  maxWindowHeight = 2500,
   refScreenFolder = 'screenshots'
 ;
 
@@ -73,10 +75,16 @@ const takeScreenshotAtWidth = function (win, filePath, sizes, refScreenPath, sav
   if (sizes.length > 0) {
     let
       width = sizes.shift(),
-      js = defaultScreenshotJS(width, defaultHeight)
+      js = defaultScreenshotJS(width, minWindowHeight)
       ;
 
+    win.setSize(width, minWindowHeight);
     win.webContents.executeJavaScript(js);
+
+    electron.ipcMain.once('webpage-height', function (e, height) {
+      // win.setSize(width, (height > maxWindowHeight) ? maxWindowHeight : height);
+      win.setSize(width, height);
+    });
 
     // Artificial delay to wait for the resized browser to re-render
     setTimeout(function () {
@@ -133,13 +141,16 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     pagePath = path.resolve(fullPath + '/' + file.path),
     pageUrl = 'file:///' + pagePath,
     win = new BrowserWindow({
+      x: 0,
+      y: 0,
+      center: false,
       width: file.sizes[0],
-      height: defaultHeight,
+      height: minWindowHeight,
       show: false,
       frame: false,
       enableLargerThanScreen: true,
       backgroundColor: '#fff',
-      nodeIntegration: false,
+      // nodeIntegration: false,
       defaultEncoding: 'UTF-8'
     }),
     refScreenPath = (genRefScreens) ? path.resolve(fullPath) : false,
@@ -147,7 +158,6 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     ;
 
   file.sizes.forEach(function (size) {
-
     differs[size] = fork(`${__dirname}/screenshots/differ`);
 
     differs[size].send({
