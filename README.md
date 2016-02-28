@@ -258,7 +258,7 @@ cd markbot
 npm install
 ```
 
-You’ll also need [Wine](https://www.winehq.org/) to make the Windows version on your make:
+You’ll also need [Wine](https://www.winehq.org/) to make the Windows version on your Mac:
 
 ```
 brew install wine
@@ -268,15 +268,21 @@ brew install wine
 
 There’s a few things you need to do to develop Markbot on your computer.
 
+1. [Create two environment variables on your computer.](#environment-variables)
+2. [Create your application config file.](#app-config-file)
+3. [Embed the hashed version of your password into your config file.](#passcode-hashing--embedding)
+4. [Download and install the dependencies](#markbot-dependencies)
+
 #### Environment variables
 
-Start by making an environment variable on your computer for the “Develop” menu.
+Start by making two environment variables on your computer for the “Develop” menu and cheat locking.
 
 ```
 MARKBOT_DEVELOP_MENU="on"
+MARKBOT_LOCK_PASSCODE="some-long-password-thing"
 ```
 
-*This will allow you to enable the “Develop” menu on your computer.*
+*These will allow you to enable the “Develop” menu on your computer and create locking hashes for screenshots, code files, and the `.markbot.yml` file itself.*
 
 [**To set persistent env vars on Mac OS X for command line and GUI, check out this answer on StackOverflow.**](https://stackoverflow.com/questions/135688/setting-environment-variables-in-os-x#answer-32405815)
 
@@ -288,6 +294,10 @@ Rename `config.example.json` to just `config.json` and change the following opti
 
 - `proxyUrl` — (string) the URL to your [Markbot Server](#markbot-server) instance.
 - `ignoreCommitEmails` — (array) the list of email addresses to ignore when counting commits.
+
+#### Passcode hashing & embedding
+
+*(Coming soon…)*
 
 ### Markbot dependencies
 
@@ -309,7 +319,7 @@ The `vendor` folder should contain the `vnu.jar`—the pre-built binary works we
 
 The pre-build JAR files seem to be out of date, so you’ll have to compile the JAR yourself.
 
-[**Download the CSS validator source from GitHub.**](https://github.com/w3c/css-validator).
+[**Download the CSS validator source from GitHub.**](https://github.com/w3c/css-validator)
 
 ##### Compiling the CSS validator
 
@@ -344,13 +354,20 @@ npm run build:win
 
 That’s it, Markbot should be ready to go.
 
+**Upload the Markbot installer files to a location the students can download from.**
+
 ---
 
 ## Debugging Markbot
 
 Markbot has access to the developer tools and web inspector as well as a few other tools hidden in the “Develop” menu.
 
-[**To enable the “Develop” menu make sure you have the correct environment variable.**](#environment-variables)
+[**To enable the “Develop” menu make sure you have the correct environment variables.**](#environment-variables)
+
+The “Develop” menu will only show when these two conditions are met:
+
+1. The `MARKBOT_DEVELOP_MENU` env var exists.
+2. The hashed version of the `MARKBOT_LOCK_PASSCODE` is the same as the hashed version in the `config.json` file.
 
 ---
 
