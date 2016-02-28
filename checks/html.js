@@ -25,7 +25,7 @@ module.exports.check = function (listener, filePath, file, group) {
   const bypassAllChecks = function (f) {
     if (f.valid) validationChecker.bypass();
     if (f.bestPractices) bestPracticesChecker.bypass();
-    if (f.has) elementsChecker.bypass();
+    if (f.has || f.has_not) elementsChecker.bypass();
     if (f.search) contentChecker.bypass();
   };
 
@@ -36,7 +36,7 @@ module.exports.check = function (listener, filePath, file, group) {
     if (file.bestPractices) bestPracticesChecker = bestPractices.init(listener, group);
   }
 
-  if (file.has) elementsChecker = elements.init(listener, group);
+  if (file.has || file.has_not) elementsChecker = elements.init(listener, group);
   if (file.search) contentChecker = content.init(listener, group);
 
   if (!exists.check(fullPath)) {
@@ -61,10 +61,15 @@ module.exports.check = function (listener, filePath, file, group) {
       validationChecker.check(fullPath, fileContents, lines, function (err) {
         if (!err || err.length <= 0) {
           if (file.bestPractices) bestPracticesChecker.check(fileContents, lines);
-          if (file.has) elementsChecker.check(fileContents, file.has);
+
+          if (file.has || file.has_not) {
+            if (file.has && !file.has_not) elementsChecker.check(fileContents, file.has, []);
+            if (!file.has && file.has_not) elementsChecker.check(fileContents, [], file.has_not);
+            if (file.has && file.has_not) elementsChecker.check(fileContents, file.has, file.has_not);
+          }
         } else {
           if (file.bestPractices) bestPracticesChecker.bypass();
-          if (file.has) elementsChecker.bypass();
+          if (file.has || file.has_not) elementsChecker.bypass();
         }
       });
     }

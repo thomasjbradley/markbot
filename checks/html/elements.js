@@ -9,20 +9,40 @@ const bypass = function (listener, checkGroup, checkId, checkLabel) {
   listener.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
 
-const check = function (listener, checkGroup, checkId, checkLabel, fileContents, sels) {
+const checkHasElements = function (code, sels) {
+  var errors = [];
+
+  sels.forEach(function (sel) {
+    if (code(sel).length <= 0) {
+      errors.push(util.format('Expected to see this element: `%s`', sel));
+    }
+  });
+
+  return errors;
+};
+
+const checkHasNotElements = function (code, sels) {
+  var errors = [];
+
+  sels.forEach(function (sel) {
+    if (code(sel).length > 0) {
+      errors.push(util.format('The `%s` element should not be used', sel));
+    }
+  });
+
+  return errors;
+};
+
+const check = function (listener, checkGroup, checkId, checkLabel, fileContents, hasSels, hasNotSels) {
   var
-    $ = null,
+    code = {},
     errors = []
   ;
 
   listener.send('check-group:item-computing', checkGroup, checkId);
-  $ = cheerio.load(fileContents);
 
-  sels.forEach(function (sel) {
-    if ($(sel).length <= 0) {
-      errors.push(util.format('Expected to see this element: `%s`', sel));
-    }
-  });
+  code = cheerio.load(fileContents);
+  errors = errors.concat(checkHasElements(code, hasSels), checkHasNotElements(code, hasNotSels));
 
   listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
 };
@@ -39,8 +59,8 @@ module.exports.init = function (lstnr, group) {
     listener.send('check-group:item-new', checkGroup, checkId, checkLabel);
 
     return {
-      check: function (fileContents, sels) {
-        check(listener, checkGroup, checkId, checkLabel, fileContents, sels);
+      check: function (fileContents, hasSels, hasNotSels) {
+        check(listener, checkGroup, checkId, checkLabel, fileContents, hasSels, hasNotSels);
       },
       bypass: function () {
         bypass(listener, checkGroup, checkId, checkLabel);
