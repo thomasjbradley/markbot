@@ -270,13 +270,15 @@ There’s a few things you need to do to develop Markbot on your computer.
 
 #### Environment variables
 
-Start by making an environment variable on your computer like this:
+Start by making an environment variable on your computer for the “Develop” menu.
 
 ```
-export MARKBOT_DEVELOP_MENU="on"
+MARKBOT_DEVELOP_MENU="on"
 ```
 
 *This will allow you to enable the “Develop” menu on your computer.*
+
+[**To set persistent env vars on Mac OS X for command line and GUI, check out this answer on StackOverflow.**](https://stackoverflow.com/questions/135688/setting-environment-variables-in-os-x#answer-32405815)
 
 #### App config file
 
