@@ -133,6 +133,10 @@ exports.onFileDropped = function(filePath) {
   markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
   listener.send('app:file-exists', markbotFile.repo);
 
+  listener.send('check-group:new', 'markbot', 'Markbot file');
+  listener.send('check-group:item-new', 'markbot', 'file', 'Exists');
+  listener.send('check-group:item-complete', 'markbot', 'file', 'Exists');
+
   if (markbotFile.naming) {
     listener.send('check-group:new', 'naming', 'Naming conventions');
     naming.check(listener, filePath, 'naming');
