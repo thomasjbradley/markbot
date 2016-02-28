@@ -18,7 +18,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Markbot would attempt to bypass some checks without them every being initialized.
 - Fix screenshot window resizing to support shorter screens after longer screens.
 - Fix the differ’s split slider so that it’s properly centred on load.
-- Screenshots for really long websites now capture the whole page without missing some at the bottom.
+- Screenshots for really long websites now capture the whole page without missing some at the bottom—up to a maximum of 6000 pixels.
 
 ---
 

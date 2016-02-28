@@ -15,9 +15,15 @@ var
   defaultScreenshotJS = require('./screenshots/default'),
   screenshotPrefix = 'markbot',
   minWindowHeight = 400,
-  maxWindowHeight = 10000,
+  maxWindowHeight = 6000,
   refScreenFolder = 'screenshots'
 ;
+
+const getCropHeight = function (height) {
+  if (height > maxWindowHeight) return maxWindowHeight;
+  if (height < minWindowHeight) return minWindowHeight;
+  return height;
+};
 
 const getScreenshotFileName = function (filePath, width, prefix) {
   let pre = (prefix) ? prefix + '-' : '';
@@ -73,19 +79,16 @@ const saveScreenshot = function (filePath, width, img, refScreenPath, cb) {
 
 const takeScreenshotAtWidth = function (win, filePath, sizes, refScreenPath, savedPaths, cb) {
   if (sizes.length > 0) {
-    let
-      width = sizes.shift(),
-      js = defaultScreenshotJS(width, minWindowHeight)
-      ;
+    let width = sizes.shift();
 
     win.setSize(width, maxWindowHeight);
-    win.webContents.executeJavaScript(js);
+    win.webContents.executeJavaScript(defaultScreenshotJS);
 
     // Artificial delay to wait for the resized browser to re-render
     setTimeout(function () {
       // Using the <title> to pass information back and forth is super hacky
       // But the async ways were causing way too many problems
-      let height = parseInt(win.webContents.getTitle(), 10) || minWindowHeight;
+      let height = getCropHeight(parseInt(win.webContents.getTitle(), 10) || minWindowHeight);
 
       win.capturePage({x: 0, y:0, width: width, height: height}, function (img) {
         saveScreenshot(filePath, width, img, refScreenPath, function (path) {
