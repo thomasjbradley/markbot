@@ -208,11 +208,17 @@ screenshots:
 
 The screenshots should be generated using Markbot itself for the most consistency—trigger the “Develop” menu ([See Environment variables](#environment-variables)) and press “Generate Reference Screenshots”.
 
-Markbot will display differences to students highlighted in a bright colour. Difference percentages are calculated and **anything with a difference greater than 10% is considered an error.**
+Markbot will display differences to students highlighted in a black & white difference image. Difference percentages are calculated and **anything with a difference greater than 10% is considered an error.**
 
 ![](.readme/visual-diff.png)
 
 *An example of screenshot difference errors.*
+
+Students can enlarge the difference screenshot into a split view window for clearer understanding.
+
+![](.readme/split-view.png)
+
+*Markbot split view screenshot comparison tool.*
 
 ---
 
