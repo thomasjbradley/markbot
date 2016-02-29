@@ -10,7 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - A Markbot file status message that says “Exists” is now shown at the top of the checks panel.
-- A `has_not` element matching option to the Markbot file that will throw an error if that element is encountered.
+- Added a `has_not` element matching option to the HTML entry of the Markbot file that will throw an error if that element is encountered.
 
 ### Changed
 
