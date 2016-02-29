@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Re-disabled the Node integration in the hidden screenshot window.
+
+---
+
 ## [2.9.0] — 2016-02-28
 
 ### Added

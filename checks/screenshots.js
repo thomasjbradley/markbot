@@ -152,7 +152,7 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
       frame: false,
       enableLargerThanScreen: true,
       backgroundColor: '#fff',
-      // nodeIntegration: false,
+      nodeIntegration: false,
       defaultEncoding: 'UTF-8'
     }),
     refScreenPath = (genRefScreens) ? path.resolve(fullPath) : false,
