@@ -5,12 +5,16 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.8.5] — 2016-02-28
 
 ### Added
 
 - A Markbot file status message that says “Exists” is now shown at the top of the checks panel.
 - A `has_not` element matching option to the Markbot file that will throw an error if that element is encountered.
+
+### Changed
+
+- Increased allowed screenshot differences to 13% based on student feedback.
 
 ---
 
