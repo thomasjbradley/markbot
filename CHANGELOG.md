@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [2.8.5] — 2016-02-28
+## [2.9.0] — 2016-02-28
 
 ### Added
 
@@ -20,16 +20,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.8.4] — 2016-02-28
 
-### Added
-
-- Added basic CSS to enable hardware acceleration for the application windows.
-
 ### Changed
 
 - The labels on the diff window are more visible than before.
 - The “Force Reload” menu item will now reload the focused window.
 - The “Develop” menu can only be displayed with the `MARKBOT_DEVELOP_MENU` environment variable now.
 - Upgraded to a newer version of Electron, v0.36.9.
+- Added basic CSS to enable hardware acceleration for the application windows.
 
 ### Fixed
 
