@@ -265,6 +265,10 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
   }
 });
 
+window.addEventListener('will-navigate', function (e) {
+  e.preventDefault();
+});
+
 $repoName.addEventListener('click', function (e) {
   e.preventDefault();
   markbot.revealFolder();

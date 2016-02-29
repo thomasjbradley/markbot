@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Re-disabled the Node integration in the hidden screenshot window.
+- Accidental drags of screenshot images don’t attempt to re-check the website.
 
 ---
 
