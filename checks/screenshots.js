@@ -157,6 +157,11 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     }),
     refScreenPath = (genRefScreens) ? path.resolve(fullPath) : false,
     differs = {}
+    differs = {},
+    didFinishLoad = false,
+    domReady = false,
+    onFinishLoadFired = false,
+    onFinishLoad
     ;
 
   file.sizes.forEach(function (size) {
@@ -191,35 +196,46 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     return;
   }
 
-  win.loadURL(pageUrl);
+  win.loadURL(pageUrl, {'extraHeaders': 'pragma: no-cache\n'});
 
-  win.webContents.on('did-finish-load', function () {
+  onFinishLoad = function () {
     win.webContents.insertCSS(defaultScreenshotCSS);
 
-    var loadingTimer = setInterval(function () {
-      if (!win.webContents.isLoading()) {
-        clearInterval(loadingTimer);
+    // Artificial delay for final rendering bits, sometimes a little slower than domReady & didFinishLoad
+    setTimeout(function () {
+      takeScreenshots(win, file, refScreenPath, function (screenshotPaths) {
+        win.destroy();
+        win = null;
 
-        // Artificial delay for final rendering bits, sometimes a little slower than isLoading() call
-        setTimeout(function () {
-          takeScreenshots(win, file, refScreenPath, function (screenshotPaths) {
-            win.destroy();
-            win = null;
+        if (!genRefScreens) {
+          let bothScreens = findMatchingScreenshots(screenshotPaths, path.resolve(fullPath));
 
-            if (!genRefScreens) {
-              let bothScreens = findMatchingScreenshots(screenshotPaths, path.resolve(fullPath));
-
-              file.sizes.forEach(function (size) {
-                differs[size].send({
-                  type: 'check',
-                  paths: bothScreens[size]
-                });
-              });
-            }
+          file.sizes.forEach(function (size) {
+            differs[size].send({
+              type: 'check',
+              paths: bothScreens[size]
+            });
           });
-        }, 200);
+        }
+      });
+    }, 200);
+  };
 
-      }
-    }, 100);
+  win.webContents.on('did-finish-load', function () {
+    didFinishLoad = true;
+
+    if (didFinishLoad && domReady && !onFinishLoadFired) {
+      onFinishLoadFired = true;
+      onFinishLoad();
+    }
+  });
+
+  win.webContents.on('dom-ready', function () {
+    domReady = true;
+
+    if (didFinishLoad && domReady && !onFinishLoadFired) {
+      onFinishLoadFired = true;
+      onFinishLoad();
+    }
   });
 };
