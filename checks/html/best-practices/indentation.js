@@ -62,7 +62,7 @@ module.exports.check = function (fileContents, lines) {
   ;
 
   beautified = beautifier(fileContents, beautifierOptions);
-  beautifiedLines = beautified.toString().split('\n');
+  beautifiedLines = beautified.toString().split(/[\n\u0085\u2028\u2029]|\r\n?/g);
 
   for (i; i < total; i++) {
     orgFrontSpace = lines[i].match(/^(\s*)/);

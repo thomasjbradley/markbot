@@ -47,7 +47,7 @@ const check = function (listener, checkGroup, checkId, checkLabel, fullPath, fil
     ;
 
     if (err) {
-      messages = JSON.parse(err.message.split('\n')[1].trim()).messages;
+      messages = JSON.parse(err.message.split(/[\n\u0085\u2028\u2029]|\r\n?/g)[1].trim()).messages;
 
       messages.forEach(function (item) {
         if (shouldIncludeError(item.message, item.line)) {
