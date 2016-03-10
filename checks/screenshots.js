@@ -156,13 +156,19 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
       defaultEncoding: 'UTF-8'
     }),
     refScreenPath = (genRefScreens) ? path.resolve(fullPath) : false,
-    differs = {}
     differs = {},
     didFinishLoad = false,
     domReady = false,
     onFinishLoadFired = false,
     onFinishLoad
     ;
+
+  file.sizes.forEach(function (size) {
+    // This was moved here from `differ.js` because the screenshot checks were starting too slowly
+    //   students were able to click the Submit to Canvas button if all other checks finished before
+    //   the screenshots started
+    listener.send('check-group:item-new', group, file.path + '-' + size, file.path + ' — ' + size + 'px');
+  });
 
   file.sizes.forEach(function (size) {
     differs[size] = fork(`${__dirname}/screenshots/differ`);

@@ -174,14 +174,6 @@ const check = function (paths) {
 const init = function (filePath, size) {
   checkId = filePath + '-' + size;
   checkLabel = filePath + ' — ' + size + 'px';
-
-  process.send({
-    type: 'listener',
-    id: 'check-group:item-new',
-    checkId: checkId,
-    checkLabel: checkLabel,
-    errors: []
-  });
 };
 
 process.on('message', function (message) {
