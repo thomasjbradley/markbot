@@ -95,7 +95,7 @@
   left: 0;
   position: fixed;
   top: 0;
-  width: 275px;
+  width: 274px;
   z-index: 100;
 
   background-image: linear-gradient(to bottom, #f5f2f0, #f5f2f0 78%, rgba(245, 242, 240, 0));
