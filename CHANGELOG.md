@@ -12,6 +12,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Re-disabled the Node integration in the hidden screenshot window.
 - Accidental drags of screenshot images don’t attempt to re-check the website.
 - Fixed line breaking to better support Windows’s CRLF and other edge cases.
+- Change the window loading detection to better handle remote resources.
+- Move screenshot check initialization earlier to prevent Submit to Canvas button showing prematurely.
 - Updated dependencies.
 
 ---
