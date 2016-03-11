@@ -128,10 +128,10 @@ html:
 
     # Can be used to test that specific selectors are not used in the HTML
     # I would use this for ensuring that `<hr>` tags aren’t used when borders should be or that `<br>` tags aren’t used
-    #   [selector, [property, property, etc.]]
+    # Will be skipped if validation isn’t also checked—the document must be valid first
     has_not:
-      - ['hr']
-      - ['br']
+      - 'hr'
+      - 'br'
 
     # Regex searches on the file, for confirming specific content
     search:
@@ -166,6 +166,7 @@ css:
     # Can be used to test that specific selectors do not contain certain properties
     # I would use this for ensuring as little CSS duplication as possible, like forcing students to use multiple classes
     #   [selector, [property, property, etc.]]
+    # Will be skipped if validation isn’t also checked—the document must be valid first
     has_not:
       - ['.btn-ghost', ['display']]
       - ['.btn-subtle', ['font-size', 'text-decoration']]
@@ -177,7 +178,7 @@ css:
 
 ### Javascript file tests
 
-Use the `js` entry to test Javascript files, with many of the same options as the HTML.
+Use the `js` entry to test Javascript files.
 
 ```yml
 js:
@@ -284,7 +285,7 @@ There’s a few things you need to do to develop Markbot on your computer.
 1. [Create two environment variables on your computer.](#environment-variables)
 2. [Create your application config file.](#app-config-file)
 3. [Embed the hashed version of your password into your config file.](#passcode-hashing--embedding)
-4. [Download and install the dependencies](#markbot-dependencies)
+4. [Download and install the dependencies.](#markbot-dependencies)
 
 #### Environment variables
 
@@ -361,8 +362,8 @@ npm run build
 Or optionally a single platform:
 
 ```
-npm run build:osx
-npm run build:win
+npm run build-osx
+npm run build-win
 ```
 
 That’s it, Markbot should be ready to go.
@@ -386,7 +387,7 @@ The “Develop” menu will only show when these two conditions are met:
 
 ## Markbot server
 
-**Markbot Server is a companion server-side component ot the desktop application.**
+**Markbot Server is a companion server-side component to the desktop application.**
 
 It’s used for the purpose of connecting Markbot to Canvas. Everything is on a separate server to keep my own personal Canvas API key secret, and to create a mapping for student GitHub usernames to Canvas student IDs.
 
