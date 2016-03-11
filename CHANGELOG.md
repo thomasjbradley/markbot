@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed line breaking to better support Windows’s CRLF and other edge cases.
 - Change the window loading detection to better handle remote resources.
 - Move screenshot check initialization earlier to prevent Submit to Canvas button showing prematurely.
+- Adjusted the gradient width to not cover interface border between the checks list and the error list.
 - Updated dependencies.
 
 ---
