@@ -122,20 +122,30 @@ html:
 
     # Can be used to test for specific elements; each entry should be a valid CSS selector
     # Will be skipped if validation isn’t also checked—the document must be valid first
+    # If given an array, the second argument can be a custom error message
     has:
       - 'header nav[role="navigation"]'
       - 'main'
+      - ['header nav li a[class][href*="index.html"]', 'The navigation should be highlighted on this page']
 
     # Can be used to test that specific selectors are not used in the HTML
     # I would use this for ensuring that `<hr>` tags aren’t used when borders should be or that `<br>` tags aren’t used
     # Will be skipped if validation isn’t also checked—the document must be valid first
+    # If given an array, the second argument can be a custom error message
     has_not:
-      - 'hr'
       - 'br'
+      - ['hr', 'The `hr` tag should not be used to create borders']
 
     # Regex searches on the file, for confirming specific content
+    # If given an array, the second argument can be a custom error message
     search:
       - 'Hello World!'
+      - ['Hello World!', 'Whoa, don’t be so grumpy, say “Hello”']
+
+    # Regex searches on the file, for confirming specific content isn’t found
+    # If given an array, the second argument can be a custom error message
+    search_not:
+      - 'Thing-a-magic'
 ```
 
 ### CSS file tests
@@ -172,8 +182,17 @@ css:
       - ['.btn-subtle', ['font-size', 'text-decoration']]
 
     # Regex searches on the file
+    # If given an array, the second argument can be a custom error message
     search:
       - '@keyframes'
+      - ['@viewport', 'The `@viewport` should be included for the best browser compatibility']
+
+    # Regex searches on the file for confirming certain things don’t exist
+    # If given an array, the second argument can be a custom error message
+    search:
+      - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
+      - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
+      - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
 ```
 
 ### Javascript file tests

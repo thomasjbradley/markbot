@@ -26,7 +26,7 @@ module.exports.check = function (listener, filePath, file, group) {
     if (f.valid) validationChecker.bypass();
     if (f.bestPractices) bestPracticesChecker.bypass();
     if (f.has || f.has_not) propertiesChecker.bypass();
-    if (f.search) contentChecker.bypass();
+    if (f.search || f.search_not) contentChecker.bypass();
   };
 
   listener.send('check-group:item-new', group, 'exists', 'Exists');
@@ -37,7 +37,7 @@ module.exports.check = function (listener, filePath, file, group) {
   }
 
   if (file.has || file.has_not) propertiesChecker = properties.init(listener, group);
-  if (file.search) contentChecker = content.init(listener, group);
+  if (file.search || file.search_not) contentChecker = content.init(listener, group);
 
   if (!exists.check(fullPath)) {
     listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is missing or misspelled', file.path)]);
@@ -74,6 +74,10 @@ module.exports.check = function (listener, filePath, file, group) {
       });
     }
 
-    if (file.search) contentChecker.check(fileContents, file.search);
+    if (file.search || file.search_not) {
+      if (file.search && !file.search_not) contentChecker.check(fileContents, file.search, []);
+      if (!file.search && file.search_not) contentChecker.check(fileContents, [], file.search_not);
+      if (file.search && file.search_not) contentChecker.check(fileContents, file.search, file.search_not);
+    }
   });
 };

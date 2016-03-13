@@ -13,8 +13,15 @@ const checkHasElements = function (code, sels) {
   var errors = [];
 
   sels.forEach(function (sel) {
-    if (code(sel).length <= 0) {
-      errors.push(util.format('Expected to see this element: `%s`', sel));
+    let se = sel, error = `Expected to see this element: \`${sel}\``;
+
+    if (typeof sel == 'object') {
+      se = sel[0];
+      error = sel[1];
+    }
+
+    if (code(se).length <= 0) {
+      errors.push(error);
     }
   });
 
@@ -25,8 +32,15 @@ const checkHasNotElements = function (code, sels) {
   var errors = [];
 
   sels.forEach(function (sel) {
-    if (code(sel).length > 0) {
-      errors.push(util.format('The `%s` element should not be used', sel));
+    let se = sel, error = `The \`${sel}\` element should not be used`;
+
+    if (typeof sel == 'object') {
+      se = sel[0];
+      error = sel[1];
+    }
+
+    if (code(se).length > 0) {
+      errors.push(error);
     }
   });
 

@@ -5,6 +5,16 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased] — 2016-03-13
+
+### Added
+
+- The ability to search the documents for content that shouldn’t exist, `search_not`.
+- The `search` and `search_not` entries can now accept an array, where the second item is a custom error message.
+- The `has` & `has_not` properties for `html` can now have custom error messages.
+
+---
+
 ## [2.9.1] — 2016-03-10
 
 ### Fixed
