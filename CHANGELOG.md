@@ -13,6 +13,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The `search` and `search_not` entries can now accept an array, where the second item is a custom error message.
 - The `has` & `has_not` properties for `html` can now have custom error messages.
 
+### Changed
+
+- The main window now has a min resizable width and height.
+- Removed the about screen on Mac OS X, replacing it with just the version number.
+- On Windows, there’s now a “Help” menu that shows the version number.
+
 ---
 
 ## [2.9.1] — 2016-03-10
