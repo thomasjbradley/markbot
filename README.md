@@ -189,7 +189,7 @@ css:
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
-    search:
+    search_not:
       - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
       - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
       - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
@@ -217,6 +217,12 @@ js:
     search:
       - 'querySelector'
       - 'addEventListener'
+
+    # Regex searches on the file for confirming certain things don’t exist
+    # If given an array, the second argument can be a custom error message
+    search_not:
+      - 'document.write\('
+      - ['console.log\(', 'The `console.log()` function should not be left in your code after you’ve finished debugging']
 ```
 
 ### Screenshot comparisons
