@@ -52,7 +52,9 @@ const updateAppMenu = function () {
 const createWindow = function () {
   mainWindow = new BrowserWindow({
     width: 800,
+    minWidth: 600,
     height: 600,
+    minHeight: 550,
     titleBarStyle: 'hidden-inset'
   });
 
