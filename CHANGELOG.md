@@ -18,6 +18,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The main window now has a min resizable width and height.
 - Removed the about screen on Mac OS X, replacing it with just the version number.
 - On Windows, there’s now a “Help” menu that shows the version number.
+- The distance measurement for screenshot comparison is now higher—it matters a little less in the tested metrics.
 
 ### Fixed
 

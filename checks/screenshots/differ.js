@@ -7,7 +7,7 @@ var
   jimp = require('jimp'),
   checkId,
   checkLabel,
-  ALLOWED_DISTANCE_DIFFERENCE = 0.22,
+  ALLOWED_DISTANCE_DIFFERENCE = 0.50,
   ALLOWED_PERCENT_DIFFERENCE = 0.13
 ;
 
