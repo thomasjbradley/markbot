@@ -43,17 +43,22 @@ const check = function (listener, checkGroup, checkId, checkLabel, fullPath, fil
   exec(execPath, function (err, data) {
     var
       messages = {},
+      errorJson = '',
       errors = []
     ;
 
     if (err) {
-      messages = JSON.parse(err.message.split(/[\n\u0085\u2028\u2029]|\r\n?/g)[1].trim()).messages;
+      errorJson = err.message.trim().split(/[\n\u0085\u2028\u2029]|\r\n?/g)[1].trim();
 
-      messages.forEach(function (item) {
-        if (shouldIncludeError(item.message, item.line)) {
-          errors.push(util.format('Line %d: %s', item.lastLine, item.message));
-        }
-      });
+      if (errorJson) messages = JSON.parse(errorJson);
+
+      if (errorJson && messages.messages) {
+        messages.messages.forEach(function (item) {
+          if (shouldIncludeError(item.message, item.line)) {
+            errors.push(util.format('Line %d: %s', item.lastLine, item.message));
+          }
+        });
+      }
     }
 
     listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
