@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased] — 2016-03-13
+## [Unreleased]
 
 ### Added
 
@@ -18,6 +18,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The main window now has a min resizable width and height.
 - Removed the about screen on Mac OS X, replacing it with just the version number.
 - On Windows, there’s now a “Help” menu that shows the version number.
+
+### Fixed
+
+- Add some more error checking in the HTML validation to fix a weird bug in Windows.
 
 ---
 
