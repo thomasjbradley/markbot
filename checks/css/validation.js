@@ -34,6 +34,9 @@ const shouldIncludeError = function (message, line, lines, fileContents) {
   var nonExistingPropMatch = null;
 
   // Caused by @viewport
+  // It’s a little overzealous: if the viewport is written all on one line, as I tend to do
+  //   then validation errors anywhere in that line will be skipped
+  //   it relies on the best practices & properties to catch skipped errors
   if (message.match(/parse error/i) && lines[line].match(/viewport/) || (lines[line - 1] && lines[line - 1].match(/viewport/))) return false;
   if (message.match(/at-rule @.*viewport/i)) return false;
 
@@ -51,7 +54,8 @@ const shouldIncludeError = function (message, line, lines, fileContents) {
 
   if (message.match(/parse error/i)) {
     // Another work around for validator's calc() bug
-    // It's really grabby and will sometimes ignore other errors, those are hopefully caught by the best practices test
+    // It's really grabby and will sometimes ignore other errors,
+    //   those are hopefully caught by the best practices test
     let currentLine = line;
     let foundOpenBrace = false;
 
