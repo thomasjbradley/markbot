@@ -18,21 +18,29 @@ const bypass = function (listener, checkGroup, checkId, checkLabel) {
 };
 
 const check = function (listener, checkGroup, checkId, checkLabel, fileContents, lines) {
+  var errors = [];
+
   listener.send('check-group:item-computing', checkGroup, checkId);
 
-  linter.lint({code: fileContents, config: require('./stylelint.json')}).then(function (data) {
-    var errors = [];
+  linter.lint({code: fileContents, config: require('./stylelint.json')})
+    .then(function (data) {
+      if (data.results) {
+        data.results[0].warnings.forEach(function (item) {
+          if (shouldIncludeError(item.text, item.line, lines, fileContents)) {
+            errors.push(util.format('Line %d: %s', item.line, item.text));
+          }
+        });
+      }
 
-    if (data.results) {
-      data.results[0].warnings.forEach(function (item) {
-        if (shouldIncludeError(item.text, item.line, lines, fileContents)) {
-          errors.push(util.format('Line %d: %s', item.line, item.text));
-        }
-      });
-    }
-
-    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
-  });
+      listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+    })
+    .catch(function (err) {
+      if (err.reason && err.line) {
+        errors.push(`Line ${err.line}: ${err.reason}`);
+        listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+      }
+    })
+    ;
 };
 
 module.exports.init = function (lstnr, group) {

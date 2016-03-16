@@ -51,10 +51,16 @@ const shouldIncludeError = function (message, line, lines, fileContents) {
 
   if (message.match(/parse error/i)) {
     // Another work around for validator's calc() bug
+    // It's really grabby and will sometimes ignore other errors, those are hopefully caught by the best practices test
     let currentLine = line;
+    let foundOpenBrace = false;
+
+    if (lines[line].match(/calc/) || (lines[line - 1] && lines[line - 1].match(/calc/))) return false;
 
     while (currentLine >= 0) {
       if (lines[currentLine].match(/calc/)) return false;
+      if (lines[currentLine].match(/\{/) && foundOpenBrace) break;
+      if (lines[currentLine].match(/\{/)) foundOpenBrace = true;
       currentLine--;
     }
 
