@@ -100,10 +100,16 @@ const check = function (listener, checkGroup, checkId, checkLabel, fileContents,
 
   listener.send('check-group:item-computing', checkGroup, checkId);
 
-  code = css.parse(fileContents);
-  errors = errors.concat(checkHasProperties(code, hasSels), checkHasNotProperties(code, hasNotSels));
-
-  listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+  try {
+    code = css.parse(fileContents);
+    errors = errors.concat(checkHasProperties(code, hasSels), checkHasNotProperties(code, hasNotSels));
+    listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+  } catch (e) {
+    if (e.reason && e.line) {
+      errors.push(`Line ${e.line}: ${e.reason}`);
+      listener.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+    }
+  }
 };
 
 module.exports.init = function (lstnr, group) {
