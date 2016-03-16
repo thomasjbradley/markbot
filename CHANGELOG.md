@@ -12,12 +12,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The ability to search the documents for content that shouldn’t exist, `search_not`.
 - The `search` and `search_not` entries can now accept an array, where the second item is a custom error message.
 - The `has` & `has_not` properties for `html` can now have custom error messages.
+- A “Help̦p” menu with links to the license, issues, the version on Windows & a link to the GitHub Issues page for the current assignment.
 
 ### Changed
 
 - The main window now has a minimum resizable width and height.
 - Removed the about screen on Mac OS X, replacing it with just the version number.
-- On Windows, there’s now a “Help” menu that shows the version number.
 - The distance measurement for screenshot comparison is now higher—it matters a little less in the tested metrics.
 
 ### Fixed

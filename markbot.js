@@ -89,6 +89,7 @@ menuCallbacks.revealFolder = exports.revealFolder;
 exports.disableFolderMenuFeatures = function () {
   menuOptions.runChecks = false;
   menuOptions.revealFolder = false;
+  menuOptions.ghIssues = false;
   updateAppMenu();
 };
 menuCallbacks.disableFolderMenuFeatures = exports.disableFolderMenuFeatures;
@@ -125,14 +126,16 @@ exports.onFileDropped = function(filePath) {
 
   currentFolderPath = filePath;
 
-  menuOptions.runChecks = true;
-  menuOptions.revealFolder = true;
-  updateAppMenu();
-
   mainWindow.setRepresentedFilename(filePath);
   mainWindow.setTitle(filePath.split(/\//).pop() + ' — Markbot');
 
   markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
+
+  menuOptions.runChecks = true;
+  menuOptions.revealFolder = true;
+  menuOptions.ghIssues = `http://github.com/{{username}}/${markbotFile.repo}/issues`;
+  updateAppMenu();
+
   listener.send('app:file-exists', markbotFile.repo);
 
   listener.send('check-group:new', 'markbot', 'Markbot file');
