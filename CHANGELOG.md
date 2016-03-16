@@ -24,6 +24,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Add some more error checking in the HTML validation to fix a weird bug in Windows.
 - Tried to make a better job of ignoring the CSS `calc()` validation errors.
+- Validation errors inside single line `@viewport` declarations were skipped—they will now be caught by best practices or properties checking.
 
 ---
 
