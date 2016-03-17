@@ -103,9 +103,57 @@ const compare = function (distance, percent, imgPaths, width) {
   process.send({type: 'kill'});
 };
 
-const check = function (paths) {
-  let diffImgPath;
+const calculateImageDifference = function (paths, refImg, newImg) {
+  let
+    diffImgPath = paths.new.replace(/\.png$/, '-diff.png'),
+    distance = jimp.distance(refImg, newImg),
+    diff = jimp.diff(refImg, newImg)
+    ;
 
+  diff
+    .image
+    .scan(0, 0, diff.image.bitmap.width, diff.image.bitmap.height, function (x, y, idx) {
+      let clr = jimp.intToRGBA(diff.image.getPixelColor(x, y));
+
+      // Yellow
+      if (clr.r == 255 && clr.g == 255 && clr.b == !255) {
+        diff.image.setPixelColor(0x999999ff, x, y);
+      }
+
+      // Red
+      if (clr.r == 255 && clr.g == !255 && clr.b == !255) {
+        diff.image.setPixelColor(0x000000ff, x, y);
+      }
+    })
+    .write(diffImgPath, function () {
+      compare(distance, diff.percent, {
+        ref: paths.ref,
+        new: paths.new,
+        diff: diffImgPath
+      }, diff.image.bitmap.width);
+    })
+    ;
+};
+
+const resizeImagesToMatchHeight = function (paths, refImg, newImg) {
+  if (newImg.bitmap.height != refImg.bitmap.height) {
+    let tmpImgHeight = (newImg.bitmap.height > refImg.bitmap.height) ? newImg.bitmap.height : refImg.bitmap.height;
+
+    new jimp(refImg.bitmap.width, tmpImgHeight, 0xff00ffff, function (err, rightLengthImg) {
+      if (newImg.bitmap.height > refImg.bitmap.height) {
+        rightLengthImg.composite(refImg, 0, 0);
+        calculateImageDifference(paths, rightLengthImg, newImg);
+      } else {
+        rightLengthImg.composite(newImg, 0, 0);
+        calculateImageDifference(paths, refImg, rightLengthImg);
+      }
+    });
+  } else {
+    calculateImageDifference(paths, refImg, newImg);
+  }
+};
+
+const check = function (paths) {
   computing();
 
   if (!paths.new) {
@@ -118,12 +166,8 @@ const check = function (paths) {
     return;
   }
 
-  diffImgPath = paths.new.replace(/\.png$/, '-diff.png');
-
   jimp.read(paths.ref, function (err, refImg) {
     jimp.read(paths.new, function (err, newImg) {
-      let distance, diff;
-
       if (!newImg.bitmap) {
         newNotFound();
         return;
@@ -134,39 +178,7 @@ const check = function (paths) {
         return;
       }
 
-      if (newImg.bitmap.height > refImg.bitmap.height) {
-        newImg.crop(0, 0, newImg.bitmap.width, refImg.bitmap.height);
-      } else {
-        if (refImg.bitmap.height > newImg.bitmap.height) {
-          refImg.crop(0, 0, refImg.bitmap.width, newImg.bitmap.height);
-        }
-      }
-
-      distance = jimp.distance(refImg, newImg);
-      diff = jimp.diff(refImg, newImg);
-      diff
-        .image
-        .scan(0, 0, diff.image.bitmap.width, diff.image.bitmap.height, function (x, y, idx) {
-          let clr = jimp.intToRGBA(diff.image.getPixelColor(x, y));
-
-          // Yellow
-          if (clr.r == 255 && clr.g == 255 && clr.b == !255) {
-            diff.image.setPixelColor(0x999999ff, x, y);
-          }
-
-          // Red
-          if (clr.r == 255 && clr.g == !255 && clr.b == !255) {
-            diff.image.setPixelColor(0x000000ff, x, y);
-          }
-        })
-        .write(diffImgPath, function () {
-          compare(distance, diff.percent, {
-            ref: paths.ref,
-            new: paths.new,
-            diff: diffImgPath
-          }, diff.image.bitmap.width);
-        })
-        ;
+      resizeImagesToMatchHeight(paths, refImg, newImg);
     });
   });
 };
