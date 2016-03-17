@@ -12,7 +12,7 @@
     "cheerio": "^0.19.0",
     "css": "^2.2.1",
     "entities": "^1.1.1",
-    "eslint": "^2.3.0",
+    "eslint": "^2.4.0",
     "git-commits": "^1.1.1",
     "htmlcs": "^0.1.12",
     "jimp": "^0.2.21",
@@ -24,17 +24,17 @@
     "xml2js": "^0.4.16"
   },
   "devDependencies": {
-    "electron-builder": "^2.9.2",
+    "electron-builder": "^2.10.1",
     "electron-packager": "^5.2.1",
-    "electron-prebuilt": "^0.36.10"
+    "electron-prebuilt": "^0.37.2"
   },
   "scripts": {
     "start": "electron markbot.js",
     "clean-osx": "rm -Rf ./dist/osx",
     "clean-win": "rm -Rf ./dist/win",
     "clean": "rm -Rf ./dist",
-    "pack-osx": "npm run clean-osx && electron-packager ./ --overwrite --app-version=2.9.1 --build-version=2.9.1 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --asar --asar-unpack-dir=vendor --version=0.36.10 --ignore='(dist/osx|dist/win)' --icon=images/icon.icns --app-copyright='© Thomas J Bradley' --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
-    "pack-win": "npm run clean-win && electron-packager ./ --overwrite --app-version=2.9.1 --build-version=2.9.1 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --asar --asar-unpack-dir=vendor --version=0.36.10 --ignore='(dist/osx|dist/win)' --icon=images/icon.ico --app-copyright='© Thomas J Bradley' --version-string={ProductName:'Markbot',LegalCopyright:'© Thomas J Bradley'}",
+    "pack-osx": "npm run clean-osx && electron-packager ./ --overwrite --app-version=2.9.1 --build-version=2.9.1 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --asar --asar-unpack-dir=vendor --version=0.37.2 --ignore='(dist/osx|dist/win)' --icon=images/icon.icns --app-copyright='© Thomas J Bradley' --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
+    "pack-win": "npm run clean-win && electron-packager ./ --overwrite --app-version=2.9.1 --build-version=2.9.1 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --asar --asar-unpack-dir=vendor --version=0.37.2 --ignore='(dist/osx|dist/win)' --icon=images/icon.ico --app-copyright='© Thomas J Bradley' --version-string={ProductName:'Markbot',LegalCopyright:'© Thomas J Bradley'}",
     "pack": "npm run clean && npm run pack-osx && npm run pack-win",
     "build-osx": "npm run pack-osx && electron-builder \"dist/osx/Markbot-darwin-x64/Markbot.app\" --platform=osx --out=\"dist/osx\" --config=builder.json",
     "build-win": "npm run pack-win && electron-builder \"dist/win/Markbot-win32-ia32\" --platform=win --out=\"dist/win\" --config=builder.json",
