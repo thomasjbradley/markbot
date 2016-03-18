@@ -20,6 +20,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Removed the about screen on Mac OS X, replacing it with just the version number.
 - The distance measurement for screenshot comparison is now higher—it matters a little less in the tested metrics.
 - Updated the dependencies including Electron & ESLint.
+- Changed the version updating script to hook into the `npm version` script.
 
 ### Fixed
 
