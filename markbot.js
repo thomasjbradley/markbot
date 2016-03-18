@@ -23,6 +23,7 @@ var
   appPkg = require('./package.json'),
   config = require('./config.json'),
   markbotFile = {},
+  passcode = require('./lib/passcode'),
   exists = require('./checks/file-exists'),
   naming = require('./checks/naming-conventions'),
   commits = require('./checks/git-commits'),
@@ -40,12 +41,13 @@ var
     revealFolder: false,
     signOut: false,
     signOutUsername: false,
-    showDevelop: MARKBOT_DEVELOP_MENU
+    showDevelop: false
   },
   currentFolderPath
 ;
 
 const updateAppMenu = function () {
+  menuOptions.showDevelop = (MARKBOT_DEVELOP_MENU && MARKBOT_LOCK_PASSCODE && passcode.matches(MARKBOT_LOCK_PASSCODE, config.secret, config.passcodeHash));
   Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, listener, menuCallbacks, menuOptions)));
 };
 
