@@ -30,6 +30,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Tried to make a better job of ignoring the CSS `calc()` validation errors.
 - Validation errors inside single line `@viewport` declarations were skipped—they will now be caught by best practices or properties checking.
 - Fixed a very specific screenshot bug: sometimes the cropping would cut at exactly the point needed to get 0% differences. This has been changed, now the images are cropped to match dimensions but the shorter one is lengthened.
+- Error messages from regex searches now remove the `\` to help with clarity and understanding.
 
 ---
 
