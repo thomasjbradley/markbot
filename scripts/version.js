@@ -1,16 +1,23 @@
+'use strict';
+
 const
   path = require('path'),
-  fs = require('fs'),
-  pkg = require('../package.json'),
-  bldr = require('../builder.json'),
-  updateVersionBySearch = function (key, search) {
-    pkg.scripts[key] = pkg.scripts[key].replace(new RegExp(`--${search}=[0-9]*.[0-9]*.[0-9]*`, 'g'), `--${search}=${pkg.version}`);
-  },
-  updateVersion = function (key) {
-    updateVersionBySearch(key, 'app-version');
-    updateVersionBySearch(key, 'build-version');
-  }
+  fs = require('fs')
   ;
+
+let
+  pkg = require('../package.json'),
+  bldr = require('../builder.json')
+  ;
+
+const updateVersionBySearch = function (key, search) {
+  pkg.scripts[key] = pkg.scripts[key].replace(new RegExp(`--${search}=[0-9]*.[0-9]*.[0-9]*`, 'g'), `--${search}=${pkg.version}`);
+};
+
+const updateVersion = function (key) {
+  updateVersionBySearch(key, 'app-version');
+  updateVersionBySearch(key, 'build-version');
+};
 
 bldr.win.version = pkg.version;
 

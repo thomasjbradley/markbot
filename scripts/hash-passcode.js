@@ -1,8 +1,13 @@
+'use strict';
+
 const
   fs = require('fs'),
   path = require('path'),
   crypto = require('crypto'),
-  passcode = require('../lib/passcode'),
+  passcode = require('../lib/passcode')
+  ;
+
+let
   config = require('../config.json')
   ;
 
