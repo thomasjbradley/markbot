@@ -12,7 +12,9 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The ability to search the documents for content that shouldn’t exist, `search_not`.
 - The `search` and `search_not` entries can now accept an array, where the second item is a custom error message.
 - The `has` & `has_not` properties for `html` can now have custom error messages.
-- A “Help” menu with links to the license, issues, the version on Windows & a link to the GitHub Issues page for the current assignment.
+- Added a “Help” menu with links to the license, issues, the version on Windows & a link to the GitHub Issues page for the current assignment.
+- Added a script, `hash-passcode`, that will hash the `MARKBOT_LOCK_PASSCODE` environment variable and embed it (with a `secret`) into `config.json`.
+- The “Develop” menu only becomes visible when the environment variables are present and the hashed passcode in `config.json` matches the environment variable.
 
 ### Changed
 

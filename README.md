@@ -25,12 +25,13 @@ Built with Javascript, Node.js & Electron.
   - [Student installation tutorial](#student-installation-tutorial)
 - [Building Markbot](#building-markbot)
   - [Configure the Markbot application](#configure-the-markbot-application)
-    - [Environment variables](#environment-variables)
-    - [App config file](#app-config-file)
-  - [Markbot dependencies](#markbot-dependencies)
-    - [HTML validator](#html-validator)
-    - [CSS validator](#css-validator)
-      - [Compiling the CSS validator](#compiling-the-css-validator)
+    - [1. Environment variables](#1--environment-variables)
+    - [2. App config file](#2--app-config-file)
+    - [3. Passcode hashing & embedding](#3--passcode-hashing--embedding)
+    - [4. Markbot dependencies](#4--markbot-dependencies)
+      - [HTML validator](#html-validator)
+      - [CSS validator](#css-validator)
+        - [Compiling the CSS validator](#compiling-the-css-validator)
   - [Running Markbot](#running-markbot)
 - [Debugging Markbot](#debugging-markbot)
 - [Markbot Server](#markbot-server)
@@ -312,7 +313,7 @@ There’s a few things you need to do to develop Markbot on your computer.
 3. [Embed the hashed version of your password into your config file.](#passcode-hashing--embedding)
 4. [Download and install the dependencies.](#markbot-dependencies)
 
-#### Environment variables
+#### 1. Environment variables
 
 Start by making two environment variables on your computer for the “Develop” menu and cheat locking.
 
@@ -325,7 +326,7 @@ MARKBOT_LOCK_PASSCODE="some-long-password-thing"
 
 [**To set persistent env vars on Mac OS X for command line and GUI, check out this answer on StackOverflow.**](https://stackoverflow.com/questions/135688/setting-environment-variables-in-os-x#answer-32405815)
 
-#### App config file
+#### 2. App config file
 
 To configure your installation of Markbot you’ll need to adjust the config file.
 
@@ -334,11 +335,15 @@ Rename `config.example.json` to just `config.json` and change the following opti
 - `proxyUrl` — (string) the URL to your [Markbot Server](#markbot-server) instance.
 - `ignoreCommitEmails` — (array) the list of email addresses to ignore when counting commits.
 
-#### Passcode hashing & embedding
+#### 3. Passcode hashing & embedding
 
-*(Coming soon…)*
+After you’ve created your `config.json` file *and* created the two environment variables, run the following command: `npm run hash-passcode`.
 
-### Markbot dependencies
+The `hash-passcode` script will generate a `secret` key and hash your password, embedding both into your `config.json`.
+
+*The hashed passcode isn’t really for security, it only uses HMAC. The purpose is really to be sufficiently annoying that students will do their work instead of figuring out how to cheat Markbot.*
+
+#### 4. Markbot dependencies
 
 Markbot has a few external dependencies that it shells out to internally:
 
@@ -348,19 +353,19 @@ Markbot has a few external dependencies that it shells out to internally:
 
 The `vendor` folder should contain a bunch of JAR files for the HTML validator and the CSS validator.
 
-#### HTML validator
+##### HTML validator
 
 The `vendor` folder should contain the `vnu.jar`—the pre-built binary works well.
 
 [**Download the HTML validator release from GitHub.**](https://github.com/validator/validator)
 
-#### CSS validator
+##### CSS validator
 
 The pre-build JAR files seem to be out of date, so you’ll have to compile the JAR yourself.
 
 [**Download the CSS validator source from GitHub.**](https://github.com/w3c/css-validator)
 
-##### Compiling the CSS validator
+###### Compiling the CSS validator
 
 You’ll need the JDK and `ant` to compile the validator. Install `ant` with Homebrew: `brew install ant`.
 
