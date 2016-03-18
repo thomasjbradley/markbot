@@ -341,7 +341,7 @@ After you’ve created your `config.json` file *and* created the two environment
 
 The `hash-passcode` script will generate a `secret` key and hash your password, embedding both into your `config.json`.
 
-*The hashed passcode isn’t really for security, it only uses HMAC. The purpose is really to be sufficiently annoying that students will do their work instead of figuring out how to cheat Markbot.*
+*The hashed passcode isn’t really for security, it only uses HMAC-SHA512. The purpose is really to be sufficiently annoying that students will do their work instead of figuring out how to cheat Markbot.*
 
 #### 4. Markbot dependencies
 
