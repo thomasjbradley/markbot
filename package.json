@@ -40,7 +40,7 @@
     "build-osx": "npm run pack-osx && electron-builder \"dist/osx/Markbot-darwin-x64/Markbot.app\" --platform=osx --out=\"dist/osx\" --config=builder.json",
     "build-win": "npm run pack-win && electron-builder \"dist/win/Markbot-win32-ia32\" --platform=win --out=\"dist/win\" --config=builder.json",
     "build": "npm run build-osx && npm run build-win",
-    "generate-passcode-hash": "node ./tools/generate-passcode-hash.js"
+    "hash-passcode": "node ./tools/hash-passcode.js"
   },
   "repository": {
     "type": "git",
