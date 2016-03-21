@@ -24,7 +24,7 @@ const moveDiffer = function (x) {
     moveSplitter(x);
     cropImage(x);
   }
-}
+};
 
 const handleMouseMove = function (e) {
   moveDiffer(e.pageX)
@@ -32,7 +32,7 @@ const handleMouseMove = function (e) {
 
 const adjustDiff = function (opacity) {
   diff.style.opacity = opacity;
-}
+};
 
 const setImages = function (imgsJson) {
   let imgs = JSON.parse(imgsJson.replace(/\\/g, '/'));
@@ -45,7 +45,7 @@ const setImages = function (imgsJson) {
 
   diffRange.value = 0.5;
   moveDiffer(document.documentElement.clientWidth / 2);
-}
+};
 
 diffWrap.addEventListener('mousedown', function (e) {
   moveDiffer(e.pageX);
