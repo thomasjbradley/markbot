@@ -1,17 +1,26 @@
 {
- "osx" : {
+  "osx": {
     "title": "Install Markbot",
     "background": "images/installer.png",
     "icon": "images/icon.icns",
     "icon-size": 100,
     "contents": [
-      { "x": 494, "y": 270, "type": "link", "path": "/Applications" },
-      { "x": 210, "y": 270, "type": "file" }
+      {
+        "x": 494,
+        "y": 270,
+        "type": "link",
+        "path": "/Applications"
+      },
+      {
+        "x": 210,
+        "y": 270,
+        "type": "file"
+      }
     ]
   },
-  "win" : {
+  "win": {
     "title": "Markbot",
-    "version": "2.9.1",
+    "version": "2.10.0",
     "publisher": "Thomas J Bradley",
     "icon": "images/icon.ico"
   }
