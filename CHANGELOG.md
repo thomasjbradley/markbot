@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [2.10.0] — 2016-03-21
 
 ### Added
 
@@ -15,6 +15,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added a “Help” menu with links to the license, issues, the version on Windows & a link to the GitHub Issues page for the current assignment.
 - Added a script, `hash-passcode`, that will hash the `MARKBOT_LOCK_PASSCODE` environment variable and embed it (with a `secret`) into `config.json`.
 - The “Develop” menu only becomes visible when the environment variables are present and the hashed passcode in `config.json` matches the environment variable.
+- Added menu items to preview the website locally and view the live website on GitHub.
 
 ### Changed
 

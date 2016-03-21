@@ -39,6 +39,8 @@ var
     openRepo: false,
     runChecks: false,
     revealFolder: false,
+    viewLocal: false,
+    viewLive: false,
     signOut: false,
     signOutUsername: false,
     showDevelop: false
@@ -91,6 +93,8 @@ menuCallbacks.revealFolder = exports.revealFolder;
 exports.disableFolderMenuFeatures = function () {
   menuOptions.runChecks = false;
   menuOptions.revealFolder = false;
+  menuOptions.viewLocal = false;
+  menuOptions.viewLive = false;
   menuOptions.ghIssues = false;
   updateAppMenu();
 };
@@ -135,6 +139,8 @@ exports.onFileDropped = function(filePath) {
 
   menuOptions.runChecks = true;
   menuOptions.revealFolder = true;
+  menuOptions.viewLocal = 'file://' + path.resolve(filePath + '/' + 'index.html');
+  menuOptions.viewLive = `http://{{username}}.github.io/${markbotFile.repo}/`;
   menuOptions.ghIssues = `http://github.com/{{username}}/${markbotFile.repo}/issues`;
   updateAppMenu();
 
