@@ -10,6 +10,7 @@ const
   path = require('path'),
   util = require('util'),
   https = require('https'),
+  crypto = require('crypto'),
   yaml = require('js-yaml'),
   passcode = require('./lib/passcode'),
   locker = require('./lib/locker'),
@@ -169,6 +170,8 @@ exports.onFileDropped = function(filePath) {
   requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
   isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());
 
+  if (isCheater.cheated) listener.send('debug', 'CHEATER!');
+
   listener.send('app:file-exists', markbotFile.repo);
 
   listener.send('check-group:new', 'markbot', 'Markbot file');
@@ -259,14 +262,21 @@ exports.showDifferWindow = function (imgs, width) {
 };
 
 exports.submitToCanvas = function (ghUsername, cb) {
-  var getVars = [
-    util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
-    util.format('gh_username=%s', encodeURI(ghUsername)),
-    util.format('canvas_course=%s', markbotFile.canvasCourse),
-    util.format('canvas_assignment=%s', markbotFile.canvasAssignment),
-    util.format('markbot_version=%s', appPkg.version),
-    util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
-  ];
+  let
+    getVars = [
+      util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
+      util.format('gh_username=%s', encodeURI(ghUsername)),
+      util.format('canvas_course=%s', markbotFile.canvasCourse),
+      util.format('canvas_assignment=%s', markbotFile.canvasAssignment),
+      util.format('markbot_version=%s', appPkg.version),
+      util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
+    ],
+    hash = crypto.createHash('sha512'),
+    sig = hash.update(getVars.join('&') + config.passcodeHash, 'utf8').digest('hex')
+    ;
+
+  getVars.push(`sig=${sig}`);
+  listener.send('debug', getVars.join('&'));
 
   https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {
     res.on('data', function (data) {
