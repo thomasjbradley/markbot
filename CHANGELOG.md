@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- File lock hashes can now be generated for the Markbot file, any files marked as `locked: true` and the screenshots.
+
+### Fixed
+
+- Another HTML validation related bug on Windows.
+
+---
+
 ## [2.10.0] — 2016-03-21
 
 ### Added

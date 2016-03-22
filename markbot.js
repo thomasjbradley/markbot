@@ -5,8 +5,24 @@ const
   app = electron.app,
   Menu = electron.Menu,
   BrowserWindow = electron.BrowserWindow,
-  shell = electron.shell
-;
+  shell = electron.shell,
+  fs = require('fs'),
+  path = require('path'),
+  util = require('util'),
+  https = require('https'),
+  yaml = require('js-yaml'),
+  passcode = require('./lib/passcode'),
+  locker = require('./lib/locker'),
+  requirementsFinder = require('./lib/requirements-finder'),
+  lockMatcher = require('./lib/lock-matcher'),
+  exists = require('./lib/file-exists'),
+  naming = require('./checks/naming-conventions'),
+  commits = require('./checks/git-commits'),
+  html = require('./checks/html'),
+  css = require('./checks/css'),
+  js = require('./checks/javascript'),
+  screenshots = require('./checks/screenshots')
+  ;
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
@@ -14,23 +30,10 @@ const appMenu = require('./lib/menu');
 const MARKBOT_FILE = '.markbot.yml';
 const MARKBOT_LOCK_FILE = '.markbot.lock';
 
-var
-  fs = require('fs'),
-  path = require('path'),
-  util = require('util'),
-  https = require('https'),
-  yaml = require('js-yaml'),
+let
   appPkg = require('./package.json'),
   config = require('./config.json'),
   markbotFile = {},
-  passcode = require('./lib/passcode'),
-  exists = require('./checks/file-exists'),
-  naming = require('./checks/naming-conventions'),
-  commits = require('./checks/git-commits'),
-  html = require('./checks/html'),
-  css = require('./checks/css'),
-  js = require('./checks/javascript'),
-  screenshots = require('./checks/screenshots'),
   mainWindow,
   differWindow,
   listener,
@@ -43,9 +46,18 @@ var
     viewLive: false,
     signOut: false,
     signOutUsername: false,
-    showDevelop: false
+    showDevelop: false,
+    developMenuItems: false
   },
-  currentFolderPath
+  markbotFilePath,
+  markbotLockFilePath,
+  currentFolderPath,
+  markbotLockFileLocker,
+  actualFilesLocker,
+  isCheater = {
+    results: false,
+    matches: {}
+  }
 ;
 
 const updateAppMenu = function () {
@@ -121,14 +133,31 @@ exports.diffScreenshots = function (genRefScreens) {
 };
 menuCallbacks.diffScreenshots = exports.diffScreenshots;
 
+exports.lockRequirements = function () {
+  actualFilesLocker.save(markbotLockFilePath);
+};
+menuCallbacks.lockRequirements = exports.lockRequirements;
+
 exports.onFileDropped = function(filePath) {
-  var markbotFilePath = path.resolve(filePath + '/' + MARKBOT_FILE);
+  markbotLockFileLocker = locker.new(config.passcodeHash);
+  actualFilesLocker = locker.new(config.passcodeHash);
+
+  markbotFilePath = path.resolve(filePath + '/' + MARKBOT_FILE);
+  markbotLockFilePath = path.resolve(filePath + '/' + MARKBOT_LOCK_FILE);
 
   if (!exists.check(markbotFilePath)) {
     listener.send('app:file-missing');
     exports.disableFolderMenuFeatures();
     return;
   }
+
+  menuOptions.runChecks = true;
+  menuOptions.revealFolder = true;
+  menuOptions.viewLocal = 'file://' + path.resolve(filePath + '/' + 'index.html');
+  menuOptions.viewLive = `http://{{username}}.github.io/${markbotFile.repo}/`;
+  menuOptions.ghIssues = `http://github.com/{{username}}/${markbotFile.repo}/issues`;
+  menuOptions.developMenuItems = true;
+  updateAppMenu();
 
   currentFolderPath = filePath;
 
@@ -137,12 +166,11 @@ exports.onFileDropped = function(filePath) {
 
   markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
 
-  menuOptions.runChecks = true;
-  menuOptions.revealFolder = true;
-  menuOptions.viewLocal = 'file://' + path.resolve(filePath + '/' + 'index.html');
-  menuOptions.viewLive = `http://{{username}}.github.io/${markbotFile.repo}/`;
-  menuOptions.ghIssues = `http://github.com/{{username}}/${markbotFile.repo}/issues`;
-  updateAppMenu();
+  markbotLockFileLocker.read(markbotLockFilePath);
+  requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
+// console.log('.markbot.lock', markbotLockFileLocker.getLocks());
+// console.log('actual files', actualFilesLocker.getLocks());
+  isCheater = lockMatcher.match(markbotLockFileLocker.locks, actualFilesLocker.locks);
 
   listener.send('app:file-exists', markbotFile.repo);
 
