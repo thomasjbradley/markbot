@@ -319,11 +319,11 @@
   fill: #ff9494;
 }
 
-#messages {
+.messages {
   padding: 5px 13px 13px;
 }
 
-#messages h2 {
+.messages h2 {
   margin: 15px 0 0 0;
   padding: 12px 0 10px 20px;
 
@@ -334,7 +334,12 @@
   font-size: 14px;
 }
 
-#messages h2:target {
+.messages-positive h2 {
+  background-image: url("images/check.svg");
+  color: #417d0a;
+}
+
+.messages h2:target {
   border-color: #f33;
   animation: border-fade-out 500ms linear forwards;
 }
@@ -344,22 +349,22 @@
   100% { border-color: #f5f2f0; }
 }
 
-#messages [data-state="bypassed"] h2 {
+.messages [data-state="bypassed"] h2 {
   background-image: url("images/bypassed.svg");
   color: #63666a;
 }
 
-#messages ul {
+.messages ul {
   margin: 0;
   padding: 0 0 0 20px;
   list-style-type: none;
 }
 
-#messages li {
+.messages li {
   position: relative;
 }
 
-#messages li::before {
+.messages li::before {
   content: "•";
   left: -20px;
   position: absolute;
@@ -369,15 +374,19 @@
   text-align: center;
 }
 
-#messages [data-state="bypassed"] li::before {
+.messages-positive li::before {
+  color: #6dd110;
+}
+
+.messages [data-state="bypassed"] li::before {
   color: #a8a6af;
 }
 
-#messages li[data-state="skipped"]::before {
+.messages li[data-state="skipped"]::before {
   color: #a8a6af;
 }
 
-#messages .diff-wrap {
+.messages .diff-wrap {
   display: block;
   margin-top: 0.4rem;
   height: 150px;
@@ -390,11 +399,11 @@
   cursor: zoom-in;
 }
 
-#messages .diff-wrap:hover {
+.messages .diff-wrap:hover {
   background-color: #f2f2f2;
 }
 
-#messages .diff-img-wrap {
+.messages .diff-img-wrap {
   display: inline-block;
   height: 136px;
   margin-right: 0.7em;
@@ -407,7 +416,7 @@
   vertical-align: middle;
 }
 
-#messages .diff-wrap span {
+.messages .diff-wrap span {
   display: inline-block;
   vertical-align: middle;
 
@@ -415,7 +424,7 @@
   font-style: italic;
 }
 
-#messages img {
+.messages img {
   display: block;
   width: 100%;
   pointer-events: none;
@@ -470,7 +479,8 @@ pre, code {
 }
 
 #submit {
-  padding-top: 20px;
+  padding-bottom: 30px;
+  padding-top: 50px;
   text-align: center;
 }
 

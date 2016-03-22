@@ -9,6 +9,7 @@ const
   $dropbox = document.getElementById('dropbox'),
   $checks = document.getElementById('checks'),
   $messages = document.getElementById('messages'),
+  $messagesPositive = document.getElementById('messages-positive'),
   $messageHeader = document.getElementById('message-header'),
   $robotLogo = document.querySelector('.robot-logo'),
   $messageHeading = document.querySelector('h2.no-errors'),
@@ -129,14 +130,15 @@ const buildErrorMessageFromObject = function (err, li) {
   }
 };
 
-const displayErrors = function (group, label, linkId, errors, status) {
+const displayErrors = function (group, label, linkId, errors, status, isMessages) {
   const
     $errorGroup = document.createElement('div'),
     $groupHead = document.createElement('h2'),
     $messageList = document.createElement('ul')
   ;
 
-  hasErrors = true;
+  if (!isMessages) hasErrors = true;
+
   $groupHead.textContent = groups[group].label + ' — ' + label;
   $groupHead.id = linkId;
 
@@ -168,10 +170,17 @@ const displayErrors = function (group, label, linkId, errors, status) {
 
   $errorGroup.appendChild($groupHead);
   $errorGroup.appendChild($messageList);
-  $messages.appendChild($errorGroup);
+
+  if (isMessages) {
+    $messagesPositive.appendChild($errorGroup);
+  } else {
+    $messages.dataset.state = 'visible';
+    $messagesPositive.dataset.state = 'hidden';
+    $messages.appendChild($errorGroup);
+  }
 };
 
-const displaySummary = function () {
+const displaySummary = function (group, label, linkId, messages) {
   $messageHeader.dataset.state = 'computing';
   $submit.dataset.state = 'hidden';
 
@@ -185,13 +194,20 @@ const displaySummary = function () {
     $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
     $submit.dataset.state = 'visible';
     checksRunning = false;
+    $messages.dataset.state = 'hidden';
+    $messagesPositive.dataset.state = 'visible';
   }
+
+  if (messages) displayErrors(group, label, linkId, messages, '', true);
 };
 
 const reset = function () {
   hasErrors = false;
   $messages.innerHTML = '';
+  $messagesPositive.innerHTML = '';
   $checks.innerHTML = '';
+  $messages.dataset.state = 'visible';
+  $messagesPositive.dataset.state = 'hidden';
   $messageHeader.dataset.state = 'computing';
   $submit.dataset.state = 'hidden';
   $canvasBtn.removeAttribute('disabled');
@@ -342,7 +358,7 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
   displaySummary();
 });
 
-listener.on('check-group:item-complete', function (event, group, id, label, errors, skip) {
+listener.on('check-group:item-complete', function (event, group, id, label, errors, skip, messages) {
   var checkId = group + id;
 
   checksCompleted++;
@@ -354,7 +370,7 @@ listener.on('check-group:item-complete', function (event, group, id, label, erro
     checks[checkId].dataset.status = 'succeeded';
   }
 
-  displaySummary();
+  displaySummary(group, label, checks[checkId].dataset.id, messages);
 })
 
 listener.on('app:open-repo', function (event, path) {

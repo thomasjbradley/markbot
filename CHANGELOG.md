@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- When the screenshots are successfully matched and there are no error messages, the screenshot differences show with a positive message.
+
+---
+
 ## [3.0.0] — 2016-03-22
 
 ### Added

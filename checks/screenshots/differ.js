@@ -75,7 +75,7 @@ const compare = function (distance, percent, imgPaths, width) {
       checkLabel: checkLabel,
       errors: [{
         type: 'image-diff',
-        message: `Too visually different from screenshot`,
+        message: 'Too visually different from screenshot',
         diff: {
           distance: distance,
           percent: percent,
@@ -96,7 +96,23 @@ const compare = function (distance, percent, imgPaths, width) {
       id: 'check-group:item-complete',
       checkId: checkId,
       checkLabel: checkLabel,
-      errors: []
+      errors: [],
+      messages: [{
+        type: 'image-diff',
+        message: 'Screenshots match within acceptable limits',
+        diff: {
+          distance: distance,
+          percent: percent,
+          expectedDistance: ALLOWED_DISTANCE_DIFFERENCE,
+          expectedPercent: ALLOWED_PERCENT_DIFFERENCE
+        },
+        width: width,
+        images: {
+          ref: `file:///${imgPaths.ref}`,
+          new: `file:///${imgPaths.new}`,
+          diff: `file:///${imgPaths.diff}`
+        }
+      }]
     });
   }
 

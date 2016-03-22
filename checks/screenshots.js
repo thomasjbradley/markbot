@@ -189,7 +189,11 @@ const check = function (listener, fullPath, file, group, genRefScreens) {
           listener.send('debug', message.debug.join(' '));
           break;
         default:
-          listener.send(message.id, group, message.checkId, message.checkLabel, message.errors);
+          if (message.messages) {
+            listener.send(message.id, group, message.checkId, message.checkLabel, [], '', message.messages);
+          } else {
+            listener.send(message.id, group, message.checkId, message.checkLabel, message.errors);
+          }
           break;
       }
     });
