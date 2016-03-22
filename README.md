@@ -13,6 +13,7 @@ Built with Javascript, Node.js & Electron.
 - [Why a desktop app?](#why-a-desktop-app)
 - [Use cases](#use-cases)
 - [Set up](#set-up)
+  - [Cheat prevention](#cheat-prevention)
 - [How the students use it](#how-the-students-use-it)
 - [Repo configuration with Markbot files](#repo-configuration-with-markbot-files)
   - [HTML file tests](#html-file-tests)
@@ -69,8 +70,22 @@ There’s a few things you’ll need to do to set the repo up properly for Markb
 2. Create a repo on GitHub with a `.markbot.yml` file inside—[see Markbot configuration below](#configuration-with-markbot-files).
 3. I usually put `.editorconfig` and `.gitignore` files in the repo to help the students not make simple mistakes. [See the Markbot repo template on GitHub.](https://github.com/thomasjbradley/markbot-template)
 4. I usually make sure the repo is set up with `gh-pages` so it is a live website for the students.
-5. Get the students to [download Markbot and it’s dependencies onto their computers](#installation-on-student-computers).
-6. Use Markbot while coding…
+5. If you’re using screenshot comparison be sure to use the “Develop” menu’s “Generate Reference Screenshots” for the most consistency.
+6. Make sure to run the “Develop” menu’s “Lock Requirements” before sending the repo to students or they will be marked as a cheater.
+7. Get the students to [download Markbot and it’s dependencies onto their computers](#installation-on-student-computers).
+8. Then students use Markbot while coding.
+
+### Cheat prevention
+
+There is some cheat prevention build into Markbot—it’s not perfect but it’s annoying enough for students to work around that it’s just faster to do the homework.
+
+In the “Develop” menu there’s an option named “Lock Requirements”—this should be done for every assignment or the student will get marked as a cheater.
+
+It will hash the `.markbot.yml` file and the screenshots and put the hashes into a `.markbot.lock` file. If any of the HTML, CSS or JS files are marked as `locked: true` they will also be hashed into the lock file.
+
+If Markbot detects any changes to these files the user will be marked as a cheater and given a grade of 0 with Markbot Server.
+
+**Lock the requirements right at the end to make sure everything is exactly how you want it to be.**
 
 ---
 
