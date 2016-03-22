@@ -10,7 +10,7 @@ var
   app = electron.app,
   BrowserWindow = require('electron').BrowserWindow,
   jimp = require('jimp'),
-  fileExists = require('./file-exists'),
+  fileExists = require('../lib/file-exists'),
   defaultScreenshotCSS = fs.readFileSync(path.resolve(__dirname + '/screenshots/default.css'), 'utf8'),
   defaultScreenshotJS = require('./screenshots/default'),
   screenshotPrefix = 'markbot',
@@ -138,7 +138,7 @@ const findMatchingScreenshots = function (screenshotPaths, refScreenPath) {
   return bothScreens;
 };
 
-module.exports.check = function (listener, fullPath, file, group, genRefScreens) {
+const check = function (listener, fullPath, file, group, genRefScreens) {
   let
     pagePath = path.resolve(fullPath + '/' + file.path),
     pageUrl = 'file:///' + pagePath,
@@ -245,3 +245,9 @@ module.exports.check = function (listener, fullPath, file, group, genRefScreens)
     }
   });
 };
+
+module.exports = {
+  REFERENCE_SCREENSHOT_FOLDER: refScreenFolder,
+  getScreenshotFileName: getScreenshotFileName,
+  check: check
+}

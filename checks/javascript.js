@@ -4,7 +4,7 @@ var
   fs = require('fs'),
   path = require('path'),
   util = require('util'),
-  exists = require('./file-exists'),
+  exists = require('../lib/file-exists'),
   validation = require('./js/validation'),
   bestPractices = require('./js/best-practices'),
   content = require('./content')
