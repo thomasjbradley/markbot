@@ -113,6 +113,11 @@ html:
     # The HTML file’s path
   - path: 'index.html'
 
+    # Whether the code in this file should be locked or not, to help prevent students from changing the code
+    # I use it for assignments where I give them complete HTML & they just write the CSS or JS
+    # With locked on, there isn’t much point providing the rest of the options
+    locked: true
+
     # Whether to validate it or not
     valid: true
 
@@ -157,6 +162,11 @@ Use the `css` entry to test CSS files, with many of the same options as the HTML
 css:
     # The CSS file’s path
   - path: 'css/main.css'
+
+    # Whether the code in this file should be locked or not, to help prevent students from changing the code
+    # I use it for assignments where I give them complete CSS & they just write the HTML or JS
+    # With locked on, there isn’t much point providing the rest of the options
+    locked: true
 
     # Whether to validate it or not
     valid: true
@@ -204,6 +214,11 @@ Use the `js` entry to test Javascript files.
 js:
     # The JS file’s path
   - path: 'js/main.js'
+
+    # Whether the code in this file should be locked or not, to help prevent students from changing the code
+    # I use it for assignments where I give them complete JS & they just write the HTML or CSS
+    # With locked on, there isn’t much point providing the rest of the options
+    locked: true
 
     # Whether to validate/lint it or not using a series of best practices
     # Can be further configured in the `validation/eslint.json` file
