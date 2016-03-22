@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - File lock hashes can now be generated for the Markbot file, any files marked as `locked: true` and the screenshots.
+- Markbot will now detect if the student cheated by changing the Markbot file, the screenshots, or the locked code files—this information is passed to Markbot Server.
 
 ### Fixed
 

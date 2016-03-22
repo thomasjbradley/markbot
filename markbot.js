@@ -55,7 +55,7 @@ let
   markbotLockFileLocker,
   actualFilesLocker,
   isCheater = {
-    results: false,
+    cheated: false,
     matches: {}
   }
 ;
@@ -165,12 +165,9 @@ exports.onFileDropped = function(filePath) {
   mainWindow.setTitle(filePath.split(/\//).pop() + ' — Markbot');
 
   markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
-
   markbotLockFileLocker.read(markbotLockFilePath);
   requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
-// console.log('.markbot.lock', markbotLockFileLocker.getLocks());
-// console.log('actual files', actualFilesLocker.getLocks());
-  isCheater = lockMatcher.match(markbotLockFileLocker.locks, actualFilesLocker.locks);
+  isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());
 
   listener.send('app:file-exists', markbotFile.repo);
 
@@ -191,21 +188,36 @@ exports.onFileDropped = function(filePath) {
   if (markbotFile.html) {
     markbotFile.html.forEach(function (file) {
       listener.send('check-group:new', file.path, file.path);
-      html.check(listener, filePath, file, file.path);
+
+      if (isCheater.matches[file.path]) {
+        html.check(listener, filePath, file, file.path, isCheater.matches[file.path]);
+      } else {
+        html.check(listener, filePath, file, file.path);
+      }
     });
   }
 
   if (markbotFile.css) {
     markbotFile.css.forEach(function (file) {
       listener.send('check-group:new', file.path, file.path);
-      css.check(listener, filePath, file, file.path);
+
+      if (isCheater.matches[file.path]) {
+        css.check(listener, filePath, file, file.path, isCheater.matches[file.path]);
+      } else {
+        css.check(listener, filePath, file, file.path);
+      }
     });
   }
 
   if (markbotFile.js) {
     markbotFile.js.forEach(function (file) {
       listener.send('check-group:new', file.path, file.path);
-      js.check(listener, filePath, file, file.path);
+
+      if (isCheater.matches[file.path]) {
+        js.check(listener, filePath, file, file.path, isCheater.matches[file.path]);
+      } else {
+        js.check(listener, filePath, file, file.path);
+      }
     });
   }
 
@@ -252,7 +264,8 @@ exports.submitToCanvas = function (ghUsername, cb) {
     util.format('gh_username=%s', encodeURI(ghUsername)),
     util.format('canvas_course=%s', markbotFile.canvasCourse),
     util.format('canvas_assignment=%s', markbotFile.canvasAssignment),
-    util.format('markbot_version=%s', appPkg.version)
+    util.format('markbot_version=%s', appPkg.version),
+    util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
   ];
 
   https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {

@@ -3,7 +3,6 @@
 var
   fs = require('fs'),
   path = require('path'),
-  util = require('util'),
   exists = require('../lib/file-exists'),
   validation = require('./css/validation'),
   bestPractices = require('./css/best-practices'),
@@ -11,7 +10,7 @@ var
   content = require('./content')
 ;
 
-module.exports.check = function (listener, filePath, file, group) {
+module.exports.check = function (listener, filePath, file, group, matchesLock) {
   var
     errors = [],
     fullPath = path.resolve(filePath + '/' + file.path),
@@ -40,16 +39,26 @@ module.exports.check = function (listener, filePath, file, group) {
   if (file.search || file.search_not) contentChecker = content.init(listener, group);
 
   if (!exists.check(fullPath)) {
-    listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is missing or misspelled', file.path)]);
+    listener.send('check-group:item-complete', group, 'exists', 'Exists', [`The file “${file.path}” is missing or misspelled`]);
     bypassAllChecks(file);
     return;
+  }
+
+  if (file.locked) {
+    listener.send('check-group:item-new', group, 'unchanged', 'Unchanged');
+
+    if (!matchesLock) {
+      listener.send('check-group:item-complete', group, 'unchanged', 'Unchanged', [`The “${file.path}” should not be changed`]);
+    } else {
+      listener.send('check-group:item-complete', group, 'unchanged', 'Unchanged');
+    }
   }
 
   fs.readFile(fullPath, 'utf8', function (err, fileContents) {
     var lines;
 
     if (fileContents.trim() == '') {
-      listener.send('check-group:item-complete', group, 'exists', 'Exists', [util.format('The file `%s` is empty', file.path)]);
+      listener.send('check-group:item-complete', group, 'exists', 'Exists', [`The file “${file.path}” is empty`]);
       bypassAllChecks(file);
       return;
     }
