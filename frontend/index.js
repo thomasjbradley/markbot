@@ -1,6 +1,7 @@
 'use strict';
 
 const
+  os = require('os'),
   electron = require('electron'),
   markbot = electron.remote.require('./markbot'),
   listener = electron.ipcRenderer,
@@ -226,6 +227,16 @@ const startChecks = function () {
   checksRunning = true;
   markbot.onFileDropped(fullPath);
 };
+
+$body.classList.add(`os-${os.platform()}`);
+
+if (os.platform() == 'darwin') {
+  if (parseInt(os.release().split('.')[0]) >= 14) {
+    $body.classList.add('macosx-gte-1010');
+  } else {
+    $body.classList.add('macosx-lt-1010');
+  }
+}
 
 $body.ondragover = function (e) {
   e.stopImmediatePropagation();

@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - The menu items that linked to websites had an `undefined` in them because of code I reordered.
+- On Windows and older MacOS X, the checks list is now closer to the top because space for the traffic light buttons isn’t necessary.
 
 ---
 

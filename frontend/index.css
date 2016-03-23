@@ -89,6 +89,11 @@
   overflow-y: auto;
 }
 
+.os-win #checks,
+.macosx-lt-1010 #checks {
+  padding-top: 13px;
+}
+
 #checks::before {
   content: " ";
   height: 35px;
@@ -99,6 +104,11 @@
   z-index: 100;
 
   background-image: linear-gradient(to bottom, #f5f2f0, #f5f2f0 78%, rgba(245, 242, 240, 0));
+}
+
+.os-win #checks::before,
+.macosx-lt-1010 #checks::before {
+  content: none;
 }
 
 #checks h2 {
