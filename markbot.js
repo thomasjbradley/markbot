@@ -152,6 +152,13 @@ exports.onFileDropped = function(filePath) {
     return;
   }
 
+  currentFolderPath = filePath;
+
+  mainWindow.setRepresentedFilename(filePath);
+  mainWindow.setTitle(filePath.split(/\//).pop() + ' — Markbot');
+
+  markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
+
   menuOptions.runChecks = true;
   menuOptions.revealFolder = true;
   menuOptions.viewLocal = 'file://' + path.resolve(filePath + '/' + 'index.html');
@@ -160,12 +167,6 @@ exports.onFileDropped = function(filePath) {
   menuOptions.developMenuItems = true;
   updateAppMenu();
 
-  currentFolderPath = filePath;
-
-  mainWindow.setRepresentedFilename(filePath);
-  mainWindow.setTitle(filePath.split(/\//).pop() + ' — Markbot');
-
-  markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
   markbotLockFileLocker.read(markbotLockFilePath);
   requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
   isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());

@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - When the screenshots are successfully matched and there are no error messages, the screenshot differences show with a positive message.
 
+### Fixed
+
+- The menu items that linked to websites had an `undefined` in them because of code I reordered.
+
 ---
 
 ## [3.0.0] — 2016-03-22
