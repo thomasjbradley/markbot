@@ -20,6 +20,7 @@ Built with Javascript, Node.js & Electron.
   - [CSS file tests](#css-file-tests)
   - [JS file tests](#javascript-file-tests)
   - [Screenshot comparisons](#screenshot-comparisons)
+  - [Functionality tests](#functionality-tests)
 - [Installation on student computers](#installation-on-student-computers)
   - [Git](#git)
   - [JDK](#jdk)
@@ -283,6 +284,66 @@ Students can enlarge the difference screenshot into a split view window for clea
 ![](.readme/split-view.png)
 
 *Markbot split view screenshot comparison tool.*
+
+### Functionality tests
+
+Markbot has the ability to run arbitrary Javascript code against an HTML file. This is great for running integration and functionality tests on student code to make sure their Javascript is doing the right thing.
+
+Use the `functionality` entry in the `.markbot.yml` file to add tests for HTML files.
+
+Each entry in the `functionality` list will perform the following actions:
+
+1. The `path` will be loaded into a hidden browser window
+2. When the website has finished loading the testing will start
+3. Markbut will run through every entry in the `tests` array
+4. Each Javascript test will be run inside a function that gets injected into the fully loaded page
+5. If the function returns `true` the test passes, otherwise it should return a string describing the error
+
+*If a single test doesn’t pass the remainder of the tests will no execute.*
+
+Here’s an example from one of my assignments:
+
+```yml
+functionality:
+  - path: "index.html"
+    tests:
+      - |
+        let ball = $('.ball');
+        if (!ball) return 'The .ball cannot be found';
+
+        let currentColour = css(ball).backgroundColor;
+        $('input[type="color"]').value = '#ffee66';
+        $('form').dispatchEvent(ev('change'));
+
+        if (currentColour == css(ball).backgroundColor) return 'The ball’s colour doesn’t change';
+
+        return true;
+```
+
+Each test entry will be embedded into a Javascript anonymous self-executing function with a try-catch block, like this:
+
+```js
+(function () {
+  'use strict';
+
+  try {
+    // Your test code will be embedded here
+  } catch (e) {
+    return 'Double check the Javascript';
+  }
+}());
+```
+
+Your injected code will have access to a few functions to simplify what you have to write:
+
+- **`ev(eventString[, options])`** — Can be used with `dispatchEvent()`. It creates a `new Event`, `new MouseEvent` or `new KeyboardEvent` with the following options:
+  - `bubbles: true`
+  - `cancelable: true`
+- **`$(selector[, target = document])`** — Instead of having to write `document.querySelector()`
+  - The `target` parameter allows you to use `querySelector()` on elements other than `document`—but defaults to `document`
+- **`$$(selector[, target = document])`** — Instead of having to write `document.querySelectorAll()`
+  - The `target` parameter allows you to use `querySelectorAll()` on elements other than `document`—but defaults to `document`
+- **`css(element)`** — A shortcut to `getComputedStyle()`
 
 ---
 
