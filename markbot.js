@@ -170,7 +170,7 @@ exports.onFileDropped = function(filePath) {
   updateAppMenu();
 
   markbotLockFileLocker.read(markbotLockFilePath);
-  requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
+  requirementsFinder.lock(listener, actualFilesLocker, currentFolderPath, markbotFile);
   isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());
 
   if (isCheater.cheated) listener.send('debug', 'CHEATER!');

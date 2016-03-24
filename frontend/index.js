@@ -418,6 +418,10 @@ listener.on('debug', function (event, ...args) {
   console.log.apply(console, args);
 });
 
+listener.on('alert', function (event, message) {
+  alert(message);
+});
+
 if (localStorage.getItem('github-username')) {
   $signin.dataset.state = 'hidden';
   markbot.enableSignOut(localStorage.getItem('github-username'));
