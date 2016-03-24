@@ -13,6 +13,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Javascript integration testing whereby code can be run against a page with pass/fail tests & custom error messages.
 - The live website can now be tested, using the repo’s GitHub URL and the student’s username.
 
+### Changed
+
+- The screenshot difference percentage is now calculated based on the area of the image. This change was made to allow larger screenshots to be a little more strict—students were getting away with too much on big screenshots.
+
 ### Fixed
 
 - The menu items that linked to websites had an `undefined` in them because of code I reordered.
