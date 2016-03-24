@@ -17,12 +17,13 @@ const
   requirementsFinder = require('./lib/requirements-finder'),
   lockMatcher = require('./lib/lock-matcher'),
   exists = require('./lib/file-exists'),
-  naming = require('./checks/naming-conventions'),
-  commits = require('./checks/git-commits'),
-  html = require('./checks/html'),
-  css = require('./checks/css'),
-  js = require('./checks/javascript'),
-  screenshots = require('./checks/screenshots')
+  naming = require('./lib/checks/naming-conventions'),
+  commits = require('./lib/checks/git-commits'),
+  html = require('./lib/checks/html'),
+  css = require('./lib/checks/css'),
+  js = require('./lib/checks/javascript'),
+  screenshots = require('./lib/checks/screenshots'),
+  executionTests = require('./lib/checks/execution-tests')
   ;
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
@@ -228,6 +229,14 @@ exports.onFileDropped = function(filePath) {
   if (markbotFile.screenshots) {
     listener.send('check-group:new', 'screenshots', 'Screenshots');
     exports.diffScreenshots();
+  }
+
+  if (markbotFile.exec) {
+    listener.send('check-group:new', 'exec', 'Functionality');
+
+    markbotFile.exec.forEach(function (file) {
+      executionTests.check(listener, filePath, file, 'exec');
+    });
   }
 };
 
