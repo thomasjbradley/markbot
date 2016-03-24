@@ -23,7 +23,8 @@ const
   css = require('./lib/checks/css'),
   js = require('./lib/checks/javascript'),
   screenshots = require('./lib/checks/screenshots'),
-  functionality = require('./lib/checks/functionality-tests')
+  functionality = require('./lib/checks/functionality-tests'),
+  liveWebsite = require('./lib/checks/live-website')
   ;
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
@@ -188,6 +189,11 @@ exports.onFileDropped = function(filePath) {
   if (markbotFile.commits) {
     listener.send('check-group:new', 'commits', 'Git commits');
     commits.check(listener, filePath, markbotFile.commits, config.ignoreCommitEmails, 'commits');
+  }
+
+  if (markbotFile.liveWebsite && markbotFile.repo) {
+    listener.send('check-group:new', 'live-website', 'Live website');
+    liveWebsite.check(listener, filePath, 'live-website', markbotFile.repo, menuOptions.signOutUsername);
   }
 
   if (markbotFile.html) {

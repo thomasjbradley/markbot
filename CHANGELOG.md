@@ -10,7 +10,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - When the screenshots are successfully matched and there are no error messages, the screenshot differences show with a positive message.
-- Live Javascript integration testing whereby code can be run against a page with pass/fail tests & custom error messages.
+- Javascript integration testing whereby code can be run against a page with pass/fail tests & custom error messages.
+- The live website can now be tested, using the repo’s GitHub URL and the student’s username.
 
 ### Fixed
 
