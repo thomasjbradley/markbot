@@ -5,6 +5,7 @@ const
   electron = require('electron'),
   markbot = electron.remote.require('./markbot'),
   listener = electron.ipcRenderer,
+  classify = require('../lib/classify'),
   successMessages = require('./success-messages.json'),
   $body = document.querySelector('body'),
   $dropbox = document.getElementById('dropbox'),
@@ -29,10 +30,6 @@ var
   checksCompleted = 0,
   checksRunning = false
 ;
-
-const classify = function (str) {
-  return str.replace(/[^a-z0-9\-]/ig, '-').replace(/\-+/g, '-').toLowerCase();
-};
 
 const buildCodeDiffErrorMessage = function (err, li) {
   var
