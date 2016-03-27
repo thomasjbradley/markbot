@@ -16,6 +16,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - The screenshot difference percentage is now calculated based on the area of the image. This change was made to allow larger screenshots to be a little more strict—students were getting away with too much on big screenshots.
+- Made the screenshot status pills go into computing/yellow mode earlier to better perception of speed.
 
 ### Fixed
 
