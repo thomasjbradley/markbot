@@ -23,6 +23,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The menu items that linked to websites had an `undefined` in them because of code I reordered.
 - On Windows and older MacOS X, the checks list is now closer to the top because space for the traffic light buttons isn’t necessary.
 - When the file to lock isn’t found a more descriptive error message is shown.
+- When the Git repo has no commits or it’s not a repo Markbot shows an error message.
 
 ---
 
