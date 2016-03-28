@@ -324,7 +324,7 @@ Each entry in the `functionality` list will perform the following actions:
 2. When the website has finished loading the testing will start
 3. Markbut will run through every entry in the `tests` array
 4. Each Javascript test will be run inside a function that gets injected into the fully loaded page
-5. If the function returns `true` the test passes, otherwise it should return a string describing the error
+5. If the test calls the `pass()` function, then the test passes, otherwise it should the `fail()` function with a string describing the problem
 
 *If a single test doesn’t pass the remainder of the tests will not execute.*
 
@@ -338,15 +338,13 @@ functionality:
     tests:
       - |
         let ball = $('.ball');
-        if (!ball) return 'The .ball cannot be found';
-
         let currentColour = css(ball).backgroundColor;
         $('input[type="color"]').value = '#ffee66';
         $('form').dispatchEvent(ev('change'));
 
-        if (currentColour == css(ball).backgroundColor) return 'The ball’s colour doesn’t change';
+        if (currentColour == css(ball).backgroundColor) fail('The ball’s colour doesn’t change');
 
-        return true;
+        pass();
 ```
 
 Each test entry will be embedded into a Javascript anonymous self-executing function with a try-catch block, like this:
@@ -365,15 +363,22 @@ Each test entry will be embedded into a Javascript anonymous self-executing func
 
 Your injected code will have access to a few functions to simplify what you have to write:
 
+- **`pass()`** — Tell Markbot that this test has passed
+- **`fail(reason)`** — Tell Markbot that this test has failed
+  - The `reason` should be a string that will be shown to the user in Markbot’s error list
+- **`debug(string)`** — For when writing the tests, to help you debug your test code
+  - What ever is passed into `debug()` will be written to the console
+- **`$(selector[, target = document])`** — Instead of having to write `document.querySelector()`
+  - The `target` parameter allows you to use `querySelector()` on elements other than `document`—but defaults to `document`
+  - If the `selector` isn’t found on the page the test will fail with an error message
+- **`$$(selector[, target = document])`** — Instead of having to write `document.querySelectorAll()`
+  - The `target` parameter allows you to use `querySelectorAll()` on elements other than `document`—but defaults to `document`
+  - If the `selector` isn’t found on the page the test will fail with an error message
+- **`css(element)`** — A shortcut to `getComputedStyle()`
 - **`ev(eventString[, options])`** — Can be used to fire an event with `dispatchEvent()`
   - It creates a `new Event`, `new MouseEvent` or `new KeyboardEvent`
   - `options` has a default of: `{bubbles: true, cancelable: true}`
   - If you provide an options argument it will be merged with the defaults
-- **`$(selector[, target = document])`** — Instead of having to write `document.querySelector()`
-  - The `target` parameter allows you to use `querySelector()` on elements other than `document`—but defaults to `document`
-- **`$$(selector[, target = document])`** — Instead of having to write `document.querySelectorAll()`
-  - The `target` parameter allows you to use `querySelectorAll()` on elements other than `document`—but defaults to `document`
-- **`css(element)`** — A shortcut to `getComputedStyle()`
 
 ---
 
