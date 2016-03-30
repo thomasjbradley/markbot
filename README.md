@@ -356,7 +356,8 @@ Each test entry will be embedded into a Javascript anonymous self-executing func
   try {
     // Your test code will be embedded here
   } catch (e) {
-    return 'Double check the Javascript';
+    if (e.message) debug(e.message);
+    fail('Double check the Javascript');
   }
 }());
 ```
