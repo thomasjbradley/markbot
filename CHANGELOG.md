@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added an `on()` function for functionality tests to help prevent listener timing issues. The `on()` function has the benefit of a timeout for listeners.
+
 ### Changed
 
 - Moved to the spread operator for debug statements.
