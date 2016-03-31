@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Moved to the spread operator for debug statements.
+- Functionality tests are now executed with `exec()` to help debugging and catch syntax errors.
+
+---
+
 ## [3.1.1] — 2016-03-28
 
 ### Fixed
