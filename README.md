@@ -354,13 +354,14 @@ Each test entry will be embedded into a Javascript anonymous self-executing func
   'use strict';
 
   try {
-    // Your test code will be embedded here
+    eval(/* Your test code will be embedded here */);
   } catch (e) {
-    if (e.message) debug(e.message);
-    fail('Double check the Javascript');
+    /* Show error messages in Markbot & console */
   }
 }());
 ```
+
+*Yes, eval is evil, etc. But it’s useful here to catch any syntax errors you may have in your code so they can be displayed in the debugging console.*
 
 Your injected code will have access to a few functions to simplify what you have to write:
 
@@ -376,10 +377,39 @@ Your injected code will have access to a few functions to simplify what you have
   - The `target` parameter allows you to use `querySelectorAll()` on elements other than `document`—but defaults to `document`
   - If the `selector` isn’t found on the page the test will fail with an error message
 - **`css(element)`** — A shortcut to `getComputedStyle()`
+- **`on(selector, eventname, callback[, timeoutlength = 2000])`** — This is instead of using `addEventListener`. The problem with `addEventListener` is timing.
+  - If the student’s code uses event delegation, but yours listens directly on the element, your listener will be fired first.
+  - Using `on()` will always bind to the `document` and listen for the event to bubble back upwards—guaranteeing that your listener gets called second.
+  - `selector` is the CSS selector for the target of your event.
+  - `eventname` is any standard event like `click`, `animationend`, etc.
+  - `callback` is a function that will be executed when the event is triggered. It will receive two arguments:
+    - `err` — (`bool`): whether or not the timeout was executed, meaning the event was never triggered.
+    - `ev` — the standard Javascript event object passed through.
+  - `timeoutlength` is an optional argument you can pass to control the maximum length the listener will wait to be called.
 - **`ev(eventString[, options])`** — Can be used to fire an event with `dispatchEvent()`
   - It creates a `new Event`, `new MouseEvent` or `new KeyboardEvent`
   - `options` has a default of: `{bubbles: true, cancelable: true}`
   - If you provide an options argument it will be merged with the defaults
+
+*Here’s an example of using `ev()` and `on()`:*
+
+```yaml
+functionality:
+  - path: 'index.html'
+    tests:
+      - |
+        let btn = $('.btn');
+        let btnFill = $('path:nth-child(2)', btn);
+
+        on('.btn path:nth-child(2)', 'transitionend', function (err, ev) {
+          if (err) fail('The transition on the button’s coloured setion never ends—check that is has a transition');
+          if (oldBtnFill == css(btnFill).fill) fail('The button doesn’t change colour');
+          totalEvents--;
+          checkPass();
+        });
+
+        btn.dispatchEvent(ev('click'));
+```
 
 ---
 
