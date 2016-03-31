@@ -412,7 +412,7 @@ listener.on('app:sign-out', function (event) {
 });
 
 listener.on('debug', function (event, ...args) {
-  console.log.apply(console, args);
+  console.log(...args);
 });
 
 listener.on('alert', function (event, message) {
