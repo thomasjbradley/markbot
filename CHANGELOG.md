@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [3.2.0] — 2016-03-31
 
 ### Added
 
@@ -15,6 +15,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Moved to the spread operator for debug statements.
 - Functionality tests are now executed with `exec()` to help debugging and catch syntax errors.
+
+### Fixed
+
+- Completely rewrote and refactored the screenshot system to be based off events and message passing (as it should have been from the start) to fix a bunch of timing bugs.
+- Fixed the differ screen for when the student’s screen show was longer than the reference one: previously it was cropped.
 
 ---
 

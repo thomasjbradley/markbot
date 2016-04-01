@@ -96,11 +96,7 @@ label {
   color: #fff;
 }
 
-.img-ref {
-  display: block;
-  width: 100%;
-}
-
+.img-ref,
 .img-new,
 .img-diff {
   overflow: hidden;
