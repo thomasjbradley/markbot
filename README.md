@@ -324,9 +324,9 @@ Each entry in the `functionality` list will perform the following actions:
 2. When the website has finished loading the testing will start
 3. Markbut will run through every entry in the `tests` array
 4. Each Javascript test will be run inside a function that gets injected into the fully loaded page
-5. If the test calls the `pass()` function, then the test passes, otherwise it should the `fail()` function with a string describing the problem
+5. If the test calls the `pass()` function, then the test passes, otherwise it should call the `fail()` function with a string describing the problem
 
-*If a single test doesn’t pass the remainder of the tests will not execute.*
+**If a single test doesn’t pass the remainder of the tests will not execute.**
 
 Here’s an example from one of my assignments:
 
@@ -380,7 +380,7 @@ Your injected code will have access to a few functions to simplify what you have
 - **`on(selector, eventname, callback[, timeoutlength = 2000])`** — This is instead of using `addEventListener`. The problem with `addEventListener` is timing.
   - If the student’s code uses event delegation, but yours listens directly on the element, your listener will be fired first.
   - Using `on()` will always bind to the `document` and listen for the event to bubble back upwards—guaranteeing that your listener gets called second.
-  - `selector` is the CSS selector for the target of your event.
+  - `selector` is the CSS selector of the target for your event.
   - `eventname` is any standard event like `click`, `animationend`, etc.
   - `callback` is a function that will be executed when the event is triggered. It will receive two arguments:
     - `err` — (`bool`): whether or not the timeout was executed, meaning the event was never triggered.
@@ -392,7 +392,7 @@ Your injected code will have access to a few functions to simplify what you have
   - If you provide an options argument it will be merged with the defaults
 - **`hover(selector, callback)`** — A specialized event dispatch that hovers the mouse over an element—regular JS events aren’t “trusted” and therefore won’t trigger the CSS `:hover` styles.
   - Allows for testing to make sure student’s apply hover states to elements in CSS.
-  - `selector` is the CSS selector for the target of your event.
+  - `selector` is the CSS selector of the target for your event.
   - `callback` is a function that will be executed when the hover has triggered.
 
 *Here’s an example of using `ev()` and `on()`:*
