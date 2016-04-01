@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a `hover()` function for functionality testing to see if elements change when hovered.
+
 ### Changed
 
 - Refactored the functionality testing code to match how the new screenshot code runs.

@@ -390,6 +390,10 @@ Your injected code will have access to a few functions to simplify what you have
   - It creates a `new Event`, `new MouseEvent` or `new KeyboardEvent`
   - `options` has a default of: `{bubbles: true, cancelable: true}`
   - If you provide an options argument it will be merged with the defaults
+- **`hover(selector, callback)`** — A specialized event dispatch that hovers the mouse over an element—regular JS events aren’t “trusted” and therefore won’t trigger the CSS `:hover` styles.
+  - Allows for testing to make sure student’s apply hover states to elements in CSS.
+  - `selector` is the CSS selector for the target of your event.
+  - `callback` is a function that will be executed when the hover has triggered.
 
 *Here’s an example of using `ev()` and `on()`:*
 
@@ -409,6 +413,22 @@ functionality:
         });
 
         btn.dispatchEvent(ev('click'));
+```
+
+*Here’s an example of using `hover()`:*
+
+```yaml
+functionality:
+  - path: 'index.html'
+    tests:
+      - |
+        let a = document.querySelector('a');
+        let oldBg = css(a).backgroundColor;
+
+        hover('a', function () {
+          if (css(a).backgroundColor == oldBg) fail('The hover colour doesn’t change on the link');
+          pass();
+        });
 ```
 
 ---
