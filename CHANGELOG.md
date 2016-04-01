@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Refactored the functionality testing code to match how the new screenshot code runs.
+
+---
+
 ## [3.2.0] — 2016-03-31
 
 ### Added
