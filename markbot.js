@@ -12,6 +12,7 @@ const
   https = require('https'),
   crypto = require('crypto'),
   yaml = require('js-yaml'),
+  mkdirp = require('mkdirp'),
   passcode = require('./lib/passcode'),
   locker = require('./lib/locker'),
   requirementsFinder = require('./lib/requirements-finder'),
@@ -129,12 +130,21 @@ exports.enableSignOut = function (username) {
   updateAppMenu();
 };
 
-exports.diffScreenshots = function (genRefScreens) {
+exports.copyReferenceScreenshots = function () {
   markbotFile.screenshots.forEach(function (file) {
-    screenshots.check(listener, currentFolderPath, file, 'screenshots', genRefScreens);
+    if (!file.sizes) return;
+
+    mkdirp.sync(path.resolve(currentFolderPath + '/' + screenshots.REFERENCE_SCREENSHOT_FOLDER));
+
+    file.sizes.forEach(function (width) {
+      fs.rename(
+        screenshots.getScreenshotPath(currentFolderPath, file.path, width),
+        screenshots.getScreenshotPath(currentFolderPath, file.path, width, true)
+      );
+    });
   });
 };
-menuCallbacks.diffScreenshots = exports.diffScreenshots;
+menuCallbacks.copyReferenceScreenshots = exports.copyReferenceScreenshots;
 
 exports.lockRequirements = function () {
   actualFilesLocker.save(markbotLockFilePath);
@@ -234,7 +244,10 @@ exports.onFileDropped = function(filePath) {
 
   if (markbotFile.screenshots) {
     listener.send('check-group:new', 'screenshots', 'Screenshots');
-    exports.diffScreenshots();
+
+    markbotFile.screenshots.forEach(function (file) {
+      screenshots.check(listener, currentFolderPath, file, 'screenshots');
+    });
   }
 
   if (markbotFile.functionality) {
