@@ -32,7 +32,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Completely rewrote and refactored the screenshot system to be based off events and message passing (as it should have been from the start) to fix a bunch of timing bugs.
-- Fixed the differ screen for when the student’s screen show was longer than the reference one: previously it was cropped.
+- Fixed the differ screen for when the student’s screen shot was longer than the reference one: previously it was cropped.
 
 ---
 
