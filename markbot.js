@@ -152,6 +152,8 @@ exports.lockRequirements = function () {
 menuCallbacks.lockRequirements = exports.lockRequirements;
 
 exports.onFileDropped = function(filePath) {
+  let markbotGroup = `markbot-${Date.now()}`;
+
   markbotLockFileLocker = locker.new(config.passcodeHash);
   actualFilesLocker = locker.new(config.passcodeHash);
 
@@ -187,74 +189,90 @@ exports.onFileDropped = function(filePath) {
 
   listener.send('app:file-exists', markbotFile.repo);
 
-  listener.send('check-group:new', 'markbot', 'Markbot file');
-  listener.send('check-group:item-new', 'markbot', 'file', 'Exists');
-  listener.send('check-group:item-complete', 'markbot', 'file', 'Exists');
+  listener.send('check-group:new', markbotGroup, 'Markbot file');
+  listener.send('check-group:item-new', markbotGroup, 'file', 'Exists');
+  listener.send('check-group:item-complete', markbotGroup, 'file', 'Exists');
 
   if (markbotFile.naming) {
-    listener.send('check-group:new', 'naming', 'Naming conventions');
-    naming.check(listener, filePath, 'naming');
+    let group = `naming-${Date.now()}`;
+
+    listener.send('check-group:new', group, 'Naming conventions');
+    naming.check(listener, filePath, group);
   }
 
   if (markbotFile.commits) {
-    listener.send('check-group:new', 'commits', 'Git commits');
-    commits.check(listener, filePath, markbotFile.commits, config.ignoreCommitEmails, 'commits');
+    let group = `commits-${Date.now()}`;
+
+    listener.send('check-group:new', group, 'Git commits');
+    commits.check(listener, filePath, markbotFile.commits, config.ignoreCommitEmails, group);
   }
 
   if (markbotFile.liveWebsite && markbotFile.repo) {
-    listener.send('check-group:new', 'live-website', 'Live website');
-    liveWebsite.check(listener, filePath, 'live-website', markbotFile.repo, menuOptions.signOutUsername);
+    let group = `live-website-${Date.now()}`;
+
+    listener.send('check-group:new', group, 'Live website');
+    liveWebsite.check(listener, filePath, group, markbotFile.repo, menuOptions.signOutUsername);
   }
 
   if (markbotFile.html) {
     markbotFile.html.forEach(function (file) {
-      listener.send('check-group:new', file.path, file.path);
+      let group = `html-${file.path}-${Date.now()}`;
+
+      listener.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        html.check(listener, filePath, file, file.path, isCheater.matches[file.path]);
+        html.check(listener, filePath, file, group, isCheater.matches[file.path]);
       } else {
-        html.check(listener, filePath, file, file.path);
+        html.check(listener, filePath, file, group);
       }
     });
   }
 
   if (markbotFile.css) {
     markbotFile.css.forEach(function (file) {
-      listener.send('check-group:new', file.path, file.path);
+      let group = `css-${file.path}-${Date.now()}`;
+
+      listener.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        css.check(listener, filePath, file, file.path, isCheater.matches[file.path]);
+        css.check(listener, filePath, file, group, isCheater.matches[file.path]);
       } else {
-        css.check(listener, filePath, file, file.path);
+        css.check(listener, filePath, file, group);
       }
     });
   }
 
   if (markbotFile.js) {
     markbotFile.js.forEach(function (file) {
-      listener.send('check-group:new', file.path, file.path);
+      let group = `js-${file.path}-${Date.now()}`;
+
+      listener.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        js.check(listener, filePath, file, file.path, isCheater.matches[file.path]);
+        js.check(listener, filePath, file, group, isCheater.matches[file.path]);
       } else {
-        js.check(listener, filePath, file, file.path);
+        js.check(listener, filePath, file, group);
       }
     });
   }
 
   if (markbotFile.screenshots) {
-    listener.send('check-group:new', 'screenshots', 'Screenshots');
+    let group = `screenshots-${Date.now()}`;
+
+    listener.send('check-group:new', group, 'Screenshots');
 
     markbotFile.screenshots.forEach(function (file) {
-      screenshots.check(listener, currentFolderPath, file, 'screenshots');
+      screenshots.check(listener, currentFolderPath, file, group);
     });
   }
 
   if (markbotFile.functionality) {
-    listener.send('check-group:new', 'functionality', 'Functionality');
+    let group = `functionality-${Date.now()}`;
+
+    listener.send('check-group:new', group, 'Functionality');
 
     markbotFile.functionality.forEach(function (file) {
-      functionality.check(listener, filePath, file, 'functionality');
+      functionality.check(listener, filePath, file, group);
     });
   }
 };
