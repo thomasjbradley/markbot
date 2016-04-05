@@ -16,6 +16,7 @@ Built with Javascript, Node.js & Electron.
   - [Cheat prevention](#cheat-prevention)
 - [How the students use it](#how-the-students-use-it)
 - [Repo configuration with Markbot files](#repo-configuration-with-markbot-files)
+  - [Git & GitHub checks](#git--github-checks)
   - [HTML file tests](#html-file-tests)
   - [CSS file tests](#css-file-tests)
   - [JS file tests](#javascript-file-tests)
@@ -112,6 +113,7 @@ Here are the properties that you can use in the Markbot file for testing:
 - `naming` — will confirm every file & folder follows [our naming conventions](http://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/).
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
 - `liveWebsite` — whether to make a `HEAD` request to the GitHub URL to check that it’s accessible or not. Requires the `repo` entry. If the repo isn’t set up with `gh-pages` or the student hasn’t synced any commits a 404 will be issued, failing the test.
+- `git` — [for more complex Git checks.](#git--github-checks)
 - `html` — [for testing HTML files.](#html-file-tests)
 - `css` — [for testing CSS files.](#css-file-tests)
 - `js` — [for testing Javascript files.](#javascript-file-tests)
@@ -132,6 +134,22 @@ commits: 3
 liveWebsite: true
 
 # Other tests, described below, would go here
+```
+
+### Git & GitHub checks
+
+Using the `git` entry we can enforce some requirements on the status of the student’s Git repo.
+
+**This is a replacement for the simple `commits` entry.**
+
+```yml
+git:
+  # The minimum number of commits students need—will automatically subtract your commits.
+  numCommits: 2
+  # Force the students to make sure all their files are committed.
+  allCommitted: true
+  # Force the students to make sure all their files are pushed & synced.
+  allSynced: true
 ```
 
 ### HTML file tests

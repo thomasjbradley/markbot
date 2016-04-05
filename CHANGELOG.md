@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Added a `hover()` function for functionality testing to see if elements change when hovered.
+- More status checking for Git & GitHub, including outstanding commits and pushes.
 
 ### Changed
 

@@ -19,7 +19,7 @@ const
   lockMatcher = require('./lib/lock-matcher'),
   exists = require('./lib/file-exists'),
   naming = require('./lib/checks/naming-conventions'),
-  commits = require('./lib/checks/git-commits'),
+  git = require('./lib/checks/git'),
   html = require('./lib/checks/html'),
   css = require('./lib/checks/css'),
   js = require('./lib/checks/javascript'),
@@ -200,11 +200,17 @@ exports.onFileDropped = function(filePath) {
     naming.check(listener, filePath, group);
   }
 
-  if (markbotFile.commits) {
-    let group = `commits-${Date.now()}`;
+  if (markbotFile.commits || markbotFile.git) {
+    let group = `git-${Date.now()}`;
 
-    listener.send('check-group:new', group, 'Git commits');
-    commits.check(listener, filePath, markbotFile.commits, config.ignoreCommitEmails, group);
+    if (!markbotFile.git && markbotFile.commits) {
+      markbotFile.git = {
+        numCommits: markbotFile.commits
+      };
+    }
+
+    listener.send('check-group:new', group, 'Git & GitHub');
+    git.check(listener, filePath, markbotFile.git, config.ignoreCommitEmails, group);
   }
 
   if (markbotFile.liveWebsite && markbotFile.repo) {

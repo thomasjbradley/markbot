@@ -14,6 +14,7 @@
     "entities": "^1.1.1",
     "eslint": "^2.4.0",
     "git-commits": "^1.1.1",
+    "git-get-status": "^1.0.2",
     "htmlcs": "^0.1.12",
     "jimp": "^0.2.21",
     "js-beautify": "^1.6.2",
