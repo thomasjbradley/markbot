@@ -128,6 +128,25 @@ const buildErrorMessageFromObject = function (err, li) {
   }
 };
 
+const escapeHTML = function (err) {
+  return err.replace(/[&<>]/g, function (tag) {
+    return {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;'
+    }[tag];
+  });
+};
+
+const transformCodeBlocks = function (err) {
+  while (err.match(/`/)) {
+    err = err.replace(/`/, '<samp>');
+    err = err.replace(/`/, '</samp>');
+  }
+
+  return err;
+};
+
 const displayErrors = function (group, label, linkId, errors, status, isMessages) {
   const
     $errorGroup = document.createElement('div'),
@@ -148,7 +167,7 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 
       if (err.status) status = err.status;
     } else {
-      li.textContent = err;
+      li.innerHTML = transformCodeBlocks(escapeHTML(err));
     }
 
     $messageList.appendChild(li)
