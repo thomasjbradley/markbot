@@ -21,6 +21,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Groups are now tagged with the time to prevent quick refreshes & older check interference.
 - The background of the diff window is now a transparency grid instead of white.
 - Cleaned up error messages so code samples are highlighted instead of using Markdown-like backticks.
+- Live website links are now clickable and open in a browser window.
 
 ---
 
