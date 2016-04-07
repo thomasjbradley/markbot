@@ -13,6 +13,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - More status checking for Git & GitHub, including outstanding commits and pushes.
 - A functionality test to confirm there are now errors in the Javascript: `noErrors`.
 - HTML document heading outline order verification.
+- Some checks for `viewport` best practices: no maximum zoom, no disabling of user zooming.
 
 ### Changed
 
