@@ -12,7 +12,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added a `hover()` function for functionality testing to see if elements change when hovered.
 - More status checking for Git & GitHub, including outstanding commits and pushes.
 - A functionality test to confirm there are now errors in the Javascript: `noErrors`.
-- HTML document heading outline structure testing.
+- HTML document heading outline order verification.
 
 ### Changed
 
