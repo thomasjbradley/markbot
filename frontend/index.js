@@ -3,6 +3,7 @@
 const
   os = require('os'),
   electron = require('electron'),
+  shell = electron.shell,
   markbot = electron.remote.require('./markbot'),
   listener = electron.ipcRenderer,
   classify = require('../lib/classify'),
@@ -147,6 +148,14 @@ const transformCodeBlocks = function (err) {
   return err;
 };
 
+const transformLinks = function (err) {
+  if (err.match(/@@/)) {
+    err = err.replace(/@@(.+?)@@/g, '<a href="$1">$1</a>')
+  }
+
+  return err;
+};
+
 const displayErrors = function (group, label, linkId, errors, status, isMessages) {
   const
     $errorGroup = document.createElement('div'),
@@ -167,7 +176,7 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 
       if (err.status) status = err.status;
     } else {
-      li.innerHTML = transformCodeBlocks(escapeHTML(err));
+      li.innerHTML = transformCodeBlocks(transformLinks(escapeHTML(err)));
     }
 
     $messageList.appendChild(li)
@@ -305,6 +314,13 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
         if (data.message) alert(data.message);
       }
     });
+  }
+});
+
+document.addEventListener('click', function (e) {
+  if (e.target.matches('a')) {
+    e.preventDefault();
+    shell.openExternal(e.target.href);
   }
 });
 

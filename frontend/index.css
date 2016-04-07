@@ -1,3 +1,11 @@
+a {
+  color: #4484c2;
+}
+
+a:hover {
+  color: #2262a0;
+}
+
 .overlay {
   height: 100vh;
   left: 0;
