@@ -318,7 +318,7 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 });
 
 document.addEventListener('click', function (e) {
-  if (e.target.matches('a')) {
+  if (e.target.matches('#messages a')) {
     e.preventDefault();
     shell.openExternal(e.target.href);
   }
