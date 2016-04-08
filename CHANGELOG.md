@@ -5,7 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [3.3.1] — 2016-04-07
+
+### Fixed
+
+- When a folder wasn’t a Git repository the sync and commit checks were still getting green, even with error messages.
+
+---
+
+## [3.3.0] — 2016-04-07
 
 ### Added
 
