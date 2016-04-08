@@ -176,6 +176,10 @@ html:
     # Will be skipped if validation isn’t also checked—the document must be valid first
     bestPractices: true
 
+    # Check if the headings are in the proper order and that the document starts with an <h1>
+    # Will be skipped if validation isn’t also checked—the document must be valid first
+    outline: true
+
     # Can be used to test for specific elements; each entry should be a valid CSS selector
     # Will be skipped if validation isn’t also checked—the document must be valid first
     # If given an array, the second argument can be a custom error message
@@ -352,6 +356,11 @@ Here’s an example from one of my assignments:
 functionality:
     # The path to the HTML file to load in a hidden browser window
   - path: "index.html"
+
+    # A replacement for individual tests
+    # Will just confirm that there are no Javascript errors
+    noErrors: true
+
     # An array of Javascript code pieces to run against the live website
     tests:
       - |
