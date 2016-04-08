@@ -249,6 +249,7 @@ const reset = function () {
 
 const startChecks = function () {
   console.log(fullPath);
+  markbot.newDebugGroup(fullPath);
   checksRunning = true;
   markbot.onFileDropped(fullPath);
 };
@@ -447,6 +448,7 @@ listener.on('app:sign-out', function (event) {
 });
 
 listener.on('debug', function (event, ...args) {
+  markbot.debug(args);
   console.log(...args);
 });
 

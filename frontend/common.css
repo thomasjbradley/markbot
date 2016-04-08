@@ -42,3 +42,11 @@ body {
   -ms-user-select: none;
   user-select: none;
 }
+
+a {
+  color: #4484c2;
+}
+
+a:hover {
+  color: #2262a0;
+}

@@ -1,0 +1,56 @@
+main {
+  padding: 12px;
+}
+
+details {
+  margin-bottom: .75rem;
+  padding-bottom: .75rem;
+
+  border-bottom: 3px solid #f5f2f0;
+}
+
+summary {
+  display: block;
+
+  cursor: pointer;
+
+  color: #a8a6af;
+  font-weight: bold;
+}
+
+summary span {
+  color: #000;
+}
+
+details[open] summary {
+  margin-bottom: .3em;
+}
+
+.cheater {
+  color: #f33;
+}
+
+ul {
+  margin: 0;
+  padding-left: 1.2em;
+
+  list-style-type: none;
+}
+
+li {
+  padding: .3em 0;
+  position: relative;
+
+  border-top: 1px solid #dfdcda;
+}
+
+li::before {
+  content: "•";
+  left: -1.7em;
+  position: absolute;
+  top: 0.4em;
+  width: 1.7em;
+
+  color: #a8a6af;
+  text-align: center;
+}

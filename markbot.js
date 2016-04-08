@@ -39,6 +39,7 @@ let
   config = require('./config.json'),
   markbotFile = {},
   mainWindow,
+  debugWindow,
   differWindow,
   listener,
   menuCallbacks = {},
@@ -69,7 +70,7 @@ const updateAppMenu = function () {
   Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, listener, menuCallbacks, menuOptions)));
 };
 
-const createWindow = function () {
+const createMainWindow = function () {
   mainWindow = new BrowserWindow({
     width: 800,
     minWidth: 600,
@@ -82,22 +83,60 @@ const createWindow = function () {
 
   mainWindow.on('closed', function () {
     if (differWindow) differWindow.destroy();
+    if (debugWindow) debugWindow.destroy();
+
     mainWindow = null;
   });
 
   listener = mainWindow.webContents;
-  updateAppMenu();
-}
+};
 
-app.on('ready', createWindow);
+const createDebugWindow = function () {
+  debugWindow = new BrowserWindow({
+    width: 600,
+    minWidth: 600,
+    height: 300,
+    minHeight: 300,
+    show: false
+  });
+
+  debugWindow.on('close', function (e) {
+    e.preventDefault();
+    debugWindow.hide();
+  })
+
+  debugWindow.loadURL('file://' + __dirname + '/frontend/debug.html');
+};
+
+menuCallbacks.showDebugWindow = function () {
+  debugWindow.show();
+};
+
+const createWindows = function () {
+  createMainWindow();
+  createDebugWindow();
+};
+
+app.on('ready', function () {
+  createWindows();
+  updateAppMenu();
+});
 
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('activate', function () {
-  if (mainWindow === null) createWindow();
+  if (mainWindow === null) createWindows();
 });
+
+exports.newDebugGroup = function (label) {
+  debugWindow.webContents.send('__markbot-debug-group', label);
+};
+
+exports.debug = function (args) {
+  debugWindow.webContents.send('__markbot-debug', ...args);
+};
 
 exports.revealFolder = function () {
   if (currentFolderPath) {

@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A functionality test to confirm there are now errors in the Javascript: `noErrors`.
 - HTML document heading outline order verification.
 - Some checks for `viewport` best practices: no maximum zoom, no disabling of user zooming.
+- An “Activity” window that shows the same information as console, but with clickable links and clearer for students.
 
 ### Changed
 
