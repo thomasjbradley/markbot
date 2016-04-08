@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- The filename inside of functionality errors wasn’t highlighted like other files.
+
+---
+
 ## [3.3.1] — 2016-04-07
 
 ### Fixed
