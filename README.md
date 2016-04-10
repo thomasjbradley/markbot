@@ -237,6 +237,8 @@ css:
       - ['.thing']
       - ['.super', 'background-image']
       - ['.thang', 'width', '50px']
+      # Starting the array with an `@` and a matching string will look inside media queries
+      - ['@38em', 'html', 'font-size', '110%']
 
     # Can be used to test that specific selectors do not contain certain properties
     # I would use this for ensuring as little CSS duplication as possible, like forcing students to use multiple classes
@@ -245,6 +247,8 @@ css:
     has_not:
       - ['.btn-ghost', ['display']]
       - ['.btn-subtle', ['font-size', 'text-decoration']]
+      # Starting the array with an `@` and a matching string will look inside media queries
+      - ['@110em']
 
     # Regex searches on the file
     # If given an array, the second argument can be a custom error message

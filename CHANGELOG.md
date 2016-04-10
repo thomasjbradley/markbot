@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Ability to search within media queries for the CSS `has` and `has_not` checks.
+
 ### Fixed
 
 - The filename inside of functionality errors wasn’t highlighted like other files.
