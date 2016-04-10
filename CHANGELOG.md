@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - The filename inside of functionality errors wasn’t highlighted like other files.
+- The positive messages & completed check sometimes showed prematurely—added a 100ms timeout that clears regularly.
 
 ---
 

@@ -29,7 +29,8 @@ var
   hasErrors = false,
   checksCount = 0,
   checksCompleted = 0,
-  checksRunning = false
+  checksRunning = false,
+  summaryDisplayTimeout
 ;
 
 const buildCodeDiffErrorMessage = function (err, li) {
@@ -207,8 +208,10 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 };
 
 const displaySummary = function (group, label, linkId, messages) {
+  clearTimeout(summaryDisplayTimeout);
   $messageHeader.dataset.state = 'computing';
   $submit.dataset.state = 'hidden';
+  $messagesPositive.dataset.state = 'hidden';
 
   if (hasErrors && checksCompleted >= checksCount) {
     $messageHeader.dataset.state = 'errors';
@@ -216,18 +219,22 @@ const displaySummary = function (group, label, linkId, messages) {
   }
 
   if (!hasErrors && checksCompleted >= checksCount) {
-    $messageHeader.dataset.state = 'no-errors';
-    $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
-    $submit.dataset.state = 'visible';
-    checksRunning = false;
-    $messages.dataset.state = 'hidden';
-    $messagesPositive.dataset.state = 'visible';
+    summaryDisplayTimeout = setTimeout(function () {
+      clearTimeout(summaryDisplayTimeout);
+      $messageHeader.dataset.state = 'no-errors';
+      $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
+      $submit.dataset.state = 'visible';
+      checksRunning = false;
+      $messages.dataset.state = 'hidden';
+      $messagesPositive.dataset.state = 'visible';
+    }, 100);
   }
 
   if (messages) displayErrors(group, label, linkId, messages, '', true);
 };
 
 const reset = function () {
+  clearTimeout(summaryDisplayTimeout);
   hasErrors = false;
   $messages.innerHTML = '';
   $messagesPositive.innerHTML = '';
@@ -349,6 +356,8 @@ listener.on('check-group:new', function (event, id, label) {
     $groupTitle = document.createElement('span')
   ;
 
+  clearTimeout(summaryDisplayTimeout);
+
   groups[id] = {
     label: label,
     elem: document.createElement('ul')
@@ -370,6 +379,7 @@ listener.on('check-group:item-new', function (event, group, id, label) {
   ;
 
   checksCount++;
+  clearTimeout(summaryDisplayTimeout);
 
   if (!checks[checkId]) {
     checks[checkId] = document.createElement('a');
@@ -388,6 +398,7 @@ listener.on('check-group:item-computing', function (event, group, id) {
   var checkId = group + id;
 
   checks[checkId].dataset.status = 'computing';
+  clearTimeout(summaryDisplayTimeout);
 
   displaySummary();
 });
