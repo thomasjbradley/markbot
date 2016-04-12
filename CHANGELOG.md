@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [3.4.0] — 2016-04-12
 
 ### Added
 
@@ -15,6 +15,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - The filename inside of functionality errors wasn’t highlighted like other files.
 - The positive messages & completed check sometimes showed prematurely—added a 100ms timeout that clears regularly.
+- Added some error checking the HTML element matching for when there’s a problem in the Markbot file.
 
 ---
 
