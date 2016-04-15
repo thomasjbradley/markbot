@@ -19,6 +19,7 @@
     "jimp": "^0.2.21",
     "js-beautify": "^1.6.2",
     "js-yaml": "^3.5.4",
+    "merge-objects": "^1.0.5",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.11",
     "stylelint": "^4.5.1",
