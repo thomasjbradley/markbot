@@ -5,6 +5,23 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Any folder can be dropped into Markbot and it will search for HTML, CSS & JS files to test.
+- A `default` entry for Markbot files that will share settings between all files of the same type.
+
+### Changed
+
+- Updated the configuration for Stylelint to better handle multi-line CSS values.
+
+### Fixed
+
+- The scrollbar doesn’t go under the top gradient for the checks panel now.
+
+---
+
 ## [3.4.0] — 2016-04-12
 
 ### Added
