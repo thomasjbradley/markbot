@@ -19,7 +19,9 @@ const
   $repoName = document.getElementById('folder'),
   $signin = document.getElementById('sign-in'),
   $submit = document.getElementById('submit'),
-  $canvasBtn = document.getElementById('submit-btn')
+  $canvasBtn = document.getElementById('submit-btn'),
+  $messageCanvas = document.querySelector('.with-canvas-message'),
+  $messageNoCanvas = document.querySelector('.no-canvas-message')
 ;
 
 var
@@ -245,6 +247,9 @@ const reset = function () {
   $submit.dataset.state = 'hidden';
   $canvasBtn.removeAttribute('disabled');
   $canvasBtn.dataset.state = '';
+  $canvasBtn.setAttribute('hidden', true);
+  $messageNoCanvas.removeAttribute('hidden');
+  $messageCanvas.setAttribute('hidden', true);
   groups = {};
   checks = {};
   checksCount = 0;
@@ -348,6 +353,12 @@ listener.on('app:file-missing', function (event) {
 
 listener.on('app:file-exists', function (event, repo) {
   $repoName.innerHTML = repo;
+});
+
+listener.on('app:with-canvas', function (event) {
+  $canvasBtn.removeAttribute('hidden');
+  $messageNoCanvas.setAttribute('hidden', true);
+  $messageCanvas.removeAttribute('hidden');
 });
 
 listener.on('check-group:new', function (event, id, label) {
