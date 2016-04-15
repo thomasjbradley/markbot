@@ -20,7 +20,7 @@
     "declaration-block-semicolon-space-before": "never",
     "declaration-block-single-line-max-declarations": 2,
     "declaration-colon-newline-after": "always-multi-line",
-    "declaration-colon-space-after": "always",
+    "declaration-colon-space-after": "always-single-line",
     "declaration-colon-space-before": "never",
     "declaration-no-important": true,
     "function-calc-no-unspaced-operator": true,
@@ -65,7 +65,7 @@
     "string-quotes": "double",
     "value-list-comma-newline-after": "always-multi-line",
     "value-list-comma-newline-before": "never-multi-line",
-    "value-list-comma-space-after": "always",
+    "value-list-comma-space-after": "always-single-line",
     "value-list-comma-space-before": "never"
   }
 }
