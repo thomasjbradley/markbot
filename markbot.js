@@ -256,6 +256,9 @@ const startChecks = function () {
 
 const handleMarkbotFile = function (mf) {
   markbotFile = mf;
+
+  if (mf.inheritFileNotFound) listener.send('debug', `Inherited Markbot file “${mf.inherit}” not found`);
+
   initializeInterface();
   updateAppMenu();
   checkForCheating();
