@@ -11,6 +11,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Any folder can be dropped into Markbot and it will search for HTML, CSS & JS files to test.
 - A `default` entry for Markbot files that will share settings between all files of the same type.
+- A set of restricted file types that can be included with the `restrictFileTypes` option.
 
 ### Changed
 

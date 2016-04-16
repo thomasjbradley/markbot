@@ -1,0 +1,34 @@
+[
+  "pdf",
+  "ai",
+  "psd",
+  "indd",
+  "indb",
+
+  "zip",
+  "gz",
+  "tar",
+  "7z",
+
+  "otf",
+  "ttf",
+  "woff",
+  "eot",
+  "ttc",
+
+  "mov",
+  "mp4",
+  "m4v",
+  "f4v",
+  "f4p",
+  "ogv",
+  "webm",
+  "flv",
+  "mp3",
+  "m4a",
+  "f4a",
+  "f4b",
+  "oga",
+  "ogg",
+  "opus"
+]

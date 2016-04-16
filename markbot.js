@@ -19,6 +19,7 @@ const
   lockMatcher = require('./lib/lock-matcher'),
   exists = require('./lib/file-exists'),
   naming = require('./lib/checks/naming-conventions'),
+  restrictFileTypes = require('./lib/checks/restrict-file-types'),
   git = require('./lib/checks/git'),
   html = require('./lib/checks/html'),
   css = require('./lib/checks/css'),
@@ -161,11 +162,13 @@ const startChecks = function () {
     listener.send('check-group:item-complete', markbotGroup, 'file', 'Exists');
   }
 
-  if (markbotFile.naming) {
+  if (markbotFile.naming || markbotFile.restrictFileTypes) {
     let group = `naming-${Date.now()}`;
 
-    listener.send('check-group:new', group, 'Naming conventions');
-    naming.check(listener, currentFolderPath, group);
+    listener.send('check-group:new', group, 'Naming & files');
+
+    if (markbotFile.naming) naming.check(listener, currentFolderPath, group);
+    if (markbotFile.restrictFileTypes) restrictFileTypes.check(listener, currentFolderPath, group);
   }
 
   if (markbotFile.commits || markbotFile.git) {
