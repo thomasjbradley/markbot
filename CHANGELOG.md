@@ -23,6 +23,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The scrollbar doesn’t go under the top gradient for the checks panel now.
 - Better support for void SVG tags.
 - If CSS checks without media queries came after media queries their error messages would show them as being inside media queries.
+- When the HTML & CSS `valid` option isn’t present but other options that require are Markbot will bypass the checks.
 
 ---
 
