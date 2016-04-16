@@ -7,7 +7,7 @@ git:
   allCommitted: true
   allSynced: true
 
-defaults:
+allFiles:
   html:
     valid: true
     bestPractices: true

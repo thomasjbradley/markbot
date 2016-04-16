@@ -2,7 +2,7 @@ internalTemplate: true
 
 naming: true
 
-defaults:
+allFiles:
   html:
     valid: true
     bestPractices: true
