@@ -7,38 +7,27 @@ defaults:
     valid: true
     bestPractices: true
     outline: true
+    has_not:
+      - ['a[name]', 'Use the `id` attribute on elements for internal links instead of `a[name]`']
+      - ['meta[name*="keyword"]', 'The `meta keywords` tag isn’t used by any search engines — it should be removed']
 
   css:
     valid: true
     bestPractices: true
-    # has:
-    #   - ['html', 'box-sizing', 'border-box']
-    #   - ['html', 'text-size-adjust', '100%']
-    #   - ['html', '-moz-text-size-adjust', '100%']
-    #   - ['html', '-ms-text-size-adjust', '100%']
-    #   - ['html', '-webkit-text-size-adjust', '100%']
-    #   - ['*', 'box-sizing', 'inherit']
-    # search:
-    #   - '@-moz-viewport'
-    #   - '@-ms-viewport'
-    #   - '@-o-viewport'
-    #   - '@-webkit-viewport'
-    #   - '@viewport'
     search_not:
       - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
       - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
       - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
-      # - ['line-height\s*:\s*.+(px|rem|em)', 'Line heights should not have units']
 
   js:
     valid: true
     bestPractices: true
     search_not:
-      # - 'document\.write\('
+      - 'document\.write\('
       - 'console\.log\('
-      # - 'alert\('
-      # - 'prompt\('
-      # - 'confirm\('
+      - 'alert\('
+      - 'prompt\('
+      - 'confirm\('
 
   functionality:
     noErrors: true
