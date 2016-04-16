@@ -19,6 +19,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - The scrollbar doesn’t go under the top gradient for the checks panel now.
+- Better support for void SVG tags.
 
 ---
 
