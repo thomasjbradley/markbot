@@ -10,10 +10,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Any folder can be dropped into Markbot and it will search for HTML, CSS & JS files to test.
-- A `default` entry for Markbot files that will share settings between all files of the same type.
+- An `allFiles` entry for Markbot files that will share settings between all files of the same type.
 - An `inherit` entry for Markbot files so they can extend embedded templates.
 - A set of restricted file types that can be included with the `restrictFileTypes` option.
-- A `unique` search ability which will confirm tag text, or attributes on tags, is different for every HTML file—like unique `<title>` tags.
+- A `unique` search ability which will confirm that tag text, or an attribute on a tag, is different for every HTML file—like unique `<title>` tags.
 
 ### Changed
 
@@ -24,7 +24,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The scrollbar doesn’t go under the top gradient for the checks panel now.
 - Better support for void SVG tags.
 - If CSS checks without media queries came after media queries their error messages would show them as being inside media queries.
-- When the HTML & CSS `valid` option isn’t present but other options that require are Markbot will bypass the checks.
+- When the HTML & CSS `valid` option isn’t present but other options that require it are Markbot will bypass the checks.
 
 ---
 
