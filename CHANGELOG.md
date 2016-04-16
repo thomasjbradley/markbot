@@ -13,6 +13,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A `default` entry for Markbot files that will share settings between all files of the same type.
 - An `inherit` entry for Markbot files so they can extend embedded templates.
 - A set of restricted file types that can be included with the `restrictFileTypes` option.
+- A `unique` search ability which will confirm tag text, or attributes on tags, is different for every HTML file—like unique `<title>` tags.
 
 ### Changed
 

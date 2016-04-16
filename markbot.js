@@ -22,6 +22,7 @@ const
   restrictFileTypes = require('./lib/checks/restrict-file-types'),
   git = require('./lib/checks/git'),
   html = require('./lib/checks/html'),
+  htmlUnique = require('./lib/checks/html-unique'),
   css = require('./lib/checks/css'),
   js = require('./lib/checks/javascript'),
   screenshots = require('./lib/checks/screenshots'),
@@ -191,7 +192,19 @@ const startChecks = function () {
     liveWebsite.check(listener, currentFolderPath, group, markbotFile.repo, menuOptions.signOutUsername);
   }
 
+  let uniqueGroup = `html-unique-${Date.now()}`;
+  let htmlUniqueId = 'html-unique';
+  let htmlUniqueLabel = 'HTML unique content';
+
+  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
+    listener.send('check-group:new', uniqueGroup, 'All files');
+    listener.send('check-group:item-new', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
+    listener.send('check-group:item-computing', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
+  }
+
   if (markbotFile.html) {
+    let uniqueCapture = {};
+
     markbotFile.html.forEach(function (file) {
       let group = `html-${file.path}-${Date.now()}`;
 
@@ -202,7 +215,32 @@ const startChecks = function () {
       } else {
         html.check(listener, currentFolderPath, file, group);
       }
+
+      if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
+        let uniqueFinds = htmlUnique.find(currentFolderPath, file, markbotFile.allFiles.html.unique);
+        let errors = [];
+
+        for (let uniq in uniqueFinds) {
+          if (!uniqueCapture[uniq]) uniqueCapture[uniq] = {};
+          if (!uniqueCapture[uniq][uniqueFinds[uniq]]) uniqueCapture[uniq][uniqueFinds[uniq]] = [];
+          uniqueCapture[uniq][uniqueFinds[uniq]].push(file.path);
+        }
+      }
     });
+
+    if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
+      let uniqueErrors = [];
+
+      for (let uniq in uniqueCapture) {
+        for (let content in uniqueCapture[uniq]) {
+          if (uniqueCapture[uniq][content].length > 1) {
+            uniqueErrors.push(`These files share the same \`${uniq}\` but they all should be unique: \`${uniqueCapture[uniq][content].join('`, `')}\``);
+          }
+        }
+      }
+
+      listener.send('check-group:item-complete', uniqueGroup, htmlUniqueId, htmlUniqueLabel, uniqueErrors);
+    }
   }
 
   if (markbotFile.css) {
