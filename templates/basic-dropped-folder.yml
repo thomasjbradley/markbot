@@ -1,6 +1,7 @@
 internalTemplate: true
 
 naming: true
+restrictFileTypes: true
 
 allFiles:
   html:
@@ -10,6 +11,10 @@ allFiles:
     has_not:
       - ['a[name]', 'Use the `id` attribute on elements for internal links instead of `a[name]`']
       - ['meta[name*="keyword"]', 'The `meta keywords` tag isn’t used by any search engines — it should be removed']
+    unique:
+      - 'title'
+      - ['meta[name="description"][content]', 'meta description']
+      - 'h1'
 
   css:
     valid: true

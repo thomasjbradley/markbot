@@ -15,6 +15,10 @@ allFiles:
     has_not:
       - ['a[name]', 'Use the `id` attribute on elements for internal links instead of `a[name]`']
       - ['meta[name*="keyword"]', 'The `meta keywords` tag isn’t used by any search engines — it should be removed']
+    unique:
+      - 'title'
+      - ['meta[name="description"][content]', 'meta description']
+      - 'h1'
 
   css:
     valid: true
@@ -26,9 +30,6 @@ allFiles:
       - ['html', '-ms-text-size-adjust', '100%']
       - ['html', '-webkit-text-size-adjust', '100%']
       - ['*', 'box-sizing', 'inherit']
-      - ['body', 'margin', '0']
-      - ['.img-flex', 'display', 'block']
-      - ['.img-flex', 'width', '100%']
       - ['@38em', 'html', 'font-size', '110%']
       - ['@38em', 'html', 'line-height', '1.4']
       - ['@60em', 'html', 'font-size', '120%']
