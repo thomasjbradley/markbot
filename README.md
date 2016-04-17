@@ -22,6 +22,9 @@ Built with Javascript, Node.js & Electron.
   - [JS file tests](#javascript-file-tests)
   - [Screenshot comparisons](#screenshot-comparisons)
   - [Functionality tests](#functionality-tests)
+  - [Targeting all files](#targeting-all-files)
+    - [Unique information for all files](#unique-information-for-all-files)
+  - [Inheriting from templates](#inheriting-from-templates)
 - [Installation on student computers](#installation-on-student-computers)
   - [Git](#git)
   - [JDK](#jdk)
@@ -113,6 +116,7 @@ Here are the properties that you can use in the Markbot file for testing:
 - `naming` — will confirm every file & folder follows [our naming conventions](http://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/).
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
 - `liveWebsite` — whether to make a `HEAD` request to the GitHub URL to check that it’s accessible or not. Requires the `repo` entry. If the repo isn’t set up with `gh-pages` or the student hasn’t synced any commits a 404 will be issued, failing the test.
+- `restrictFileTypes` — will disallow specific extensions and file names from existing in the folder—[see `lib/checks/restricted-file-types` for a list](lib/checks/restricted-file-types).
 - `git` — [for more complex Git checks.](#git--github-checks)
 - `html` — [for testing HTML files.](#html-file-tests)
 - `css` — [for testing CSS files.](#css-file-tests)
@@ -461,6 +465,77 @@ functionality:
           pass();
         });
 ```
+
+### Targeting all files
+
+If you want the same values to work for all files of the same type in a project you can use the `allFiles` entry. With the all files entry we can set defaults that would be applied to all the selected files.
+
+```yml
+allFiles:
+  html:
+    # Supports any of the entries that HTML supports
+    valid: true
+    bestPractices: true
+    outline: true
+    has:
+      - 'h1'
+  css:
+    # Supports any of the entries that CSS supports
+    valid: true
+  js:
+    # Supports any of the entries that JS supports
+    valid: true
+  # The functionality tests will be applied to every HTML file
+  functionality:
+    noErrors: true
+
+html:
+  - path: index.html
+  - path: about.html
+    has:
+      - 'h2'
+```
+
+With this setup everything from the `allFiles->html` entry would be applied to all the HTML files listed below—to help alleviate duplication.
+
+*Adding `functionality` into the `allFiles` entry will test that functionality on every HTML file listed in the `html` entry.*
+
+#### Unique information for all files
+
+With the `allFiles` entry, for HTML, we can check for uniqueness between the files: e.g. unique `<title>` tags or unique `meta description` tags.
+
+```yml
+allFiles:
+  html:
+    unique:
+      - 'title'
+      # Using an array, the second item will be used in the error message as the description
+      # I use this to make the error messages a little simpler to understand
+      # Without the second entry, the error message will just write the selector
+      - ['meta[name="description"][content]', 'meta description']
+      - 'h1'
+```
+
+The above set up would force all the HTML files to have different title tags, meta descriptions and `<h1>` tags.
+
+*The `unique` entry expects each item to be a valid CSS selector, similar to `has` & `has_not`.*
+
+If you want to check attribute content, select with the attribute selector. **Markbot will grab the last selected attribute** and compare its content. In the example above, Markbot is comparing the `content` attribute.
+
+### Inheriting from templates
+
+Markbot has a few templates inside the [templates folder](templates) that your Markbot files can inherit from, thereby getting all the requirements specified in that file. Your Markbot file is more powerful and will overwrite entries—but things like `has`, `search`, etc. will be merged together.
+
+The templates are just standard Markbot files, with all the same properties.
+
+```yml
+inherit: responsive-website
+
+html:
+  - path: index.html
+```
+
+In the above scenario, everything from the `repsonsive-website` template will be applied to your Markbot file and therefore the `index.html` file.
 
 ---
 
