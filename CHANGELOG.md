@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [3.5.1] — 2016-04-18
+
+### Fixed
+
+- Fixed the functionality `hover()` tests that weren’t always returning properly for two reasons: if using a toggle nav, the testing screen width was too narrow; and transitions.
+
+---
+
 ## [3.5.0] — 2016-04-17
 
 ### Added
