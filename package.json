@@ -1,6 +1,6 @@
 {
   "name": "Markbot",
-  "version": "3.5.0",
+  "version": "3.5.1",
   "license": "GPL",
   "description": "An automated marking application for code projects in the Algonquin College Graphic Design program.",
   "author": "Thomas J Bradley <hey@thomasjbradley.ca>",
@@ -36,8 +36,8 @@
     "clean-osx": "rimraf ./dist/osx",
     "clean-win": "rimraf ./dist/win",
     "clean": "rimraf ./dist",
-    "pack-osx": "npm run clean-osx && electron-packager ./ --overwrite --app-version=3.5.0 --build-version=3.5.0 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --asar --asar-unpack-dir=vendor --version=0.37.2 --ignore='(dist/osx|dist/win)' --icon=images/icon.icns --app-copyright='© Thomas J Bradley' --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
-    "pack-win": "npm run clean-win && electron-packager ./ --overwrite --app-version=3.5.0 --build-version=3.5.0 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --asar --asar-unpack-dir=vendor --version=0.37.2 --ignore='(dist/osx|dist/win)' --icon=images/icon.ico --app-copyright='© Thomas J Bradley' --version-string={ProductName:'Markbot',LegalCopyright:'© Thomas J Bradley'}",
+    "pack-osx": "npm run clean-osx && electron-packager ./ --overwrite --app-version=3.5.1 --build-version=3.5.1 \"Markbot\" --out=dist/osx --platform=darwin --arch=x64 --asar --asar-unpack-dir=vendor --version=0.37.2 --ignore='(dist/osx|dist/win)' --icon=images/icon.icns --app-copyright='© Thomas J Bradley' --app-bundle-id=ca.thomasjbradley.markbot --app-category-type=public.app-category.developer-tools",
+    "pack-win": "npm run clean-win && electron-packager ./ --overwrite --app-version=3.5.1 --build-version=3.5.1 \"Markbot\" --out=dist/win --platform=win32 --arch=ia32 --asar --asar-unpack-dir=vendor --version=0.37.2 --ignore='(dist/osx|dist/win)' --icon=images/icon.ico --app-copyright='© Thomas J Bradley' --version-string={ProductName:'Markbot',LegalCopyright:'© Thomas J Bradley'}",
     "pack": "npm run clean && npm run pack-osx && npm run pack-win",
     "build-osx": "npm run pack-osx && electron-builder \"dist/osx/Markbot-darwin-x64/Markbot.app\" --platform=osx --out=\"dist/osx\" --config=builder.json",
     "build-win": "npm run pack-win && electron-builder \"dist/win/Markbot-win32-ia32\" --platform=win --out=\"dist/win\" --config=builder.json",
