@@ -1,9 +1,3 @@
 [
-  "node_modules",
-  "npm-debug.log",
-
-  "_site",
-  ".jekyll-metadata",
-
-  "tmp"
+  "npm-debug.log"
 ]

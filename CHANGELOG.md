@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+[Unreleased]
+
+### Changed
+
+- Relaxed the file restrictions in the `restrictFileTypes` option.
+
+---
+
 ## [3.5.1] — 2016-04-18
 
 ### Fixed
