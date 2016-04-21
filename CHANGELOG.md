@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Relaxed the file restrictions in the `restrictFileTypes` option.
 
+### Fixed
+
+- If the mouse move coordinates are negative in the hover test they are now set to 0—negative mouse coordinates do nothing.
+
 ---
 
 ## [3.5.1] — 2016-04-18
