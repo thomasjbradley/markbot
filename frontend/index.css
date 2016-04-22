@@ -457,6 +457,7 @@ samp {
 
   color: #444;
   font-size: inherit;
+  white-space: pre;
 }
 
 .error-code-block {

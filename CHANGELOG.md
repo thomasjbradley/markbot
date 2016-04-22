@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added double+ space checking within lines to help prevent confusing “unexpected indentation” errors.
+
+---
+
 ## [3.5.2] — 2016-04-21
 
 ### Changed
