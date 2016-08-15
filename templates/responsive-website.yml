@@ -35,7 +35,6 @@ allFiles:
       - ['@60em', 'html', 'font-size', '120%']
       - ['@60em', 'html', 'line-height', '1.5']
       - ['@90em', 'html', 'font-size', '130%']
-      - ['@90em', 'html', 'line-height', '1.5']
     search:
       - '@-moz-viewport'
       - '@-ms-viewport'
