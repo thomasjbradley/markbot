@@ -116,7 +116,7 @@ Here are the properties that you can use in the Markbot file for testing:
 - `naming` — will confirm every file & folder follows [our naming conventions](http://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/).
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
 - `liveWebsite` — whether to make a `HEAD` request to the GitHub URL to check that it’s accessible or not. Requires the `repo` entry. If the repo isn’t set up with `gh-pages` or the student hasn’t synced any commits a 404 will be issued, failing the test.
-- `restrictFileTypes` — will disallow specific extensions and file names from existing in the folder—[see `lib/checks/restricted-file-types` for a list](lib/checks/restrict-file-types.js).
+- `restrictFileTypes` — will disallow specific extensions and file names from existing in the folder—[see `lib/checks/restricted-file-types` for a list](lib/checks/restrict-file-types/).
 - `git` — [for more complex Git checks.](#git--github-checks)
 - `html` — [for testing HTML files.](#html-file-tests)
 - `css` — [for testing CSS files.](#css-file-tests)
