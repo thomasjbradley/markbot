@@ -204,6 +204,7 @@ const startChecks = function () {
 
   if (markbotFile.html) {
     let uniqueCapture = {};
+    let uniqueErrors = [];
 
     markbotFile.html.forEach(function (file) {
       let group = `html-${file.path}-${Date.now()}`;
@@ -218,7 +219,8 @@ const startChecks = function () {
 
       if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
         let uniqueFinds = htmlUnique.find(currentFolderPath, file, markbotFile.allFiles.html.unique);
-        let errors = [];
+
+        if (uniqueFinds === false) uniqueErrors.push(`The \`${file.path}\` file cannot be found`);
 
         for (let uniq in uniqueFinds) {
           if (!uniqueCapture[uniq]) uniqueCapture[uniq] = {};
@@ -229,8 +231,6 @@ const startChecks = function () {
     });
 
     if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
-      let uniqueErrors = [];
-
       for (let uniq in uniqueCapture) {
         for (let content in uniqueCapture[uniq]) {
           if (uniqueCapture[uniq][content].length > 1) {

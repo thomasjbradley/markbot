@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fixed a bug in the Markbot file `inherit` property where it didn’t seem to be inheriting in some situations.
+- When HTML files are missing the unique content checker was still trying to run—hanging the process and never finishing.
 
 ---
 
