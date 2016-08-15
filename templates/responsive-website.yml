@@ -35,6 +35,7 @@ allFiles:
       - ['@60em', 'html', 'font-size', '120%']
       - ['@60em', 'html', 'line-height', '1.5']
       - ['@90em', 'html', 'font-size', '130%']
+      - ['@90em', 'html', 'line-height', '1.5']
     search:
       - '@-moz-viewport'
       - '@-ms-viewport'
@@ -45,7 +46,6 @@ allFiles:
       - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
       - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
       - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
-      - ['line-height\s*:\s*.+(px|rem|em)', 'Line heights should not have units']
 
   functionality:
     noErrors: true
