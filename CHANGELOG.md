@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+### [Unreleased]
+
+### Fixed
+
+- Fixed a bug in the Markbot file `inherit` property where it didn’t seem to be inheriting in some situations.
+
+---
+
 ## [3.6.0] — 2016-04-27
 
 ### Added
