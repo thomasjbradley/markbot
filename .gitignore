@@ -2,7 +2,6 @@ config.json
 
 npm-debug.log
 node_modules
-build
 dist
 vendor/*.jar
 vendor/lib/*.jar
