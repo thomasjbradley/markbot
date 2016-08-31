@@ -149,7 +149,7 @@ const startChecks = function () {
 
   listener.send('app:file-exists', repoOrFolder);
 
-  if (markbotFile.canvasCourse && markbotFile.canvasAssignment) listener.send('app:with-canvas');
+  if (markbotFile.canvasCourse) listener.send('app:with-canvas');
 
   listener.send('check-group:new', markbotGroup, 'Markbot file');
 
@@ -429,7 +429,6 @@ exports.submitToCanvas = function (ghUsername, cb) {
       util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
       util.format('gh_username=%s', encodeURI(ghUsername)),
       util.format('canvas_course=%s', markbotFile.canvasCourse),
-      util.format('canvas_assignment=%s', markbotFile.canvasAssignment),
       util.format('markbot_version=%s', appPkg.version),
       util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
     ],
