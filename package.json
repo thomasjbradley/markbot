@@ -38,7 +38,7 @@
     "build-mac": "build -m",
     "build-win": "build -w",
     "build": "build -mw",
-    "hash-passcode": "node ./scripts/hash-passcode.js",
+    "hash-passcode": "node ./scripts/hash-passcode.js"
   },
   "repository": {
     "type": "git",
