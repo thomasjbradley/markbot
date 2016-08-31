@@ -39,13 +39,12 @@
     "build-win": "build -w",
     "build": "build -mw",
     "hash-passcode": "node ./scripts/hash-passcode.js",
-    "version": "node ./scripts/version.js && git add package.json builder.json"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/thomasjbradley/markbot.git"
   },
-  "build" :{
+  "build": {
     "appId": "ca.thomasjbradley.markbot",
     "category": "public.app-category.developer-tools",
     "copyright": "© Thomas J Bradley",
