@@ -5,7 +5,20 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-### [Unreleased]
+## [4.0.0] — 2016-09-07
+
+### Changed
+
+- Updated to the newer Electron build process.
+- Simplified maintenance on Canvas IDs by removing them from the `.markbot.yml` file and moving them into Canvas itself.
+
+---
+
+## [3.6.1] — 2016-08-30
+
+### Changed
+
+- Update all the dependencies
 
 ### Fixed
 
