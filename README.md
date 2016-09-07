@@ -442,8 +442,7 @@ functionality:
         on('.btn path:nth-child(2)', 'transitionend', function (err, ev) {
           if (err) fail('The transition on the button’s coloured setion never ends—check that is has a transition');
           if (oldBtnFill == css(btnFill).fill) fail('The button doesn’t change colour');
-          totalEvents--;
-          checkPass();
+          pass();
         });
 
         btn.dispatchEvent(ev('click'));
@@ -674,7 +673,7 @@ npm run build
 Or optionally a single platform:
 
 ```
-npm run build-osx
+npm run build-mac
 npm run build-win
 ```
 
