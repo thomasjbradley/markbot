@@ -266,6 +266,15 @@ const startChecks = function () {
   markbot.onFileDropped(fullPath);
 };
 
+const fileDropped = function (path) {
+  if (localStorage.getItem('github-username')) {
+    reset();
+    fullPath = path;
+    startChecks();
+    $dropbox.dataset.state = 'hidden';
+  }
+};
+
 $body.classList.add(`os-${os.platform()}`);
 
 if (os.platform() == 'darwin') {
@@ -293,13 +302,7 @@ $body.ondragleave = function (e) {
 
 $body.ondrop = function (e) {
   e.preventDefault();
-
-  if (localStorage.getItem('github-username')) {
-    reset();
-    fullPath = e.dataTransfer.files[0].path;
-    startChecks();
-    $dropbox.dataset.state = 'hidden';
-  }
+  fileDropped(e.dataTransfer.files[0].path);
 
   return false;
 };
@@ -467,6 +470,10 @@ listener.on('app:sign-out', function (event) {
   markbot.disableSignOut();
   markbot.disableFolderMenuFeatures();
   window.location.reload();
+});
+
+listener.on('app:file-dropped', function (event, path) {
+  fileDropped(path);
 });
 
 listener.on('debug', function (event, ...args) {

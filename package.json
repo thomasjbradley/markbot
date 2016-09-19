@@ -50,6 +50,7 @@
     "copyright": "© Thomas J Bradley",
     "productName": "Markbot",
     "compression": "maximum",
+    "extend-info": "markbot-extra.plist",
     "asar": {
       "unpackDir": "vendor"
     },

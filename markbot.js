@@ -320,6 +320,11 @@ app.on('activate', function () {
   if (mainWindow === null) createWindows();
 });
 
+app.on('open-file', function (e, path) {
+  e.preventDefault();
+  listener.send('app:file-dropped', path);
+});
+
 exports.newDebugGroup = function (label) {
   debugWindow.webContents.send('__markbot-debug-group', label);
 };
