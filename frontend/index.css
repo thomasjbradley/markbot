@@ -226,6 +226,7 @@
   width: calc(100% - 275px);
 
   background-color: #fff;
+  overflow-x: hidden;
   overflow-y: auto;
 }
 
@@ -471,7 +472,7 @@ samp {
 
   color: #444;
   font-size: inherit;
-  white-space: pre;
+  white-space: pre-wrap;
 }
 
 .error-code-block {
