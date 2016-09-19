@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [4.1.0] — 2016-09-19
+
+### Added
+
+- A folder can now be dragged and dropped to the dock icon and MacOS will handle it.
+
+---
+
 ## [4.0.1] — 2016-09-19
 
 ### Fixed
