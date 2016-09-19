@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [4.0.1] — 2016-09-19
+
+### Fixed
+
+- Restored the ability to drag and move the window.
+- Prevented the window from scrolling horizontally when there are long code samples.
+
+---
+
 ## [4.0.0] — 2016-09-07
 
 ### Changed
