@@ -1,12 +1,25 @@
+#drag-region {
+  height: 2.8em;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+
+  background-color: transparent;
+  -webkit-app-region: drag;
+}
+
 .overlay {
   height: 100vh;
   left: 0;
   position: absolute;
   top: 0;
   width: 100vw;
-  z-index: 200;
+  z-index: 3000;
 
   background-color: #d9d8e3;
+  -webkit-app-region: drag;
 
   text-align: center;
 }
@@ -252,6 +265,7 @@
   right: 13px;
   position: absolute;
   top: 10px;
+  z-index: 2000;
 
   cursor: pointer;
 }
