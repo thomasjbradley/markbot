@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [4.1.1] — 2016-09-22
+
+### Changed
+
+- Upgraded to a newer version of the CSS validator that better supports `calc()`, `attr()` and SVG properties—removing a bunch of hacky work arounds.
+
+### Fixed
+
+- A CSS validator parse error bug when there was a extra closing brace at the bottom of the file.
+
+---
+
 ## [4.1.0] — 2016-09-19
 
 ### Added
