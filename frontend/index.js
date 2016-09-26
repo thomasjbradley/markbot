@@ -2,6 +2,7 @@
 
 const
   os = require('os'),
+  fs = require('fs'),
   electron = require('electron'),
   shell = electron.shell,
   markbot = electron.remote.require('./markbot'),
@@ -302,6 +303,12 @@ $body.ondragleave = function (e) {
 
 $body.ondrop = function (e) {
   e.preventDefault();
+
+  if (!fs.statSync(e.dataTransfer.files[0].path).isDirectory()) {
+    alert('Drop a folder onto Markbot instead of a single file');
+    return false;
+  }
+
   fileDropped(e.dataTransfer.files[0].path);
 
   return false;
