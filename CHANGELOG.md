@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- The restricted file types search was looking inside `.git` folders and sometimes finding bad files.
+
+---
+
 ## [4.1.1] — 2016-09-22
 
 ### Changed
