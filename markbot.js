@@ -143,6 +143,24 @@ const checkForCheating = function () {
   if (isCheater.cheated) listener.send('debug', 'CHEATER!');
 };
 
+const hasFilesToCheck = function () {
+  const noHtmlFiles = (typeof markbotFile.html === 'undefined' || markbotFile.html.length < 1);
+  const noCssFiles = (typeof markbotFile.css === 'undefined' || markbotFile.css.length < 1);
+  const noJsFiles = (typeof markbotFile.js === 'undefined' || markbotFile.js.length < 1);
+
+  if (noHtmlFiles && noCssFiles && noJsFiles) {
+    listener.send('app:file-missing');
+
+    setTimeout(function () {
+      listener.send('alert', 'There are no HTML, CSS or Javascript files for Markbot to check');
+    }, 75);
+
+    return false;
+  }
+
+  return true;
+};
+
 const startChecks = function () {
   let markbotGroup = `markbot-${Date.now()}`;
   let repoOrFolder = (markbotFile.repo) ? markbotFile.repo : currentFolderPath.split(/[\\\/]/).pop();
@@ -300,7 +318,8 @@ const handleMarkbotFile = function (mf) {
   initializeInterface();
   updateAppMenu();
   checkForCheating();
-  startChecks();
+
+  if (hasFilesToCheck()) startChecks();
 };
 
 menuCallbacks.showDebugWindow = function () {

@@ -5,12 +5,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [4.1.2] — 2016-09-26
 
 ### Fixed
 
 - The restricted file types search was looking inside `.git` folders and sometimes finding bad files.
 - When a single file is dropped to Markbot an alert is now shown and Markbot stops.
+- When a folder is dropped that has no HTML, CSS or Javascript files Markbot will reset and show an alert.
 
 ---
 
