@@ -140,7 +140,13 @@ const checkForCheating = function () {
   requirementsFinder.lock(listener, actualFilesLocker, currentFolderPath, markbotFile);
   isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());
 
-  if (isCheater.cheated) listener.send('debug', 'CHEATER!');
+  if (isCheater.cheated) {
+    listener.send('debug', 'CHEATER!');
+
+    for (let match in isCheater.matches) {
+      if (!isCheater.matches[match].equal) listener.send('debug', `&nbsp;&nbsp;┖ \`${match}\` is different — expecting: \`${isCheater.matches[match].expectedHash.slice(0, 7)}\`… actual: \`${isCheater.matches[match].actualHash.slice(0, 7)}\`…`);
+    };
+  }
 };
 
 const hasFilesToCheck = function () {

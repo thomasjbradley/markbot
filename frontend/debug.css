@@ -1,3 +1,10 @@
+body {
+  -webkit-user-select: auto;
+  -moz-user-select: auto;
+  -ms-user-select: auto;
+  user-select: auto;
+}
+
 main {
   padding: 12px;
 }
@@ -53,4 +60,15 @@ li::before {
 
   color: #a8a6af;
   text-align: center;
+}
+
+code {
+  padding: .25em .45em;
+
+  background-color: #f5f2f0;
+
+  color: #444;
+  font-size: 11px;
+  font-family: Menlo, monospace;
+  line-height: 1.5;
 }

@@ -5,6 +5,23 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [4.2.0] — 2016-09-27
+
+### Added
+
+- When Markbot detects cheating the error message is more detailed, including the names of the files and their hashes.
+- The debug window now allows outputting `code` blocks with the backtick syntax.
+
+### Changed
+
+- The validation Java paths are now output as code blocks in the activity window for consistency.
+
+### Fixed
+
+- Text within the Activity window can now be selected.
+
+---
+
 ## [4.1.2] — 2016-09-26
 
 ### Fixed

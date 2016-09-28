@@ -25,14 +25,18 @@ const closeOldGroups = function () {
 ipcRenderer.on('__markbot-debug', function (e, ...args) {
   let li = document.createElement('li');
 
-  li.textContent = args.join(' ');
+  li.innerHTML = args.join(' ');
 
   if (args[0].match(/^cheater/i)) {
     li.innerHTML = `<strong class="cheater">${li.textContent}</strong>`;
   }
 
-  if (li.textContent.match(/@@/)) {
-    li.innerHTML = li.textContent.replace(/@@(.+?)@@/g, '<a href="$1">$1</a>')
+  if (li.innerHTML.match(/@@/)) {
+    li.innerHTML = li.innerHTML.replace(/@@(.+?)@@/g, '<a href="$1">$1</a>');
+  }
+
+  if (li.innerHTML.match(/`/)) {
+    li.innerHTML = li.innerHTML.replace(/`(.+?)`/g, '<code>$1</code>');
   }
 
   group.appendChild(li);
