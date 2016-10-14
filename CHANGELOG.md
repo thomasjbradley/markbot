@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [4.2.1] — 2016-10-14
+
+### Fixed
+
+- A bug in the cheat detection when HTML, CSS & JS files were changed, the interface still sometimes registered them as being unchanged.
+
+---
+
 ## [4.2.0] — 2016-09-27
 
 ### Added

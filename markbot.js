@@ -35,6 +35,7 @@ const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
 const appMenu = require('./lib/menu');
 const MARKBOT_FILE = '.markbot.yml';
 const MARKBOT_LOCK_FILE = '.markbot.lock';
+const NOT_CHEATER = true;
 
 let
   appPkg = require('./package.json'),
@@ -236,9 +237,9 @@ const startChecks = function () {
       listener.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        html.check(listener, currentFolderPath, file, group, isCheater.matches[file.path]);
+        html.check(listener, currentFolderPath, file, group, isCheater.matches[file.path].equal);
       } else {
-        html.check(listener, currentFolderPath, file, group);
+        html.check(listener, currentFolderPath, file, group, NOT_CHEATER);
       }
 
       if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
@@ -274,9 +275,9 @@ const startChecks = function () {
       listener.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        css.check(listener, currentFolderPath, file, group, isCheater.matches[file.path]);
+        css.check(listener, currentFolderPath, file, group, isCheater.matches[file.path].equal);
       } else {
-        css.check(listener, currentFolderPath, file, group);
+        css.check(listener, currentFolderPath, file, group, NOT_CHEATER);
       }
     });
   }
@@ -288,9 +289,9 @@ const startChecks = function () {
       listener.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        js.check(listener, currentFolderPath, file, group, isCheater.matches[file.path]);
+        js.check(listener, currentFolderPath, file, group, isCheater.matches[file.path].equal);
       } else {
-        js.check(listener, currentFolderPath, file, group);
+        js.check(listener, currentFolderPath, file, group, NOT_CHEATER);
       }
     });
   }
