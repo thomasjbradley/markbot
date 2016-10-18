@@ -50,6 +50,10 @@
   width: 120px;
 }
 
+.logo-small {
+  width: 70px;
+}
+
 #dropbox .logo {
   animation: bounce 2s linear infinite;
 }
@@ -239,6 +243,7 @@
 }
 
 #message-header {
+  margin-bottom: 40px;
   padding: 42px 0 22px 0;
 
   background-color: #63666a;
@@ -345,7 +350,31 @@
 }
 
 .messages {
+  margin-top: 20px;
   padding: 5px 13px 13px;
+  position: relative;
+
+  border-top: 3px solid #ff9494;
+}
+
+.messages::before {
+  content: "";
+  left: 13px;
+  position: absolute;
+  right: 13px;
+  top: 0;
+}
+
+.messages::after {
+  content: "";
+  height: 28px;
+  left: 50%;
+  position: absolute;
+  top: -15px;
+  width: 28px;
+
+  background: url("images/error.svg") no-repeat center center / 22px auto #fff;
+  transform: translateX(-50%);
 }
 
 .messages h2 {
@@ -357,6 +386,19 @@
 
   color: #991f1f;
   font-size: 14px;
+}
+
+.messages div:first-child h2 {
+  border: 0;
+}
+
+.messages-positive {
+  background-image: none;
+  border-color: #c1e89b;
+}
+
+.messages-positive::after {
+  background-image: url("images/check.svg");
 }
 
 .messages-positive h2 {
@@ -455,6 +497,45 @@
   pointer-events: none;
 }
 
+.messages-loader {
+  padding-bottom: 24px;
+
+  text-align: center;
+}
+
+.messages-loader-icon {
+  display: block;
+  margin: 0 auto 12px;
+  height: 64px;
+  width: 64px;
+}
+
+.messages-loader-icon svg {
+  height: 64px;
+  width: 64px;
+}
+
+.gear-light {
+  animation: spin 2s linear infinite;
+  stroke: none;
+  transform-origin: 80.8px 80.8px;
+}
+
+.gear-dark {
+  animation: spin 2s linear reverse infinite;
+  stroke: none;
+  transform-origin: 176.3px 176.3px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 pre, code, samp {
   display: block;
 
@@ -514,14 +595,18 @@ samp {
   line-height: 1.5;
 }
 
-#submit {
+.success-fail {
   padding-bottom: 30px;
-  padding-top: 50px;
+  padding-top: 10px;
   text-align: center;
 }
 
-#submit p {
+.success-fail p {
   margin: 20px 0;
+}
+
+.success-fail p:last-child {
+  margin-bottom: 0;
 }
 
 .submit-btn {

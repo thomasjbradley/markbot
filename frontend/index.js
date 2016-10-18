@@ -14,11 +14,13 @@ const
   $checks = document.getElementById('checks'),
   $messages = document.getElementById('messages'),
   $messagesPositive = document.getElementById('messages-positive'),
+  $messagesLoader = document.getElementById('messages-loader'),
   $messageHeader = document.getElementById('message-header'),
   $robotLogo = document.querySelector('.robot-logo'),
   $messageHeading = document.querySelector('h2.no-errors'),
   $repoName = document.getElementById('folder'),
   $signin = document.getElementById('sign-in'),
+  // $failure = document.getElementById('failure'),
   $submit = document.getElementById('submit'),
   $canvasBtn = document.getElementById('submit-btn'),
   $messageCanvas = document.querySelector('.with-canvas-message'),
@@ -203,9 +205,9 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 
   if (isMessages) {
     $messagesPositive.appendChild($errorGroup);
+    $messagesPositive.dataset.state = 'visible';
   } else {
     $messages.dataset.state = 'visible';
-    $messagesPositive.dataset.state = 'hidden';
     $messages.appendChild($errorGroup);
   }
 };
@@ -214,11 +216,13 @@ const displaySummary = function (group, label, linkId, messages) {
   clearTimeout(summaryDisplayTimeout);
   $messageHeader.dataset.state = 'computing';
   $submit.dataset.state = 'hidden';
-  $messagesPositive.dataset.state = 'hidden';
+  $messagesLoader.dataset.state = 'visible';
 
   if (hasErrors && checksCompleted >= checksCount) {
     $messageHeader.dataset.state = 'errors';
+    $messagesLoader.dataset.state = 'hidden';
     checksRunning = false;
+    // $failure.dataset.state = 'visible';
   }
 
   if (!hasErrors && checksCompleted >= checksCount) {
@@ -229,7 +233,8 @@ const displaySummary = function (group, label, linkId, messages) {
       $submit.dataset.state = 'visible';
       checksRunning = false;
       $messages.dataset.state = 'hidden';
-      $messagesPositive.dataset.state = 'visible';
+      $messagesLoader.dataset.state = 'hidden';
+      // $failure.dataset.state = 'hidden';
     }, 100);
   }
 
@@ -242,9 +247,11 @@ const reset = function () {
   $messages.innerHTML = '';
   $messagesPositive.innerHTML = '';
   $checks.innerHTML = '';
-  $messages.dataset.state = 'visible';
+  $messagesLoader.dataset.state = 'visible';
+  $messages.dataset.state = 'hidden';
   $messagesPositive.dataset.state = 'hidden';
   $messageHeader.dataset.state = 'computing';
+  // $failure.dataset.state = 'hidden';
   $submit.dataset.state = 'hidden';
   $canvasBtn.removeAttribute('disabled');
   $canvasBtn.dataset.state = '';
