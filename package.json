@@ -9,25 +9,25 @@
   "private": true,
   "main": "markbot.js",
   "dependencies": {
-    "cheerio": "^0.19.0",
+    "cheerio": "^0.22.0",
     "css": "^2.2.1",
     "entities": "^1.1.1",
-    "eslint": "^2.13.1",
+    "eslint": "^3.8.0",
     "git-commits": "^1.2.0",
     "git-get-status": "^1.0.5",
-    "htmlcs": "^0.1.12",
+    "htmlcs": "^0.2.9",
     "jimp": "^0.2.27",
     "js-beautify": "^1.6.4",
     "js-yaml": "^3.6.1",
     "merge-objects": "^1.0.5",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.16",
-    "stylelint": "^4.5.1",
+    "stylelint": "^7.4.2",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "electron": "^1.4.0",
-    "electron-builder": "^6.7.7"
+    "electron": "^1.4.3",
+    "electron-builder": "^7.14.1"
   },
   "scripts": {
     "start": "electron markbot.js",
