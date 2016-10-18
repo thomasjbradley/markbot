@@ -17,6 +17,9 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Updated dependencies, especially Stylelint, to new versions to handle more CSS.
 - Markbot will now ignore `touch-action` and `appearance` related CSS errors.
 - The screenshots were sometimes taken before the web fonts finished downloading—Markbot waits for the `document.fonts.ready()` event.
+- The window flashed white on load because the page wasn’t loaded yet—fix with the `ready-to-show` event.
+- Fix a bug in the cheat logging when one of the hashes was missing.
+- Added more load checks for screenshots & functionality tests to help prevent incomplete loading issues.
 
 ---
 
