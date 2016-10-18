@@ -78,6 +78,7 @@ const createMainWindow = function () {
     width: 800,
     minWidth: 600,
     height: 600,
+    show: false,
     minHeight: 550,
     titleBarStyle: 'hidden-inset'
   });
@@ -89,6 +90,10 @@ const createMainWindow = function () {
     if (debugWindow) debugWindow.destroy();
 
     mainWindow = null;
+  });
+
+  mainWindow.once('ready-to-show', function () {
+    mainWindow.show();
   });
 
   listener = mainWindow.webContents;
