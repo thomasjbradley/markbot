@@ -5,6 +5,16 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Updated dependencies, especially Stylelint, to new versions to handle more CSS.
+- Markbot will now ignore `touch-action` and `appearance` related CSS errors.
+- The screenshots were sometimes taken before the web fonts finished downloading—Markbot waits for the `document.fonts.ready()` event.
+
+---
+
 ## [4.2.1] — 2016-10-14
 
 ### Fixed
