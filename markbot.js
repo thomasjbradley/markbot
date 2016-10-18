@@ -145,8 +145,14 @@ const checkForCheating = function () {
     listener.send('debug', 'CHEATER!');
 
     for (let match in isCheater.matches) {
-      if (!isCheater.matches[match].equal) listener.send('debug', `&nbsp;&nbsp;┖ \`${match}\` is different — expecting: \`${isCheater.matches[match].expectedHash.slice(0, 7)}\`… actual: \`${isCheater.matches[match].actualHash.slice(0, 7)}\`…`);
-    };
+      if (!isCheater.matches[match].equal) {
+        if (isCheater.matches[match].actualHash && isCheater.matches[match].expectedHash) {
+          listener.send('debug', `&nbsp;&nbsp;┖ \`${match}\` is different — expecting: \`${isCheater.matches[match].expectedHash.slice(0, 7)}…\` actual: \`${isCheater.matches[match].actualHash.slice(0, 7)}…\``);
+        } else {
+          listener.send('debug', `&nbsp;&nbsp;┖ \`${match}\` is different`);
+        }
+      }
+    }
   }
 };
 
