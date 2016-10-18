@@ -7,6 +7,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Screenshots comparisons—if the tests pass—are still shown even when there are errors. Some students wanted to be able to get better screenshot results without having to constantly commit and sync.
+- Clarified the live website error message to include a hint about capitalization on the GitHub servers.
+
 ### Fixed
 
 - Updated dependencies, especially Stylelint, to new versions to handle more CSS.
