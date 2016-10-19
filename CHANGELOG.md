@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Removed the `no-indistinguishable-colors` Stylelint rule—it was causing problems.
 
+### Fixed
+
+- Markbot now supports `<pre>`, `<code>` and `<textarea>` tags properly by ignoring indentation within the tags.
+
 ---
 
 ## [4.2.2] — 2016-10-18

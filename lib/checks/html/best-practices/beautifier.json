@@ -8,7 +8,7 @@
   "unformatted": [
     "a", "span", "img", "bdo", "em", "strong", "dfn", "code", "samp", "kbd", "data", "time",
     "cite", "abbr", "acronym", "q", "sub", "sup", "tt", "i", "b", "small", "u", "s", "strike",
-    "var", "ins", "del", "pre", "address", "dt", "h1", "h2", "h3", "h4", "h5", "h6",
+    "var", "ins", "del", "pre", "address", "dt", "h1", "h2", "h3", "h4", "h5", "h6", "textarea",
     "path", "use", "ruby", "rt", "rp", "mark", "bdi", "br", "wbr"
   ]
 }
