@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Removed the `no-indistinguishable-colors` Stylelint rule—it was causing problems.
+
+---
+
 ## [4.2.2] — 2016-10-18
 
 ### Changed
