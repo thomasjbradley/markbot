@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Markbot now supports `<pre>`, `<code>` and `<textarea>` tags properly by ignoring indentation within the tags.
+- An unexpected indentation error was thrown when there was a space before a closing `>` in a tag, like: `<h1 >`—this is now caught by Markbot, showing a more descriptive error message.
 
 ---
 
