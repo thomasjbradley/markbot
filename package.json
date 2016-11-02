@@ -12,7 +12,7 @@
     "cheerio": "^0.22.0",
     "css": "^2.2.1",
     "entities": "^1.1.1",
-    "eslint": "^3.8.0",
+    "eslint": "^3.9.1",
     "git-commits": "^1.2.0",
     "git-get-status": "^1.0.5",
     "htmlcs": "^0.2.9",
@@ -22,12 +22,12 @@
     "merge-objects": "^1.0.5",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.16",
-    "stylelint": "^7.4.2",
+    "stylelint": "^7.5.0",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "electron": "^1.4.3",
-    "electron-builder": "^7.14.1"
+    "electron": "^1.4.5",
+    "electron-builder": "^7.18.0"
   },
   "scripts": {
     "start": "electron markbot.js",
