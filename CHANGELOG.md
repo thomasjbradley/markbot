@@ -7,9 +7,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Added more asyncronization to the browser window loading to help get the Google Fonts shown on the screen before the screenshots are taken.
+
 ### Fixed
 
 - When trying to debug functionality tests, if types other than string were sent, an error was thrown. Markbot is a little more forgiving and will accept more types to debug now.
+- A memory leak with too many `__markbot-hidden-browser-window-loaded` events being bound in the screenshot checking.
 
 ---
 
