@@ -27,7 +27,7 @@ ipcRenderer.on('__markbot-debug', function (e, ...args) {
 
   li.innerHTML = args.join(' ');
 
-  if (args[0].match(/^cheater/i)) {
+  if (typeof args[0] === 'string' && args[0].match(/^cheater/i)) {
     li.innerHTML = `<strong class="cheater">${li.textContent}</strong>`;
   }
 

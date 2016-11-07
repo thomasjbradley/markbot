@@ -402,7 +402,7 @@ Your injected code will have access to a few functions to simplify what you have
 - **`pass()`** — Tell Markbot that this test has passed
 - **`fail(reason)`** — Tell Markbot that this test has failed
   - The `reason` should be a string that will be shown to the user in Markbot’s error list
-- **`debug(string)`** — For when writing the tests, to help you debug your test code
+- **`debug(...args)`** — For when writing the tests, to help you debug your test code
   - What ever is passed into `debug()` will be written to the console
 - **`$(selector[, target = document])`** — Instead of having to write `document.querySelector()`
   - The `target` parameter allows you to use `querySelector()` on elements other than `document`—but defaults to `document`

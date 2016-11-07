@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- When trying to debug functionality tests, if types other than string were sent, an error was thrown. Markbot is a little more forgiving and will accept more types to debug now.
+
+---
+
 ## [4.2.3] — 2016-10-23
 
 ### Changed
