@@ -1,0 +1,7 @@
+{
+  "name": "devtools-har-extension",
+  "description": "DevTools HAR Extension",
+  "version": "1.0.0",
+  "manifest_version": 2,
+  "devtools_page": "index.html"
+}
