@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Added more asyncronization to the browser window loading to help get the Google Fonts shown on the screen before the screenshots are taken.
+- Extracted the window & website loading into a separate module so that it can be shared.
 
 ### Fixed
 
