@@ -11,6 +11,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - A HAR is now generated for each page load so performance testing can be completed. This also adds a little more time to wait for the screen to fully render before triggering screenshots.
 - A static web server & web loader is introduced to help with loading websites & emulating different network conditions — `https://localhost:8080`.
+- Performance testing for HTML files using [The coach](https://github.com/sitespeedio/coach/), including support for performance budgets.
 
 ### Changed
 

@@ -1,0 +1,17 @@
+[
+  "assetsRedirects",
+  "cacheHeaders",
+  "cacheHeadersLong",
+  "compressAssets",
+  "connectionKeepAlive",
+  "fewRequestsPerDomain",
+  "headerSize",
+  "optimalCssSize",
+  "privateAssets",
+  "avoidScalingImages",
+  "fastRender",
+  "inlineCss",
+  "spof",
+  "thirdPartyAsyncJs",
+  "userTiming"
+]

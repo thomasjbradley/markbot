@@ -316,7 +316,7 @@ const displaySummary = function (group, label, linkId, messages) {
     }, 100);
   }
 
-  if (messages) displayErrors(group, label, linkId, messages, '', true);
+  if (messages && messages.length > 0) displayErrors(group, label, linkId, messages, '', true);
 };
 
 const reset = function () {

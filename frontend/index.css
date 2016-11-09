@@ -388,6 +388,14 @@
   font-size: 14px;
 }
 
+.messages mark {
+  padding: 3px;
+  background-color: rgba(255, 148, 148, .3);
+  border-radius: 2px;
+
+  color: #a02727;
+}
+
 .messages div:first-child h2 {
   border: 0;
 }
@@ -409,6 +417,11 @@
 .messages h2:target {
   border-color: #f33;
   animation: border-fade-out 500ms linear forwards;
+}
+
+.messages-positive mark {
+  background-color: #c1e89b;
+  color: #44800d;
 }
 
 @keyframes border-fade-out {
@@ -528,8 +541,10 @@
 }
 
 table {
-  border-collapse: collapse;
+  margin-bottom: 8px;
   width: 100%;
+
+  border-collapse: collapse;
 }
 
 caption {
