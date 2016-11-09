@@ -13,6 +13,7 @@
     "css": "^2.2.1",
     "entities": "^1.1.1",
     "eslint": "^3.9.1",
+    "finalhandler": "^0.5.0",
     "git-commits": "^1.2.0",
     "git-get-status": "^1.0.5",
     "htmlcs": "^0.2.9",
@@ -22,7 +23,10 @@
     "merge-objects": "^1.0.5",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.16",
+    "pem": "^1.8.3",
+    "serve-static": "^1.11.1",
     "stylelint": "^7.5.0",
+    "webcoach": "^0.28.4",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {

@@ -1,34 +1,35 @@
 'use strict';
 
-const
-  electron = require('electron'),
-  app = electron.app,
-  Menu = electron.Menu,
-  BrowserWindow = electron.BrowserWindow,
-  shell = electron.shell,
-  fs = require('fs'),
-  path = require('path'),
-  util = require('util'),
-  https = require('https'),
-  crypto = require('crypto'),
-  mkdirp = require('mkdirp'),
-  markbotFileGenerator = require('./lib/markbot-file-generator'),
-  passcode = require('./lib/passcode'),
-  locker = require('./lib/locker'),
-  requirementsFinder = require('./lib/requirements-finder'),
-  lockMatcher = require('./lib/lock-matcher'),
-  exists = require('./lib/file-exists'),
-  naming = require('./lib/checks/naming-conventions'),
-  restrictFileTypes = require('./lib/checks/restrict-file-types'),
-  git = require('./lib/checks/git'),
-  html = require('./lib/checks/html'),
-  htmlUnique = require('./lib/checks/html-unique'),
-  css = require('./lib/checks/css'),
-  js = require('./lib/checks/javascript'),
-  screenshots = require('./lib/checks/screenshots'),
-  functionality = require('./lib/checks/functionality-tests'),
-  liveWebsite = require('./lib/checks/live-website')
-  ;
+const electron = require('electron');
+const app = electron.app;
+const Menu = electron.Menu;
+const BrowserWindow = electron.BrowserWindow;
+const shell = electron.shell;
+const fs = require('fs');
+const path = require('path');
+const util = require('util');
+const https = require('https');
+const crypto = require('crypto');
+const mkdirp = require('mkdirp');
+
+const markbotFileGenerator = require('./lib/markbot-file-generator');
+const webServer = require('./lib/web-server');
+
+const passcode = require('./lib/passcode');
+const locker = require('./lib/locker');
+const requirementsFinder = require('./lib/requirements-finder');
+const lockMatcher = require('./lib/lock-matcher');
+const exists = require('./lib/file-exists');
+const naming = require('./lib/checks/naming-conventions');
+const restrictFileTypes = require('./lib/checks/restrict-file-types');
+const git = require('./lib/checks/git');
+const html = require('./lib/checks/html');
+const htmlUnique = require('./lib/checks/html-unique');
+const css = require('./lib/checks/css');
+const js = require('./lib/checks/javascript');
+const screenshots = require('./lib/checks/screenshots');
+const functionality = require('./lib/checks/functionality-tests');
+const liveWebsite = require('./lib/checks/live-website');
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
@@ -37,36 +38,36 @@ const MARKBOT_FILE = '.markbot.yml';
 const MARKBOT_LOCK_FILE = '.markbot.lock';
 const NOT_CHEATER = true;
 
-let
-  appPkg = require('./package.json'),
-  config = require('./config.json'),
-  markbotFile = {},
-  mainWindow,
-  debugWindow,
-  differWindow,
-  listener,
-  menuCallbacks = {},
-  menuOptions = {
-    openRepo: false,
-    runChecks: false,
-    revealFolder: false,
-    viewLocal: false,
-    viewLive: false,
-    signOut: false,
-    signOutUsername: false,
-    showDevelop: false,
-    developMenuItems: false
-  },
-  markbotFilePath,
-  markbotLockFilePath,
-  currentFolderPath,
-  markbotLockFileLocker,
-  actualFilesLocker,
-  isCheater = {
-    cheated: false,
-    matches: {}
-  }
-;
+let appPkg = require('./package.json');
+let config = require('./config.json');
+let markbotFile = {};
+let mainWindow;
+let debugWindow;
+let differWindow;
+let listener;
+let menuCallbacks = {};
+let menuOptions = {
+  openRepo: false,
+  runChecks: false,
+  revealFolder: false,
+  viewLocal: false,
+  viewLive: false,
+  signOut: false,
+  signOutUsername: false,
+  showDevelop: false,
+  developMenuItems: false,
+};
+let markbotFilePath;
+let markbotLockFilePath;
+let currentFolderPath;
+let markbotLockFileLocker;
+let actualFilesLocker;
+let isCheater = {
+  cheated: false,
+  matches: {},
+};
+
+app.commandLine.appendSwitch('--ignore-certificate-errors');
 
 const updateAppMenu = function () {
   menuOptions.showDevelop = (MARKBOT_DEVELOP_MENU && MARKBOT_LOCK_PASSCODE && passcode.matches(MARKBOT_LOCK_PASSCODE, config.secret, config.passcodeHash));
@@ -97,6 +98,7 @@ const createMainWindow = function () {
   });
 
   listener = mainWindow.webContents;
+  webServer.init(listener);
 };
 
 const createDebugWindow = function () {
@@ -129,7 +131,7 @@ const initializeInterface = function () {
 
   menuOptions.runChecks = true;
   menuOptions.revealFolder = true;
-  menuOptions.viewLocal = 'file://' + path.resolve(currentFolderPath + '/' + 'index.html');
+  menuOptions.viewLocal = true;
   menuOptions.developMenuItems = true;
 
   if (markbotFile.repo) {
@@ -168,6 +170,7 @@ const hasFilesToCheck = function () {
 
   if (noHtmlFiles && noCssFiles && noJsFiles) {
     listener.send('app:file-missing');
+    webServer.stop();
 
     setTimeout(function () {
       listener.send('alert', 'There are no HTML, CSS or Javascript files for Markbot to check');
@@ -427,11 +430,13 @@ exports.onFileDropped = function(filePath) {
   markbotLockFilePath = path.resolve(filePath + '/' + MARKBOT_LOCK_FILE);
   currentFolderPath = filePath;
 
-  if (exists.check(markbotFilePath)) {
-    markbotFileGenerator.get(markbotFilePath, handleMarkbotFile)
-  } else {
-    markbotFileGenerator.buildFromFolder(filePath, handleMarkbotFile);
-  }
+  webServer.start(currentFolderPath, function () {
+    if (exists.check(markbotFilePath)) {
+      markbotFileGenerator.get(markbotFilePath, handleMarkbotFile)
+    } else {
+      markbotFileGenerator.buildFromFolder(filePath, handleMarkbotFile);
+    }
+  });
 };
 
 exports.showDifferWindow = function (imgs, width) {
@@ -464,6 +469,11 @@ exports.showDifferWindow = function (imgs, width) {
   differWindow.webContents.executeJavaScript(js);
   differWindow.show();
 };
+
+exports.disableWebServer = function () {
+  webServer.stop();
+};
+menuCallbacks.disableWebServer = exports.disableWebServer;
 
 exports.submitToCanvas = function (ghUsername, cb) {
   let
