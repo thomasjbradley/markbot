@@ -497,12 +497,18 @@
   pointer-events: none;
 }
 
+.checks-loader,
 .messages-loader {
   padding-bottom: 24px;
 
   text-align: center;
 }
 
+.checks-loader {
+  padding-top: 24px;
+}
+
+.checks-loader-icon,
 .messages-loader-icon {
   display: block;
   margin: 0 auto 12px;
@@ -513,6 +519,56 @@
 .messages-loader-icon svg {
   height: 64px;
   width: 64px;
+}
+
+.checks-loader-icon,
+.checks-loader-icon svg {
+  height: 42px;
+  width: 42px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+caption {
+  margin-bottom: 8px;
+
+  text-align: left;
+}
+
+table .highlight {
+  background-color: #f8f6f5;
+}
+
+table th {
+  font-weight: normal;
+}
+
+thead th {
+  font-style: italic;
+}
+
+table th,
+table td {
+  padding: 4px 6px;
+
+  border-left: 1px dotted #dfdcda;
+  border-bottom: 1px solid #dfdcda;
+
+  white-space: nowrap;
+}
+
+table th:first-child,
+table td:first-child {
+  border-left: 0;
+}
+
+table .highlight th,
+table .highlight td {
+  font-style: normal;
+  font-weight: bold;
 }
 
 .gear-light {

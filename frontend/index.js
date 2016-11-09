@@ -11,7 +11,8 @@ const
   successMessages = require('./success-messages.json'),
   $body = document.querySelector('body'),
   $dropbox = document.getElementById('dropbox'),
-  $checks = document.getElementById('checks'),
+  $checks = document.getElementById('checks-container'),
+  $checksLoader = document.getElementById('checks-loader'),
   $messages = document.getElementById('messages'),
   $messagesPositive = document.getElementById('messages-positive'),
   $messagesLoader = document.getElementById('messages-loader'),
@@ -124,6 +125,50 @@ const buildImageDiffErrorMessage = function (err, li) {
   });
 };
 
+const buildTableErrorMessage = function (err, li) {
+  let table = document.createElement('table');
+  let caption = document.createElement('caption');
+  let thead = document.createElement('thead');
+  let tbody = document.createElement('tbody');
+  let theadRow = document.createElement('tr');
+
+  caption.innerHTML = err.message;
+  table.appendChild(caption);
+
+  err.headings.forEach(function (item) {
+    let th = document.createElement('th');
+
+    th.innerHTML = item;
+    th.setAttribute('scope', 'col');
+    theadRow.appendChild(th);
+  });
+
+  err.rows.forEach(function (item) {
+    let tr = document.createElement('tr');
+    let th = document.createElement('th');
+
+    th.innerHTML = item.title;
+    th.setAttribute('scope', 'row');
+    tr.appendChild(th);
+
+    if (item.highlight) tr.classList.add('highlight');
+
+    item.data.forEach(function (data) {
+      let td = document.createElement('td');
+
+      td.innerHTML = prepareErrorText(data);
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  thead.appendChild(theadRow);
+  table.appendChild(thead);
+  table.appendChild(tbody);
+  li.appendChild(table);
+};
+
 const buildErrorMessageFromObject = function (err, li) {
   switch (err.type) {
     case 'code-diff':
@@ -132,10 +177,15 @@ const buildErrorMessageFromObject = function (err, li) {
     case 'image-diff':
       buildImageDiffErrorMessage(err, li);
       break;
+    case 'table':
+      buildTableErrorMessage(err, li);
+      break;
   }
 };
 
 const escapeHTML = function (err) {
+  if (typeof err !== 'string') return err;
+
   return err.replace(/[&<>]/g, function (tag) {
     return {
       '&': '&amp;',
@@ -146,6 +196,8 @@ const escapeHTML = function (err) {
 };
 
 const transformCodeBlocks = function (err) {
+  if (typeof err !== 'string') return err;
+
   while (err.match(/`/)) {
     err = err.replace(/`/, '<samp>');
     err = err.replace(/`/, '</samp>');
@@ -155,11 +207,37 @@ const transformCodeBlocks = function (err) {
 };
 
 const transformLinks = function (err) {
+  if (typeof err !== 'string') return err;
+
   if (err.match(/@@/)) {
-    err = err.replace(/@@(.+?)@@/g, '<a href="$1">$1</a>')
+    err = err.replace(/@@(.+?)@@/g, '<a href="$1">$1</a>');
   }
 
   return err;
+};
+
+const transformStrong = function (err) {
+  if (typeof err !== 'string') return err;
+
+  if (err.match(/\*\*/)) {
+    err = err.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  }
+
+  return err;
+};
+
+const transformMark = function (err) {
+  if (typeof err !== 'string') return err;
+
+  if (err.match(/\*\*\*/)) {
+    err = err.replace(/\*\*\*(.+?)\*\*\*/g, '<mark>$1</mark>');
+  }
+
+  return err;
+};
+
+const prepareErrorText = function (err) {
+  return transformCodeBlocks(transformStrong(transformMark(transformLinks(escapeHTML(err)))));
 };
 
 const displayErrors = function (group, label, linkId, errors, status, isMessages) {
@@ -182,7 +260,7 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 
       if (err.status) status = err.status;
     } else {
-      li.innerHTML = transformCodeBlocks(transformLinks(escapeHTML(err)));
+      li.innerHTML = prepareErrorText(err);
     }
 
     $messageList.appendChild(li)
@@ -247,6 +325,7 @@ const reset = function () {
   $messages.innerHTML = '';
   $messagesPositive.innerHTML = '';
   $checks.innerHTML = '';
+  $checksLoader.dataset.state = 'visible';
   $messagesLoader.dataset.state = 'visible';
   $messages.dataset.state = 'hidden';
   $messagesPositive.dataset.state = 'hidden';
@@ -395,6 +474,8 @@ listener.on('check-group:new', function (event, id, label) {
   $groupTitle.textContent = label;
 
   $groupHead.appendChild($groupTitle);
+
+  $checksLoader.dataset.state = 'hidden';
   $checks.appendChild($groupHead);
   $checks.appendChild(groups[id].elem);
 });
@@ -483,6 +564,7 @@ listener.on('app:sign-out', function (event) {
   localStorage.clear();
   markbot.disableSignOut();
   markbot.disableFolderMenuFeatures();
+  markbot.disableWebServer();
   window.location.reload();
 });
 
