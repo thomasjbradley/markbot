@@ -10,11 +10,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - A HAR is now generated for each page load so performance testing can be completed. This also adds a little more time to wait for the screen to fully render before triggering screenshots.
+- A static web server & web loader is introduced to help with loading websites & emulating different network conditions — `https://localhost:8080`.
 
 ### Changed
 
 - Added more asyncronization to the browser window loading to help get the Google Fonts shown on the screen before the screenshots are taken.
-- Extracted the window & website loading into a separate module so that it can be shared.
+- Screenshots & functionality tests are now loaded through a web server.
 
 ### Fixed
 
