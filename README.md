@@ -493,12 +493,14 @@ files:
   - path: "images/mars-2.jpg"
 
     # For images only
-    # The maximum allowed width
+    # The maximum/minimum allowed width
     maxWidth: 3000
+    minWidth: 320
 
     # For images only
-    # The maximum allowed height
+    # The maximum/minimum allowed height
     maxHeight: 1500
+    minHeight: 240
 
     # The maximum allowed file size represented in kilobytes (kB)
     maxSize: 300

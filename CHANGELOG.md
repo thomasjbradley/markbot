@@ -9,6 +9,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Image dimensions `minWidth` and `minHeight` can now be checked.
+
+### Changed
+
+- Removed `ImageOptim` from the error message to make the error messages slightly more opaque.
+
+---
+
+## [4.3.0] — 2016-11-09
+
+### Added
+
 - A HAR is now generated for each page load so performance testing can be completed. This also adds a little more time to wait for the screen to fully render before triggering screenshots.
 - A static web server & web loader is introduced to help with loading websites & emulating different network conditions — `https://localhost:8080`.
 - Performance testing for HTML files using [The coach](https://github.com/sitespeedio/coach/), including support for performance budgets.
