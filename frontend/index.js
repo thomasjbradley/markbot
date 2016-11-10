@@ -1,43 +1,41 @@
 'use strict';
 
-const
-  os = require('os'),
-  fs = require('fs'),
-  electron = require('electron'),
-  shell = electron.shell,
-  markbot = electron.remote.require('./markbot'),
-  listener = electron.ipcRenderer,
-  classify = require('../lib/classify'),
-  successMessages = require('./success-messages.json'),
-  $body = document.querySelector('body'),
-  $dropbox = document.getElementById('dropbox'),
-  $checks = document.getElementById('checks-container'),
-  $checksLoader = document.getElementById('checks-loader'),
-  $messages = document.getElementById('messages'),
-  $messagesPositive = document.getElementById('messages-positive'),
-  $messagesLoader = document.getElementById('messages-loader'),
-  $messageHeader = document.getElementById('message-header'),
-  $robotLogo = document.querySelector('.robot-logo'),
-  $messageHeading = document.querySelector('h2.no-errors'),
-  $repoName = document.getElementById('folder'),
-  $signin = document.getElementById('sign-in'),
-  // $failure = document.getElementById('failure'),
-  $submit = document.getElementById('submit'),
-  $canvasBtn = document.getElementById('submit-btn'),
-  $messageCanvas = document.querySelector('.with-canvas-message'),
-  $messageNoCanvas = document.querySelector('.no-canvas-message')
-;
+const os = require('os');
+const fs = require('fs');
+const electron = require('electron');
+const shell = electron.shell;
+const markbot = electron.remote.require('./markbot');
+const listener = electron.ipcRenderer;
+const classify = require('../lib/classify');
+const successMessages = require('./success-messages.json');
+const robotBeeps = require('./robot-beeps.json');
+const $body = document.querySelector('body');
+const $dropbox = document.getElementById('dropbox');
+const $checks = document.getElementById('checks-container');
+const $checksLoader = document.getElementById('checks-loader');
+const $messages = document.getElementById('messages');
+const $messagesPositive = document.getElementById('messages-positive');
+const $messagesLoader = document.getElementById('messages-loader');
+const $messagesLoaderLabel = document.querySelector('.messages-loader-label');
+const $messageHeader = document.getElementById('message-header');
+const $robotLogo = document.querySelector('.robot-logo');
+const $messageHeading = document.querySelector('h2.no-errors');
+const $repoName = document.getElementById('folder');
+const $signin = document.getElementById('sign-in');
+// const $failure = document.getElementById('failure');
+const $submit = document.getElementById('submit');
+const $canvasBtn = document.getElementById('submit-btn');
+const $messageCanvas = document.querySelector('.with-canvas-message');
+const $messageNoCanvas = document.querySelector('.no-canvas-message');
 
-var
-  groups = {},
-  checks = {},
-  fullPath = false,
-  hasErrors = false,
-  checksCount = 0,
-  checksCompleted = 0,
-  checksRunning = false,
-  summaryDisplayTimeout
-;
+let groups = {};
+let checks = {};
+let fullPath = false;
+let hasErrors = false;
+let checksCount = 0;
+let checksCompleted = 0;
+let checksRunning = false;
+let summaryDisplayTimeout;
 
 const buildCodeDiffErrorMessage = function (err, li) {
   var
@@ -327,6 +325,7 @@ const reset = function () {
   $checks.innerHTML = '';
   $checksLoader.dataset.state = 'visible';
   $messagesLoader.dataset.state = 'visible';
+  $messagesLoaderLabel.innerHTML = robotBeeps[Math.floor(Math.random() * robotBeeps.length)] + '…';
   $messages.dataset.state = 'hidden';
   $messagesPositive.dataset.state = 'hidden';
   $messageHeader.dataset.state = 'computing';

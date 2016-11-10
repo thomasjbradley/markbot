@@ -19,6 +19,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added more asyncronization to the browser window loading to help get the Google Fonts shown on the screen before the screenshots are taken.
 - Screenshots & functionality tests are now loaded through a web server.
 - Change `has_not` and `search_not` to use camel case: `hasNot` and `searchNot` for consistency—maintaining backwards compatibility.
+- The loading gears message is now randomized for more funness.
 
 ### Fixed
 
