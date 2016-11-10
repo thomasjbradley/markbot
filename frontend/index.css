@@ -719,3 +719,16 @@ samp {
   background-color: #c1e89b;
   color: #417d0a;
 }
+
+#all-good-check {
+  animation: none 200ms cubic-bezier(.54, -0.37, .42, 1.78);
+}
+
+@keyframes bounce-check {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.2);
+  }
+}

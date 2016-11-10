@@ -20,6 +20,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Screenshots & functionality tests are now loaded through a web server.
 - Change `has_not` and `search_not` to use camel case: `hasNot` and `searchNot` for consistency—maintaining backwards compatibility.
 - The loading gears message is now randomized for more funness.
+- The big green check now bounces when submitted to Canvas for ultimate levels of fun.
 
 ### Fixed
 

@@ -25,6 +25,7 @@ const $signin = document.getElementById('sign-in');
 // const $failure = document.getElementById('failure');
 const $submit = document.getElementById('submit');
 const $canvasBtn = document.getElementById('submit-btn');
+const $allGoodCheck = document.getElementById('all-good-check');
 const $messageCanvas = document.querySelector('.with-canvas-message');
 const $messageNoCanvas = document.querySelector('.no-canvas-message');
 
@@ -334,6 +335,7 @@ const reset = function () {
   $canvasBtn.removeAttribute('disabled');
   $canvasBtn.dataset.state = '';
   $canvasBtn.setAttribute('hidden', true);
+  $allGoodCheck.style.animationName = 'none';
   $messageNoCanvas.removeAttribute('hidden');
   $messageCanvas.setAttribute('hidden', true);
   groups = {};
@@ -416,9 +418,11 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
     markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
       if (!err && data.code == 200) {
         $canvasBtn.dataset.state = 'done';
+        $allGoodCheck.style.animationName = 'bounce-check';
       } else {
         $canvasBtn.dataset.state = '';
         $canvasBtn.removeAttribute('disabled');
+        $allGoodCheck.style.animationName = 'none';
         if (data.message) alert(data.message);
       }
     });
