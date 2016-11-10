@@ -207,7 +207,7 @@ html:
     # I would use this for ensuring that `<hr>` tags aren’t used when borders should be or that `<br>` tags aren’t used
     # Will be skipped if validation isn’t also checked—the document must be valid first
     # If given an array, the second argument can be a custom error message
-    has_not:
+    hasNot:
       - 'br'
       - ['hr', 'The `hr` tag should not be used to create borders']
 
@@ -219,7 +219,7 @@ html:
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
-    search_not:
+    searchNot:
       - 'Thing-a-magic'
 ```
 
@@ -259,7 +259,7 @@ css:
     # I would use this for ensuring as little CSS duplication as possible, like forcing students to use multiple classes
     #   [selector, [property, property, etc.]]
     # Will be skipped if validation isn’t also checked—the document must be valid first
-    has_not:
+    hasNot:
       - ['.btn-ghost', ['display']]
       - ['.btn-subtle', ['font-size', 'text-decoration']]
       # Starting the array with an `@` and a matching string will look inside media queries
@@ -273,7 +273,7 @@ css:
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
-    search_not:
+    searchNot:
       - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
       - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
       - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
@@ -309,7 +309,7 @@ js:
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
-    search_not:
+    searchNot:
       - 'document.write\('
       - ['console.log\(', 'The `console.log()` function should not be left in your code after you’ve finished debugging']
 ```
@@ -582,7 +582,7 @@ allFiles:
 
 The above set up would force all the HTML files to have different title tags, meta descriptions and `<h1>` tags.
 
-*The `unique` entry expects each item to be a valid CSS selector, similar to `has` & `has_not`.*
+*The `unique` entry expects each item to be a valid CSS selector, similar to `has` & `hasNot`.*
 
 If you want to check attribute content, select with the attribute selector. **Markbot will grab the last selected attribute** and compare its content. In the example above, Markbot is comparing the `content` attribute.
 
