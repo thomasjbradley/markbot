@@ -22,6 +22,7 @@ Built with Javascript, Node.js & Electron.
   - [JS file tests](#javascript-file-tests)
   - [Screenshot comparisons](#screenshot-comparisons)
   - [Functionality tests](#functionality-tests)
+  - [File & image tests](#file--image-tests)
   - [Targeting all files](#targeting-all-files)
     - [Unique information for all files](#unique-information-for-all-files)
   - [Inheriting from templates](#inheriting-from-templates)
@@ -192,7 +193,7 @@ html:
       budget:
         maxLoadTime: 1000   # Milliseconds for maximum load time
         maxRequests: 15     # Maximum number of assets
-        maxSize: 800        # Maximum page size of all assets
+        maxSize: 800        # Maximum page size of all assets in kilobytes (kB)
 
     # Can be used to test for specific elements; each entry should be a valid CSS selector
     # Will be skipped if validation isn’t also checked—the document must be valid first
@@ -475,35 +476,88 @@ functionality:
         });
 ```
 
+### File & image tests
+
+Markbot can check random plain text files and images for specific features.
+
+- **Images:** compare dimensions, compare file size, check if metadata has been removed by smushing.
+- **Text files:** compare file size, check if it’s empty, search/not with regexes.
+
+Use the `files` entry to test images and text files, it’s an array of objects, each representing a file to test.
+
+*The `path` option is the only one that’s required—leaving any of the others off will skip the test.*
+
+```yml
+files:
+  # The file’s path
+  - path: "images/mars-2.jpg"
+
+    # For images only
+    # The maximum allowed width
+    maxWidth: 3000
+
+    # For images only
+    # The maximum allowed height
+    maxHeight: 1500
+
+    # The maximum allowed file size represented in kilobytes (kB)
+    maxSize: 300
+
+    # For text files only
+    # Regex searches on the file, for confirming specific content
+    # If given an array, the second argument can be a custom error message
+    search:
+      - '^Sitemap\:.+sitemap\.xml\s+?$'
+
+    # For text files only
+    # Regex searches on the file, for confirming specific content isn’t found
+    # If given an array, the second argument can be a custom error message
+    searchNot:
+      - 'Allow:'
+      - ['Disallow\:\s*\/', 'The disallow all directive (`Disallow: /`) should not be used']
+```
+
 ### Targeting all files
 
 If you want the same values to work for all files of the same type in a project you can use the `allFiles` entry. With the all files entry we can set defaults that would be applied to all the selected files.
 
 ```yml
 allFiles:
+  # Supports any of the entries that `html` supports
   html:
-    # Supports any of the entries that HTML supports
     valid: true
     bestPractices: true
     outline: true
     performance: true
     has:
       - 'h1'
+
+  # Supports any of the entries that `css` supports
   css:
-    # Supports any of the entries that CSS supports
     valid: true
+  # Supports any of the entries that `js` supports
   js:
-    # Supports any of the entries that JS supports
     valid: true
+
   # The functionality tests will be applied to every HTML file
   functionality:
     noErrors: true
+
+  # Supports any of the entries that `files` supports
+  files:
+    maxWidth: 2500
+    maxHeight: 2500
+    maxSize: 300
+    smushed: true
 
 html:
   - path: index.html
   - path: about.html
     has:
       - 'h2'
+
+files:
+  - path: 'images/dino.jpg'
 ```
 
 With this setup everything from the `allFiles->html` entry would be applied to all the HTML files listed below—to help alleviate duplication.

@@ -30,6 +30,7 @@ const js = require('./lib/checks/javascript');
 const screenshots = require('./lib/checks/screenshots');
 const functionality = require('./lib/checks/functionality-tests');
 const liveWebsite = require('./lib/checks/live-website');
+const files = require('./lib/checks/files');
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
@@ -205,7 +206,7 @@ const startChecks = function () {
   if (markbotFile.naming || markbotFile.restrictFileTypes) {
     let group = `naming-${Date.now()}`;
 
-    listener.send('check-group:new', group, 'Naming & files');
+    listener.send('check-group:new', group, 'Naming & file restrictions');
 
     if (markbotFile.naming) naming.check(listener, currentFolderPath, group);
     if (markbotFile.restrictFileTypes) restrictFileTypes.check(listener, currentFolderPath, group);
@@ -327,6 +328,16 @@ const startChecks = function () {
 
     markbotFile.functionality.forEach(function (file) {
       functionality.check(listener, currentFolderPath, file, group);
+    });
+  }
+
+  if (markbotFile.files) {
+    let group = `files-${Date.now()}`;
+
+    listener.send('check-group:new', group, 'Files & images');
+
+    markbotFile.files.forEach(function (file) {
+      files.check(listener, currentFolderPath, file, group);
     });
   }
 };
