@@ -535,6 +535,7 @@ allFiles:
   # Supports any of the entries that `css` supports
   css:
     valid: true
+
   # Supports any of the entries that `js` supports
   js:
     valid: true
