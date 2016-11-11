@@ -13,12 +13,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- Removed `ImageOptim` from the error message to make the error messages slightly more opaque.
-- There’s now a timeout of 50ms on events in the interaction testing—it was consistently firing too early, even with the `requestAnimationFrame` slowdowns.
+- Removed “ImageOptim” from the error message to make the error messages slightly more opaque.
+- There’s now a timeout of `50ms` on events in the interaction testing—it was consistently firing too early, even with the `requestAnimationFrame` slowdowns.
 
 ### Fixed
 
 - Remove the “Best practices, outlines… not checked” error when HTML files are locked.
+- Markbot will now fail with an error when performing a `hover` functionality test and the element’s height or width is `0`.
 
 ---
 
