@@ -10,11 +10,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Image dimensions `minWidth` and `minHeight` can now be checked.
+- A directory can now be parsed by the `files` directive, relying on the settings of `allFiles`.
 
 ### Changed
 
 - Removed “ImageOptim” from the error message to make the error messages slightly more opaque.
 - There’s now a timeout of `50ms` on events in the interaction testing—it was consistently firing too early, even with the `requestAnimationFrame` slowdowns.
+- Extracted the directory listing & ignorable file list into their own modules.
+- Changed the naming conventions check to use the new directory listing module.
 
 ### Fixed
 

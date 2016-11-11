@@ -517,6 +517,10 @@ files:
     searchNot:
       - 'Allow:'
       - ['Disallow\:\s*\/', 'The disallow all directive (`Disallow: /`) should not be used']
+
+  # OR…
+  # Just pass a directory & rely on the `allFiles` directive described below
+  - director: "images"
 ```
 
 ### Targeting all files
