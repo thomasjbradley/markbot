@@ -11,9 +11,13 @@ const util = require('util');
 const https = require('https');
 const crypto = require('crypto');
 const mkdirp = require('mkdirp');
+const merge = require('merge-objects');
 
 const markbotFileGenerator = require('./lib/markbot-file-generator');
 const webServer = require('./lib/web-server');
+
+const listDir = require('./lib/list-dir');
+const stripPath = require('./lib/strip-path');
 
 const passcode = require('./lib/passcode');
 const locker = require('./lib/locker');
@@ -337,7 +341,19 @@ const startChecks = function () {
     listener.send('check-group:new', group, 'Files & images');
 
     markbotFile.files.forEach(function (file) {
-      files.check(listener, currentFolderPath, file, group);
+      if (file.directory) {
+        const fullPath = path.resolve(`${currentFolderPath}/${file.directory}`);
+
+        listDir(fullPath, function(dirFiles) {
+          dirFiles.forEach(function (singleFile) {
+            let newFileObj = merge(Object.assign({}, file), {path: stripPath(singleFile, currentFolderPath)});
+
+            files.check(listener, currentFolderPath, newFileObj, group);
+          });
+        });
+      } else {
+        files.check(listener, currentFolderPath, file, group);
+      }
     });
   }
 };
