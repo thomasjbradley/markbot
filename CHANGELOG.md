@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased] — 2016-11-16
+
+### Changed
+
+- Tried to improve performance scores by introducing `max-age` and compression. Had to rewrite the whole web server layer.
+
+---
+
 ## [4.4.0] — 2016-11-13
 
 ### Added
