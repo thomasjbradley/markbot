@@ -189,11 +189,12 @@ html:
     performance: true       # To use the default settings (what’s listed below)
     # OR
     performance:
-      speed: '3G'           # The network speed (WIFI-FAST, WIFI-REGULAR [WIFI], DSL, 4G-REGULAR [4G], 3G-GOOD [3G], 3G-REGULAR, 2G-GOOD [2G], 2G-REGULAR, GPRS)
+      speed: 'WIFI'         # The network speed (WIFI-FAST, WIFI-REGULAR [WIFI], DSL, 4G-REGULAR [4G], 3G-GOOD [3G], 3G-REGULAR, 2G-GOOD [2G], 2G-REGULAR, GPRS)
       budget:
         maxLoadTime: 1000   # Milliseconds for maximum load time
         maxRequests: 15     # Maximum number of assets
         maxSize: 800        # Maximum page size of all assets in kilobytes (kB)
+        maxFonts: 5         # Maximum number of fonts allowed on the page
 
     # Can be used to test for specific elements; each entry should be a valid CSS selector
     # Will be skipped if validation isn’t also checked—the document must be valid first
