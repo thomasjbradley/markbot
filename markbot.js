@@ -73,6 +73,7 @@ let isCheater = {
 };
 
 app.commandLine.appendSwitch('--ignore-certificate-errors');
+app.commandLine.appendSwitch('--disable-http-cache');
 
 const updateAppMenu = function () {
   menuOptions.showDevelop = (MARKBOT_DEVELOP_MENU && MARKBOT_LOCK_PASSCODE && passcode.matches(MARKBOT_LOCK_PASSCODE, config.secret, config.passcodeHash));
