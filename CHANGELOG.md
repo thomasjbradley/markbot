@@ -11,10 +11,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - The network used to test the performance of the website is output to the activity window.
 - A new network setting that’s half way between WIFI and 4G called WIFI-REGULAR.
+- The ability to control the maximum number of fonts for the website with the performance budget.
 
 ### Changed
 
 - Tried to improve performance scores by introducing `max-age` and compression. Had to rewrite the whole web server layer.
+- The `<iframe>` tag is no longer required to be on separate lines.
 
 ---
 
