@@ -189,7 +189,7 @@ html:
     performance: true       # To use the default settings (what’s listed below)
     # OR
     performance:
-      speed: '3G'           # The network speed, matching Google Chrome (WIFI, DSL, 4G-REGULAR [4G], 3G-GOOD [3G], 3G-REGULAR, 2G-GOOD [2G], 2G-REGULAR, GPRS)
+      speed: '3G'           # The network speed (WIFI-FAST, WIFI-REGULAR [WIFI], DSL, 4G-REGULAR [4G], 3G-GOOD [3G], 3G-REGULAR, 2G-GOOD [2G], 2G-REGULAR, GPRS)
       budget:
         maxLoadTime: 1000   # Milliseconds for maximum load time
         maxRequests: 15     # Maximum number of assets

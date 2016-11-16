@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - The network used to test the performance of the website is output to the activity window.
+- A new network setting that’s half way between WIFI and 4G called WIFI-REGULAR.
 
 ### Changed
 
