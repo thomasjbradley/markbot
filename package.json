@@ -31,12 +31,12 @@
     "pem": "^1.8.3",
     "png-itxt": "^1.3.0",
     "stylelint": "^7.5.0",
-    "webcoach": "^0.28.4",
+    "webcoach": "^0.29.0",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
     "electron": "^1.4.5",
-    "electron-builder": "^7.18.0"
+    "electron-builder": "^8.6.0"
   },
   "scripts": {
     "start": "electron markbot.js",

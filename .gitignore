@@ -7,3 +7,5 @@ dist
 vendor/*.jar
 vendor/lib/*.jar
 build/background.tiff
+
+yarn.lock
