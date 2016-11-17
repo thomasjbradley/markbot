@@ -255,6 +255,9 @@ css:
       - ['.thang', 'width', '50px']
       # Starting the array with an `@` and a matching string will look inside media queries
       - ['@38em', 'html', 'font-size', '110%']
+      # Adding another argument at the end will be a custom error message
+      - ['html', 'font-size', '100%', 'The `font-size` should always be `100%`']
+      - ['@38em', 'html', 'font-size', '110%', 'The `font-size` should always increase at `38em`']
 
     # Can be used to test that specific selectors do not contain certain properties
     # I would use this for ensuring as little CSS duplication as possible, like forcing students to use multiple classes
@@ -265,6 +268,9 @@ css:
       - ['.btn-subtle', ['font-size', 'text-decoration']]
       # Starting the array with an `@` and a matching string will look inside media queries
       - ['@110em']
+      # Adding another argument at the end will be a custom error message
+      - ['.btn-subtle', ['font-size', 'text-decoration'], 'The `.btn-subtle` shouldn’t be used']
+      - ['@110em', '.btn-subtle', ['font-size', 'text-decoration'], 'The `.btn-subtle` shouldn’t be used']
 
     # Regex searches on the file
     # If given an array, the second argument can be a custom error message
