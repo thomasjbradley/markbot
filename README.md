@@ -123,6 +123,8 @@ Here are the properties that you can use in the Markbot file for testing:
 - `js` — [for testing Javascript files.](#javascript-file-tests)
 - `screenshots` — [for comparing visual differences with screenshots.](#screenshot-comparisons)
 - `functionality` — [for running Javascript live tests against the website.](#functionality-tests)
+- `files` — [for checking images & plain text files](#file--image-tests)
+- `allFiles` — [for common requirements between all files of a specific type](#targeting-all-files)
 
 **If you plan on using the Canvas auto-grading feature, check out [Markbot Server](#markbot-server).**
 
@@ -527,7 +529,7 @@ files:
 
   # OR…
   # Just pass a directory & rely on the `allFiles` directive described below
-  - director: "images"
+  - directory: "images"
 ```
 
 ### Targeting all files
