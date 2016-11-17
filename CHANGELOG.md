@@ -19,6 +19,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Tried to improve performance scores by introducing `max-age` and compression. Had to rewrite the whole web server layer.
 - The `<iframe>` tag is no longer required to be on separate lines.
 
+### Fixed
+
+- The performance budget default template was getting merged with the users settings permanently.
+
 ---
 
 ## [4.4.0] — 2016-11-13
