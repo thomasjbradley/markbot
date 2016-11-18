@@ -13,7 +13,9 @@ const crypto = require('crypto');
 const mkdirp = require('mkdirp');
 const merge = require('merge-objects');
 
+const markbotMain = require('./lib/markbot-main');
 const markbotFileGenerator = require('./lib/markbot-file-generator');
+const webLoaderQueue = require('./lib/web-loader-queue');
 const webServer = require('./lib/web-server');
 
 const listDir = require('./lib/list-dir');
@@ -49,7 +51,6 @@ let markbotFile = {};
 let mainWindow;
 let debugWindow;
 let differWindow;
-let listener;
 let menuCallbacks = {};
 let menuOptions = {
   openRepo: false,
@@ -77,7 +78,7 @@ app.commandLine.appendSwitch('--disable-http-cache');
 
 const updateAppMenu = function () {
   menuOptions.showDevelop = (MARKBOT_DEVELOP_MENU && MARKBOT_LOCK_PASSCODE && passcode.matches(MARKBOT_LOCK_PASSCODE, config.secret, config.passcodeHash));
-  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, listener, menuCallbacks, menuOptions)));
+  Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, menuCallbacks, menuOptions)));
 };
 
 const createMainWindow = function () {
@@ -103,8 +104,7 @@ const createMainWindow = function () {
     mainWindow.show();
   });
 
-  listener = mainWindow.webContents;
-  webServer.init(listener);
+  markbotMain.init(mainWindow.webContents);
 };
 
 const createDebugWindow = function () {
@@ -151,18 +151,18 @@ const checkForCheating = function () {
   actualFilesLocker = locker.new(config.passcodeHash);
 
   markbotLockFileLocker.read(markbotLockFilePath);
-  requirementsFinder.lock(listener, actualFilesLocker, currentFolderPath, markbotFile);
+  requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
   isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());
 
   if (isCheater.cheated) {
-    listener.send('debug', 'CHEATER!');
+    markbotMain.debug('CHEATER!');
 
     for (let match in isCheater.matches) {
       if (!isCheater.matches[match].equal) {
         if (isCheater.matches[match].actualHash && isCheater.matches[match].expectedHash) {
-          listener.send('debug', `&nbsp;&nbsp;┖ \`${match}\` is different — expecting: \`${isCheater.matches[match].expectedHash.slice(0, 7)}…\` actual: \`${isCheater.matches[match].actualHash.slice(0, 7)}…\``);
+          markbotMain.debug(`&nbsp;&nbsp;┖ \`${match}\` is different — expecting: \`${isCheater.matches[match].expectedHash.slice(0, 7)}…\` actual: \`${isCheater.matches[match].actualHash.slice(0, 7)}…\``);
         } else {
-          listener.send('debug', `&nbsp;&nbsp;┖ \`${match}\` is different`);
+          markbotMain.debug(`&nbsp;&nbsp;┖ \`${match}\` is different`);
         }
       }
     }
@@ -175,11 +175,11 @@ const hasFilesToCheck = function () {
   const noJsFiles = (typeof markbotFile.js === 'undefined' || markbotFile.js.length < 1);
 
   if (noHtmlFiles && noCssFiles && noJsFiles) {
-    listener.send('app:file-missing');
+    markbotMain.send('app:file-missing');
     webServer.stop();
 
     setTimeout(function () {
-      listener.send('alert', 'There are no HTML, CSS or Javascript files for Markbot to check');
+      markbotMain.send('alert', 'There are no HTML, CSS or Javascript files for Markbot to check');
     }, 75);
 
     return false;
@@ -192,29 +192,29 @@ const startChecks = function () {
   let markbotGroup = `markbot-${Date.now()}`;
   let repoOrFolder = (markbotFile.repo) ? markbotFile.repo : currentFolderPath.split(/[\\\/]/).pop();
 
-  listener.send('app:file-exists', repoOrFolder);
+  markbotMain.send('app:file-exists', repoOrFolder);
 
-  if (markbotFile.canvasCourse) listener.send('app:with-canvas');
+  if (markbotFile.canvasCourse) markbotMain.send('app:with-canvas');
 
-  listener.send('check-group:new', markbotGroup, 'Markbot file');
+  markbotMain.send('check-group:new', markbotGroup, 'Markbot file');
 
   if (markbotFile.internalTemplate) {
-    listener.send('check-group:item-new', markbotGroup, 'file', 'Not found');
-    listener.send('check-group:item-complete', markbotGroup, 'file', 'Not found');
-    listener.send('check-group:item-new', markbotGroup, 'settings', 'Using default settings');
-    listener.send('check-group:item-complete', markbotGroup, 'settings', 'Using default settings');
+    markbotMain.send('check-group:item-new', markbotGroup, 'file', 'Not found');
+    markbotMain.send('check-group:item-complete', markbotGroup, 'file', 'Not found');
+    markbotMain.send('check-group:item-new', markbotGroup, 'settings', 'Using default settings');
+    markbotMain.send('check-group:item-complete', markbotGroup, 'settings', 'Using default settings');
   } else {
-    listener.send('check-group:item-new', markbotGroup, 'file', 'Exists');
-    listener.send('check-group:item-complete', markbotGroup, 'file', 'Exists');
+    markbotMain.send('check-group:item-new', markbotGroup, 'file', 'Exists');
+    markbotMain.send('check-group:item-complete', markbotGroup, 'file', 'Exists');
   }
 
   if (markbotFile.naming || markbotFile.restrictFileTypes) {
     let group = `naming-${Date.now()}`;
 
-    listener.send('check-group:new', group, 'Naming & file restrictions');
+    markbotMain.send('check-group:new', group, 'Naming & file restrictions');
 
-    if (markbotFile.naming) naming.check(listener, currentFolderPath, group);
-    if (markbotFile.restrictFileTypes) restrictFileTypes.check(listener, currentFolderPath, group);
+    if (markbotFile.naming) naming.check(currentFolderPath, group);
+    if (markbotFile.restrictFileTypes) restrictFileTypes.check(currentFolderPath, group);
   }
 
   if (markbotFile.commits || markbotFile.git) {
@@ -226,15 +226,15 @@ const startChecks = function () {
       };
     }
 
-    listener.send('check-group:new', group, 'Git & GitHub');
-    git.check(listener, currentFolderPath, markbotFile.git, config.ignoreCommitEmails, group);
+    markbotMain.send('check-group:new', group, 'Git & GitHub');
+    git.check(currentFolderPath, markbotFile.git, config.ignoreCommitEmails, group);
   }
 
   if (markbotFile.liveWebsite && markbotFile.repo) {
     let group = `live-website-${Date.now()}`;
 
-    listener.send('check-group:new', group, 'Live website');
-    liveWebsite.check(listener, currentFolderPath, group, markbotFile.repo, menuOptions.signOutUsername);
+    markbotMain.send('check-group:new', group, 'Live website');
+    liveWebsite.check(currentFolderPath, group, markbotFile.repo, menuOptions.signOutUsername);
   }
 
   let uniqueGroup = `html-unique-${Date.now()}`;
@@ -242,9 +242,9 @@ const startChecks = function () {
   let htmlUniqueLabel = 'HTML unique content';
 
   if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
-    listener.send('check-group:new', uniqueGroup, 'All files');
-    listener.send('check-group:item-new', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
-    listener.send('check-group:item-computing', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
+    markbotMain.send('check-group:new', uniqueGroup, 'All files');
+    markbotMain.send('check-group:item-new', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
+    markbotMain.send('check-group:item-computing', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
   }
 
   if (markbotFile.html) {
@@ -254,12 +254,12 @@ const startChecks = function () {
     markbotFile.html.forEach(function (file) {
       let group = `html-${file.path}-${Date.now()}`;
 
-      listener.send('check-group:new', group, file.path);
+      markbotMain.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        html.check(listener, currentFolderPath, file, group, isCheater.matches[file.path].equal);
+        html.check(currentFolderPath, file, group, isCheater.matches[file.path].equal);
       } else {
-        html.check(listener, currentFolderPath, file, group, NOT_CHEATER);
+        html.check(currentFolderPath, file, group, NOT_CHEATER);
       }
 
       if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
@@ -284,7 +284,7 @@ const startChecks = function () {
         }
       }
 
-      listener.send('check-group:item-complete', uniqueGroup, htmlUniqueId, htmlUniqueLabel, uniqueErrors);
+      markbotMain.send('check-group:item-complete', uniqueGroup, htmlUniqueId, htmlUniqueLabel, uniqueErrors);
     }
   }
 
@@ -292,12 +292,12 @@ const startChecks = function () {
     markbotFile.css.forEach(function (file) {
       let group = `css-${file.path}-${Date.now()}`;
 
-      listener.send('check-group:new', group, file.path);
+      markbotMain.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        css.check(listener, currentFolderPath, file, group, isCheater.matches[file.path].equal);
+        css.check(currentFolderPath, file, group, isCheater.matches[file.path].equal);
       } else {
-        css.check(listener, currentFolderPath, file, group, NOT_CHEATER);
+        css.check(currentFolderPath, file, group, NOT_CHEATER);
       }
     });
   }
@@ -306,40 +306,20 @@ const startChecks = function () {
     markbotFile.js.forEach(function (file) {
       let group = `js-${file.path}-${Date.now()}`;
 
-      listener.send('check-group:new', group, file.path);
+      markbotMain.send('check-group:new', group, file.path);
 
       if (isCheater.matches[file.path]) {
-        js.check(listener, currentFolderPath, file, group, isCheater.matches[file.path].equal);
+        js.check(currentFolderPath, file, group, isCheater.matches[file.path].equal);
       } else {
-        js.check(listener, currentFolderPath, file, group, NOT_CHEATER);
+        js.check(currentFolderPath, file, group, NOT_CHEATER);
       }
-    });
-  }
-
-  if (markbotFile.screenshots) {
-    let group = `screenshots-${Date.now()}`;
-
-    listener.send('check-group:new', group, 'Screenshots');
-
-    markbotFile.screenshots.forEach(function (file) {
-      screenshots.check(listener, currentFolderPath, file, group);
-    });
-  }
-
-  if (markbotFile.functionality) {
-    let group = `functionality-${Date.now()}`;
-
-    listener.send('check-group:new', group, 'Functionality');
-
-    markbotFile.functionality.forEach(function (file) {
-      functionality.check(listener, currentFolderPath, file, group);
     });
   }
 
   if (markbotFile.files) {
     let group = `files-${Date.now()}`;
 
-    listener.send('check-group:new', group, 'Files & images');
+    markbotMain.send('check-group:new', group, 'Files & images');
 
     markbotFile.files.forEach(function (file) {
       if (file.directory) {
@@ -349,12 +329,32 @@ const startChecks = function () {
           dirFiles.forEach(function (singleFile) {
             let newFileObj = merge(Object.assign({}, file), {path: stripPath(singleFile, currentFolderPath)});
 
-            files.check(listener, currentFolderPath, newFileObj, group);
+            files.check(currentFolderPath, newFileObj, group);
           });
         });
       } else {
-        files.check(listener, currentFolderPath, file, group);
+        files.check(currentFolderPath, file, group);
       }
+    });
+  }
+
+  if (markbotFile.functionality) {
+    let group = `functionality-${Date.now()}`;
+
+    markbotMain.send('check-group:new', group, 'Functionality');
+
+    markbotFile.functionality.forEach(function (file) {
+      functionality.check(currentFolderPath, file, group);
+    });
+  }
+
+  if (markbotFile.screenshots) {
+    let group = `screenshots-${Date.now()}`;
+
+    markbotMain.send('check-group:new', group, 'Screenshots');
+
+    markbotFile.screenshots.forEach(function (file) {
+      screenshots.check(currentFolderPath, file, group);
     });
   }
 };
@@ -362,7 +362,7 @@ const startChecks = function () {
 const handleMarkbotFile = function (mf) {
   markbotFile = mf;
 
-  if (mf.inheritFileNotFound) listener.send('debug', `Inherited Markbot file “${mf.inherit}” not found`);
+  if (mf.inheritFileNotFound) markbotMain.debug(`Inherited Markbot file “${mf.inherit}” not found`);
 
   initializeInterface();
   updateAppMenu();
@@ -390,7 +390,7 @@ app.on('activate', function () {
 
 app.on('open-file', function (e, path) {
   e.preventDefault();
-  listener.send('app:file-dropped', path);
+  markbotMain.send('app:file-dropped', path);
 });
 
 exports.newDebugGroup = function (label) {
@@ -517,7 +517,7 @@ exports.submitToCanvas = function (ghUsername, cb) {
     ;
 
   getVars.push(`sig=${sig}`);
-  listener.send('debug', getVars.join('&'));
+  markbotMain.debug(getVars.join('&'));
 
   https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {
     res.on('data', function (data) {
