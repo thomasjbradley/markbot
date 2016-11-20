@@ -5,7 +5,7 @@ const path = require('path');
 const util = require('util');
 const gitCommits = require('git-commits');
 const exists = require('../../file-exists');
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('../../markbot-main');
 
 const matchesProfEmail = function (email, profEmails) {
   return !profEmails.indexOf(email);

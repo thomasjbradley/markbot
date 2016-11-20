@@ -4,7 +4,7 @@ const path = require('path');
 const util = require('util');
 const exec = require('child_process').exec;
 const xmlParser = require('xml2js').parseString;
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('../../markbot-main');
 
 /**
  * This function is mainly to work around Windows issues

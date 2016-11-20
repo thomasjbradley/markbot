@@ -4,7 +4,7 @@ const util = require('util');
 const path = require('path');
 const linter = require('eslint').linter;
 const linterConfig = require('./validation/eslint.json');
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('../../markbot-main');
 
 const bypass = function (checkGroup, checkId, checkLabel) {
   markbotMain.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);

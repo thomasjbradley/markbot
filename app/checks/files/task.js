@@ -1,17 +1,18 @@
 (function () {
   'use strict';
 
+  const main = require('electron').remote;
   const fs = require('fs');
   const path = require('path');
   const util = require('util');
-  const calipers = require('calipers')('png', 'jpeg');
-  const exif = require('exif').ExifImage;
-  const pngitxt = require('png-itxt');
-  const merge = require('merge-objects');
-  const stripPath = require('./strip-path');
-  const exists = require('./file-exists');
-  const listDir = require('./list-dir');
-  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const calipers = main.require('calipers')('png', 'jpeg');
+  const exif = main.require('exif').ExifImage;
+  const pngitxt = main.require('png-itxt');
+  const merge = main.require('merge-objects');
+  const markbotMain = main.require('./app/markbot-main');
+  const stripPath = main.require('./app/strip-path');
+  const exists = main.require('./app/file-exists');
+  const listDir = main.require('./app/list-dir');
 
   const group = taskDetails.group;
   let totalFiles = 0;

@@ -6,11 +6,11 @@ const PRELOAD_JS = __dirname + '/hidden-browser-window-preload.js';
 const PRELOAD_PATH = 'chrome://ensure-electron-resolution/';
 
 const path = require('path');
-const ipcMain = require('electron').remote.ipcMain;
-const BrowserWindow = require('electron').remote.BrowserWindow;
+const ipcMain = require('electron').ipcMain;
+const BrowserWindow = require('electron').BrowserWindow;
 const networks = require('./networks');
 const webServer = require('./web-server');
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('./markbot-main');
 
 const getNewBrowserWindow = function (userOpts) {
   const defaultOpts = {
@@ -116,7 +116,7 @@ const load = function (url, opts, next) {
 
   ipcMain.on('__markbot-hidden-browser-devtools-loaded', function (e) {
     process.nextTick(function () {
-      win.loadURL(getUrl(url), {'extraHeaders': 'pragma: no-cache\n'});
+      win.loadURL(getUrl(url), {'extraHeaders': 'Pragma: no-cache\n'});
     });
   });
 
@@ -146,7 +146,7 @@ const load = function (url, opts, next) {
     win.webContents.session.enableNetworkEmulation(speed);
   }
 
-  win.loadURL(PRELOAD_PATH, {'extraHeaders': 'pragma: no-cache\n'});
+  win.loadURL(PRELOAD_PATH, {'extraHeaders': 'Pragma: no-cache\n'});
 };
 
 module.exports = {

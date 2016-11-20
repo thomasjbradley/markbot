@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
 const gitStatus = require('git-get-status');
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('../../markbot-main');
 
 module.exports.check = function (fullPath, gitOpts, group, next) {
   const allSynced = 'all-synced';

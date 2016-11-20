@@ -43,7 +43,7 @@ const spawnTaskRunner = function () {
     }
   });
 
-  bw.loadURL('file://' + path.resolve('./app/task-pool.html'));
+  bw.loadURL('file://' + path.resolve(__dirname + '/task-pool.html'));
 
   if (DEBUG) {
     bw.webContents.openDevTools({

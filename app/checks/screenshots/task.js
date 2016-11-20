@@ -5,19 +5,21 @@
   const MAX_WINDOW_HEIGHT = 6000;
   const MAX_WINDOW_WIDTH = 3000;
 
+  const main = require('electron').remote;
   const fs = require('fs');
   const path = require('path');
   const fork = require('child_process').fork;
+  const jimp = main.require('jimp');
   const ipcRenderer = require('electron').ipcRenderer;
-  const BrowserWindow = require('electron').remote.BrowserWindow;
-  const jimp = require('jimp');
-  const fileExists = require('./file-exists');
-  const webLoader = require('./web-loader');
-  const screenshotNamingService = require('./checks/screenshots/naming-service');
-  const defaultScreenshotCSS = fs.readFileSync(path.resolve(__dirname + '/checks/screenshots/default.css'), 'utf8');
-  const defaultScreenshotJS = fs.readFileSync(path.resolve(__dirname + '/checks/screenshots/default.js'), 'utf8');
-  const classify = require('./classify');
-  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const markbotMain = main.require('./app/markbot-main');
+  const BrowserWindow = main.BrowserWindow;
+  const fileExists = main.require('./app/file-exists');
+  const webLoader = main.require('./app/web-loader');
+  const classify = main.require('./app/classify');
+  const screenshotNamingService = main.require('./app/checks/screenshots/naming-service');
+  const defaultsService = main.require('./app/checks/screenshots/defaults-service');
+  const defaultScreenshotCSS = defaultsService.get('default.css');
+  const defaultScreenshotJS = defaultsService.get('default.js');
 
   const group = taskDetails.group;
   const folderPath = taskDetails.cwd;

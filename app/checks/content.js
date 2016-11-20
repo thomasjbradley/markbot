@@ -1,7 +1,7 @@
 'use strict';
 
 const util = require('util');
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('../markbot-main');
 
 const cleanRegex = function (regex) {
   return regex.replace(/\\(?!\\)/g, '');

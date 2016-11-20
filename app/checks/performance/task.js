@@ -1,14 +1,15 @@
 (function () {
   'use strict';
 
+  const main = require('electron').remote;
   const path = require('path');
-  const merge = require('merge-objects');
-  const ipcMain = require('electron').remote.ipcMain;
-  const webcoach = require('webcoach');
-  const webLoader = require('./web-loader');
-  const adviceIgnoreIds = require('./checks/performance/ignore-advice-ids.json');
-  const webServer = require('electron').remote.require('./app/web-server');
-  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const merge = main.require('merge-objects');
+  const webcoach = main.require('webcoach');
+  const ipcRenderer = require('electron').ipcRenderer;
+  const markbotMain = main.require('./app/markbot-main');
+  const webLoader = main.require('./app/web-loader');
+  const webServer = main.require('./app/web-server');
+  const adviceIgnoreIds = main.require('./app/checks/performance/ignore-advice-ids.json');
 
   const group = taskDetails.group;
   const fullPath = taskDetails.cwd;
@@ -44,8 +45,7 @@
         const webcoach = nodeRequire('webcoach');
 
         webcoach.getDomAdvice().then(function (data) {
-          console.log(data);
-          nodeRequire('electron').ipcRenderer.send('__markbot-hidden-browser-perf-dom-advice', JSON.stringify(eval(data)));
+          nodeRequire('electron').remote.BrowserWindow.fromId(${taskRunnerId}).webContents.send('__markbot-hidden-browser-perf-dom-advice', JSON.stringify(eval(data)));
         });
       }());
     `;
@@ -128,10 +128,10 @@
     let perf = getPerformanceSettings(file);
     let label = `${file.path} — ${perf.speed}`
 
-    ipcMain.on('__markbot-hidden-browser-perf-dom-advice', function (event, data) {
+    ipcRenderer.on('__markbot-hidden-browser-perf-dom-advice', function (event, data) {
       var domAdvice = JSON.parse(data);
 
-      ipcMain.removeAllListeners('__markbot-hidden-browser-perf-dom-advice');
+      ipcRenderer.removeAllListeners('__markbot-hidden-browser-perf-dom-advice');
       webLoader.destroy(win);
       win = null;
 

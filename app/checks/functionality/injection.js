@@ -1,7 +1,5 @@
 const __MarkbotInjectedFunctions = {
 
-  ipcRenderer: nodeRequire('electron').ipcRenderer,
-  browserWindow: nodeRequire('electron').remote.BrowserWindow,
   failed: false,
 
   $: function (sel, trgt = document) {
@@ -68,11 +66,10 @@ const __MarkbotInjectedFunctions = {
   },
 
   send: function (eventStr, opts = {}, next = null) {
-    const win = __MarkbotInjectedFunctions.browserWindow.fromId(__MarkbotInjectedFunctions.browserWindowID);
     let defaultOpts = { type: eventStr, isTrusted: true };
     let allOpts = Object.assign(defaultOpts, opts);
 
-    win.webContents.sendInputEvent(allOpts);
+    __MarkbotInjectedFunctions.browserWindow.sendInputEvent(allOpts);
 
     if (next) {
       setTimeout(function () {
@@ -103,16 +100,18 @@ const __MarkbotInjectedFunctions = {
   },
 
   pass: function () {
-    if (!__MarkbotInjectedFunctions.failed) __MarkbotInjectedFunctions.ipcRenderer.send(__MarkbotInjectedFunctions.passLabel);
+    console.log('Pass!', __MarkbotInjectedFunctions.failed);
+    if (!__MarkbotInjectedFunctions.failed) __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.passLabel);
   },
 
   fail: function (reason) {
+    console.log('Fail!');
     __MarkbotInjectedFunctions.failed = true;
-    __MarkbotInjectedFunctions.ipcRenderer.send(__MarkbotInjectedFunctions.failLabel, reason);
+    __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.failLabel, reason);
   },
 
   debug: function (...message) {
-    __MarkbotInjectedFunctions.ipcRenderer.send(__MarkbotInjectedFunctions.debugLabel, ...message);
+    __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.debugLabel, ...message);
   }
 
 };

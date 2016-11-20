@@ -11,7 +11,7 @@ const viewportChecker = require('./best-practices/viewport');
 const doublespaceChecker = require('./best-practices/double-space');
 const spaceBeforeCloseGTChecker = require('./best-practices/space-before-close-greater-than');
 const indentationChecker = require('./best-practices/indentation');
-const markbotMain = require('electron').remote.require('./app/markbot-main');
+const markbotMain = require('../../markbot-main');
 
 const bypass = function (checkGroup, checkId, checkLabel) {
   markbotMain.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);

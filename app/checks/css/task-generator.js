@@ -10,7 +10,7 @@ module.exports.generateTaskList = function (markbotFile, isCheater) {
         groupLabel: file.path,
         options: {
           file: file,
-          cheater: (isCheater.matches[file.path]) ? isCheater.matches[file.path].equal : false,
+          cheater: (isCheater.matches[file.path]) ? !isCheater.matches[file.path].equal : false,
         },
       };
 

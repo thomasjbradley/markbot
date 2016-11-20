@@ -3,25 +3,29 @@
 
   const fs = require('fs');
   const path = require('path');
-  const util = require('util');
-  const ipcMain = require('electron').remote.ipcMain;
-  const fileExists = require('./file-exists');
-  const classify = require('./classify');
-  const webLoader = require('./web-loader');
-  const injectionJs = fs.readFileSync(path.resolve(__dirname + '/checks/functionality/injection.js'), 'utf8');
-  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const main = require('electron').remote;
+  const ipcRenderer = require('electron').ipcRenderer;
+  const markbotMain = main.require('./app/markbot-main');
+  const fileExists = main.require('./app/file-exists');
+  const classify = main.require('./app/classify');
+  const webLoader = main.require('./app/web-loader');
+  const defaultsService = main.require('./app/checks/functionality/defaults-service');
+  const injectionJs = defaultsService.get('injection.js');
 
   const group = taskDetails.group;
   const fullPath = taskDetails.cwd;
 
   let totalFiles = 0;
 
-  const makeExecTestJs = function (js, testIndex, label, winId) {
+  const makeExecTestJs = function (js, testIndex, label, testWinId) {
     return `
       (function () {
         ${injectionJs}
 
-        __MarkbotInjectedFunctions.browserWindowID = ${winId};
+        __MarkbotInjectedFunctions.browserWindowId = ${testWinId};
+        __MarkbotInjectedFunctions.browserWindow = nodeRequire('electron').remote.BrowserWindow.fromId(${testWinId}).webContents;
+        __MarkbotInjectedFunctions.taskRunnerId = ${taskRunnerId};
+        __MarkbotInjectedFunctions.taskRunner = nodeRequire('electron').remote.BrowserWindow.fromId(${taskRunnerId}).webContents;
         __MarkbotInjectedFunctions.passLabel = '__markbot-functionality-test-pass-${label}';
         __MarkbotInjectedFunctions.failLabel = '__markbot-functionality-test-fail-${label}';
         __MarkbotInjectedFunctions.debugLabel = '__markbot-functionality-test-debug-${label}';
@@ -64,10 +68,10 @@
     let win;
 
     const cleanup = function () {
-      ipcMain.removeAllListeners('__markbot-functionality-error');
-      ipcMain.removeAllListeners('__markbot-functionality-test-pass-' + listenerLabel);
-      ipcMain.removeAllListeners('__markbot-functionality-test-fail-' + listenerLabel);
-      ipcMain.removeAllListeners('__markbot-functionality-test-debug-' + listenerLabel);
+      ipcRenderer.removeAllListeners('__markbot-functionality-error');
+      ipcRenderer.removeAllListeners('__markbot-functionality-test-pass-' + listenerLabel);
+      ipcRenderer.removeAllListeners('__markbot-functionality-test-fail-' + listenerLabel);
+      ipcRenderer.removeAllListeners('__markbot-functionality-test-debug-' + listenerLabel);
 
       webLoader.destroy(win);
       win = null;
@@ -82,14 +86,14 @@
 
     markbotMain.send('check-group:item-computing', group, file.path, file.path);
 
-    ipcMain.on('__markbot-functionality-error', function (event, message, line, filename) {
+    ipcRenderer.on('__markbot-functionality-error', function (event, message, line, filename) {
       filename = filename.replace(fullPath, '').replace('file:///', '');
       cleanup();
       markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message} — \`${filename}\` on line ${line}`]);
       next();
     });
 
-    ipcMain.on('__markbot-functionality-test-pass-' + listenerLabel, function(event) {
+    ipcRenderer.on('__markbot-functionality-test-pass-' + listenerLabel, function(event) {
       if (file.tests.length > 0) {
         currentTestIndex++
         runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
@@ -100,13 +104,13 @@
       }
     });
 
-    ipcMain.on('__markbot-functionality-test-fail-' + listenerLabel, function(event, reason) {
+    ipcRenderer.on('__markbot-functionality-test-fail-' + listenerLabel, function(event, reason) {
       cleanup();
       markbotMain.send('check-group:item-complete', group, file.path, file.path, [`The website isn’t functioning as expected: ${reason}`]);
       next();
     });
 
-    ipcMain.on('__markbot-functionality-test-debug-' + listenerLabel, function (event, ...e) {
+    ipcRenderer.on('__markbot-functionality-test-debug-' + listenerLabel, function (event, ...e) {
       markbotMain.debug(...e);
     });
 
