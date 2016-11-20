@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.0.1] — 2016-11-20
+
+### Changed
+
+- Disabled `asar` compression for the application—it was significantly slowing performance testing, by about 300ms. I’d love to be able to turn it back on in the future.
+
+---
+
 ## [5.0.0] — 2016-11-20
 
 ### Added

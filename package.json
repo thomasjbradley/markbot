@@ -60,9 +60,7 @@
     "productName": "Markbot",
     "compression": "maximum",
     "extend-info": "markbot-extra.plist",
-    "asar": {
-      "unpackDir": "vendor"
-    },
+    "asar": false,
     "mac": {
       "target": "dmg",
       "category": "public.app-category.developer-tools"
