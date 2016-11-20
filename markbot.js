@@ -11,39 +11,23 @@ const util = require('util');
 const https = require('https');
 const crypto = require('crypto');
 const mkdirp = require('mkdirp');
-const merge = require('merge-objects');
 
-const markbotMain = require('./lib/markbot-main');
-const markbotFileGenerator = require('./lib/markbot-file-generator');
-const webLoaderQueue = require('./lib/web-loader-queue');
-const webServer = require('./lib/web-server');
-
-const listDir = require('./lib/list-dir');
-const stripPath = require('./lib/strip-path');
-
-const passcode = require('./lib/passcode');
-const locker = require('./lib/locker');
-const requirementsFinder = require('./lib/requirements-finder');
-const lockMatcher = require('./lib/lock-matcher');
-const exists = require('./lib/file-exists');
-const naming = require('./lib/checks/naming-conventions');
-const restrictFileTypes = require('./lib/checks/restrict-file-types');
-const git = require('./lib/checks/git');
-const html = require('./lib/checks/html');
-const htmlUnique = require('./lib/checks/html-unique');
-const css = require('./lib/checks/css');
-const js = require('./lib/checks/javascript');
-const screenshots = require('./lib/checks/screenshots');
-const functionality = require('./lib/checks/functionality-tests');
-const liveWebsite = require('./lib/checks/live-website');
-const files = require('./lib/checks/files');
+const markbotMain = require('./app/markbot-main');
+const markbotFileGenerator = require('./app/markbot-file-generator');
+const webServer = require('./app/web-server');
+const screenshotNamingService = require('./app/checks/screenshots/naming-service');
+const passcode = require('./app/passcode');
+const locker = require('./app/locker');
+const requirementsFinder = require('./app/requirements-finder');
+const lockMatcher = require('./app/lock-matcher');
+const exists = require('./app/file-exists');
+const checkManager = require('./app/check-manager');
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
-const appMenu = require('./lib/menu');
+const appMenu = require('./app/menu');
 const MARKBOT_FILE = '.markbot.yml';
 const MARKBOT_LOCK_FILE = '.markbot.lock';
-const NOT_CHEATER = true;
 
 let appPkg = require('./package.json');
 let config = require('./config.json');
@@ -91,7 +75,7 @@ const createMainWindow = function () {
     titleBarStyle: 'hidden-inset'
   });
 
-  mainWindow.loadURL('file://' + __dirname + '/frontend/index.html');
+  mainWindow.loadURL('file://' + __dirname + '/frontend/main/main.html');
 
   mainWindow.on('closed', function () {
     if (differWindow) differWindow.destroy();
@@ -121,7 +105,7 @@ const createDebugWindow = function () {
     debugWindow.hide();
   })
 
-  debugWindow.loadURL('file://' + __dirname + '/frontend/debug.html');
+  debugWindow.loadURL('file://' + __dirname + '/frontend/debug/debug.html');
 };
 
 const createWindows = function () {
@@ -192,6 +176,9 @@ const startChecks = function () {
   let markbotGroup = `markbot-${Date.now()}`;
   let repoOrFolder = (markbotFile.repo) ? markbotFile.repo : currentFolderPath.split(/[\\\/]/).pop();
 
+  markbotFile.cwd = currentFolderPath;
+  markbotFile.username = menuOptions.signOutUsername;
+
   markbotMain.send('app:file-exists', repoOrFolder);
 
   if (markbotFile.canvasCourse) markbotMain.send('app:with-canvas');
@@ -208,155 +195,9 @@ const startChecks = function () {
     markbotMain.send('check-group:item-complete', markbotGroup, 'file', 'Exists');
   }
 
-  if (markbotFile.naming || markbotFile.restrictFileTypes) {
-    let group = `naming-${Date.now()}`;
-
-    markbotMain.send('check-group:new', group, 'Naming & file restrictions');
-
-    if (markbotFile.naming) naming.check(currentFolderPath, group);
-    if (markbotFile.restrictFileTypes) restrictFileTypes.check(currentFolderPath, group);
-  }
-
-  if (markbotFile.commits || markbotFile.git) {
-    let group = `git-${Date.now()}`;
-
-    if (!markbotFile.git && markbotFile.commits) {
-      markbotFile.git = {
-        numCommits: markbotFile.commits
-      };
-    }
-
-    markbotMain.send('check-group:new', group, 'Git & GitHub');
-    git.check(currentFolderPath, markbotFile.git, config.ignoreCommitEmails, group);
-  }
-
-  if (markbotFile.liveWebsite && markbotFile.repo) {
-    let group = `live-website-${Date.now()}`;
-
-    markbotMain.send('check-group:new', group, 'Live website');
-    liveWebsite.check(currentFolderPath, group, markbotFile.repo, menuOptions.signOutUsername);
-  }
-
-  let uniqueGroup = `html-unique-${Date.now()}`;
-  let htmlUniqueId = 'html-unique';
-  let htmlUniqueLabel = 'HTML unique content';
-
-  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
-    markbotMain.send('check-group:new', uniqueGroup, 'All files');
-    markbotMain.send('check-group:item-new', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
-    markbotMain.send('check-group:item-computing', uniqueGroup, htmlUniqueId, htmlUniqueLabel);
-  }
-
-  if (markbotFile.html) {
-    let uniqueCapture = {};
-    let uniqueErrors = [];
-
-    markbotFile.html.forEach(function (file) {
-      let group = `html-${file.path}-${Date.now()}`;
-
-      markbotMain.send('check-group:new', group, file.path);
-
-      if (isCheater.matches[file.path]) {
-        html.check(currentFolderPath, file, group, isCheater.matches[file.path].equal);
-      } else {
-        html.check(currentFolderPath, file, group, NOT_CHEATER);
-      }
-
-      if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
-        let uniqueFinds = htmlUnique.find(currentFolderPath, file, markbotFile.allFiles.html.unique);
-
-        if (uniqueFinds === false) uniqueErrors.push(`The \`${file.path}\` file cannot be found`);
-
-        for (let uniq in uniqueFinds) {
-          if (!uniqueCapture[uniq]) uniqueCapture[uniq] = {};
-          if (!uniqueCapture[uniq][uniqueFinds[uniq]]) uniqueCapture[uniq][uniqueFinds[uniq]] = [];
-          uniqueCapture[uniq][uniqueFinds[uniq]].push(file.path);
-        }
-      }
-    });
-
-    if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.unique) {
-      for (let uniq in uniqueCapture) {
-        for (let content in uniqueCapture[uniq]) {
-          if (uniqueCapture[uniq][content].length > 1) {
-            uniqueErrors.push(`These files share the same \`${uniq}\` but they all should be unique: \`${uniqueCapture[uniq][content].join('`, `')}\``);
-          }
-        }
-      }
-
-      markbotMain.send('check-group:item-complete', uniqueGroup, htmlUniqueId, htmlUniqueLabel, uniqueErrors);
-    }
-  }
-
-  if (markbotFile.css) {
-    markbotFile.css.forEach(function (file) {
-      let group = `css-${file.path}-${Date.now()}`;
-
-      markbotMain.send('check-group:new', group, file.path);
-
-      if (isCheater.matches[file.path]) {
-        css.check(currentFolderPath, file, group, isCheater.matches[file.path].equal);
-      } else {
-        css.check(currentFolderPath, file, group, NOT_CHEATER);
-      }
-    });
-  }
-
-  if (markbotFile.js) {
-    markbotFile.js.forEach(function (file) {
-      let group = `js-${file.path}-${Date.now()}`;
-
-      markbotMain.send('check-group:new', group, file.path);
-
-      if (isCheater.matches[file.path]) {
-        js.check(currentFolderPath, file, group, isCheater.matches[file.path].equal);
-      } else {
-        js.check(currentFolderPath, file, group, NOT_CHEATER);
-      }
-    });
-  }
-
-  if (markbotFile.files) {
-    let group = `files-${Date.now()}`;
-
-    markbotMain.send('check-group:new', group, 'Files & images');
-
-    markbotFile.files.forEach(function (file) {
-      if (file.directory) {
-        const fullPath = path.resolve(`${currentFolderPath}/${file.directory}`);
-
-        listDir(fullPath, function(dirFiles) {
-          dirFiles.forEach(function (singleFile) {
-            let newFileObj = merge(Object.assign({}, file), {path: stripPath(singleFile, currentFolderPath)});
-
-            files.check(currentFolderPath, newFileObj, group);
-          });
-        });
-      } else {
-        files.check(currentFolderPath, file, group);
-      }
-    });
-  }
-
-  if (markbotFile.functionality) {
-    let group = `functionality-${Date.now()}`;
-
-    markbotMain.send('check-group:new', group, 'Functionality');
-
-    markbotFile.functionality.forEach(function (file) {
-      functionality.check(currentFolderPath, file, group);
-    });
-  }
-
-  if (markbotFile.screenshots) {
-    let group = `screenshots-${Date.now()}`;
-
-    markbotMain.send('check-group:new', group, 'Screenshots');
-
-    markbotFile.screenshots.forEach(function (file) {
-      screenshots.check(currentFolderPath, file, group);
-    });
-  }
+  checkManager.run(markbotFile, isCheater, function () {
+    markbotMain.send('app:all-done');
+  });
 };
 
 const handleMarkbotFile = function (mf) {
@@ -436,12 +277,12 @@ exports.copyReferenceScreenshots = function () {
   markbotFile.screenshots.forEach(function (file) {
     if (!file.sizes) return;
 
-    mkdirp.sync(path.resolve(currentFolderPath + '/' + screenshots.REFERENCE_SCREENSHOT_FOLDER));
+    mkdirp.sync(path.resolve(currentFolderPath + '/' + screenshotNamingService.REFERENCE_SCREENSHOT_FOLDER));
 
     file.sizes.forEach(function (width) {
       fs.rename(
-        screenshots.getScreenshotPath(currentFolderPath, file.path, width),
-        screenshots.getScreenshotPath(currentFolderPath, file.path, width, true)
+        screenshotNamingService.getScreenshotPath(currentFolderPath, file.path, width),
+        screenshotNamingService.getScreenshotPath(currentFolderPath, file.path, width, true)
       );
     });
   });
@@ -479,7 +320,7 @@ exports.showDifferWindow = function (imgs, width) {
       show: false
     });
 
-    differWindow.loadURL(`file://${__dirname}/frontend/differ.html`);
+    differWindow.loadURL(`file://${__dirname}/frontend/differ/differ.html`);
 
     differWindow.on('close', function (e) {
       e.preventDefault();
@@ -503,27 +344,25 @@ exports.disableWebServer = function () {
 };
 menuCallbacks.disableWebServer = exports.disableWebServer;
 
-exports.submitToCanvas = function (ghUsername, cb) {
-  let
-    getVars = [
-      util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
-      util.format('gh_username=%s', encodeURI(ghUsername)),
-      util.format('canvas_course=%s', markbotFile.canvasCourse),
-      util.format('markbot_version=%s', appPkg.version),
-      util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
-    ],
-    hash = crypto.createHash('sha512'),
-    sig = hash.update(getVars.join('&') + config.passcodeHash, 'utf8').digest('hex')
-    ;
+exports.submitToCanvas = function (ghUsername, next) {
+  let getVars = [
+    util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
+    util.format('gh_username=%s', encodeURI(ghUsername)),
+    util.format('canvas_course=%s', markbotFile.canvasCourse),
+    util.format('markbot_version=%s', appPkg.version),
+    util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
+  ];
+  let hash = crypto.createHash('sha512');
+  let sig = hash.update(getVars.join('&') + config.passcodeHash, 'utf8').digest('hex');
 
   getVars.push(`sig=${sig}`);
   markbotMain.debug(getVars.join('&'));
 
   https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {
     res.on('data', function (data) {
-      cb(false, JSON.parse(data.toString('utf8')));
+      next(false, JSON.parse(data.toString('utf8')));
     });
   }).on('error', function (e) {
-    cb(true);
+    next(true);
   });
 };

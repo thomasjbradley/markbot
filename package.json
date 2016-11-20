@@ -14,6 +14,7 @@
     "calipers-png": "^2.0.0",
     "cheerio": "^0.22.0",
     "css": "^2.2.1",
+    "electron-is": "^2.3.0",
     "entities": "^1.1.1",
     "eslint": "^3.9.1",
     "exif": "^0.6.0",

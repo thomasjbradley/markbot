@@ -1,0 +1,28 @@
+<svg width="220" height="100" viewBox="0 0 220 100" xmlns="http://www.w3.org/2000/svg" fill="#63666a">
+  <style>
+    .left {
+      opacity: .9;
+      transform: scale(1.6);
+      transform-origin: 50% 50%;
+      animation: pulse 1s linear alternate-reverse infinite;
+    }
+
+    .right {
+      transform-origin: 50% 50%;
+      animation: pulse 1s linear alternate infinite;
+    }
+
+    @keyframes pulse {
+      0% {
+        opacity: .6;
+        transform: scale(1);
+      }
+      100% {
+        opacity: .9;
+        transform: scale(1.6);
+      }
+    }
+  </style>
+  <circle class="left" cx="50" cy="50%" r="30"/>
+  <circle class="right" cx="170" cy="50%" r="30"/>
+</svg>
