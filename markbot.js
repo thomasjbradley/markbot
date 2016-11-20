@@ -306,6 +306,8 @@ exports.onFileDropped = function(filePath) {
       markbotFileGenerator.buildFromFolder(filePath, handleMarkbotFile);
     }
   });
+
+  if (differWindow) differWindow.hide();
 };
 
 exports.showDifferWindow = function (imgs, width) {
@@ -337,6 +339,7 @@ exports.showDifferWindow = function (imgs, width) {
   differWindow.setMaximumSize(width, 2000);
   differWindow.webContents.executeJavaScript(js);
   differWindow.show();
+  differWindow.setSize(width, 400);
 };
 
 exports.disableWebServer = function () {
