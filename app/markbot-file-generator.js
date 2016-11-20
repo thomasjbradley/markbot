@@ -30,7 +30,7 @@ const findCompatibleFiles = function (filePath, next) {
 };
 
 const populateDefaults = function (markbotFile) {
-  let keys = ['html', 'css', 'js', 'functionality', 'files'];
+  let keys = ['html', 'css', 'js', 'functionality', 'files', 'performance'];
   let newMarkbotFile = {};
 
   if (!markbotFile.allFiles && !markbotFile.inherit) return markbotFile;
