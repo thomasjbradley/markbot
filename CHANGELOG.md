@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased] — 2016-11-16
+## [Unreleased] — 2016-11-19
 
 ### Added
 
@@ -13,16 +13,23 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A new network setting that’s half way between WIFI and 4G called WIFI-REGULAR.
 - The ability to control the maximum number of fonts for the website with the performance budget.
 - The ability to have custom error messages in `has` & `hasNot` CSS options.
+- The ability to detect if a media query exists without looking for properties inside.
 
 ### Changed
 
 - Tried to improve performance scores by introducing `max-age` and compression. Had to rewrite the whole web server layer.
 - The `<iframe>` tag is no longer required to be on separate lines.
 - Removed `listener` from being passed around and converted it into a module that can be required.
+- Completely rewrote the task queuing system to include a pool of task runners and queuing.
+- Renamed a bunch of files because they were niggling me.
+- The diff window is now automatically closed when Markbot is refreshed.
 
 ### Fixed
 
 - The performance budget default template was getting merged with the users settings permanently.
+- A bug in the diff window that prevented the split from touching the right edge.
+- A bug in the diff window where it wasn’t always resized to the correct width to match the screenshot.
+- The files checker will now throw an error if the `directory` options points to a location that doesn’t exist.
 
 ---
 

@@ -23,6 +23,7 @@ Built with Javascript, Node.js & Electron.
   - [Screenshot comparisons](#screenshot-comparisons)
   - [Functionality tests](#functionality-tests)
   - [File & image tests](#file--image-tests)
+  - [Performance testing](#performance-testing)
   - [Targeting all files](#targeting-all-files)
     - [Unique information for all files](#unique-information-for-all-files)
   - [Inheriting from templates](#inheriting-from-templates)
@@ -123,8 +124,9 @@ Here are the properties that you can use in the Markbot file for testing:
 - `js` — [for testing Javascript files.](#javascript-file-tests)
 - `screenshots` — [for comparing visual differences with screenshots.](#screenshot-comparisons)
 - `functionality` — [for running Javascript live tests against the website.](#functionality-tests)
-- `files` — [for checking images & plain text files](#file--image-tests)
-- `allFiles` — [for common requirements between all files of a specific type](#targeting-all-files)
+- `files` — [for checking images & plain text files.](#file--image-tests)
+- `performance` — [for checking website performance against simulated networks.](#performance-testing)
+- `allFiles` — [for common requirements between all files of a specific type.](#targeting-all-files)
 
 **If you plan on using the Canvas auto-grading feature, check out [Markbot Server](#markbot-server).**
 
@@ -185,18 +187,6 @@ html:
     # Check if the headings are in the proper order and that the document starts with an <h1>
     # Will be skipped if validation isn’t also checked—the document must be valid first
     outline: true
-
-    # Check the performance of the HTML file against a performance budget
-    # Will be skipped if validation isn’t also checked—the document must be valid first
-    performance: true       # To use the default settings (what’s listed below)
-    # OR
-    performance:
-      speed: 'WIFI'         # The network speed (WIFI-FAST, WIFI-REGULAR [WIFI], DSL, 4G-REGULAR [4G], 3G-GOOD [3G], 3G-REGULAR, 2G-GOOD [2G], 2G-REGULAR, GPRS)
-      budget:
-        maxLoadTime: 1000   # Milliseconds for maximum load time
-        maxRequests: 15     # Maximum number of assets
-        maxSize: 800        # Maximum page size of all assets in kilobytes (kB)
-        maxFonts: 5         # Maximum number of fonts allowed on the page
 
     # Can be used to test for specific elements; each entry should be a valid CSS selector
     # Will be skipped if validation isn’t also checked—the document must be valid first
@@ -530,6 +520,60 @@ files:
   # OR…
   # Just pass a directory & rely on the `allFiles` directive described below
   - directory: "images"
+```
+
+### Performance testing
+
+Markbot can check the performance of a website on simulated networks—or without. Markbot will check specific performance statistics and compare them to a performance budget.
+
+*The `path` option is the only one that’s required—leaving any of the others off will skip the test.* If only the `path` is included the default performance budget will be used.
+
+```yml
+performance:
+  # The path to an HTML file to load and test
+  - path: 'index.html'
+
+    # The network speed see list below
+    speed: 'WIFI'
+
+    budget:
+      # Milliseconds for maximum load time
+      maxLoadTime: 1000
+      # Maximum number of assets
+      maxRequests: 15
+      # Maximum page size of all assets in kilobytes (kB)
+      maxSize: 800
+      # Maximum number of fonts allowed on the page
+      maxFonts: 5
+```
+
+#### Simulated networks speeds
+
+Markbot has a few simulated network speeds built in—you can see all the details of here in the [app/networks.js](app/networks.js) file.
+
+- WIFI-FAST
+- WIFI-REGULAR (WIFI)
+- DSL
+- 4G-REGULAR (4G)
+- 3G-GOOD (3G)
+- 3G-REGULAR
+- 2G-GOOD (2G)
+- 2G-REGULAR
+- GPRS
+
+*The names in the brackets are shortcuts: using `speed: '4G'` is exactly the same as `speed: '4G-REGULAR'`.*
+
+#### Default performance budget
+
+Here’s the default performance budget that Markbot will use if you’ don’t specify you own. If you leave on of the performance budget options off, Markbot will add the missing properties as the values in the default budget.
+
+```yml
+speed: 'WIFI'
+budget:
+  maxLoadTime: 1000
+  maxRequests: 15
+  maxSize: 800
+  maxFonts: 5
 ```
 
 ### Targeting all files
