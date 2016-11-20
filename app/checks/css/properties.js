@@ -36,6 +36,8 @@ const checkHasProperties = function (code, sels) {
         continue;
       }
 
+      if (sels[i].length <= 0) continue;
+
       context = ` in the \`${mq}\` media query`;
       ruleset = tmpRules[0].rules;
     } else {
