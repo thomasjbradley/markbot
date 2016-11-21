@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased] — 2016-11-21
+
+### Fixed
+
+- The web server wasn’t starting on Windows—I didn’t realize (for some reason) `openssl` was a dependency. I’ve now replaced it with a static key/cert pair.
+
+---
+
 ## [5.0.1] — 2016-11-20
 
 ### Changed

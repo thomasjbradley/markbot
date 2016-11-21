@@ -29,7 +29,6 @@
     "mime-types": "^2.1.12",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.16",
-    "pem": "^1.8.3",
     "png-itxt": "^1.3.0",
     "stylelint": "^7.5.0",
     "webcoach": "^0.29.0",
@@ -48,7 +47,8 @@
     "build-mac": "npm run pack-bg && build -m",
     "build-win": "build -w",
     "build": "build -mw",
-    "hash-passcode": "node ./scripts/hash-passcode.js"
+    "hash-passcode": "node ./scripts/hash-passcode.js",
+    "gen-https-cert": "./scripts/gen-https-cert.sh"
   },
   "repository": {
     "type": "git",

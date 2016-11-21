@@ -36,7 +36,8 @@ Built with Javascript, Node.js & Electron.
     - [1. Environment variables](#1-environment-variables)
     - [2. App config file](#2-app-config-file)
     - [3. Passcode hashing & embedding](#3-passcode-hashing--embedding)
-    - [4. Markbot dependencies](#4-markbot-dependencies)
+    - [4. HTTPS certificate generation](#4-https-certificate-generation)
+    - [5. Markbot dependencies](#4-markbot-dependencies)
       - [HTML validator](#html-validator)
       - [CSS validator](#css-validator)
         - [Compiling the CSS validator](#compiling-the-css-validator)
@@ -750,7 +751,21 @@ The `hash-passcode` script will generate a `secret` key and hash your password, 
 
 *The hashed passcode isn’t really for security, it only uses HMAC-SHA512. The purpose is really to be sufficiently annoying that students will do their work instead of figuring out how to cheat Markbot.*
 
-#### 4. Markbot dependencies
+#### 4. HTTPS certificate generation
+
+Markbot spins up a web server internally to help with performance testing and website loading. The web server uses HTTPS—though it is just a self-signed certificate. The private key and public certificate need to be generated with `openssl` before Markbot can work.
+
+In your terminal run:
+
+```
+npm run gen-https-cert
+```
+
+The script will create the appropriate files and place them into the `app` directory.
+
+*While Markbot is running the tested website will be available at [https://localhost:8080/](https://localhost:8080/).*
+
+#### 5. Markbot dependencies
 
 Markbot has a few external dependencies that it shells out to internally:
 

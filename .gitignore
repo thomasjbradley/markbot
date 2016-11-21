@@ -8,4 +8,7 @@ vendor/*.jar
 vendor/lib/*.jar
 build/background.tiff
 
+app/*.cert
+app/*.pem
+
 yarn.lock
