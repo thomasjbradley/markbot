@@ -26,16 +26,16 @@
     "js-beautify": "^1.6.4",
     "js-yaml": "^3.6.1",
     "merge-objects": "^1.0.5",
-    "mime-types": "^2.1.12",
+    "mime-types": "^2.1.13",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.16",
     "png-itxt": "^1.3.0",
-    "stylelint": "^7.5.0",
+    "stylelint": "^7.6.0",
     "webcoach": "^0.29.0",
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "electron": "^1.4.5",
+    "electron": "^1.4.7",
     "electron-builder": "^8.6.0"
   },
   "scripts": {

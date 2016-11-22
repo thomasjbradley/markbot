@@ -5,11 +5,17 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased] — 2016-11-21
+## [5.0.2] — 2016-11-21
+
+### Changed
+
+- Made the missing file error message for screenshots more descriptive.
 
 ### Fixed
 
 - The web server wasn’t starting on Windows—I didn’t realize (for some reason) `openssl` was a dependency. I’ve now replaced it with a static key/cert pair.
+- Added a kludgy work around for Markbot not triggering its done state.
+- Now the performance metrics don’t show that the website passed the performance budget when the website cannot be loaded.
 
 ---
 
