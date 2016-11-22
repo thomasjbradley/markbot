@@ -6,6 +6,7 @@
   const merge = main.require('merge-objects');
   const webcoach = main.require('webcoach');
   const ipcRenderer = require('electron').ipcRenderer;
+  const exists = main.require('./app/file-exists');
   const markbotMain = main.require('./app/markbot-main');
   const webLoader = main.require('./app/web-loader');
   const webServer = main.require('./app/web-server');
@@ -173,9 +174,20 @@
     markbotMain.send('check-group:item-new', group, file.path, label);
     markbotMain.send('check-group:item-computing', group, file.path, label);
 
+    if (!exists.check(path.resolve(fullPath + '/' + file.path))) {
+      markbotMain.send('check-group:item-complete', group, file.path, label, [`Performance metrics couldn’t be calculated — \`${file.path}\` is missing or misspelled`]);
+      return done();
+    }
+
     webLoader.load(file.path, {speed: perf.speed}, function (theWindow, theHar) {
       win = theWindow;
       har = theHar;
+
+      if (typeof theHar !== 'object' || !theHar.log || !theHar.log.pages || theHar.log.pages <= 0) {
+        markbotMain.send('check-group:item-complete', group, file.path, label, [`Performance metrics couldn’t be calculated — \`${file.path}\` is missing or misspelled`]);
+        return done();
+      }
+
       win.webContents.executeJavaScript(makeJs());
     });
   };

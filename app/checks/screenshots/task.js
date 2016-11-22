@@ -169,7 +169,7 @@
     if (!fileExists.check(pagePath)) {
       screenshotSizes.forEach(function (size) {
         markbotMain.send('check-group:item-new', group, listenerId(size), listenerLabel(size));
-        markbotMain.send('check-group:item-complete', group, listenerId(size), listenerLabel(size), ['The file is missing or misspelled']);
+        markbotMain.send('check-group:item-complete', group, listenerId(size), listenerLabel(size), [`Screenshots couldn’t be captured — \`${file.path}\` is missing or misspelled`]);
         next();
       });
       return;
