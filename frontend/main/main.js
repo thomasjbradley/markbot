@@ -351,7 +351,7 @@ const startChecks = function () {
   markbot.newDebugGroup(fullPath);
   checksRunning = true;
   markbot.onFileDropped(fullPath);
-  setInterval(checkIfMarkbotIsDoneYet, 3000);
+  isMarkbotDoneYet = setInterval(checkIfMarkbotIsDoneYet, 3000);
 };
 
 const fileDropped = function (path) {

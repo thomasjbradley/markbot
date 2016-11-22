@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed a bug where the done checking interval wasn’t actually placed into a variable—therefore it was never cleared.
+
+---
+
 ## [5.0.2] — 2016-11-21
 
 ### Changed
