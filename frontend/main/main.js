@@ -34,6 +34,7 @@ let checks = {};
 let fullPath = false;
 let hasErrors = false;
 let checksRunning = false;
+let isMarkbotDoneYet;
 
 const buildCodeDiffErrorMessage = function (err, li) {
   var
@@ -312,11 +313,45 @@ const reset = function () {
   console.group();
 };
 
+const triggerDoneState = function () {
+  clearInterval(isMarkbotDoneYet);
+  $messagesLoader.dataset.state = 'hidden';
+  checksRunning = false;
+
+  if (hasErrors) {
+     $messageHeader.dataset.state = 'errors';
+  } else {
+    $messageHeader.dataset.state = 'no-errors';
+    $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
+    $submit.dataset.state = 'visible';
+    $messages.dataset.state = 'hidden';
+  }
+};
+
+const checkIfMarkbotIsDoneYet = function () {
+  const allGroups = document.querySelectorAll('#checks ul');
+
+  for(let group of allGroups) {
+    let aTags;
+
+    if (group.innerHTML.trim() == '') return;
+
+    aTags = group.querySelectorAll('li a');
+
+    for (let a of aTags) {
+      if (!a.dataset.status || ['computing'].indexOf(a.dataset.status) >= 0) return;
+    }
+  };
+
+   triggerDoneState();
+};
+
 const startChecks = function () {
   console.log(fullPath);
   markbot.newDebugGroup(fullPath);
   checksRunning = true;
   markbot.onFileDropped(fullPath);
+  setInterval(checkIfMarkbotIsDoneYet, 3000);
 };
 
 const fileDropped = function (path) {
@@ -426,17 +461,7 @@ listener.on('app:with-canvas', function (event) {
 });
 
 listener.on('app:all-done', function (event) {
-  $messagesLoader.dataset.state = 'hidden';
-  checksRunning = false;
-
-  if (hasErrors) {
-     $messageHeader.dataset.state = 'errors';
-  } else {
-    $messageHeader.dataset.state = 'no-errors';
-    $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
-    $submit.dataset.state = 'visible';
-    $messages.dataset.state = 'hidden';
-  }
+  triggerDoneState();
 });
 
 listener.on('check-group:new', function (event, id, label) {
