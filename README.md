@@ -492,6 +492,9 @@ files:
   # The file’s path
   - path: "images/mars-2.jpg"
 
+    # The maximum allowed file size represented in kilobytes (kB)
+    maxSize: 300
+
     # For images only
     # The maximum/minimum allowed width
     maxWidth: 3000
@@ -502,8 +505,9 @@ files:
     maxHeight: 1500
     minHeight: 240
 
-    # The maximum allowed file size represented in kilobytes (kB)
-    maxSize: 300
+    # For images only
+    # Check if the image has been smushed with a tool like ImageOptim
+    smushed: true
 
     # For text files only
     # Regex searches on the file, for confirming specific content
@@ -525,7 +529,7 @@ files:
 
 ### Performance testing
 
-Markbot can check the performance of a website on simulated networks—or without. Markbot will check specific performance statistics and compare them to a performance budget.
+Markbot can check the performance of a website on simulated networks—or without network throttling. Markbot will check specific performance statistics and compare them to a performance budget.
 
 *The `path` option is the only one that’s required—leaving any of the others off will skip the test.* If only the `path` is included the default performance budget will be used.
 
@@ -534,7 +538,7 @@ performance:
   # The path to an HTML file to load and test
   - path: 'index.html'
 
-    # The network speed see list below
+    # The network speed (see list below)
     speed: 'WIFI'
 
     budget:
@@ -566,7 +570,7 @@ Markbot has a few simulated network speeds built in—you can see all the detail
 
 #### Default performance budget
 
-Here’s the default performance budget that Markbot will use if you’ don’t specify you own. If you leave on of the performance budget options off, Markbot will add the missing properties as the values in the default budget.
+Here’s the default performance budget that Markbot will use if you don’t specify your own. If you leave one of the performance budget options off, Markbot will add the missing properties from the default budget.
 
 ```yml
 speed: 'WIFI'
@@ -611,6 +615,10 @@ allFiles:
     maxSize: 300
     smushed: true
 
+  # Supports any of the entries that `performance` supports
+  performance:
+    speed: '3G'
+
 html:
   - path: index.html
   - path: about.html
@@ -619,6 +627,9 @@ html:
 
 files:
   - path: 'images/dino.jpg'
+
+performance:
+  - path: 'index.html'
 ```
 
 With this setup everything from the `allFiles->html` entry would be applied to all the HTML files listed below—to help alleviate duplication.
