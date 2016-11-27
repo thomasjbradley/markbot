@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Ignore validation errors related to `aria-describedat`
+
+---
+
 ## [5.0.3] — 2016-11-22
 
 ### Fixed
