@@ -1,11 +1,12 @@
 'use strict';
 
-const DEBUG = false;
-
 const path = require('path');
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
 const taskPoolQueue = require('./task-pool-queue');
+const appPkg = require('../package.json');
+
+const DEBUG = appPkg.config.DEBUG;
 
 const TYPE_STATIC = 'type-static';
 const TYPE_LIVE = 'type-live';

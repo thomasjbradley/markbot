@@ -8,6 +8,10 @@
   "bugs": "https://github.com/thomasjbradley/markbot/issues",
   "private": true,
   "main": "markbot.js",
+  "config": {
+    "serverPort": "8080",
+    "DEBUG": false
+  },
   "dependencies": {
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",

@@ -1,7 +1,5 @@
 'use strict';
 
-const DEBUG = false;
-
 const PRELOAD_JS = __dirname + '/hidden-browser-window-preload.js';
 const PRELOAD_PATH = 'chrome://ensure-electron-resolution/';
 
@@ -11,6 +9,9 @@ const BrowserWindow = require('electron').BrowserWindow;
 const networks = require('./networks');
 const webServer = require('./web-server');
 const markbotMain = require('./markbot-main');
+const appPkg = require('../package.json');
+
+const DEBUG = appPkg.config.DEBUG;
 
 const getNewBrowserWindow = function (userOpts) {
   const defaultOpts = {

@@ -1,6 +1,5 @@
 'use strict';
 
-const SERVER_PORT = 8080;
 const DIRECTORY_INDEX = '/index.html';
 const HTTPS_KEY = __dirname + '/https-key.pem';
 const HTTPS_CERT = __dirname + '/https-cert.pem';
@@ -14,6 +13,9 @@ var mimeTypes = require('mime-types');
 const finalhandler = require('finalhandler');
 const exists = require('./file-exists');
 const markbotMain = require('./markbot-main');
+const appPkg = require('../package.json');
+
+const SERVER_PORT = appPkg.config.serverPort;
 
 let webServer;
 let staticDir;
