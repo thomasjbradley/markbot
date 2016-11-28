@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added a single-run process to the task queue—some students were having performance checking problems because of Markbot’s other tasks running concurrently.
+
+### Changed
+
+- Move the `DEBUG` & the `serverPort` settings into the `package.json` file for simpler editing.
+
+---
+
 ## [5.0.4] — 2016-11-27
 
 ### Fixed

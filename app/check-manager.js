@@ -13,6 +13,11 @@ const availableChecks = {
   git: {
     module: 'git',
   },
+  performance: {
+    module: 'performance',
+    type: taskPool.TYPE_SINGLE,
+    priority: taskPool.PRIORITY_HIGH,
+  },
   allFiles: {
     module: 'all-files',
   },
@@ -27,11 +32,6 @@ const availableChecks = {
   },
   files: {
     module: 'files',
-  },
-  performance: {
-    module: 'performance',
-    type: taskPool.TYPE_LIVE,
-    priority: taskPool.PRIORITY_HIGH,
   },
   functionality: {
     module: 'functionality',
