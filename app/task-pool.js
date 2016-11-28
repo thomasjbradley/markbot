@@ -114,7 +114,7 @@ const destroyAllLiveTaskRunners = function () {
 };
 
 const spawnSingleTaskRunner = function () {
-  availablePool.single.push(spawnTaskRunner());
+  if (availablePool.single.length <= 0) availablePool.single.push(spawnTaskRunner());
 };
 
 const spawnAllottedStaticTaskRunners = function () {
@@ -203,8 +203,12 @@ const start = function (next) {
 
   if (DEBUG) console.log('----- NEW RUN ------');
 
-  spawnSingleTaskRunner();
-  executeAvailableSingleTaskRunner()
+  if (taskQueueSingle.has()) {
+    spawnSingleTaskRunner();
+    executeAvailableSingleTaskRunner()
+  } else {
+    startStaticAndLive();
+  }
 };
 
 const startStaticAndLive = function () {
