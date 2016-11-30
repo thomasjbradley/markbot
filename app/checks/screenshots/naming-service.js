@@ -2,7 +2,7 @@
 
 const path = require('path');
 const is = require('electron-is');
-const classify = require('../../classify');
+const classify = require(__dirname + '/../../classify');
 
 const SCREENSHOT_PREFIX = 'markbot';
 const REFERENCE_SCREENSHOT_FOLDER = 'screenshots';

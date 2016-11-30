@@ -2,8 +2,8 @@
 
 const util = require('util');
 const linter = require('stylelint');
-const viewportChecker = require('./best-practices/viewport');
-const markbotMain = require('../../markbot-main');
+const markbotMain = require('electron').remote.require('./app/markbot-main');
+const viewportChecker = require(__dirname + '/best-practices/viewport');
 
 const shouldIncludeError = function (message, line, lines, fileContents) {
   /* SVG overflow: hidden CSS */

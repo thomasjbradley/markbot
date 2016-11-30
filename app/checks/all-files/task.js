@@ -2,9 +2,8 @@
   'use strict';
 
   const path = require('path');
-  const main = require('electron').remote;
-  const markbotMain = main.require('./app/markbot-main');
-  const htmlUnique = main.require('./app/checks/all-files/html-unique');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const htmlUnique = require(__dirname + '/checks/all-files/html-unique');
 
   const group = taskDetails.group;
   const id = 'html-unique';

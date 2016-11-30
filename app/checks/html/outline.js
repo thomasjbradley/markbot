@@ -2,7 +2,7 @@
 
 const util = require('util');
 const cheerio = require('cheerio');
-const markbotMain = require('../../markbot-main');
+const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 const getLevel = function (elem) {
   return parseInt(elem.name.slice(1), 10);

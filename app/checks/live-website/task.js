@@ -2,8 +2,7 @@
   'use strict';
 
   const https = require('https');
-  const main = require('electron').remote;
-  const markbotMain = main.require('./app/markbot-main');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
 
   const group = taskDetails.group;
   const repo = taskDetails.options.repo;

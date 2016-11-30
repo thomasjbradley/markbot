@@ -3,13 +3,12 @@
 
   const fs = require('fs');
   const path = require('path');
-  const main = require('electron').remote;
   const ipcRenderer = require('electron').ipcRenderer;
-  const markbotMain = main.require('./app/markbot-main');
-  const fileExists = main.require('./app/file-exists');
-  const classify = main.require('./app/classify');
-  const webLoader = main.require('./app/web-loader');
-  const defaultsService = main.require('./app/checks/functionality/defaults-service');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const fileExists = require(__dirname + '/file-exists');
+  const classify = require(__dirname + '/classify');
+  const webLoader = require(__dirname + '/web-loader');
+  const defaultsService = require(__dirname + '/checks/functionality/defaults-service');
   const injectionJs = defaultsService.get('injection.js');
 
   const group = taskDetails.group;
@@ -114,7 +113,7 @@
       markbotMain.debug(...e);
     });
 
-    webLoader.load(file.path, {}, function (theWindow) {
+    webLoader.load(taskRunnerId, file.path, {}, function (theWindow) {
       win = theWindow;
 
       if (file.tests) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);

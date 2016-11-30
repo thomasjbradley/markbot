@@ -2,7 +2,7 @@
 
 const util = require('util');
 const cheerio = require('cheerio');
-const markbotMain = require('../../markbot-main');
+const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 const bypass = function (checkGroup, checkId, checkLabel) {
   markbotMain.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);

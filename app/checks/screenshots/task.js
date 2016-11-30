@@ -5,19 +5,18 @@
   const MAX_WINDOW_HEIGHT = 6000;
   const MAX_WINDOW_WIDTH = 3000;
 
-  const main = require('electron').remote;
   const fs = require('fs');
   const path = require('path');
   const fork = require('child_process').fork;
-  const jimp = main.require('jimp');
+  const jimp = require('jimp');
+  const BrowserWindow = require('electron').remote.BrowserWindow;
   const ipcRenderer = require('electron').ipcRenderer;
-  const markbotMain = main.require('./app/markbot-main');
-  const BrowserWindow = main.BrowserWindow;
-  const fileExists = main.require('./app/file-exists');
-  const webLoader = main.require('./app/web-loader');
-  const classify = main.require('./app/classify');
-  const screenshotNamingService = main.require('./app/checks/screenshots/naming-service');
-  const defaultsService = main.require('./app/checks/screenshots/defaults-service');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const fileExists = require(__dirname + '/file-exists');
+  const webLoader = require(__dirname + '/web-loader');
+  const classify = require(__dirname + '/classify');
+  const screenshotNamingService = require(__dirname + '/checks/screenshots/naming-service');
+  const defaultsService = require(__dirname + '/checks/screenshots/defaults-service');
   const defaultScreenshotCSS = defaultsService.get('default.css');
   const defaultScreenshotJS = defaultsService.get('default.js');
 
@@ -115,7 +114,8 @@
     const ipcListenerResizeChannel = `__markbot-screenshots-resized-${ipcListenerLabel}`;
     const listenerId = function (size) { return `${file.path}-${size}`; };
     const listenerLabel = function (size) { return `${file.path} — ${size}px`; };
-    let screenshotSizes = file.sizes.slice();
+    let screenshotSizes = file.sizes.slice(0);
+    let screenshotSizesDiffing = [];
     let screenshotSizesDone = [];
 
     const nextScreenshot = function (windowId) {
@@ -143,13 +143,17 @@
     };
 
     ipcRenderer.on(ipcListenerResizeChannel, function (event, windowId, width, height) {
+      if (screenshotSizesDiffing.indexOf(width) >= 0) return;
+
+      screenshotSizesDiffing.push(width);
+
       takeScreenshotAtSize(windowId, width, height, function (img) {
         let imagePath = screenshotNamingService.getScreenshotPath(fullPath, file.path, width);
 
         saveScreenshot(imagePath, width, img, function () {
           if (fileExists.check(screenshotNamingService.getScreenshotPath(fullPath, file.path, width, true))) {
             diffScreenshot(fullPath, group, file.path, width, function (w) {
-              screenshotSizesDone.push(w);
+              if (screenshotSizesDone.indexOf(w) < 0) screenshotSizesDone.push(w);
               checkAllDiffsDone();
             });
           } else {
@@ -179,7 +183,7 @@
       });
     }
 
-    webLoader.load(file.path, {width: MAX_WINDOW_WIDTH, height: MAX_WINDOW_HEIGHT}, function (theWindow) {
+    webLoader.load(taskRunnerId, file.path, {width: MAX_WINDOW_WIDTH, height: MAX_WINDOW_HEIGHT}, function (theWindow) {
       theWindow.webContents.insertCSS(defaultScreenshotCSS);
       theWindow.webContents.executeJavaScript(getResizeInjectionJs(theWindow.id, taskRunnerId, ipcListenerResizeChannel), function (windowId) {
         nextScreenshot(windowId);
@@ -197,4 +201,5 @@
     totalFiles++;
     check(folderPath, file, checkIfDone);
   });
+
 }());

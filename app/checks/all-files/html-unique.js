@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const cheerio = require('cheerio');
-const exists = require('../../file-exists');
+const exists = require(__dirname + '/../../file-exists');
 
 module.exports.find = function (folderPath, file, uniqueElems) {
   const fullPath = path.resolve(folderPath + '/' + file.path);

@@ -1,22 +1,21 @@
 (function () {
   'use strict';
 
-  const main = require('electron').remote;
   const path = require('path');
-  const merge = main.require('merge-objects');
-  const webcoach = main.require('webcoach');
+  const merge = require('merge-objects');
+  const webcoach = require('webcoach');
   const ipcRenderer = require('electron').ipcRenderer;
-  const exists = main.require('./app/file-exists');
-  const markbotMain = main.require('./app/markbot-main');
-  const webLoader = main.require('./app/web-loader');
-  const webServer = main.require('./app/web-server');
-  const adviceIgnoreIds = main.require('./app/checks/performance/ignore-advice-ids.json');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const exists = require(__dirname + '/file-exists');
+  const webLoader = require(__dirname + '/web-loader');
+  const webServer = require(__dirname + '/web-server');
+  const adviceIgnoreIds = require(__dirname + '/checks/performance/ignore-advice-ids.json');
 
   const group = taskDetails.group;
   const fullPath = taskDetails.cwd;
 
   let totalFiles = 0;
-
+console.log(markbotMain);
   const perfDefaults = {
     speed: 'WIFI',
     budget: {
@@ -179,7 +178,7 @@
       return done();
     }
 
-    webLoader.load(file.path, {speed: perf.speed}, function (theWindow, theHar) {
+    webLoader.load(taskRunnerId, file.path, {speed: perf.speed}, function (theWindow, theHar) {
       win = theWindow;
       har = theHar;
 

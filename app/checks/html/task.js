@@ -3,14 +3,13 @@
 
   const fs = require('fs');
   const path = require('path');
-  const main = require('electron').remote;
-  const markbotMain = main.require('./app/markbot-main');
-  const exists = main.require('./app/file-exists');
-  const validation = main.require('./app/checks/html/validation');
-  const bestPractices = main.require('./app/checks/html/best-practices');
-  const outline = main.require('./app/checks/html/outline');
-  const elements = main.require('./app/checks/html/elements');
-  const content = main.require('./app/checks/content');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const exists = require(__dirname + '/file-exists');
+  const validation = require(__dirname + '/checks/html/validation');
+  const bestPractices = require(__dirname + '/checks/html/best-practices');
+  const outline = require(__dirname + '/checks/html/outline');
+  const elements = require(__dirname + '/checks/html/elements');
+  const content = require(__dirname + '/checks/content');
 
   const group = taskDetails.group;
   const file = taskDetails.options.file;

@@ -3,7 +3,7 @@
 const util = require('util');
 const path = require('path');
 const exec = require('child_process').exec;
-const markbotMain = require('../../markbot-main');
+const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 const escapeShell = function (cmd) {
   return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';

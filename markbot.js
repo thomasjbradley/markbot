@@ -88,7 +88,8 @@ const createMainWindow = function () {
     mainWindow.show();
   });
 
-  markbotMain.init(mainWindow.webContents);
+  global.markbotMainWindow = mainWindow.id;
+  if (appPkg.config.DEBUG) console.log(`Main window: ${mainWindow.id}`);
 };
 
 const createDebugWindow = function () {

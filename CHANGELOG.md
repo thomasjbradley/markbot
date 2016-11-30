@@ -14,6 +14,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Move the `DEBUG` & the `serverPort` settings into the `package.json` file for simpler editing.
+- Rewrote the `require()` statements to better work off the main process.
+- Rewrote how the `markbot-main` module finds the main window to be more reliable.
+
+### Fixed
+
+- Fixed a bug in the screenshots where it didn’t tally which screenshots were completed properly.
+- Added back the `asar` packing for the application.
 
 ---
 

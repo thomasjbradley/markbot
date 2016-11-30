@@ -4,12 +4,12 @@ const PRELOAD_JS = __dirname + '/hidden-browser-window-preload.js';
 const PRELOAD_PATH = 'chrome://ensure-electron-resolution/';
 
 const path = require('path');
-const ipcMain = require('electron').ipcMain;
-const BrowserWindow = require('electron').BrowserWindow;
-const networks = require('./networks');
-const webServer = require('./web-server');
-const markbotMain = require('./markbot-main');
-const appPkg = require('../package.json');
+const ipcRenderer = require('electron').ipcRenderer;
+const BrowserWindow = require('electron').remote.BrowserWindow;
+const markbotMain = require('electron').remote.require('./app/markbot-main');
+const networks = require(__dirname + '/networks');
+const webServer = require(__dirname + '/web-server');
+const appPkg = require(__dirname + '/../package.json');
 
 const DEBUG = appPkg.config.DEBUG;
 
@@ -49,7 +49,7 @@ const destroy = function (win) {
   }
 };
 
-const load = function (url, opts, next) {
+const load = function (listenerId, url, opts, next) {
   let win;
   let speed = false;
   let networkName;
@@ -60,33 +60,33 @@ const load = function (url, opts, next) {
   let onFinishLoadFired = false;
 
   const cleanup = function () {
-    ipcMain.removeAllListeners('__markbot-hidden-browser-devtools-loaded');
-    ipcMain.removeAllListeners('__markbot-hidden-browser-window-loaded');
-    ipcMain.removeAllListeners('__markbot-hidden-browser-window-fonts-loaded');
-    ipcMain.removeAllListeners('__markbot-hidden-browser-har-generation-succeeded');
+    ipcRenderer.removeAllListeners('__markbot-hidden-browser-devtools-loaded');
+    ipcRenderer.removeAllListeners('__markbot-hidden-browser-window-loaded');
+    ipcRenderer.removeAllListeners('__markbot-hidden-browser-window-fonts-loaded');
+    ipcRenderer.removeAllListeners('__markbot-hidden-browser-har-generation-succeeded');
     win.closeDevTools();
   };
 
-  const notifyDevToolsExtensionOfLoad = function (e) {
-    if (e.sender.getURL() != PRELOAD_PATH) {
+  const notifyDevToolsExtensionOfLoad = function (loc) {
+    if (loc != PRELOAD_PATH) {
       win.webContents.executeJavaScript('new Image().src = "https://did-finish-load/"');
     }
   };
 
-  const waitForFinalLoad = function (e) {
+  const waitForFinalLoad = function (loc) {
     // The `did-finish-load` & `dom-ready` events often fire too soon to execute JS in the window
     const isLoading = setInterval(function () {
       if (!win.webContents.isLoading()) {
         clearInterval(isLoading);
-        notifyDevToolsExtensionOfLoad(e);
+        notifyDevToolsExtensionOfLoad(loc);
       }
     }, 20);
   };
 
-  const checkForFinalLoad = function (e) {
-    if (e.sender.getURL() != PRELOAD_PATH && didFinishLoad && domReady && windowLoaded && fontsReady && !onFinishLoadFired) {
+  const checkForFinalLoad = function (loc) {
+    if (loc != PRELOAD_PATH && didFinishLoad && domReady && windowLoaded && fontsReady && !onFinishLoadFired) {
       onFinishLoadFired = true;
-      waitForFinalLoad(e);
+      waitForFinalLoad(loc);
     }
   };
 
@@ -104,38 +104,39 @@ const load = function (url, opts, next) {
   win.webContents.on('did-finish-load', function (e) {
     if (e.sender.getURL() != PRELOAD_PATH) {
       didFinishLoad = true;
-      checkForFinalLoad(e);
+      checkForFinalLoad(e.sender.getURL());
     }
   });
 
   win.webContents.on('dom-ready', function (e) {
     if (e.sender.getURL() != PRELOAD_PATH) {
       domReady = true;
-      checkForFinalLoad(e);
+      checkForFinalLoad(e.sender.getURL());
     }
   });
 
-  ipcMain.on('__markbot-hidden-browser-devtools-loaded', function (e) {
+  ipcRenderer.on('__markbot-hidden-browser-devtools-loaded', function (e) {
     process.nextTick(function () {
       win.loadURL(getUrl(url), {'extraHeaders': 'Pragma: no-cache\n'});
+      win.webContents.executeJavaScript(`window.__markbot_hidden_browser_window_id = ${listenerId};`);
     });
   });
 
-  ipcMain.on('__markbot-hidden-browser-window-fonts-loaded', function (e, details) {
-    if (e.sender.getURL() != PRELOAD_PATH) {
+  ipcRenderer.on('__markbot-hidden-browser-window-fonts-loaded', function (e, details) {
+    if (details.location != PRELOAD_PATH) {
       fontsReady = true;
-      checkForFinalLoad(e);
+      checkForFinalLoad(details.location);
     }
   });
 
-  ipcMain.on('__markbot-hidden-browser-window-loaded', function (e, details) {
-    if (e.sender.getURL() != PRELOAD_PATH) {
+  ipcRenderer.on('__markbot-hidden-browser-window-loaded', function (e, details) {
+    if (details.location != PRELOAD_PATH) {
       windowLoaded = true;
-      checkForFinalLoad(e);
+      checkForFinalLoad(details.location);
     }
   });
 
-  ipcMain.once('__markbot-hidden-browser-har-generation-succeeded', function (e, har) {
+  ipcRenderer.once('__markbot-hidden-browser-har-generation-succeeded', function (e, har) {
     cleanup();
     next(win, har);
   });
@@ -148,6 +149,7 @@ const load = function (url, opts, next) {
   }
 
   win.loadURL(PRELOAD_PATH, {'extraHeaders': 'Pragma: no-cache\n'});
+  win.webContents.executeJavaScript(`window.__markbot_hidden_browser_window_id = ${listenerId};`);
 };
 
 module.exports = {

@@ -100,12 +100,10 @@ const __MarkbotInjectedFunctions = {
   },
 
   pass: function () {
-    console.log('Pass!', __MarkbotInjectedFunctions.failed);
     if (!__MarkbotInjectedFunctions.failed) __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.passLabel);
   },
 
   fail: function (reason) {
-    console.log('Fail!');
     __MarkbotInjectedFunctions.failed = true;
     __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.failLabel, reason);
   },

@@ -1,17 +1,17 @@
 'use strict';
 
 const util = require('util');
-const documentTagChecker = require('./best-practices/document-tags');
-const lineBreakChecker = require('./best-practices/force-line-breaks');
-const pTagCloseChecker = require('./best-practices/close-p-on-same-line');
-const missingOptionalTagChecker = require('./best-practices/missing-optional-closing-tags');
-const codeStyleChecker = require('./best-practices/code-style');
-const emptyLineChecker = require('./best-practices/max-empty-lines');
-const viewportChecker = require('./best-practices/viewport');
-const doublespaceChecker = require('./best-practices/double-space');
-const spaceBeforeCloseGTChecker = require('./best-practices/space-before-close-greater-than');
-const indentationChecker = require('./best-practices/indentation');
-const markbotMain = require('../../markbot-main');
+const markbotMain = require('electron').remote.require('./app/markbot-main');
+const documentTagChecker = require(__dirname + '/best-practices/document-tags');
+const lineBreakChecker = require(__dirname + '/best-practices/force-line-breaks');
+const pTagCloseChecker = require(__dirname + '/best-practices/close-p-on-same-line');
+const missingOptionalTagChecker = require(__dirname + '/best-practices/missing-optional-closing-tags');
+const codeStyleChecker = require(__dirname + '/best-practices/code-style');
+const emptyLineChecker = require(__dirname + '/best-practices/max-empty-lines');
+const viewportChecker = require(__dirname + '/best-practices/viewport');
+const doublespaceChecker = require(__dirname + '/best-practices/double-space');
+const spaceBeforeCloseGTChecker = require(__dirname + '/best-practices/space-before-close-greater-than');
+const indentationChecker = require(__dirname + '/best-practices/indentation');
 
 const bypass = function (checkGroup, checkId, checkLabel) {
   markbotMain.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);

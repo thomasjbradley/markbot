@@ -2,10 +2,9 @@
   'use strict';
 
   const path = require('path');
-  const main = require('electron').remote;
-  const markbotMain = main.require('./app/markbot-main');
-  const commits = main.require('./app/checks/git/commits');
-  const status = main.require('./app/checks/git/status');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const commits = require(__dirname + '/checks/git/commits');
+  const status = require(__dirname + '/checks/git/status');
 
   const fullPath = path.resolve(taskDetails.cwd);
 

@@ -1,6 +1,6 @@
 'use strict';
 
-let config = require('../../../config.json');
+let config = require(__dirname + '/../../../config.json');
 
 module.exports.generateTaskList = function (markbotFile) {
   var tasks = [];

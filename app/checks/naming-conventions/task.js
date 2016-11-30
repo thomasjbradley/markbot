@@ -2,16 +2,15 @@
   'use strict';
 
   const path = require('path');
-  const main = require('electron').remote;
-  const markbotMain = main.require('./app/markbot-main');
-  const listDir = main.require('./app/list-dir');
-  const stripPath = main.require('./app/strip-path');
+  const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const listDir = require(__dirname + '/list-dir');
+  const stripPath = require(__dirname + '/strip-path');
 
-  const extsBlackList = main.require('./app/checks/naming-conventions/extension-blacklist.json');
+  const extsBlackList = require(__dirname + '/checks/naming-conventions/extension-blacklist.json');
   const extsBlackListSearch = `(${extsBlackList.join('|')})$`;
-  const fileBlackList = main.require('./app/checks/naming-conventions/file-blacklist.json');
+  const fileBlackList = require(__dirname + '/checks/naming-conventions/file-blacklist.json');
   const fileBlackListSearch = `(${fileBlackList.join('|')})`;
-  const pathsWhiteList = main.require('./app/checks/naming-conventions/path-whitelist.json');
+  const pathsWhiteList = require(__dirname + '/checks/naming-conventions/path-whitelist.json');
   const pathsWhiteListSearch = `^(${pathsWhiteList.join('|').replace(/\./ig, '\.')})`;
 
   const fullPath = path.resolve(taskDetails.cwd);
