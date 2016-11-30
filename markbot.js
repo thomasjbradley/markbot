@@ -65,7 +65,7 @@ const updateAppMenu = function () {
   Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, menuCallbacks, menuOptions)));
 };
 
-const createMainWindow = function () {
+const createMainWindow = function (next) {
   mainWindow = new BrowserWindow({
     width: 800,
     minWidth: 600,
@@ -86,6 +86,8 @@ const createMainWindow = function () {
 
   mainWindow.once('ready-to-show', function () {
     mainWindow.show();
+
+    if (next) next();
   });
 
   global.markbotMainWindow = mainWindow.id;
@@ -109,8 +111,8 @@ const createDebugWindow = function () {
   debugWindow.loadURL('file://' + __dirname + '/frontend/debug/debug.html');
 };
 
-const createWindows = function () {
-  createMainWindow();
+const createWindows = function (next) {
+  createMainWindow(next);
   createDebugWindow();
 };
 
@@ -232,7 +234,10 @@ app.on('activate', function () {
 
 app.on('open-file', function (e, path) {
   e.preventDefault();
-  markbotMain.send('app:file-dropped', path);
+
+  if (mainWindow === null) createWindows(function () {
+    markbotMain.send('app:file-dropped', path);
+  });
 });
 
 exports.newDebugGroup = function (label) {

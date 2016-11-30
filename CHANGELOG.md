@@ -21,6 +21,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Fixed a bug in the screenshots where it didn’t tally which screenshots were completed properly.
 - Added back the `asar` packing for the application.
+- An error message being displayed when the main window is closed and a folder is dropped to the dock icon.
 
 ---
 
