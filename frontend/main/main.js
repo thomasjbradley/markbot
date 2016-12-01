@@ -238,11 +238,9 @@ const prepareErrorText = function (err) {
 };
 
 const displayErrors = function (group, label, linkId, errors, status, isMessages) {
-  const
-    $errorGroup = document.createElement('div'),
-    $groupHead = document.createElement('h2'),
-    $messageList = document.createElement('ul')
-  ;
+  const $errorGroup = document.createElement('div');
+  const $groupHead = document.createElement('h2');
+  const $messageList = document.createElement('ul');
 
   if (!isMessages) hasErrors = true;
 
@@ -343,7 +341,7 @@ const checkIfMarkbotIsDoneYet = function () {
     }
   };
 
-   triggerDoneState();
+  triggerDoneState();
 };
 
 const startChecks = function () {
