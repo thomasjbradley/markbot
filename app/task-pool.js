@@ -60,8 +60,8 @@ const spawnTaskRunner = function () {
 };
 
 const executeTaskRunner = function (runner, task) {
-  let moduleUrl = require.resolve(`./checks/${task.module}/task`);
-  let taskPoolPath = require.resolve('./task-pool');
+  let moduleUrl = path.resolve(`${__dirname}/checks/${task.module}/task.js`).replace(/\\/g, '/');
+  let taskPoolPath = path.resolve(`${__dirname}/task-pool`);
   let taskDetailsJson = JSON.stringify(task);
 
   // All these variables are defined in `app/task-pool.html`
@@ -81,6 +81,21 @@ const executeTaskRunner = function (runner, task) {
   `;
 
   runner.webContents.executeJavaScript(js);
+};
+
+const destroyAllSingleTaskRunners = function () {
+  availablePool.single.forEach(function(win, i) {
+    if (availablePool.single[i]) availablePool.single[i].destroy();
+    availablePool.single[i] = null;
+  });
+
+  Object.keys(executingPool.single).forEach(function (win) {
+    if (executingPool.single[win]) executingPool.single[win].destroy();
+    executingPool.single[win] = null;
+  });
+
+  availablePool.single = [];
+  executingPool.single = {};
 };
 
 const destroyAllStaticTaskRunners = function () {
@@ -280,6 +295,12 @@ const done = function (id) {
   if (executingPool.live[id]) return doneLive(id);
 };
 
+const stop = function () {
+  destroyAllSingleTaskRunners();
+  destroyAllStaticTaskRunners();
+  destroyAllLiveTaskRunners();
+};
+
 module.exports = {
   TYPE_SINGLE: TYPE_SINGLE,
   TYPE_STATIC: TYPE_STATIC,
@@ -290,4 +311,5 @@ module.exports = {
   add: add,
   start: start,
   done: done,
+  stop: stop,
 };

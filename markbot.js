@@ -82,6 +82,10 @@ const createMainWindow = function (next) {
     if (debugWindow) debugWindow.destroy();
 
     mainWindow = null;
+
+    if (process.platform !== 'darwin') {
+      menuCallbacks.quit();
+    }
   });
 
   mainWindow.once('ready-to-show', function () {
@@ -225,8 +229,16 @@ app.on('ready', function () {
 });
 
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+  if (process.platform !== 'darwin') {
+    menuCallbacks.quit();
+  }
 });
+
+menuCallbacks.quit = function () {
+  checkManager.stop();
+  webServer.stop();
+  app.quit();
+};
 
 app.on('activate', function () {
   if (mainWindow === null) createWindows();

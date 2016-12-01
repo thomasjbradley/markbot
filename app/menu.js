@@ -179,7 +179,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
         {
           label: 'Quit',
           accelerator: 'Command+Q',
-          click: function() { app.quit(); }
+          click: function() { cbs.quit(); }
         },
       ]
     });
@@ -215,7 +215,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
       {
         label: 'Quit',
         accelerator: 'Ctrl+Q',
-        click: function() { app.quit(); }
+        click: function() { cbs.quit(); }
       }
     );
 

@@ -72,6 +72,11 @@ const run = function (markbotFile, isCheater = null, next) {
   taskPool.start(next);
 };
 
+const stop = function () {
+  taskPool.stop();
+};
+
 module.exports = {
   run: run,
+  stop: stop,
 };

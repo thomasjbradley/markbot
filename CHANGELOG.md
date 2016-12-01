@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Upgraded some dependencies to new versions.
+
+### Fixed
+
+- On Windows the Markbot background processes were never quitting.
+
+---
+
 ## [5.1.0] — 2016-11-29
 
 ### Added
