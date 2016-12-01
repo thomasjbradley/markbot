@@ -20,7 +20,7 @@
     "css": "^2.2.1",
     "electron-is": "^2.3.0",
     "entities": "^1.1.1",
-    "eslint": "^3.9.1",
+    "eslint": "^3.11.1",
     "exif": "^0.6.0",
     "finalhandler": "^0.5.0",
     "git-commits": "^1.2.0",
@@ -39,7 +39,7 @@
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
-    "electron": "^1.4.7",
+    "electron": "^1.4.10",
     "electron-builder": "^10.4.1"
   },
   "scripts": {
