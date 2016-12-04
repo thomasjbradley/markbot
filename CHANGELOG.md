@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- The live website checking will show the URL when the website is online—encouraging students to check it out on their mobile devices.
+
 ### Changed
 
 - Upgraded some dependencies to new versions.

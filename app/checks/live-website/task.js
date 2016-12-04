@@ -9,7 +9,7 @@
   const username = taskDetails.options.username;
   const id = 'live-website';
   const label = 'Online';
-  const errors = [`The website @@https://${username.toLowerCase()}.github.io/${repo}/@@ is not online. Double check that all the commits have been synced & that the \`index.html\` file, on GitHub’s website, follows the naming conventions`];
+  const errors = [`**Your website is not online.** Double check that all the commits have been synced & that the \`index.html\` file, on GitHub’s website, follows the naming conventions. @@https://${username.toLowerCase()}.github.io/${repo}/@@`];
   const opts = {
     method: 'HEAD',
     host: `${username.toLowerCase()}.github.io`,
@@ -21,7 +21,7 @@
 
   https.get(opts, function (res) {
     if(res.statusCode >= 200 && res.statusCode <= 299) {
-      markbotMain.send('check-group:item-complete', group, id, label);
+      markbotMain.send('check-group:item-complete', group, id, label, [], '', [`**Your website is online!** Check it out in your browser or on your mobile device:  @@https://${username.toLowerCase()}.github.io/${repo}/@@`]);
     } else {
       markbotMain.send('check-group:item-complete', group, id, label, errors);
     }
