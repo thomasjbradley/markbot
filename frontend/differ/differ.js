@@ -75,6 +75,12 @@ const calcHeightOnLoad = function () {
   });
 };
 
+const setWindowTitle = function (imgPath) {
+  let pathMatches = imgPath.match(/\-(\d+)\.png$/);
+
+  document.title = pathMatches[1] + 'px';
+};
+
 const setImages = function (imgsJson) {
   let imgs = JSON.parse(imgsJson.replace(/\\/g, '/'));
 
@@ -88,6 +94,7 @@ const setImages = function (imgsJson) {
 
   diffRange.value = 0.5;
   moveDiffer(document.documentElement.clientWidth / 2);
+  setWindowTitle(imgs.ref);
 };
 
 diffWrap.addEventListener('mousedown', function (e) {

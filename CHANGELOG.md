@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Upgraded some dependencies to new versions.
+- The titlebar for the screenshot comparison window now shows the width of the screenshot.
 
 ### Fixed
 
