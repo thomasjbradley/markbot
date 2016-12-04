@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - On Windows the Markbot background processes were never quitting.
+- A Windows bug where the tasks weren’t executing because the paths were being escaped incorrectly.
 
 ---
 

@@ -60,8 +60,8 @@ const spawnTaskRunner = function () {
 };
 
 const executeTaskRunner = function (runner, task) {
-  let moduleUrl = path.resolve(`${__dirname}/checks/${task.module}/task.js`).replace(/\\/g, '/');
-  let taskPoolPath = path.resolve(`${__dirname}/task-pool`);
+  let moduleUrl = path.resolve(__dirname + `/checks/${task.module}/task.js`).replace(/\\/g, '/');
+  let taskPoolPath = path.resolve(__dirname + '/task-pool').replace(/\\/g, '/');
   let taskDetailsJson = JSON.stringify(task);
 
   // All these variables are defined in `app/task-pool.html`
