@@ -15,7 +15,7 @@
   const fullPath = taskDetails.cwd;
 
   let totalFiles = 0;
-console.log(markbotMain);
+
   const perfDefaults = {
     speed: 'WIFI',
     budget: {
