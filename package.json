@@ -40,7 +40,7 @@
   },
   "devDependencies": {
     "electron": "^1.4.10",
-    "electron-builder": "^10.4.1"
+    "electron-builder": "^10.5.0"
   },
   "scripts": {
     "start": "electron markbot.js",
@@ -64,12 +64,7 @@
     "productName": "Markbot",
     "compression": "maximum",
     "extend-info": "markbot-extra.plist",
-    "asar": {
-      "smartUnpack": false
-    },
-    "asarUnpack": [
-      "vendor"
-    ],
+    "asarUnpack": "vendor",
     "mac": {
       "target": "dmg",
       "category": "public.app-category.developer-tools"
