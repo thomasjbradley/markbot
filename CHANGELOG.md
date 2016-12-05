@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.2.1] — 2016-12-05
+
+### Fixed
+
+- The performance tests weren’t running because the unpacking mechanism wasn’t working properly creating a broken `node_modules` folder. I disabled it with `asar.smartUnpack`.
+
+---
+
 ## [5.2.0] — 2016-12-04
 
 ### Added
