@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [5.2.1] — 2016-12-05
 
+### Changed
+
+- The way Markbot checks to see if it’s done or has errors is now completely dependent upon the list of checks on the left. Markbot used to use a boolean to try and track now it just runs through the list of checks and looks at the status of each.
+
 ### Fixed
 
 - The performance tests weren’t running because the unpacking mechanism wasn’t working properly creating a broken `node_modules` folder. I disabled it with `asar.smartUnpack`.

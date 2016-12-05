@@ -32,8 +32,6 @@ const $messageNoCanvas = document.querySelector('.no-canvas-message');
 let groups = {};
 let checks = {};
 let fullPath = false;
-let hasErrors = false;
-let checksRunning = false;
 let isMarkbotDoneYet;
 
 const buildCodeDiffErrorMessage = function (err, li) {
@@ -242,8 +240,6 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
   const $groupHead = document.createElement('h2');
   const $messageList = document.createElement('ul');
 
-  if (!isMessages) hasErrors = true;
-
   $groupHead.textContent = groups[group].label + ' — ' + label;
   $groupHead.id = linkId;
 
@@ -286,7 +282,6 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 };
 
 const reset = function () {
-  hasErrors = false;
   $messages.innerHTML = '';
   $messagesPositive.innerHTML = '';
   $checks.innerHTML = '';
@@ -306,17 +301,17 @@ const reset = function () {
   $messageCanvas.setAttribute('hidden', true);
   groups = {};
   checks = {};
-  checksRunning = false;
   console.groupEnd();
   console.group();
 };
 
 const triggerDoneState = function () {
+  if (isRunning()) return;
+
   clearInterval(isMarkbotDoneYet);
   $messagesLoader.dataset.state = 'hidden';
-  checksRunning = false;
 
-  if (hasErrors) {
+  if (hasErrors()) {
      $messageHeader.dataset.state = 'errors';
   } else {
     $messageHeader.dataset.state = 'no-errors';
@@ -326,30 +321,43 @@ const triggerDoneState = function () {
   }
 };
 
-const checkIfMarkbotIsDoneYet = function () {
+const isRunning = function () {
   const allGroups = document.querySelectorAll('#checks ul');
 
   for(let group of allGroups) {
     let aTags;
 
-    if (group.innerHTML.trim() == '') return;
+    if (group.innerHTML.trim() == '') return true;
 
     aTags = group.querySelectorAll('li a');
 
     for (let a of aTags) {
-      if (!a.dataset.status || ['computing'].indexOf(a.dataset.status) >= 0) return;
+      if (!a.dataset.status || ['computing'].indexOf(a.dataset.status) >= 0) return true;
     }
   };
 
-  triggerDoneState();
+  return false;
+};
+
+const hasErrors = function () {
+  const allGroups = document.querySelectorAll('#checks ul');
+
+  for(let group of allGroups) {
+    let aTags = group.querySelectorAll('li a');
+
+    for (let a of aTags) {
+      if (['bypassed', 'failed'].indexOf(a.dataset.status) >= 0) return true;
+    }
+  };
+
+  return false;
 };
 
 const startChecks = function () {
   console.log(fullPath);
   markbot.newDebugGroup(fullPath);
-  checksRunning = true;
   markbot.onFileDropped(fullPath);
-  isMarkbotDoneYet = setInterval(checkIfMarkbotIsDoneYet, 3000);
+  isMarkbotDoneYet = setInterval(triggerDoneState, 3000);
 };
 
 const fileDropped = function (path) {
@@ -409,7 +417,7 @@ document.getElementById('username-form').addEventListener('submit', function (e)
 document.getElementById('submit-btn').addEventListener('click', function (e) {
   e.preventDefault();
 
-  if (!hasErrors && !checksRunning) {
+  if (!hasErrors() && !isRunning()) {
     $canvasBtn.dataset.state = 'processing';
     $canvasBtn.setAttribute('disabled', true);
 
@@ -536,7 +544,7 @@ listener.on('app:open-repo', function (event, path) {
 });
 
 listener.on('app:re-run', function (event) {
-  if (fullPath && !checksRunning) {
+  if (fullPath && !isRunning()) {
     reset();
     startChecks();
     $dropbox.dataset.state = 'hidden';
@@ -544,7 +552,7 @@ listener.on('app:re-run', function (event) {
 });
 
 $robotLogo.addEventListener('click', function (e) {
-  if (fullPath && !checksRunning) {
+  if (fullPath && !isRunning()) {
     reset();
     startChecks();
     $dropbox.dataset.state = 'hidden';
