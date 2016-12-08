@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.2.2] — 2016-12-08
+
+### Changed
+
+- Removed the `no-descending-specificity` Stylelint rule because it was causing too many, and weird problems for the students.
+
+---
+
 ## [5.2.1] — 2016-12-05
 
 ### Changed
