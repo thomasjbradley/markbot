@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.2.3] — 2016-12-09
+
+### Fixed
+
+- The `hover()` functionality test failed when the element to be hovered wasn’t visible—Markbot will now resize the hidden window to be sure the element is visible before hovering.
+
+---
+
 ## [5.2.2] — 2016-12-08
 
 ### Changed

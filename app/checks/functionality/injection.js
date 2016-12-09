@@ -90,6 +90,8 @@ const __MarkbotInjectedFunctions = {
     let x = Math.round(rect.left + (rect.width / 2));
     let y = Math.round(rect.top + (rect.height / 2));
 
+    if (window.outerHeight < y) window.resizeTo(window.outerWidth, y + 100);
+    if (window.outerWidth < x) window.resizeTo(x + 100, window.outerHeight);
     if (rect.width <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its width is \`0px\``);
     if (rect.height <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its height is \`0px\``);
 
