@@ -436,7 +436,7 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 });
 
 document.addEventListener('click', function (e) {
-  if (e.target.matches('#messages a')) {
+  if (e.target.matches('#messages a') || e.target.matches('#messages-positive a')) {
     e.preventDefault();
     shell.openExternal(e.target.href);
   }

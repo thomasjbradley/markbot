@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.2.4] — 2016-12-12
+
+### Fixed
+
+- The live website link in the positive messages opened within Markbot instead of the default browser.
+
+---
+
 ## [5.2.3] — 2016-12-09
 
 ### Fixed
