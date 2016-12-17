@@ -1,6 +1,6 @@
 # ![](.readme/markbot-logo.png) Markbot
 
-*Your friendly neighbourhood marking robot.*
+*Your marvellously magnificent marking robot.*
 
 ![](.readme/screenshot.png)
 
