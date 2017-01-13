@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added a `bounds()` function to the functionality tests that is just a shortcut to `getBoundingClientRect()`.
 
+### Changed
+
+- Removed the `aria-describedat` error ignoring because ARIA 1.1 replaced the attribute with `aria-details`.
+
 ---
 
 ## [5.2.4] — 2016-12-12

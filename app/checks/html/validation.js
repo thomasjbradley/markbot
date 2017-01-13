@@ -22,9 +22,6 @@ const shouldIncludeError = function (message, line) {
   // Elements that "don't need" specific roles
   if (message.match(/element.*does not need.*role/i)) return false;
 
-  // Ignore errors related to `aria-describedat`
-  if (message.match(/aria-describedat/)) return false;
-
   return true;
 };
 
