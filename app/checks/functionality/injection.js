@@ -22,6 +22,10 @@ const __MarkbotInjectedFunctions = {
     return getComputedStyle(elem);
   },
 
+  bounds: function (elem) {
+    return elem.getBoundingClientRect();
+  },
+
   on: function (sel, evt, next, timeoutLength = 2000) {
     let eventHandlerTimeout;
 

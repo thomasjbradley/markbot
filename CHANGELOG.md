@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added a `bounds()` function to the functionality tests that is just a shortcut to `getBoundingClientRect()`.
+
+---
+
 ## [5.2.4] — 2016-12-12
 
 ### Fixed
