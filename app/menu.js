@@ -54,7 +54,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           label: 'Preview Website Locally',
           enabled: (opts && opts.viewLocal) ? true : false,
           click: function (item, focusedWindow) {
-            shell.openExternal('https://localhost:8080/');
+            cbs.openBrowserToServer();
           }
         },
         {

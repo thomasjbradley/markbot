@@ -267,6 +267,11 @@ exports.revealFolder = function () {
 };
 menuCallbacks.revealFolder = exports.revealFolder;
 
+exports.openBrowserToServer = function () {
+  shell.openExternal(webServer.getHost());
+};
+menuCallbacks.openBrowserToServer = exports.openBrowserToServer;
+
 exports.disableFolderMenuFeatures = function () {
   menuOptions.runChecks = false;
   menuOptions.revealFolder = false;

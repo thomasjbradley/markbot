@@ -14,6 +14,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Removed the `aria-describedat` error ignoring because ARIA 1.1 replaced the attribute with `aria-details`.
+- Removed the `Cache-Control` and `Last-Modified` headers from the web server requests—it was interfering with using the web server as testing & I don’t think (though could use more testing) that it affects the performance metrics.
+- The localhost server now uses PortFinder to find an open port and the port cannot be configured in `package.json` any more.
 
 ---
 

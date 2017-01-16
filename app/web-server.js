@@ -4,21 +4,21 @@ const DIRECTORY_INDEX = '/index.html';
 const HTTPS_KEY = __dirname + '/https-key.pem';
 const HTTPS_CERT = __dirname + '/https-cert.pem';
 
-var zlib = require('zlib');
-var http = require('http');
-var path = require('path');
-var fs = require('fs');
+const zlib = require('zlib');
+const http = require('http');
+const path = require('path');
+const fs = require('fs');
 const https = require('https');
-var mimeTypes = require('mime-types');
+const mimeTypes = require('mime-types');
+const portfinder = require('portfinder');
 const finalhandler = require('finalhandler');
 const exists = require('./file-exists');
 const markbotMain = require('./markbot-main');
 const appPkg = require('../package.json');
 
-const SERVER_PORT = appPkg.config.serverPort;
-
 let webServer;
 let staticDir;
+let serverPort = portfinder.basePort;
 
 const start = function (dir, next) {
   staticDir = dir;
@@ -40,8 +40,8 @@ const start = function (dir, next) {
         if (exists.check(filePath)) {
           let mime = mimeTypes.contentType(path.extname(filePath));
           let headers = {
-            'Last-Modified': fs.statSync(filePath).mtime,
-            'Cache-Control': 'max-age=2592000', // 30 days
+            // 'Last-Modified': fs.statSync(filePath).mtime,
+            // 'Cache-Control': 'max-age=2592000', // 30 days
           };
 
           if (mime) headers['Content-Type'] = mime;
@@ -73,8 +73,12 @@ const start = function (dir, next) {
         }
       });
 
-      webServer.listen(SERVER_PORT, function () {
-        next();
+      portfinder.getPort(function (err, port) {
+        serverPort = port;
+
+        webServer.listen(port, function () {
+          next();
+        });
       });
     });
   });
@@ -94,7 +98,7 @@ const isRunning = function () {
 };
 
 const getHost = function () {
-  return `https://localhost:${SERVER_PORT}`;
+  return `https://localhost:${serverPort}`;
 };
 
 module.exports = {
