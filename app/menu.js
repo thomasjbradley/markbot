@@ -51,15 +51,17 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           type: 'separator'
         },
         {
-          label: 'Preview Website Locally',
+          label: 'Browse Local Website',
           enabled: (opts && opts.viewLocal) ? true : false,
+          accelerator: 'CmdOrCtrl+B',
           click: function (item, focusedWindow) {
             cbs.openBrowserToServer();
           }
         },
         {
-          label: 'View Live Website',
+          label: 'Browse Live Website',
           enabled: (opts && opts.viewLive) ? true : false,
+          accelerator: 'CmdOrCtrl+Shift+B',
           click: function (item, focusedWindow) {
             shell.openExternal(opts.viewLive.replace(/\{\{username\}\}/, opts.signOutUsername));
           }
