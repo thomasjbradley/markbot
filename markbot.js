@@ -247,9 +247,15 @@ app.on('activate', function () {
 app.on('open-file', function (e, path) {
   e.preventDefault();
 
-  if (mainWindow === null) createWindows(function () {
+  if (typeof path !== 'string') path = path[0];
+
+  if (mainWindow === null) {
+    createWindows(function () {
+      markbotMain.send('app:file-dropped', path);
+    });
+  } else {
     markbotMain.send('app:file-dropped', path);
-  });
+  }
 });
 
 exports.newDebugGroup = function (label) {
