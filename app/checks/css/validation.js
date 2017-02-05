@@ -28,7 +28,7 @@ const cleanMessage = function (message) {
   return message;
 };
 
-const shouldIncludeError = function (message, line, lines, fileContents) {
+const shouldIncludeError = function (context, message, skippedstring, line, lines, fileContents) {
   var nonExistingPropMatch = null;
 
   // Parse error at bottom of CSS, usually extra closing brace
@@ -55,6 +55,12 @@ const shouldIncludeError = function (message, line, lines, fileContents) {
 
   // Appearance
   if (message.match(/property appearance/i)) return false;
+
+  // Ignore :root variable declarations
+  if (context && /\:root/.test(context)) return false;
+
+  // Ignore var() values
+  if (skippedstring && /var\(/.test(skippedstring)) return false;
 
   return true;
 };
@@ -93,11 +99,19 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
         errorsList = results['m:errorlist'][0]['m:error'];
 
         errorsList.forEach(function (error) {
+          let context = (error['m:context'] && error['m:context'][0]) ? error['m:context'][0].trim() : false;
           let line = error['m:line'][0];
-          let message = error['m:message'][0].trim().replace(/\s*\:$/, '.').replace(/\(.*?\#.*?\)/, '—');
+          let message = error['m:message'][0].trim().replace(/\s*\:$/, '.').replace(/\s*\:/, ':').replace(/\(.*?\#.*?\)/, '—');
+          let skippedstring = (error['m:skippedstring'] && error['m:skippedstring'][0]) ? error['m:skippedstring'][0].trim() : false;
 
-          if (shouldIncludeError(message, line, lines, fileContents)) {
-            errors.push(util.format('Line %d: %s', line, message));
+          if (shouldIncludeError(context, message, skippedstring, line, lines, fileContents)) {
+            let contextMessage = '';
+            let skipMessage = '';
+
+            if (context) contextMessage = ` inside the \`${context}\` selector`;
+            if (skippedstring) skipMessage = ` around this code: \`${skippedstring}\``;
+
+            errors.push(`Line ${line}: ${message}${contextMessage}${skipMessage}`);
           }
         });
       }
