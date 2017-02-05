@@ -21,6 +21,7 @@
     "finalhandler": "^0.5.0",
     "git-commits": "^1.2.0",
     "git-get-status": "^1.0.5",
+    "glob": "^7.1.1",
     "htmlcs": "^0.2.9",
     "jimp": "^0.2.27",
     "js-beautify": "^1.6.4",
@@ -41,7 +42,6 @@
   },
   "scripts": {
     "debug": "NODE_ENV=development electron markbot.js",
-    "start": "NODE_ENV=production electron markbot.js",
     "start": "electron markbot.js",
     "pack-mac": "build -m --dir",
     "pack-win": "build -w --dir",
