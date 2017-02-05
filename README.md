@@ -27,6 +27,7 @@ Built with Javascript, Node.js & Electron.
   - [Targeting all files](#targeting-all-files)
     - [Unique information for all files](#unique-information-for-all-files)
   - [Inheriting from templates](#inheriting-from-templates)
+  - [The Markbot ignore file](#the-markbot-ignore-file)
 - [Installation on student computers](#installation-on-student-computers)
   - [Git](#git)
   - [JDK](#jdk)
@@ -673,6 +674,26 @@ html:
 ```
 
 In the above scenario, everything from the `repsonsive-website` template will be applied to your Markbot file and therefore the `index.html` file.
+
+### The Markbot ignore file
+
+You can get Markbot to ignore files within your project directory when using the `allFiles` option. Include a `.markbotignore` file in the same location as your `.markbot.yml` and it’ll be loaded in.
+
+*It doesn’t support glob patterns only simple file and folder paths.*
+
+Here’s an example:
+
+```
+pattern-library.html
+patterns/typography       # Since this is a directory everything within would be ignored
+patterns/grid
+patterns/brand
+patterns/icons
+patterns/modules
+common/grid.css
+common/type.css
+common/modules.css
+```
 
 ---
 

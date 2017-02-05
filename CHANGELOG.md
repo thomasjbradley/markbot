@@ -5,11 +5,21 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [5.4.0] — 2017-02-05
+
+### Added
+
+- CSS variable error ignoring because they aren’t part of the validator yet.
+- The ability to specify a `.markbotignore` file that will make Markbot ignore files and folders.
 
 ### Changed
 
 - Removed the `DEBUG` config option in `package.json` and replaced it with a new script: `npm start debug`
+- More descriptive error message for the CSS validation errors including selectors & code snippets if available.
+
+### Fixed
+
+- The port finder & web server now work properly together and everything that uses the web server now gets the correct port.
 
 ---
 
