@@ -11,7 +11,8 @@ const networks = require(__dirname + '/networks');
 const webServer = require(__dirname + '/web-server');
 const appPkg = require(__dirname + '/../package.json');
 
-const DEBUG = appPkg.config.DEBUG;
+const ENV = process.env.NODE_ENV;
+const DEBUG = (ENV === 'development');
 
 const getNewBrowserWindow = function (userOpts) {
   const defaultOpts = {

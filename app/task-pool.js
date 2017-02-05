@@ -6,7 +6,8 @@ const BrowserWindow = electron.BrowserWindow;
 const taskPoolQueue = require('./task-pool-queue');
 const appPkg = require('../package.json');
 
-const DEBUG = appPkg.config.DEBUG;
+const ENV = process.env.NODE_ENV;
+const DEBUG = (ENV === 'development');
 
 const TYPE_SINGLE = 'type-single';
 const TYPE_STATIC = 'type-static';

@@ -23,6 +23,9 @@ const lockMatcher = require('./app/lock-matcher');
 const exists = require('./app/file-exists');
 const checkManager = require('./app/check-manager');
 
+const ENV = process.env.NODE_ENV;
+const DEBUG = (ENV === 'development');
+
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
 const appMenu = require('./app/menu');
@@ -95,7 +98,7 @@ const createMainWindow = function (next) {
   });
 
   global.markbotMainWindow = mainWindow.id;
-  if (appPkg.config.DEBUG) console.log(`Main window: ${mainWindow.id}`);
+  if (DEBUG) console.log(`Main window: ${mainWindow.id}`);
 };
 
 const createDebugWindow = function () {

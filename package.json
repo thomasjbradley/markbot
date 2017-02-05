@@ -8,9 +8,6 @@
   "bugs": "https://github.com/thomasjbradley/markbot/issues",
   "private": true,
   "main": "markbot.js",
-  "config": {
-    "DEBUG": false
-  },
   "dependencies": {
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",
@@ -43,6 +40,8 @@
     "electron-builder": "^10.5.0"
   },
   "scripts": {
+    "debug": "NODE_ENV=development electron markbot.js",
+    "start": "NODE_ENV=production electron markbot.js",
     "start": "electron markbot.js",
     "pack-mac": "build -m --dir",
     "pack-win": "build -w --dir",

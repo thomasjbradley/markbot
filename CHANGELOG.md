@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Removed the `DEBUG` config option in `package.json` and replaced it with a new script: `npm start debug`
+
+---
+
 ## [5.3.0] — 2016-01-21
 
 ### Added
