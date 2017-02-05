@@ -9,6 +9,7 @@ const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
+const is = require('electron-is');
 const mimeTypes = require('mime-types');
 const portfinder = require('portfinder');
 const finalhandler = require('finalhandler');
@@ -18,12 +19,27 @@ const appPkg = require('../package.json');
 
 let webServer;
 let staticDir;
-let serverPort = portfinder.basePort;
+
+const isRunning = function () {
+  return !!(webServer && webServer.listening);
+};
+
+const setHost = function (port) {
+  global.localWebServerHost = `https://localhost:${port}`;
+};
+
+const getHost = function () {
+  if (is.renderer()) {
+    return require('electron').remote.getGlobal('localWebServerHost');
+  } else {
+    return global.localWebServerHost;
+  }
+};
 
 const start = function (dir, next) {
   staticDir = dir;
 
-  if (isRunning()) return next();
+  if (isRunning()) return next(getHost());
 
   fs.readFile(HTTPS_KEY, 'utf8', function(err, httpsKey) {
     fs.readFile(HTTPS_CERT, 'utf8', function(err, httpsCert) {
@@ -74,10 +90,10 @@ const start = function (dir, next) {
       });
 
       portfinder.getPort(function (err, port) {
-        serverPort = port;
+        setHost(port);
 
         webServer.listen(port, function () {
-          next();
+          next(getHost());
         });
       });
     });
@@ -91,14 +107,6 @@ const stop = function () {
       staticDir = null;
     });
   }
-};
-
-const isRunning = function () {
-  return (webServer && webServer.listening);
-};
-
-const getHost = function () {
-  return `https://localhost:${serverPort}`;
 };
 
 module.exports = {
