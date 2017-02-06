@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.4.2] — 2017-02-05
+
+### Fixed
+
+- The naming conventions checking wasn’t using the `.markbotignore` file causing some unnecessary naming convention errors.
+
+---
+
 ## [5.4.1] — 2017-02-05
 
 ### Fixed

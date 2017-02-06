@@ -3,24 +3,32 @@
 const path = require('path');
 const dir = require('node-dir');
 const stripPath = require('./strip-path');
+const markbotIgnoreParser = require('./markbot-ignore-parser');
 const filesToIgnore = require('./files-to-ignore.json');
 
 module.exports = function (dirPath, next) {
   const fullPath = path.resolve(dirPath);
+  const matcher = new RegExp(`^(?:${filesToIgnore.join('|')})`);
 
-  dir.files(fullPath, function(err, files) {
-    let errors = [];
+  markbotIgnoreParser.parse(fullPath, (ignoreFiles) => {
+    const ignoreMatcher = new RegExp(`^(?:${ignoreFiles.join('|')})`);
 
-    files = files.filter(function (file) {
-      let strippedPath = stripPath(file, fullPath);
-      let cleanFileName = path.parse(file).base;
+    dir.files(fullPath, (err, files) =>{
+      let errors = [];
 
-      if (strippedPath.match(new RegExp(`^(?:${filesToIgnore.join('|')})`))) return false;
-      if (cleanFileName.match(new RegExp(`^(?:${filesToIgnore.join('|')})`))) return false;
+      files = files.filter( (file) => {
+        const strippedPath = stripPath(file, fullPath);
+        const cleanFileName = path.parse(file).base;
 
-      return true;
+        if (matcher.test(strippedPath)) return false;
+        if (matcher.test(cleanFileName)) return false;
+        if (ignoreMatcher.test(strippedPath)) return false;
+        if (ignoreMatcher.test(cleanFileName)) return false;
+
+        return true;
+      });
+
+      next(files);
     });
-
-    next(files);
   });
 };

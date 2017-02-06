@@ -92,7 +92,7 @@ const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, n
         markbotFile[key].push({ path: stripPath(file, folderpath), });
       });
     }
-console.log(markbotFile);
+
     markbotFile = mergeAllFilesProperties(markbotFile, key);
   });
 
