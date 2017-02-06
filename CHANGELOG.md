@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.4.1] — 2017-02-05
+
+### Fixed
+
+- A bug when using Markbot without a `.markbot.yml` file and no files of a specific extension (e.g. `.js`) were found.
+
+---
+
 ## [5.4.0] — 2017-02-05
 
 ### Added

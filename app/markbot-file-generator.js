@@ -64,6 +64,8 @@ const bindFunctionalityToHtmlFiles = function (markbotFile) {
 };
 
 const mergeAllFilesProperties = function (markbotFile, key) {
+  if (!markbotFile[key]) return markbotFile;
+
   markbotFile[key].forEach((item, i) => {
     if (!markbotFile.allFiles[key]) return;
 
@@ -90,7 +92,7 @@ const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, n
         markbotFile[key].push({ path: stripPath(file, folderpath), });
       });
     }
-
+console.log(markbotFile);
     markbotFile = mergeAllFilesProperties(markbotFile, key);
   });
 
