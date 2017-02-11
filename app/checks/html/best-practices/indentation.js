@@ -71,7 +71,7 @@ module.exports.check = function (fileContents, lines) {
       if (shouldThrowBreakingError(lines[i], beautifiedLines[i])) {
         errors.push({
           type: 'code-diff',
-          message: util.format('Around line %d: Unexpected indentation', i + 1),
+          message: util.format('Around line %d: Unexpected spacing or indentation', i + 1),
           code: grabChunk(i, lines, beautifiedLines),
           status: true
         });
