@@ -167,13 +167,15 @@ const hasFilesToCheck = function () {
   const noHtmlFiles = (typeof markbotFile.html === 'undefined' || markbotFile.html.length < 1);
   const noCssFiles = (typeof markbotFile.css === 'undefined' || markbotFile.css.length < 1);
   const noJsFiles = (typeof markbotFile.js === 'undefined' || markbotFile.js.length < 1);
+  const noMdFiles = (typeof markbotFile.md === 'undefined' || markbotFile.md.length < 1);
+  const noYmlFiles = (typeof markbotFile.yml === 'undefined' || markbotFile.yml.length < 1);
 
-  if (noHtmlFiles && noCssFiles && noJsFiles) {
+  if (noHtmlFiles && noCssFiles && noJsFiles && noMdFiles && noYmlFiles) {
     markbotMain.send('app:file-missing');
     webServer.stop();
 
     setTimeout(function () {
-      markbotMain.send('alert', 'There are no HTML, CSS or Javascript files for Markbot to check');
+      markbotMain.send('alert', 'There are no HTML, CSS, Javascript, Markdown, or YAML files for Markbot to check');
     }, 75);
 
     return false;

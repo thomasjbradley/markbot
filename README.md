@@ -22,6 +22,8 @@ Built with Javascript, Node.js & Electron.
   - [JS file tests](#javascript-file-tests)
   - [Screenshot comparisons](#screenshot-comparisons)
   - [Functionality tests](#functionality-tests)
+  - [Markdown tests](#markdown-tests)
+  - [YAML tests](#yaml-tests)
   - [File & image tests](#file--image-tests)
   - [Performance testing](#performance-testing)
   - [Targeting all files](#targeting-all-files)
@@ -126,6 +128,8 @@ Here are the properties that you can use in the Markbot file for testing:
 - `js` — [for testing Javascript files.](#javascript-file-tests)
 - `screenshots` — [for comparing visual differences with screenshots.](#screenshot-comparisons)
 - `functionality` — [for running Javascript live tests against the website.](#functionality-tests)
+- `md` — [for checking Markdown files.](#markdown-tests)
+- `yml` — [for checking YAML files.](#yaml-tests)
 - `files` — [for checking images & plain text files.](#file--image-tests)
 - `performance` — [for checking website performance against simulated networks.](#performance-testing)
 - `allFiles` — [for common requirements between all files of a specific type.](#targeting-all-files)
@@ -478,6 +482,60 @@ functionality:
         });
 ```
 
+### Markdown tests
+
+Markbot can check Markdown files looking for validation & best practices. It can also search inside the files for specific content.
+
+If the Markdown files have YAML front matter that will also be validated with the same processor used by the YAML file checking.
+
+*The `path` option is the only one that’s required—leaving any of the others off will skip the test.*
+
+```yml
+md:
+  # The file’s path
+  - path: "README.md"
+
+    # Check validation & best practices following a specific Markdown format
+    valid: true
+
+    # Regex searches on the file, for confirming specific content
+    # If given an array, the second argument can be a custom error message
+    search:
+      - 'Dinosaurs'
+      - ['T\. Rex', 'Expected to see the T. Rex described']
+
+    # Regex searches on the file, for confirming specific content isn’t found
+    # If given an array, the second argument can be a custom error message
+    searchNot:
+      - 'Mammals'
+```
+
+### YAML tests
+
+Markbot can check YAML files looking for validation & best practices. It can also search inside the files for specific content.
+
+*The `path` option is the only one that’s required—leaving any of the others off will skip the test.*
+
+```yml
+yml:
+  # The file’s path
+  - path: "data.yml"
+
+    # Check validation & best practices
+    valid: true
+
+    # Regex searches on the file, for confirming specific content
+    # If given an array, the second argument can be a custom error message
+    search:
+      - 'Mammals'
+      - ['Dimetrodon', 'Should have explained that the Dimetrodon isn’t a dinosaur']
+
+    # Regex searches on the file, for confirming specific content isn’t found
+    # If given an array, the second argument can be a custom error message
+    searchNot:
+      - 'Dinosaurs'
+```
+
 ### File & image tests
 
 Markbot can check random plain text files and images for specific features.
@@ -604,6 +662,14 @@ allFiles:
 
   # Supports any of the entries that `js` supports
   js:
+    valid: true
+
+  # Supports any of the entries that `md` supports
+  md:
+    valid: true
+
+  # Supports any of the entries that `yml` supports
+  yml:
     valid: true
 
   # The functionality tests will be applied to every HTML file

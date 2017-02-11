@@ -5,6 +5,19 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.5.0] — 2017-02-11
+
+### Added
+
+- Support for Markdown validation & with the `md` entry.
+- Support for YAML validation & checking with the `yml` entry.
+
+### Changed
+
+- Changed the “Unexpected indentation” message to say “Unexpected spacing or indentation” to be slightly more descriptive.
+
+---
+
 ## [5.4.2] — 2017-02-05
 
 ### Fixed

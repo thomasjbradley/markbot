@@ -15,12 +15,22 @@ const getFileCodeLang = function (fullPath) {
   return fullPath.match(/\.(html|css|js)$/)[1];
 };
 
+const getAlternativeExtensions = function (ext) {
+  switch (ext) {
+    // case 'md':
+      // return 'md|yml';
+      // break;
+    default:
+      return ext;
+  }
+};
+
 const findCompatibleFiles = function (folderpath, ignore, ext) {
   const fullPath = path.resolve(folderpath);
   const minFileExts = new RegExp(`min\.(${ext})$`);
   const ignoreRegExps = ignore.map((item) => new RegExp(item));
   const totalIgnores = ignoreRegExps.length;
-  let files = glob.sync(`${fullPath}/**/*.${ext}`);
+  let files = glob.sync(`${fullPath}/**/*.+(${ext})`);
 
   if (!files) return [];
 
@@ -76,13 +86,13 @@ const mergeAllFilesProperties = function (markbotFile, key) {
 };
 
 const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, next) {
-  const keys = ['html', 'css', 'js', 'functionality', 'files', 'performance'];
+  const keys = ['html', 'css', 'js', 'md', 'yml', 'files', 'functionality', 'performance'];
 
   keys.forEach((key) => {
     if (!markbotFile[key] && !markbotFile.allFiles[key]) return;
 
     if (markbotFile.allFiles[key] && !markbotFile[key]) {
-      let files = findCompatibleFiles(folderpath, ignoreFiles, key);
+      let files = findCompatibleFiles(folderpath, ignoreFiles, getAlternativeExtensions(key));
 
       if (!files) next(markbotFile);
 

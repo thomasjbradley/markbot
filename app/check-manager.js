@@ -33,6 +33,12 @@ const availableChecks = {
   files: {
     module: 'files',
   },
+  md: {
+    module: 'markdown',
+  },
+  yml: {
+    module: 'yaml',
+  },
   functionality: {
     module: 'functionality',
     type: taskPool.TYPE_LIVE,
