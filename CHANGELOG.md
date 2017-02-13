@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.5.1] — 2017-02-13
+
+### Changed
+
+- Removed the restriction on `font-weight` numbers—it was too strict.
+
+---
+
 ## [5.5.0] — 2017-02-11
 
 ### Added
