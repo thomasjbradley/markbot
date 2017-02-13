@@ -35,7 +35,6 @@
     "declaration-colon-space-before": "never",
     "declaration-no-important": true,
     "font-family-name-quotes": "always-where-recommended",
-    "font-weight-notation": "named-where-possible",
     "function-calc-no-unspaced-operator": true,
     "function-comma-newline-before": "never-multi-line",
     "function-comma-space-after": "always",
