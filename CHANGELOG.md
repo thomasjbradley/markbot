@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Markdown Lint was not enforcing spaces after list markers.
+
+---
+
 ## [5.5.1] — 2017-02-13
 
 ### Changed
