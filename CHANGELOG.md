@@ -7,9 +7,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Increased the compound selector limitation to 4 to allow more complex selectors for forms & error messages.
+- The paragraph closing tag checking is a little more forgiving, especially when there are tags inside the `<p>`.
+
 ### Fixed
 
-- Markdown Lint was not enforcing spaces after list markers.
+- Markdown Lint was not enforcing spaces after list markers (partial fix).
+- Allow CSS4 form element pseudo-classes: `:required`, `:valid`, `:invalid`, etc.
 
 ---
 
