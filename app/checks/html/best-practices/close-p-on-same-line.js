@@ -12,40 +12,21 @@ const findClosingPTagLine = function (line, lines, fileContents) {
   return newLine;
 };
 
-const hasUnwrappedTextOnSameLine = function (line, lines, fileContents) {
-  const thisLine = lines[line].trim();
-  const immediatelyFollowedByTag = /^<p[^>]*>\s*<[a-z]/i;
-  const hasStuffAfterTag = /^<p[^>]*>.+/i;
-
-  if (!immediatelyFollowedByTag.test(thisLine) && hasStuffAfterTag.test(thisLine)) return true;
-
-  return false;
-};
-
-const hasBrTags = function (line, lines, fileContents) {
-  const closingLine = findClosingPTagLine(line, lines, fileContents);
-
-  for (let i = line; i <= closingLine; i++) {
-    if (/\<br/i.test(lines[line].trim())) return true;
-  }
-
-  return false;
-};
-
 const nextLineStartsWithTag = function (line, lines, fileContents) {
   const startsWithTag = /^<\/?[a-z]+/i;
-  const next = line--;
+  const next = line + 1;
 
-  if (next < lines.length) {
+  if (next < lines.length - 1) {
     if (startsWithTag.test(lines[next].trim())) return true;
   }
 
   return false;
 };
 
-const prevLineStartsWithTag = function (line, lines, fileContents) {
+const closingPrevLineStartsWithTag = function (line, lines, fileContents) {
   const startsWithTag = /^<\/?[a-z]+/i;
-  const prev = line--;
+  const closingLine = findClosingPTagLine(line, lines, fileContents);
+  const prev = closingLine - 1;
 
   if (prev > 0) {
     if (startsWithTag.test(lines[prev].trim())) return true;
@@ -54,16 +35,48 @@ const prevLineStartsWithTag = function (line, lines, fileContents) {
   return false;
 };
 
-const hasOnlyTagsInside = function (line, lines, fileContents) {
+const isImmediatelyFollowedByTag = function (line, lines, fileContents) {
   const immediatelyFollowedByTag = /^<p[^>]*>\s*<[a-z]/i;
-  const immediatelyPrecededByTag = /^<[^>]+><\p/;
+
+  return immediatelyFollowedByTag.test(lines[line].trim());
+};
+
+const isImmediatelyPrecededByTag = function (line, lines, fileContents) {
+  const immediatelyPrecededByTag = /<[^>]+>\s*<\/p/;
+
+  return immediatelyPrecededByTag.test(lines[line].trim());
+};
+
+const hasUnwrappedText = function (line, lines, fileContents) {
+  const thisLine = lines[line].trim();
+  const hasStuffAfterTag = /^<p[^>]*>.+/i;
+
+  if (
+    !isImmediatelyFollowedByTag(line, lines, fileContents)
+    && hasStuffAfterTag.test(thisLine)
+  ) return true;
+
+  return false;
+};
+
+const hasBrTags = function (line, lines, fileContents) {
+  const closingLine = findClosingPTagLine(line, lines, fileContents);
+
+  for (let i = line; i <= closingLine; i++) {
+    if (/\<br/i.test(lines[i].trim())) return true;
+  }
+
+  return false;
+};
+
+const hasOnlyTagsInside = function (line, lines, fileContents) {
   const immediatelyPrecededByText = /[^>]+<\p/;
   const theLine = lines[line].trim();
   const closingLine = findClosingPTagLine(line, lines, fileContents);
 
   if (
-    (immediatelyFollowedByTag.test(theLine) || nextLineStartsWithTag(line, lines, fileContents))
-    && ((immediatelyPrecededByTag.test(theLine) && !immediatelyPrecededByText.test(theLine)) || prevLineStartsWithTag(line, lines, fileContents))
+    (isImmediatelyFollowedByTag(line, lines, fileContents) || nextLineStartsWithTag(line, lines, fileContents))
+    && (!immediatelyPrecededByText.test(theLine) || closingPrevLineStartsWithTag(line, lines, fileContents))
   ) {
     return true;
   }
@@ -72,8 +85,8 @@ const hasOnlyTagsInside = function (line, lines, fileContents) {
 };
 
 const shouldIncludeError = function (line, lines, fileContents) {
-  if (hasUnwrappedTextOnSameLine(line, lines, fileContents)) return true;
   if (hasBrTags(line, lines, fileContents)) return false;
+  if (hasUnwrappedText(line, lines, fileContents)) return true;
   if (hasOnlyTagsInside(line, lines, fileContents)) return false;
 
   return true;
@@ -87,10 +100,21 @@ const check = function (fileContents, lines) {
 
   for (i; i < total; i++) {
     let line = lines[i].trim();
+    let closingLine = findClosingPTagLine(i, lines, fileContents);
 
     if (line.match(startsWithP) && !line.match(endsWithP)) {
       if (shouldIncludeError(i, lines, fileContents)) {
         errors.push(`Line ${i + 1}: Closing \`</p>\` tag should be on the same line as the opening \`<p>\` tag`);
+        break;
+      }
+
+      if (isImmediatelyFollowedByTag(i, lines, fileContents)) {
+        errors.push(`Line ${i + 1}: The opening \`<p>\` tag should be on its own line`);
+        break;
+      }
+
+      if (isImmediatelyPrecededByTag(closingLine, lines, fileContents)) {
+        errors.push(`Line ${i + 1}: The closing \`</p>\` tag should be on its own line`);
         break;
       }
     }
