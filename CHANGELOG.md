@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.5.3] — 2017-03-13
+
+### Fixed
+
+- Fixed a bug in the closing `</p>` tag checking for when there isn’t a matched closing `</p>` tag and improved the paragraph indenting algorithm.
+
+---
+
 ## [5.5.2] — 2017-03-06
 
 ### Changed

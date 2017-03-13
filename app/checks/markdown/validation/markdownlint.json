@@ -31,7 +31,9 @@
     "ol_multi": 1
   },
   "blanks-around-lists": true,
-  "no-trailing-spaces": true,
+  "no-trailing-spaces": {
+    "br_spaces": 0
+  },
   "no-hard-tabs": true,
   "no-reversed-links": true,
   "no-multiple-blanks": true,

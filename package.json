@@ -27,7 +27,7 @@
     "jimp": "^0.2.27",
     "js-beautify": "^1.6.4",
     "js-yaml": "^3.6.1",
-    "markdownlint": "^0.3.1",
+    "markdownlint": "^0.4.0",
     "merge-objects": "^1.0.5",
     "mime-types": "^2.1.13",
     "mkdirp": "^0.5.1",
