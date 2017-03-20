@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.5.4] — 2017-03-20
+
+### Fixed
+
+- Updated the version of Markdownlint to fix a bug with trailing spaces & front matter.
+
+---
+
 ## [5.5.3] — 2017-03-13
 
 ### Fixed
