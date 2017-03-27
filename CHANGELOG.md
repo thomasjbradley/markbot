@@ -5,6 +5,19 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.6.0] — 2017-03-27
+
+### Added
+
+- The ability to pop the code open in Atom.
+- The ability to pop the repository open on GitHub’s website.
+
+### Changed
+
+- Completely revamped the interface to be more MacOS-like and more refined—including a new toolbar with buttons & a status display.
+
+---
+
 ## [5.5.4] — 2017-03-20
 
 ### Fixed

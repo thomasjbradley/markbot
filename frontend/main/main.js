@@ -11,6 +11,8 @@ const successMessages = require('./success-messages.json');
 const robotBeeps = require('./robot-beeps.json');
 const $body = document.querySelector('body');
 const $dropbox = document.getElementById('dropbox');
+const $checksWrapper = document.getElementById('checks');
+const $messagesWrapper = document.getElementById('message-wrapper');
 const $checks = document.getElementById('checks-container');
 const $checksLoader = document.getElementById('checks-loader');
 const $messages = document.getElementById('messages');
@@ -20,14 +22,29 @@ const $messagesLoaderLabel = document.querySelector('.messages-loader-label');
 const $messageHeader = document.getElementById('message-header');
 const $robotLogo = document.querySelector('.robot-logo');
 const $messageHeading = document.querySelector('h2.no-errors');
-const $repoName = document.getElementById('folder');
 const $signin = document.getElementById('sign-in');
 // const $failure = document.getElementById('failure');
 const $submit = document.getElementById('submit');
-const $canvasBtn = document.getElementById('submit-btn');
 const $allGoodCheck = document.getElementById('all-good-check');
 const $messageCanvas = document.querySelector('.with-canvas-message');
 const $messageNoCanvas = document.querySelector('.no-canvas-message');
+
+// TOOLBAR
+const $openEditorBtn = document.getElementById('open-editor');
+const $openBrowserBtn = document.getElementById('open-browser');
+const $openRepoBtn = document.getElementById('open-repo');
+const $createIssueBtn = document.getElementById('create-issue');
+const $statusBar = document.getElementById('status-bar');
+const $refreshBtn = document.getElementById('refresh-btn');
+const $repoName = document.getElementById('folder');
+const $canvasBtn = document.getElementById('submit-btn');
+const $canvasBtnText = $canvasBtn.querySelector('#button-text');
+const $statusBarRed = document.getElementById('status-bar-red');
+const $statusBarYellow = document.getElementById('status-bar-yellow');
+const $statusBarGreen = document.getElementById('status-bar-green');
+const $statusBarRedText = $statusBarRed.querySelector('.toolbar-status-text');
+const $statusBarYellowText = $statusBarYellow.querySelector('.toolbar-status-text');
+const $statusBarGreenText = $statusBarGreen.querySelector('.toolbar-status-text');
 
 let groups = {};
 let checks = {};
@@ -282,6 +299,7 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
 };
 
 const reset = function () {
+  clearInterval(isMarkbotDoneYet);
   $messages.innerHTML = '';
   $messagesPositive.innerHTML = '';
   $checks.innerHTML = '';
@@ -293,16 +311,54 @@ const reset = function () {
   $messageHeader.dataset.state = 'computing';
   // $failure.dataset.state = 'hidden';
   $submit.dataset.state = 'hidden';
-  $canvasBtn.removeAttribute('disabled');
-  $canvasBtn.dataset.state = '';
-  $canvasBtn.setAttribute('hidden', true);
   $allGoodCheck.style.animationName = 'none';
   $messageNoCanvas.removeAttribute('hidden');
   $messageCanvas.setAttribute('hidden', true);
+
+  $canvasBtn.dataset.state = '';
+  $canvasBtn.setAttribute('disabled', true);
+  $canvasBtnText.innerHTML = 'Submit';
+
+  $dropbox.dataset.state = 'visible';
+  $messagesWrapper.dataset.state = 'hidden';
+  $checksWrapper.dataset.state = 'hidden';
+  $statusBar.setAttribute('disabled', true);
+  $refreshBtn.setAttribute('disabled', true);
+  $refreshBtn.setAttribute('data-state', '');
+  $openEditorBtn.setAttribute('disabled', true);
+  $openBrowserBtn.setAttribute('disabled', true);
+  $openRepoBtn.setAttribute('disabled', true);
+  $createIssueBtn.setAttribute('disabled', true);
+  $repoName.querySelector('.icon-label').innerHTML = '—';
+
+  $statusBarRed.setAttribute('hidden', true);
+  $statusBarYellow.setAttribute('hidden', true);
+  $statusBarGreen.setAttribute('hidden', true);
+  $statusBarRedText.innerHTML = '—';
+  $statusBarYellowText.innerHTML = '—';
+  $statusBarGreenText.innerHTML = '—';
+
   groups = {};
   checks = {};
   console.groupEnd();
   console.group();
+};
+
+const refresh = function () {
+  if (fullPath && !isRunning()) {
+    reset();
+    startChecks();
+    $dropbox.dataset.state = 'hidden';
+    $messagesWrapper.dataset.state = 'visible';
+    $checksWrapper.dataset.state = 'visible';
+    $statusBar.removeAttribute('disabled');
+    $refreshBtn.removeAttribute('disabled');
+    $refreshBtn.setAttribute('data-state', 'computing');
+    $openEditorBtn.removeAttribute('disabled');
+    $openBrowserBtn.removeAttribute('disabled');
+    $openRepoBtn.removeAttribute('disabled');
+    $createIssueBtn.removeAttribute('disabled');
+  }
 };
 
 const triggerDoneState = function () {
@@ -310,6 +366,7 @@ const triggerDoneState = function () {
 
   clearInterval(isMarkbotDoneYet);
   $messagesLoader.dataset.state = 'hidden';
+  $refreshBtn.setAttribute('data-state', '');
 
   if (hasErrors()) {
      $messageHeader.dataset.state = 'errors';
@@ -318,6 +375,7 @@ const triggerDoneState = function () {
     $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
     $submit.dataset.state = 'visible';
     $messages.dataset.state = 'hidden';
+    $canvasBtn.removeAttribute('disabled');
   }
 };
 
@@ -366,8 +424,68 @@ const fileDropped = function (path) {
     fullPath = path;
     startChecks();
     $dropbox.dataset.state = 'hidden';
+    $messagesWrapper.dataset.state = 'visible';
+    $checksWrapper.dataset.state = 'visible';
+    $statusBar.removeAttribute('disabled');
+    $refreshBtn.removeAttribute('disabled');
+    $refreshBtn.setAttribute('data-state', 'computing');
+    $openEditorBtn.removeAttribute('disabled');
+    $openBrowserBtn.removeAttribute('disabled');
+    $openRepoBtn.removeAttribute('disabled');
+    $createIssueBtn.removeAttribute('disabled');
   }
 };
+
+const statusBarUpdate = function () {
+  const allGroups = document.querySelectorAll('#checks ul');
+  let redItems = 0;
+  let yellowItems = 0;
+  let greenItems = 0;
+
+  for(let group of allGroups) {
+    let aTags = group.querySelectorAll('li a');
+
+    for (let a of aTags) {
+      if (['succeeded'].indexOf(a.dataset.status) >= 0) {
+        greenItems++;
+        continue;
+      }
+
+      if (['failed'].indexOf(a.dataset.status) >= 0) {
+        redItems++;
+        continue;
+      }
+
+      yellowItems++;
+    }
+  };
+
+  if (redItems > 0) {
+    $statusBarRed.removeAttribute('hidden');
+    $statusBarRedText.innerHTML = redItems;
+  } else {
+    $statusBarRed.setAttribute('hidden', true);
+    $statusBarRedText.innerHTML = '—';
+  }
+
+  if (yellowItems > 0) {
+    $statusBarYellow.removeAttribute('hidden');
+    $statusBarYellowText.innerHTML = yellowItems;
+  } else {
+    $statusBarYellow.setAttribute('hidden', true);
+    $statusBarYellowText.innerHTML = '—';
+  }
+
+  if (greenItems > 0) {
+    $statusBarGreen.removeAttribute('hidden');
+    $statusBarGreenText.innerHTML = greenItems;
+  } else {
+    $statusBarGreen.setAttribute('hidden', true);
+    $statusBarGreenText.innerHTML = '—';
+  }
+
+  return false;
+}
 
 $body.classList.add(`os-${os.platform()}`);
 
@@ -412,6 +530,7 @@ document.getElementById('username-form').addEventListener('submit', function (e)
   localStorage.setItem('github-username', document.getElementById('username').value);
   markbot.enableSignOut(localStorage.getItem('github-username'));
   $signin.dataset.state = 'hidden';
+  $dropbox.dataset.state = 'visible';
 });
 
 document.getElementById('submit-btn').addEventListener('click', function (e) {
@@ -419,15 +538,17 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 
   if (!hasErrors() && !isRunning()) {
     $canvasBtn.dataset.state = 'processing';
-    $canvasBtn.setAttribute('disabled', true);
+    // $canvasBtn.setAttribute('disabled', true);
 
     markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
       if (!err && data.code == 200) {
         $canvasBtn.dataset.state = 'done';
+        $canvasBtnText.innerHTML = 'Submitted';
         $allGoodCheck.style.animationName = 'bounce-check';
       } else {
         $canvasBtn.dataset.state = '';
-        $canvasBtn.removeAttribute('disabled');
+        $canvasBtnText.innerHTML = 'Submit';
+        // $canvasBtn.removeAttribute('disabled');
         $allGoodCheck.style.animationName = 'none';
         if (data.message) alert(data.message);
       }
@@ -453,15 +574,14 @@ $repoName.addEventListener('click', function (e) {
 
 listener.on('app:file-missing', function (event) {
   reset();
-  $dropbox.dataset.state = 'visible';
 });
 
 listener.on('app:file-exists', function (event, repo) {
-  $repoName.innerHTML = repo;
+  $repoName.querySelector('.icon-label').innerHTML = repo;
 });
 
 listener.on('app:with-canvas', function (event) {
-  $canvasBtn.removeAttribute('hidden');
+  // $canvasBtn.removeAttribute('hidden');
   $messageNoCanvas.setAttribute('hidden', true);
   $messageCanvas.removeAttribute('hidden');
 });
@@ -508,12 +628,14 @@ listener.on('check-group:item-new', function (event, group, id, label) {
   }
 
   checks[checkId].textContent = label;
+  statusBarUpdate();
 });
 
 listener.on('check-group:item-computing', function (event, group, id) {
   var checkId = group + id;
 
   checks[checkId].dataset.status = 'computing';
+  statusBarUpdate();
 });
 
 listener.on('check-group:item-bypass', function (event, group, id, label, errors) {
@@ -521,6 +643,7 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
 
   checks[checkId].dataset.status = 'bypassed';
   displayErrors(group, label, checks[checkId].dataset.id, errors, 'bypassed');
+  statusBarUpdate();
 });
 
 listener.on('check-group:item-complete', function (event, group, id, label, errors, skip, messages) {
@@ -534,6 +657,7 @@ listener.on('check-group:item-complete', function (event, group, id, label, erro
   }
 
   if (messages && messages.length > 0) displayErrors(group, label, id, messages, '', true);
+  statusBarUpdate();
 })
 
 listener.on('app:open-repo', function (event, path) {
@@ -541,6 +665,15 @@ listener.on('app:open-repo', function (event, path) {
   fullPath = path;
   startChecks();
   $dropbox.dataset.state = 'hidden';
+  $messagesWrapper.dataset.state = 'visible';
+  $checksWrapper.dataset.state = 'visible';
+  $statusBar.removeAttribute('disabled');
+  $refreshBtn.removeAttribute('disabled');
+  $refreshBtn.setAttribute('data-state', 'computing');
+  $openEditorBtn.removeAttribute('disabled');
+  $openBrowserBtn.removeAttribute('disabled');
+  $openRepoBtn.removeAttribute('disabled');
+  $createIssueBtn.removeAttribute('disabled');
 });
 
 listener.on('app:re-run', function (event) {
@@ -548,16 +681,24 @@ listener.on('app:re-run', function (event) {
     reset();
     startChecks();
     $dropbox.dataset.state = 'hidden';
+    $messagesWrapper.dataset.state = 'visible';
+    $checksWrapper.dataset.state = 'visible';
+    $statusBar.removeAttribute('disabled');
+    $refreshBtn.removeAttribute('disabled');
+    $refreshBtn.setAttribute('data-state', 'computing');
+    $openEditorBtn.removeAttribute('disabled');
+    $openBrowserBtn.removeAttribute('disabled');
+    $openRepoBtn.removeAttribute('disabled');
+    $createIssueBtn.removeAttribute('disabled');
   }
 });
 
-$robotLogo.addEventListener('click', function (e) {
-  if (fullPath && !isRunning()) {
-    reset();
-    startChecks();
-    $dropbox.dataset.state = 'hidden';
-  }
-});
+$robotLogo.addEventListener('click', () => refresh());
+$refreshBtn.addEventListener('click', () => refresh());
+$openBrowserBtn.addEventListener('click', () => markbot.openBrowserToServer());
+$createIssueBtn.addEventListener('click', () => markbot.createGitHubIssue());
+$openRepoBtn.addEventListener('click', () => markbot.openGitHubRepo());
+$openEditorBtn.addEventListener('click', () => markbot.openInCodeEditor());
 
 listener.on('app:sign-out', function (event) {
   localStorage.clear();
@@ -582,6 +723,7 @@ listener.on('alert', function (event, message) {
 
 if (localStorage.getItem('github-username')) {
   $signin.dataset.state = 'hidden';
+  $dropbox.dataset.state = 'visible';
   markbot.enableSignOut(localStorage.getItem('github-username'));
 }
 

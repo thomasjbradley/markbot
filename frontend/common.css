@@ -9,13 +9,35 @@
   --color-grey: #a8a6af;
   --color-grey-medium: #63666a;
   --color-grey-dark: #333;
+
+  --control-font-size: .875rem;
+  --control-font-size-larger: 1.1rem;
+  --control-border-radius: .4rem;
+  --control-padding: 0 .875rem;
+  --control-border-color: rgba(0, 0, 0, .2);
+  --control-border-color-darker: rgba(0, 0, 0, .3);
+  --control-border-color-lighter: rgba(0, 0, 0, .1);
+  --control-border-color-connection: rgba(0, 0, 0, .1);
 }
+
+@font-face { font-family: "SF Mono"; font-weight: 200; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Light.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 200; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-LightItalic.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 400; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Regular.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 400; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-RegularItalic.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 500; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Medium.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 500; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-MediumItalic.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 600; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Semibold.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 600; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-SemiboldItalic.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 700; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Bold.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 700; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-BoldItalic.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 800; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Heavy.otf"); }
+@font-face { font-family: "SF Mono"; font-weight: 800; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-HeavyItalic.otf"); }
 
 html {
   box-sizing: border-box;
 
   font-size: 12px;
-  font-family: Menlo, monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   line-height: 1.5;
 }
 

@@ -5,6 +5,7 @@ const app = electron.app;
 const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
 const shell = electron.shell;
+const exec = require('child_process').exec;
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
@@ -63,6 +64,10 @@ let isCheater = {
 app.commandLine.appendSwitch('--ignore-certificate-errors');
 app.commandLine.appendSwitch('--disable-http-cache');
 
+const escapeShell = function (cmd) {
+  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
+};
+
 const updateAppMenu = function () {
   menuOptions.showDevelop = (MARKBOT_DEVELOP_MENU && MARKBOT_LOCK_PASSCODE && passcode.matches(MARKBOT_LOCK_PASSCODE, config.secret, config.passcodeHash));
   Menu.setApplicationMenu(Menu.buildFromTemplate(appMenu.getMenuTemplate(app, menuCallbacks, menuOptions)));
@@ -76,7 +81,7 @@ const createMainWindow = function (next) {
     show: false,
     minHeight: 550,
     titleBarStyle: 'hidden-inset',
-    vibrancy: 'ultra-dark',
+    vibrancy: 'light',
   });
 
   mainWindow.loadURL('file://' + __dirname + '/frontend/main/main.html');
@@ -144,8 +149,9 @@ const initializeInterface = function () {
   menuOptions.developMenuItems = true;
 
   if (markbotFile.repo) {
-    menuOptions.viewLive = `http://{{username}}.github.io/${repoOrFolder}/`;
-    menuOptions.ghIssues = `http://github.com/{{username}}/${repoOrFolder}/issues`;
+    menuOptions.viewLive = `https://{{username}}.github.io/${repoOrFolder}/`;
+    menuOptions.ghRepo = `https://github.com/{{username}}/${repoOrFolder}`;
+    menuOptions.ghIssues = `https://github.com/{{username}}/${repoOrFolder}/issues/new`;
   }
 };
 
@@ -292,11 +298,29 @@ exports.openBrowserToServer = function () {
 };
 menuCallbacks.openBrowserToServer = exports.openBrowserToServer;
 
+exports.createGitHubIssue = function () {
+  shell.openExternal(menuOptions.ghIssues.replace(/\{\{username\}\}/, menuOptions.signOutUsername));
+};
+menuCallbacks.createGitHubIssue = exports.createGitHubIssue;
+
+exports.openGitHubRepo = function () {
+  shell.openExternal(menuOptions.ghRepo.replace(/\{\{username\}\}/, menuOptions.signOutUsername));
+};
+menuCallbacks.openGitHubRepo = exports.openGitHubRepo;
+
+exports.openInCodeEditor = function () {
+  if (currentFolderPath) {
+    exec(`open -b com.github.atom ${escapeShell(currentFolderPath)}`);
+  }
+};
+menuCallbacks.openInCodeEditor = exports.openInCodeEditor;
+
 exports.disableFolderMenuFeatures = function () {
   menuOptions.runChecks = false;
   menuOptions.revealFolder = false;
   menuOptions.viewLocal = false;
   menuOptions.viewLive = false;
+  menuOptions.ghRepo = false;
   menuOptions.ghIssues = false;
   updateAppMenu();
 };

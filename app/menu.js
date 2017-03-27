@@ -40,6 +40,14 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           type: 'separator'
         },
         {
+          label: 'Edit Code',
+          enabled: (opts && opts.revealFolder) ? true : false,
+          accelerator: 'CmdOrCtrl+E',
+          click: function (item, focusedWindow) {
+            cbs.openInCodeEditor();
+          }
+        },
+        {
           label: 'Reveal Folder',
           enabled: (opts && opts.revealFolder) ? true : false,
           accelerator: 'CmdOrCtrl+Shift+R',
@@ -64,6 +72,14 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           accelerator: 'CmdOrCtrl+Shift+B',
           click: function (item, focusedWindow) {
             shell.openExternal(opts.viewLive.replace(/\{\{username\}\}/, opts.signOutUsername));
+          }
+        },
+        {
+          label: 'Browse GitHub Repo',
+          enabled: (opts && opts.revealFolder) ? true : false,
+          accelerator: 'CmdOrCtrl+G',
+          click: function (item, focusedWindow) {
+            cbs.openGitHubRepo();
           }
         },
       ]
@@ -102,7 +118,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           label: 'Get Assignment Help on GitHub',
           enabled: (opts && opts.signOutUsername && opts.ghIssues) ? true : false,
           click: function () {
-            shell.openExternal(opts.ghIssues.replace(/\{\{username\}\}/, opts.signOutUsername));
+            cbs.createGitHubIssue();
           }
         },
         {
