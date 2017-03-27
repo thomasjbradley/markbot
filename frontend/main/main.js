@@ -330,6 +330,7 @@ const reset = function () {
   $openRepoBtn.setAttribute('disabled', true);
   $createIssueBtn.setAttribute('disabled', true);
   $repoName.querySelector('.icon-label').innerHTML = '—';
+  $repoName.setAttribute('disabled', true);
 
   $statusBarRed.setAttribute('hidden', true);
   $statusBarYellow.setAttribute('hidden', true);
@@ -578,6 +579,7 @@ listener.on('app:file-missing', function (event) {
 
 listener.on('app:file-exists', function (event, repo) {
   $repoName.querySelector('.icon-label').innerHTML = repo;
+  $repoName.removeAttribute('disabled');
 });
 
 listener.on('app:with-canvas', function (event) {

@@ -21,6 +21,7 @@
 }
 
 .overlay .arrow,
+.overlay .logo,
 .overlay h1 {
   opacity: .4;
 }
@@ -81,7 +82,7 @@
   margin: 0 auto 10px;
   padding: .3em;
 
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, .5);
   border: 3px solid #ccc;
   border-radius: 6px;
 
@@ -92,6 +93,7 @@
 
 .username-input:focus {
   outline: none;
+  background-color: #fff;
   border-color: #999;
 }
 
@@ -653,46 +655,6 @@ samp {
   margin-bottom: 0;
 }
 
-/* .submit-btn {
-  padding: .4em .8em;
-
-  background: #c1e89b none no-repeat 5px center / 32px 32px;
-  border: 1px solid #6dd110;
-  border-radius: 25px;
-  cursor: pointer;
-
-  color: #417d0a;
-  font-size: 20px;
-}
-
-.submit-btn:disabled {
-  opacity: .5;
-  cursor: default;
-  pointer-events: none;
-}
- */
-/* .submit-btn[data-state="processing"] {
-  padding-left: 44px;
-
-  background-image: url("../images/spinner.gif");
-}
-
-.submit-btn[data-state="done"] {
-  padding-left: 44px;
-
-  background-image: url("../images/check.svg");
-}
- */
-/* .submit-btn:hover {
-  background-color: #6dd110;
-  color: #fff;
-}
-
-.submit-btn:disabled:hover {
-  background-color: #c1e89b;
-  color: #417d0a;
-}
- */
 #all-good-check {
   animation: none 200ms cubic-bezier(.54, -0.37, .42, 1.78);
 }
@@ -730,7 +692,6 @@ svg:not(:root) {
 
 .icon-label {
   display: inline-block;
-  /* margin-top: 1px; */
   vertical-align: text-top;
 }
 
@@ -986,8 +947,8 @@ button.toolbar-button-green:focus {
   color: #333;
 }
 
-.status-button:active,
-.status-button:focus {
+.status-button:not([disabled]):active,
+.status-button:not([disabled]):focus {
   outline: 0;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, .2);
   background-color: rgba(0, 0, 0, .05);
