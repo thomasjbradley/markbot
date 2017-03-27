@@ -16,6 +16,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Completely revamped the interface to be more MacOS-like and more refined—including a new toolbar with buttons & a status display.
 
+### Fixed
+
+- A bug with the Markbot file `files` entry when listing a directory and there is no `.markbotignore` file.
+
 ---
 
 ## [5.5.4] — 2017-03-20

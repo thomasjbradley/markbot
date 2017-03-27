@@ -11,7 +11,7 @@ module.exports = function (dirPath, next) {
   const matcher = new RegExp(`^(?:${filesToIgnore.join('|')})`);
 
   markbotIgnoreParser.parse(fullPath, (ignoreFiles) => {
-    const ignoreMatcher = new RegExp(`^(?:${ignoreFiles.join('|')})`);
+    const ignoreMatcher = (ignoreFiles.length > 0) ? new RegExp(`^(?:${ignoreFiles.join('|')})`) : false;
 
     dir.files(fullPath, (err, files) =>{
       let errors = [];
@@ -22,8 +22,11 @@ module.exports = function (dirPath, next) {
 
         if (matcher.test(strippedPath)) return false;
         if (matcher.test(cleanFileName)) return false;
-        if (ignoreMatcher.test(strippedPath)) return false;
-        if (ignoreMatcher.test(cleanFileName)) return false;
+
+        if (ignoreMatcher) {
+          if (ignoreMatcher.test(strippedPath)) return false;
+          if (ignoreMatcher.test(cleanFileName)) return false;
+        }
 
         return true;
       });
