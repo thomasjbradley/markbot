@@ -71,11 +71,12 @@ const updateAppMenu = function () {
 const createMainWindow = function (next) {
   mainWindow = new BrowserWindow({
     width: 800,
-    minWidth: 600,
+    minWidth: 800,
     height: 600,
     show: false,
     minHeight: 550,
-    titleBarStyle: 'hidden-inset'
+    titleBarStyle: 'hidden-inset',
+    vibrancy: 'ultra-dark',
   });
 
   mainWindow.loadURL('file://' + __dirname + '/frontend/main/main.html');
@@ -95,6 +96,14 @@ const createMainWindow = function (next) {
     mainWindow.show();
 
     if (next) next();
+  });
+
+  mainWindow.on('focus', function () {
+    mainWindow.webContents.send('app:focus');
+  });
+
+  mainWindow.on('blur', function () {
+    mainWindow.webContents.send('app:blur');
   });
 
   global.markbotMainWindow = mainWindow.id;

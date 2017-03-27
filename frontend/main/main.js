@@ -584,3 +584,11 @@ if (localStorage.getItem('github-username')) {
   $signin.dataset.state = 'hidden';
   markbot.enableSignOut(localStorage.getItem('github-username'));
 }
+
+listener.on('app:blur', function (e) {
+  $body.classList.add('window-blurred');
+});
+
+listener.on('app:focus', function (e) {
+  $body.classList.remove('window-blurred');
+});

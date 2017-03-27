@@ -7,9 +7,132 @@
   <link href="main.css" rel="stylesheet">
 </head>
 <body>
-  <div id="drag-region"></div>
 
-  <nav id="checks">
+  <svg hidden>
+    <symbol id="gear" viewBox="0 0 256 256">
+      <path stroke-width="1" stroke-miterlimit="10" d="M107.2 11.3a8.4 8.4 0 0 0-7.6 6.3l-4.2 23.3a92.9 92.9 0 0 0-24.8 13.9l-22-8.5a8 8 0 0 0-9.5 3.2L17.6 85a8 8 0 0 0 1.5 9.8l17.4 15.5a93.1 93.1 0 0 0-1.8 17.7 92.7 92.7 0 0 0 1.9 17.7l-17.5 15.4a8 8 0 0 0-1.5 9.9l21.6 35.4a8 8 0 0 0 9.5 3.2l22-8.4A92.9 92.9 0 0 0 95.4 215l4.2 23.3a8 8 0 0 0 7.6 6.4h41.5a8 8 0 0 0 7.7-6.4l4.2-23.3a92.9 92.9 0 0 0 24.8-13.9l22 8.4a8 8 0 0 0 9.4-3.2l21.6-35.3a8 8 0 0 0-1.5-9.9l-17.4-15.6a94.2 94.2 0 0 0 1.8-17.6 94.6 94.6 0 0 0-1.8-17.7l17.4-15.6a8 8 0 0 0 1.5-9.8l-21.6-35.2a8 8 0 0 0-9.4-3.2l-22 8.5A92.9 92.9 0 0 0 160.6 41l-4.2-23.3a8 8 0 0 0-7.7-6.3h-41.5zm6.6 15.6h28.4l3.8 20.8a7.9 7.9 0 0 0 5.3 6 77.6 77.6 0 0 1 27.8 15.7 7.9 7.9 0 0 0 7.9 1.4l19.8-7.6 14.8 24.4-15.8 14.1a7.9 7.9 0 0 0-2.3 7.7 80.4 80.4 0 0 1 0 37.3 7.9 7.9 0 0 0 2.3 7.6l15.9 14.2-14.9 24.3-19.8-7.6a7.9 7.9 0 0 0-7.9 1.4 77.6 77.6 0 0 1-27.8 15.7 7.9 7.9 0 0 0-5.3 6l-3.8 20.9h-28.4l-3.8-21a7.9 7.9 0 0 0-5.3-6 77.6 77.6 0 0 1-27.8-15.7 7.9 7.9 0 0 0-7.9-1.4l-19.8 7.6-14.9-24.3 15.9-14.1a7.9 7.9 0 0 0 2.4-7.6 75.7 75.7 0 0 1 0-37.4 7.9 7.9 0 0 0-2.4-7.7L34.3 87.5l14.9-24.3L69 70.8a7.9 7.9 0 0 0 7.9-1.4 77.6 77.6 0 0 1 27.8-15.7 7.9 7.9 0 0 0 5.3-6zM128 73.6a54.4 54.4 0 1 0 54.4 54.4A54.6 54.6 0 0 0 128 73.6zm0 15.6A38.9 38.9 0 1 1 89.1 128 38.8 38.8 0 0 1 128 89.1z"/>
+    </symbol>
+    <symbol id="gear-solid" viewBox="0 0 256 256">
+      <path stroke="#000" stroke-miterlimit="10" d="M107.2 11.3a8.4 8.4 0 0 0-7.6 6.3l-4.2 23.3a92.9 92.9 0 0 0-24.8 13.9l-22-8.5a8 8 0 0 0-9.5 3.2L17.6 85a8 8 0 0 0 1.5 9.8l17.4 15.5a93.1 93.1 0 0 0-1.8 17.7 92.7 92.7 0 0 0 1.9 17.7l-17.5 15.4a8 8 0 0 0-1.5 9.9l21.6 35.4a8 8 0 0 0 9.5 3.2l22-8.4A92.9 92.9 0 0 0 95.4 215l4.2 23.3a8 8 0 0 0 7.6 6.4h41.5a8 8 0 0 0 7.7-6.4l4.2-23.3a92.9 92.9 0 0 0 24.8-13.9l22 8.4a8 8 0 0 0 9.4-3.2l21.6-35.3a8 8 0 0 0-1.5-9.9l-17.4-15.6a94.2 94.2 0 0 0 1.8-17.6 94.6 94.6 0 0 0-1.8-17.7l17.4-15.6a8 8 0 0 0 1.5-9.8l-21.6-35.2a8 8 0 0 0-9.4-3.2l-22 8.5A92.9 92.9 0 0 0 160.6 41l-4.2-23.3a8 8 0 0 0-7.7-6.3h-41.5zM128 83a45 45 0 1 1-45 45 44.9 44.9 0 0 1 45-45z"/>
+    </symbol>
+    <symbol id="done" viewBox="0 0 256 256">
+      <path d="M128 12.7A115.3 115.3 0 1 0 243.3 128 115.3 115.3 0 0 0 128 12.7zm73.2 51.6a39.5 39.5 0 0 1-5.2 5.6q-18.8 17.3-39.1 49.2T124.7 181q-5.6 13.7-7.3 16.1a16 16 0 0 1-5 4.4q-3.3 2.1-13.7 2.1-8.2 0-10.5-1a12.7 12.7 0 0 1-3.5-2.1q-1.2-1.1-7.1-9.9a178.9 178.9 0 0 0-17.5-21.9q-6.6-7.2-6.6-12.1 0-7.1 7.5-12.3t13.3-5.3q6.3 0 13.5 5.1a52.4 52.4 0 0 1 12.9 13.6q7-14.6 16.6-32.1A385 385 0 0 1 139 90.8q12.2-17.4 17.7-23t9.4-9q3.9-3.3 13.7-4.9a105.9 105.9 0 0 1 14.9-1.5 7.6 7.6 0 0 1 5.5 2.1 7.1 7.1 0 0 1 2.1 5.4 7.8 7.8 0 0 1-1.1 4.4z"/>
+    </symbol>
+    <symbol id="refresh" viewBox="0 0 256 256">
+      <path fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="24" d="M209.9 133.8A81.9 81.9 0 1 1 128 51.9"/>
+      <polygon points="116.3 91.8 185.4 51.9 116.3 12 116.3 91.8"/>
+    </symbol>
+    <symbol id="github" viewBox="0 0 256 256">
+      <path d="M164.1 235c45.5-4.5 68.3-18.8 79.3-41 .5-1 5.7-16 5.9-17.2 2.8-11.8 3.7-25.2 3.7-40 0-23.4-8.8-42.1-23-56.3 2.5-8 5.8-25.9-3.3-48.7 0 0-16.1-5.1-52.6 19.3a185.5 185.5 0 0 0-44.7-5.3 188.5 188.5 0 0 0-49.5 6.5C42.2 26.6 25.6 31.8 25.6 31.8 14.8 58.9 21.5 79 23.5 84 10.8 97.8 3 115.3 3 136.9c0 15.1 1.6 28.7 5.4 40.7.3.9 6.3 14.7 6.7 15.3s1.6 2.7 2.5 4c13.6 20.4 38 33.6 78.8 38 0 0 19 1.7 32.5 1.7s35.2-1.6 35.2-1.6zm-35.1-8.9c-51.8 0-93.8-7.8-93.8-57.9 0-12 5.9-23.1 16-32.3 16.9-15.4 45.4-7.2 77.8-7.2s60.7-8.2 77.6 7c10.2 9.3 16.2 20.5 16.2 32.5-.1 56.4-42 57.9-93.8 57.9z"/>
+      <path d="M78.2 143.1c-10.8 0-19.5 12.6-19.5 28.1s8.7 28.1 19.5 28.1 19.5-12.6 19.5-28.1-8.7-28.1-19.5-28.1z"/>
+      <path d="M183 143.1c-10.8 0-19.5 12.6-19.5 28.1s8.7 28.1 19.5 28.1 19.5-12.6 19.5-28.1-8.8-28.1-19.5-28.1z"/>
+    </symbol>
+    <symbol id="issue" viewBox="0 0 256 256">
+      <path d="M242.5 214L137.1 31.3a10.5 10.5 0 0 0-18.3-.1L13.5 214a10.7 10.7 0 0 0 9.1 16h210.8a10.7 10.7 0 0 0 9.1-16z"/>
+      <polygon fill="#fff" points="141.8 98 140.9 121.7 137 163 119 163 115.1 121.7 114.2 98 141.8 98"/>
+      <path fill="#fff" d="M128 206.6c-10.3 0-17.7-7.6-17.7-17.9s7.4-17.5 17.7-17.5 17.7 7.2 17.7 17.5-7.4 17.9-17.7 17.9z"/>
+    </symbol>
+    <symbol id="edit" viewBox="0 0 256 256">
+      <path d="M111.2 55.6l-34-34a8.9 8.9 0 0 0-12.6 0l-43 42.9a8.9 8.9 0 0 0 0 12.6l34 34z"/>
+      <path d="M167.2 207.8a3.7 3.7 0 0 1 1.4-2.7 4.3 4.3 0 0 1 3.1-1h11a2.3 2.3 0 0 0 2.3-2.3v-12a5.1 5.1 0 0 1 4.7-4.7h12a2.3 2.3 0 0 0 2.3-2.3v-11a4.3 4.3 0 0 1 1-3.1 3.7 3.7 0 0 1 2.7-1.4h9.3a2.3 2.3 0 0 0 1.7-4l-87.9-88.1a2.3 2.3 0 0 0-3.3 0l-52.3 52.3a2.3 2.3 0 0 0 0 3.3l88.1 88.1a2.3 2.3 0 0 0 4-1.7z"/>
+      <path d="M233.2 181.5h-13.8a1 1 0 0 0-1 1v13.2a4.2 4.2 0 0 1-4.4 3.9l-13.6-.3a1 1 0 0 0-1 1v12.8c0 2.5-1.8 5.1-4.3 5.2h-12.6a1 1 0 0 0-1 1v14l54.4 3.5a1 1 0 0 0 1.1-1.1l-3.5-54.4z"/>
+    </symbol>
+    <symbol id="browse" viewBox="0 0 256 256">
+      <path d="M250.5 127.5v-.9a9.2 9.2 0 0 0-2.6-5c-7.8-9.3-17.1-17.5-26.6-25-20.4-16.2-43.6-29.8-69.4-35.3a115.6 115.6 0 0 0-44.7-.6c-13.6 2.4-26.7 7.5-38.9 13.7-19.2 9.8-36.7 23.3-52 38.5-2.8 2.8-5.6 5.7-8.2 8.7s-3.4 8.9 0 12.9c7.8 9.3 17.1 17.5 26.6 25 20.3 16.2 43.6 29.8 69.3 35.2a115.6 115.6 0 0 0 44.7.6c13.6-2.4 26.7-7.5 38.9-13.7 19.2-9.8 36.7-23.3 52-38.5 2.8-2.8 5.6-5.7 8.2-8.7a9.2 9.2 0 0 0 2.6-5V128c0-.2.1-.3.1-.5zM128 175.1a47.1 47.1 0 1 1 47.1-47.1 47.1 47.1 0 0 1-47.1 47.1z"/>
+      <circle cx="128" cy="128" r="15.6"/>
+    </symbol>
+    <symbol id="folder" viewBox="0 0 256 256">
+      <path d="M226 54.5H115.8L91.3 30H30A24.6 24.6 0 0 0 5.5 54.5v147A24.6 24.6 0 0 0 30 226h196a24.6 24.6 0 0 0 24.5-24.5V79A24.6 24.6 0 0 0 226 54.5z"/>
+    </symbol>
+    <symbol id="check" viewBox="0 0 256 256">
+      <path d="M201.2 64.3a39.5 39.5 0 0 1-5.2 5.6q-18.8 17.3-39.1 49.2T124.7 181q-5.6 13.7-7.3 16.1a16 16 0 0 1-5 4.4q-3.3 2.1-13.7 2.1-8.2 0-10.5-1a12.7 12.7 0 0 1-3.5-2.1q-1.2-1.1-7.1-9.9a178.9 178.9 0 0 0-17.5-21.9q-6.6-7.2-6.6-12.1 0-7.1 7.5-12.3t13.3-5.3q6.3 0 13.5 5.1a52.4 52.4 0 0 1 12.9 13.6q7-14.6 16.6-32.1A385 385 0 0 1 139 90.8q12.2-17.4 17.7-23t9.4-9q3.9-3.3 13.7-4.9a105.9 105.9 0 0 1 14.9-1.5 7.6 7.6 0 0 1 5.5 2.1 7.1 7.1 0 0 1 2.1 5.4 7.8 7.8 0 0 1-1.1 4.4z"/>
+    </symbol>
+    <symbol id="computing" viewBox="0 0 256 256">
+      <circle cx="128" cy="128" r="52.8"/>
+    </symbol>
+    <symbol id="error" viewBox="0 0 256 256">
+      <path d="M106.9 121.2l-14-56.9a16.4 16.4 0 0 1-.9-5 17.3 17.3 0 0 1 3.7-11.2q3.7-4.6 8.4-4.6 8.4 0 17.5 11.6t16.8 31q2.1-1.7 18.3-19.4 13.4-14.6 17.6-17.7a14.4 14.4 0 0 1 8.7-3q5.7 0 10.6 5.6t5 11.4q0 5.4-5.8 5.7a4.7 4.7 0 0 0-2.5.4l-.6 2.1a15.6 15.6 0 0 1-2.3 3.5q-6.2 6.8-18.1 25.7Q156 121 154.2 123a11.1 11.1 0 0 0-2.8 7.1q0 7.6 4.9 20.7a108.3 108.3 0 0 0 13.4 25q3.6 5.5 3.6 7.3t-1.9 4.1a3.2 3.2 0 0 1 .8 2 3.6 3.6 0 0 1-1.3 3.1 57.2 57.2 0 0 1-6.2 3.5q0 6.5-5.4 6.5-2.3 0-6.5-2.8a19.3 19.3 0 0 1-5.7-5.2 8.7 8.7 0 0 0-3.3-2.6 6.8 6.8 0 0 1-2.6-1.2q-.9-.7-4.2-4.2a9.9 9.9 0 0 0-2.6-1.9q-3.1-1.3-6-6.9-1.4-3.5-7.6-13.1l-38 41.1a64.5 64.5 0 0 1-4.7 4.6q-2.8 2.4-4.4 2.4a4.2 4.2 0 0 1-3-1.1q-1.2-1.1-1.3-7.3l-1.4-1.5a8.4 8.4 0 0 1-1.3-3.4l-2.2-1.1a25.7 25.7 0 0 0-6-6.9l-.2-3.4-.7-3a12.1 12.1 0 0 1 1.4-4.3q1.4-3 13.7-17.9t15.2-17.7q10.8-10.1 11.5-13.3 2.1-8.8 7.5-10.4z"/>
+    </symbol>
+  </svg>
+
+  <nav class="toolbar">
+    <div class="toolbar-button-segment">
+      <ul class="toolbar-buttons">
+        <li>
+          <button class="toolbar-button" id="open-editor" aria-label="Edit Code" title="Edit Code" disabled>
+            <span><i class="icon i-16"><svg><use xlink:href="#edit"></use></svg></i></span>
+          </button>
+        </li>
+        <li>
+          <button class="toolbar-button" id="open-browser" aria-label="Browse Website" title="Browse Website" disabled>
+            <span><i class="icon i-20"><svg><use xlink:href="#browse"></use></svg></i></span>
+          </button>
+        </li>
+      </ul>
+      <ul class="toolbar-buttons toolbar-buttons-group">
+        <li>
+          <button class="toolbar-button" id="open-repo" aria-label="Browse GitHub Repo" title="Browse GitHub Repo" disabled>
+            <span><i class="icon i-16"><svg><use xlink:href="#github"></use></svg></i></span>
+          </button>
+        </li>
+        <li>
+          <button class="toolbar-button" id="create-issue" aria-label="Create New Issue" title="Create New Issue" disabled>
+            <span><i class="icon i-16"><svg><use xlink:href="#issue"></use></svg></i></span>
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="toolbar-button-segment">
+      <ul class="toolbar-buttons toolbar-buttons-group">
+        <li>
+          <div class="toolbar-button toolbar-status" disabled>
+            <ul class="toolbar-buttons">
+              <li class="toolbar-status-pill toolbar-status-red">
+                <i class="icon i-14"><svg><use xlink:href="#error"></use></svg></i>
+                <span class="toolbar-status-text">—</span>
+              </li>
+              <li class="toolbar-status-pill toolbar-status-yellow">
+                <i class="icon i-14"><svg><use xlink:href="#computing"></use></svg></i>
+                <span class="toolbar-status-text">—</span>
+              </li>
+              <li class="toolbar-status-pill toolbar-status-green">
+                <i class="icon i-14"><svg><use xlink:href="#check"></use></svg></i>
+                <span class="toolbar-status-text">—</span>
+              </li>
+            </ul>
+            <button class="status-button folder-name" aria-label="Reveal Folder" title="Reveal Folder">
+              <i class="icon i-12 folder-icon"><svg><use xlink:href="#folder"></use></svg></i>
+              <span class="icon-label">—</span>
+            </button>
+          </div>
+        </li>
+        <li>
+          <button class="toolbar-button" id="refresh" aria-label="Refresh" title="Refresh" disabled>
+            <span>
+              <i class="icon i-16"><svg><use xlink:href="#refresh"></use></svg></i>
+              <i class="icon i-16 rotating-icon" hidden><svg><use xlink:href="#gear"></use></svg></i>
+            </span>
+          </button>
+        </li>
+      </ul>
+
+    </div>
+    <div class="toolbar-button-segment">
+      <ul class="toolbar-buttons">
+        <li>
+          <button class="toolbar-button toolbar-button-green" id="btn-submit" aria-label="Submit Assignment" title="Submit Assignment" disabled>
+            <span>
+             <i class="icon i-16 rotating-icon" id="submit-icon-gear" hidden><svg><use xlink:href="#gear-solid"></use></svg></i>
+             <i class="icon i-16" id="submit-icon-done" hidden><svg><use xlink:href="#done"></use></svg></i>
+             <span>Submit</span>
+            </span>
+          </button>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <nav id="checks" hidden>
     <div class="checks-loader" id="checks-loader" aria-label="Loading…">
       <i class="checks-loader-icon">
         <svg viewBox="0 0 256 256" width="256" height="256">
@@ -21,7 +144,7 @@
     <div id="checks-container"></div>
   </nav>
 
-  <main id="message-wrapper">
+  <main id="message-wrapper" hidden>
 
     <header id="message-header">
       <span id="folder" role="button"></span>
@@ -83,7 +206,7 @@
 
   </main>
 
-  <div class="overlay" id="dropbox">
+  <div class="overlay" id="dropbox" hidden>
     <div class="overlay-contents">
       <img class="logo" src="../images/arrow.png" alt="">
       <h1>Markbot</h1>
