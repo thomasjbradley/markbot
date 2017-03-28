@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.6.3] — 2017-03-28
+
+### Fixed
+
+- Stopped the interface from scrolling when on the drop-a-folder screen.
+
+---
+
 ## [5.6.2] — 2017-03-28
 
 ### Fixed
