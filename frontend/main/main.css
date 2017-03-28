@@ -21,7 +21,10 @@
 }
 
 .overlay .arrow,
-.overlay .logo,
+.overlay .logo {
+  opacity: .3;
+}
+
 .overlay h1 {
   opacity: .4;
 }
@@ -41,7 +44,7 @@
   margin-top: 1.4rem;
   margin-bottom: 0;
 
-  font-size: 22px;
+  font-size: 19px;
   font-weight: normal;
   text-align: center;
 }
@@ -60,12 +63,44 @@
   width: 70px;
 }
 
-@keyframes bounce {
-  0% { transform: translateY(0); }
-  25% { transform: translateY(-5px); }
-  50% { transform: translateY(0px); }
-  75% { transform: translateY(5px); }
-  100% { transform: translateY(0); }
+#robot-bust-wrap {
+  bottom: -27px;
+  left: calc(50% - 48px);
+  position: absolute;
+  width: 96px;
+}
+
+#robot-speech {
+  left: 50%;
+  margin: 0;
+  padding: 4px 0;
+  position: absolute;
+  top: -1em;
+  width: 12em;
+
+  background-color: rgba(0, 0, 0, .16);
+  border-radius: var(--control-border-radius);
+  transform: translateX(-50%);
+
+  color: #fff;
+  font-size: 11px;
+  text-align: center;
+}
+
+#robot-speech-triangle {
+  bottom: -9px;
+  left: 50%;
+  position: absolute;
+  width: 16px;
+
+  opacity: .16;
+  transform: translateX(-50%);
+}
+
+#robot-bust {
+  width: 100%;
+
+  opacity: .16;
 }
 
 .username-label {
