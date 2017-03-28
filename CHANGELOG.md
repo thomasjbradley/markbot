@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.6.4] — 2017-03-28
+
+### Fixed
+
+- Fixed the broken scrolling in the debug window caused by the previous fixed.
+
+---
+
 ## [5.6.3] — 2017-03-28
 
 ### Fixed
