@@ -318,6 +318,7 @@ const reset = function () {
   $canvasBtn.dataset.state = '';
   $canvasBtn.setAttribute('disabled', true);
   $canvasBtnText.innerHTML = 'Submit';
+  $canvasBtn.dataset.canSubmit = false;
 
   $dropbox.dataset.state = 'visible';
   $messagesWrapper.dataset.state = 'hidden';
@@ -539,7 +540,6 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 
   if (!hasErrors() && !isRunning()) {
     $canvasBtn.dataset.state = 'processing';
-    // $canvasBtn.setAttribute('disabled', true);
 
     markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
       if (!err && data.code == 200) {
@@ -549,7 +549,6 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
       } else {
         $canvasBtn.dataset.state = '';
         $canvasBtnText.innerHTML = 'Submit';
-        // $canvasBtn.removeAttribute('disabled');
         $allGoodCheck.style.animationName = 'none';
         if (data.message) alert(data.message);
       }
@@ -583,7 +582,7 @@ listener.on('app:file-exists', function (event, repo) {
 });
 
 listener.on('app:with-canvas', function (event) {
-  // $canvasBtn.removeAttribute('hidden');
+  $canvasBtn.dataset.canSubmit = true;
   $messageNoCanvas.setAttribute('hidden', true);
   $messageCanvas.removeAttribute('hidden');
 });

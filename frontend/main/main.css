@@ -889,8 +889,11 @@ button.toolbar-button-green:focus {
   padding-bottom: .07em;
 }
 
+.toolbar-button-green[data-can-submit="false"],
 .toolbar-button-green[disabled] {
+  pointer-events: none;
   background-color: #f7f7f7;
+  opacity: .4;
   color: #333;
   text-shadow: none;
 }

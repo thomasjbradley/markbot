@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.6.2] — 2017-03-28
+
+### Fixed
+
+- The submit button became enabled when there was nowhere to submit to, no `canvasCourse` entry.
+
+---
+
 ## [5.6.1] — 2017-03-28
 
 ### Changed
