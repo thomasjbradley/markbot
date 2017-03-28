@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [5.6.1] — 2017-03-28
+
+### Changed
+
+- Added a small robot illustration to the start screen to differentiate Markbot from the other Toolbots.
+- A few small visual design tweaks.
+
+---
+
 ## [5.6.0] — 2017-03-27
 
 ### Added
