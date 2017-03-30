@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a “Submit Assignment” entry to the “File” menu.
+
 ### Changed
 
 - Updated some cursors for when things are loading and added more `pointer-events: none` entries.

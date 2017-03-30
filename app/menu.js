@@ -82,6 +82,17 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
             cbs.openGitHubRepo();
           }
         },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Submit Assignment',
+          enabled: (opts && opts.submitAssignment) ? true : false,
+          accelerator: 'CmdOrCtrl+S',
+          click: function (item, focusedWindow) {
+            cbs.submitAssignment();
+          }
+        },
       ]
     },
     {

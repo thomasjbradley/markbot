@@ -46,6 +46,7 @@ let menuOptions = {
   revealFolder: false,
   viewLocal: false,
   viewLive: false,
+  submitAssignment: false,
   signOut: false,
   signOutUsername: false,
   showDevelop: false,
@@ -307,6 +308,21 @@ exports.openGitHubRepo = function () {
   shell.openExternal(menuOptions.ghRepo.replace(/\{\{username\}\}/, menuOptions.signOutUsername));
 };
 menuCallbacks.openGitHubRepo = exports.openGitHubRepo;
+
+exports.submitAssignment = function () {
+  markbotMain.send('app:submit-assignment');
+};
+menuCallbacks.submitAssignment = exports.submitAssignment;
+
+exports.enableSubmitAssignment = function () {
+  menuOptions.submitAssignment = true;
+  updateAppMenu();
+};
+
+exports.disableSubmitAssignment = function () {
+  menuOptions.submitAssignment = false;
+  updateAppMenu();
+};
 
 exports.openInCodeEditor = function () {
   if (currentFolderPath) {

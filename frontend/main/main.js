@@ -319,6 +319,7 @@ const reset = function () {
   $canvasBtn.setAttribute('disabled', true);
   $canvasBtnText.innerHTML = 'Submit';
   $canvasBtn.dataset.canSubmit = false;
+  markbot.disableSubmitAssignment();
 
   $dropbox.dataset.state = 'visible';
   $messagesWrapper.dataset.state = 'hidden';
@@ -378,6 +379,7 @@ const triggerDoneState = function () {
     $submit.dataset.state = 'visible';
     $messages.dataset.state = 'hidden';
     $canvasBtn.removeAttribute('disabled');
+    if ($canvasBtn.dataset.canSubmit === 'true') markbot.enableSubmitAssignment();
   }
 };
 
@@ -489,6 +491,30 @@ const statusBarUpdate = function () {
   return false;
 }
 
+const submitAssignment = function (e) {
+  if (e) e.preventDefault();
+
+  if (!hasErrors() && !isRunning()) {
+    $canvasBtn.dataset.state = 'processing';
+    $canvasBtnText.innerHTML = 'Submitting…';
+    markbot.disableSubmitAssignment();
+
+    markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
+      if (!err && data.code == 200) {
+        $canvasBtn.dataset.state = 'done';
+        $canvasBtnText.innerHTML = 'Submitted';
+        $allGoodCheck.style.animationName = 'bounce-check';
+      } else {
+        $canvasBtn.dataset.state = '';
+        $canvasBtnText.innerHTML = 'Submit';
+        $allGoodCheck.style.animationName = 'none';
+        markbot.enableSubmitAssignment();
+        if (data.message) alert(data.message);
+      }
+    });
+  }
+};
+
 $body.classList.add(`os-${os.platform()}`);
 
 if (os.platform() == 'darwin') {
@@ -535,28 +561,6 @@ document.getElementById('username-form').addEventListener('submit', function (e)
   $dropbox.dataset.state = 'visible';
 });
 
-document.getElementById('submit-btn').addEventListener('click', function (e) {
-  e.preventDefault();
-
-  if (!hasErrors() && !isRunning()) {
-    $canvasBtn.dataset.state = 'processing';
-    $canvasBtnText.innerHTML = 'Submitting…';
-
-    markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
-      if (!err && data.code == 200) {
-        $canvasBtn.dataset.state = 'done';
-        $canvasBtnText.innerHTML = 'Submitted';
-        $allGoodCheck.style.animationName = 'bounce-check';
-      } else {
-        $canvasBtn.dataset.state = '';
-        $canvasBtnText.innerHTML = 'Submit';
-        $allGoodCheck.style.animationName = 'none';
-        if (data.message) alert(data.message);
-      }
-    });
-  }
-});
-
 document.addEventListener('click', function (e) {
   if (e.target.matches('#messages a') || e.target.matches('#messages-positive a')) {
     e.preventDefault();
@@ -572,6 +576,14 @@ $repoName.addEventListener('click', function (e) {
   e.preventDefault();
   markbot.revealFolder();
 });
+
+$robotLogo.addEventListener('click', () => refresh());
+$refreshBtn.addEventListener('click', () => refresh());
+$openBrowserBtn.addEventListener('click', () => markbot.openBrowserToServer());
+$createIssueBtn.addEventListener('click', () => markbot.createGitHubIssue());
+$openRepoBtn.addEventListener('click', () => markbot.openGitHubRepo());
+$openEditorBtn.addEventListener('click', () => markbot.openInCodeEditor());
+$canvasBtn.addEventListener('click', () => submitAssignment());
 
 listener.on('app:file-missing', function (event) {
   reset();
@@ -695,13 +707,6 @@ listener.on('app:re-run', function (event) {
   }
 });
 
-$robotLogo.addEventListener('click', () => refresh());
-$refreshBtn.addEventListener('click', () => refresh());
-$openBrowserBtn.addEventListener('click', () => markbot.openBrowserToServer());
-$createIssueBtn.addEventListener('click', () => markbot.createGitHubIssue());
-$openRepoBtn.addEventListener('click', () => markbot.openGitHubRepo());
-$openEditorBtn.addEventListener('click', () => markbot.openInCodeEditor());
-
 listener.on('app:sign-out', function (event) {
   localStorage.clear();
   markbot.disableSignOut();
@@ -714,6 +719,10 @@ listener.on('app:file-dropped', function (event, path) {
   fileDropped(path);
 });
 
+listener.on('app:submit-assignment', function (event, path) {
+  submitAssignment();
+});
+
 listener.on('debug', function (event, ...args) {
   markbot.debug(args);
   console.log(...args);
@@ -723,12 +732,6 @@ listener.on('alert', function (event, message) {
   alert(message);
 });
 
-if (localStorage.getItem('github-username')) {
-  $signin.dataset.state = 'hidden';
-  $dropbox.dataset.state = 'visible';
-  markbot.enableSignOut(localStorage.getItem('github-username'));
-}
-
 listener.on('app:blur', function (e) {
   $body.classList.add('window-blurred');
 });
@@ -736,3 +739,9 @@ listener.on('app:blur', function (e) {
 listener.on('app:focus', function (e) {
   $body.classList.remove('window-blurred');
 });
+
+if (localStorage.getItem('github-username')) {
+  $signin.dataset.state = 'hidden';
+  $dropbox.dataset.state = 'visible';
+  markbot.enableSignOut(localStorage.getItem('github-username'));
+}
