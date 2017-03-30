@@ -540,6 +540,7 @@ document.getElementById('submit-btn').addEventListener('click', function (e) {
 
   if (!hasErrors() && !isRunning()) {
     $canvasBtn.dataset.state = 'processing';
+    $canvasBtnText.innerHTML = 'Submitting…';
 
     markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
       if (!err && data.code == 200) {
