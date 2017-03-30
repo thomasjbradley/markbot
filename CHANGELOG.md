@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Updated some cursors for when things are loading and added more `pointer-events: none` entries.
+- The submit button now says “Submitting…” when it’s contact the server and loading.
+
+---
+
 ## [5.6.4] — 2017-03-28
 
 ### Fixed
