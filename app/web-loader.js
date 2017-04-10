@@ -1,20 +1,44 @@
 'use strict';
 
-const PRELOAD_JS = __dirname + '/hidden-browser-window-preload.js';
+const PRELOAD_JS = `${__dirname}/hidden-browser-window-preload.js`;
 const PRELOAD_PATH = 'chrome://ensure-electron-resolution/';
 
+const fs = require('fs');
 const path = require('path');
+const is = require('electron-is');
 const ipcRenderer = require('electron').ipcRenderer;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const markbotMain = require('electron').remote.require('./app/markbot-main');
-const networks = require(__dirname + '/networks');
-const webServer = require(__dirname + '/web-server');
-const appPkg = require(__dirname + '/../package.json');
+const networks = require(`${__dirname}/networks`);
+const webServer = require(`${__dirname}/web-server`);
+const classify = require(`${__dirname}/classify`);
+const appPkg = require(`${__dirname}/../package.json`);
 
 const ENV = process.env.NODE_ENV;
 const DEBUG = (ENV === 'development');
 
-const getNewBrowserWindow = function (userOpts) {
+let app;
+
+if (is.renderer()) {
+  app = require('electron').remote.app;
+} else {
+  app = require('electron').app;
+}
+
+const createInjectableJsFile = function (filename, injectJs) {
+  let inject = fs.readFileSync(path.resolve(PRELOAD_JS), 'utf8');
+  let tempFilePath = path.resolve(app.getPath('temp') + 'markbot-' + classify(filename) + '.js');
+
+  inject += `\n${injectJs}`;
+
+  fs.writeFileSync(tempFilePath, inject);
+
+  markbotMain.debug(`@@${tempFilePath}@@`);
+
+  return tempFilePath;
+};
+
+const getNewBrowserWindow = function (filename, userOpts, injectJs) {
   const defaultOpts = {
     width: 1000,
     height: 600,
@@ -33,7 +57,7 @@ const getNewBrowserWindow = function (userOpts) {
     backgroundColor: '#fff',
     webPreferences: {
       nodeIntegration: true,
-      preload: path.resolve(PRELOAD_JS),
+      preload: (injectJs) ? createInjectableJsFile(filename, injectJs) : path.resolve(PRELOAD_JS),
     },
     defaultEncoding: 'UTF-8',
   });
@@ -50,7 +74,7 @@ const destroy = function (win) {
   }
 };
 
-const load = function (listenerId, url, opts, next) {
+const load = function (listenerId, url, opts, injectJs, next) {
   let win;
   let speed = false;
   let networkName;
@@ -91,6 +115,8 @@ const load = function (listenerId, url, opts, next) {
     }
   };
 
+  if  (typeof injectJs === 'function') next = injectJs;
+
   BrowserWindow.removeDevToolsExtension('devtools-har-extension');
   BrowserWindow.addDevToolsExtension(path.resolve(__dirname + '/../devtools-har-extension'));
 
@@ -100,7 +126,7 @@ const load = function (listenerId, url, opts, next) {
     delete opts.speed;
   }
 
-  win = getNewBrowserWindow(opts);
+  win = getNewBrowserWindow(url, opts, (typeof injectJs === 'string') ? injectJs : false);
 
   win.webContents.on('did-finish-load', function (e) {
     if (e.sender.getURL() != PRELOAD_PATH) {

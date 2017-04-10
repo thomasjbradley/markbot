@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Functionality tests can now specify a `setup` option that will be injected into the page before it loads—it’s helpful for overwriting `prompt()` to pass fake data.
+
+---
+
 ## [5.7.0] — 2017-03-30
 
 ### Added

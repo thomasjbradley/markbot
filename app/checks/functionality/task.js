@@ -114,7 +114,7 @@
       markbotMain.debug(...e);
     });
 
-    webLoader.load(taskRunnerId, file.path, {}, function (theWindow) {
+    webLoader.load(taskRunnerId, file.path, {}, (file.setup) ? file.setup : false, function (theWindow) {
       win = theWindow;
 
       if (file.tests) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);

@@ -385,6 +385,13 @@ functionality:
     # Will just confirm that there are no Javascript errors
     noErrors: true
 
+    # This Javascript code will be injected into the page before it loads
+    # The feature exists mainly so I can overwrite built-in features like `prompt()` to test user input
+    setup: |
+      window.prompt = function () {
+        return 'a';
+      }
+
     # An array of Javascript code pieces to run against the live website
     tests:
       - |

@@ -40,3 +40,15 @@ document.fonts.ready.then(function () {
     });
   });
 });
+
+window.alert = function (str) {
+  return true;
+};
+
+window.confirm = function (str) {
+  return true;
+};
+
+window.prompt = function (str) {
+  return str;
+};
