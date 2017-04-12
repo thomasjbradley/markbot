@@ -30,7 +30,16 @@ const debug = function (...messages) {
   send('debug', ...messages);
 };
 
+const isDebug = function () {
+  if (is.renderer()) {
+    return require('electron').remote.getGlobal('DEBUG');
+  } else {
+    return global.DEBUG;
+  }
+};
+
 module.exports = {
   send: send,
   debug: debug,
+  isDebug: isDebug,
 };

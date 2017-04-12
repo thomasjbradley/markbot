@@ -3,11 +3,9 @@
 const path = require('path');
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
+const markbotMain = require('./markbot-main');
 const taskPoolQueue = require('./task-pool-queue');
 const appPkg = require('../package.json');
-
-const ENV = process.env.NODE_ENV;
-const DEBUG = (ENV === 'development');
 
 const TYPE_SINGLE = 'type-single';
 const TYPE_STATIC = 'type-static';
@@ -51,7 +49,7 @@ const spawnTaskRunner = function () {
 
   bw.loadURL('file://' + path.resolve(__dirname + '/task-pool.html'));
 
-  if (DEBUG) {
+  if (markbotMain.isDebug()) {
     bw.webContents.openDevTools({
       mode: 'detach',
     });
@@ -157,7 +155,7 @@ const executeAvailableSingleTaskRunner = function () {
   let runner = availablePool.single.pop();
   let task = taskQueueSingle.next();
 
-  if (DEBUG) console.log(`Single process: ${runner.id} -- ${task.module}`);
+  if (markbotMain.isDebug()) console.log(`Single process: ${runner.id} -- ${task.module}`);
 
   executingPool.single[runner.id] = runner;
   executeTaskRunner(executingPool.single[runner.id], task);
@@ -168,7 +166,7 @@ const executeAvailableStaticTaskRunners = function () {
     let runner = availablePool.static.pop();
     let task = taskQueueStatic.next();
 
-    if (DEBUG) console.log(`Process: ${runner.id} -- ${task.module}`);
+    if (markbotMain.isDebug()) console.log(`Process: ${runner.id} -- ${task.module}`);
 
     executingPool.static[runner.id] = runner;
     executeTaskRunner(executingPool.static[runner.id], task);
@@ -180,7 +178,7 @@ const executeAvailableLiveTaskRunners = function () {
     let runner = availablePool.live.pop();
     let task = taskQueueLive.next();
 
-    if (DEBUG) console.log(`Process: ${runner.id} -- ${task.module}`);
+    if (markbotMain.isDebug()) console.log(`Process: ${runner.id} -- ${task.module}`);
 
     executingPool.live[runner.id] = runner;
     executeTaskRunner(executingPool.live[runner.id], task);
@@ -217,7 +215,7 @@ const add = function (task, type = TYPE_STATIC, priority = PRIORITY_NORMAL) {
 const start = function (next) {
   nextCallback = next;
 
-  if (DEBUG) console.log('----- NEW RUN ------');
+  if (markbotMain.isDebug()) console.log('----- NEW RUN ------');
 
   if (taskQueueSingle.has()) {
     spawnSingleTaskRunner();
@@ -244,7 +242,7 @@ const checkDoneAll = function () {
 };
 
 const doneSingle = function (id) {
-  if (DEBUG) console.log(`Done: ${id}`);
+  if (markbotMain.isDebug()) console.log(`Done: ${id}`);
 
   if (executingPool.static[id]) {
     availablePool.static.push(executingPool.static[id]);
@@ -259,7 +257,7 @@ const doneSingle = function (id) {
 };
 
 const doneStatic = function (id) {
-  if (DEBUG) console.log(`Done: ${id}`);
+  if (markbotMain.isDebug()) console.log(`Done: ${id}`);
 
   if (executingPool.static[id]) {
     availablePool.static.push(executingPool.static[id]);
@@ -269,13 +267,13 @@ const doneStatic = function (id) {
   if (taskQueueStatic.has()) executeAvailableStaticTaskRunners();
 
   if (!taskQueueStatic.has() && Object.keys(executingPool.static).length <= 0) {
-    // if (!DEBUG) destroyAllStaticTaskRunners();
+    // if (!markbotMain.isDebug()) destroyAllStaticTaskRunners();
     checkDoneAll();
   }
 };
 
 const doneLive = function (id) {
-  if (DEBUG) console.log(`Done: ${id}`);
+  if (markbotMain.isDebug()) console.log(`Done: ${id}`);
 
   if (executingPool.live[id]) {
     availablePool.live.push(executingPool.live[id]);
@@ -285,7 +283,7 @@ const doneLive = function (id) {
   if (taskQueueLive.has()) executeAvailableLiveTaskRunners();
 
   if (!taskQueueLive.has() && Object.keys(executingPool.live).length <= 0) {
-    // if (!DEBUG) destroyAllLiveTaskRunners();
+    // if (!markbotMain.isDebug()) destroyAllLiveTaskRunners();
     checkDoneAll();
   }
 };

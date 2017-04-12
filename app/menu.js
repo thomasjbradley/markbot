@@ -304,6 +304,17 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
             cbs.lockRequirements();
           }
         },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Debugging Mode',
+          type: 'checkbox',
+          checked: (opts && opts.debugChecked) ? true : false,
+          click: function () {
+            cbs.toggleDebug();
+          }
+        }
       ]
     });
   }

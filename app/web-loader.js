@@ -14,9 +14,6 @@ const webServer = require(`${__dirname}/web-server`);
 const classify = require(`${__dirname}/classify`);
 const appPkg = require(`${__dirname}/../package.json`);
 
-const ENV = process.env.NODE_ENV;
-const DEBUG = (ENV === 'development');
-
 let app;
 
 if (is.renderer()) {
@@ -46,13 +43,13 @@ const getNewBrowserWindow = function (filename, userOpts, injectJs) {
   const opts = Object.assign(defaultOpts, userOpts);
 
   return new BrowserWindow({
-    x: (DEBUG) ? 100 : 5000,
-    y: (DEBUG) ? 100 : 5000,
+    x: (markbotMain.isDebug()) ? 100 : 5000,
+    y: (markbotMain.isDebug()) ? 100 : 5000,
     center: false,
     width: opts.width,
     height: opts.height,
-    show: (DEBUG) ? true : false,
-    frame: (DEBUG) ? true : false,
+    show: (markbotMain.isDebug()) ? true : false,
+    frame: (markbotMain.isDebug()) ? true : false,
     enableLargerThanScreen: true,
     backgroundColor: '#fff',
     webPreferences: {
@@ -76,7 +73,7 @@ const getWindowLoadingOptions = function (listenerId) {
 };
 
 const destroy = function (win) {
-  if (!DEBUG) {
+  if (!markbotMain.isDebug()) {
     if (win) win.destroy();
     win = null;
   }

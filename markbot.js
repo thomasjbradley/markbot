@@ -24,8 +24,8 @@ const lockMatcher = require('./app/lock-matcher');
 const exists = require('./app/file-exists');
 const checkManager = require('./app/check-manager');
 
-const ENV = process.env.NODE_ENV;
-const DEBUG = (ENV === 'development');
+global.ENV = process.env.NODE_ENV;
+global.DEBUG = (global.ENV === 'development');
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
@@ -51,6 +51,7 @@ let menuOptions = {
   signOutUsername: false,
   showDevelop: false,
   developMenuItems: false,
+  debugChecked: false,
 };
 let markbotFilePath;
 let markbotLockFilePath;
@@ -113,7 +114,7 @@ const createMainWindow = function (next) {
   });
 
   global.markbotMainWindow = mainWindow.id;
-  if (DEBUG) console.log(`Main window: ${mainWindow.id}`);
+  if (global.DEBUG) console.log(`Main window: ${mainWindow.id}`);
 };
 
 const createDebugWindow = function () {
@@ -429,6 +430,12 @@ exports.disableWebServer = function () {
   webServer.stop();
 };
 menuCallbacks.disableWebServer = exports.disableWebServer;
+
+exports.toggleDebug = function () {
+  global.DEBUG = !global.DEBUG;
+  menuOptions.debugChecked = global.DEBUG;
+};
+menuCallbacks.toggleDebug = exports.toggleDebug;
 
 exports.submitToCanvas = function (ghUsername, next) {
   let getVars = [
