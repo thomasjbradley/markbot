@@ -52,16 +52,14 @@ let fullPath = false;
 let isMarkbotDoneYet;
 
 const buildCodeDiffErrorMessage = function (err, li) {
-  var
-    message = document.createElement('span'),
-    code = document.createElement('section'),
-    sawDiv = document.createElement('div'),
-    expectedDiv = document.createElement('div'),
-    sawHead = document.createElement('strong'),
-    expectedHead = document.createElement('strong'),
-    sawPre = document.createElement('pre'),
-    expectedPre = document.createElement('pre')
-  ;
+  const message = document.createElement('span');
+  const code = document.createElement('section');
+  const sawDiv = document.createElement('div');
+  const expectedDiv = document.createElement('div');
+  const sawHead = document.createElement('strong');
+  const expectedHead = document.createElement('strong');
+  const sawPre = document.createElement('pre');
+  const expectedPre = document.createElement('pre');
 
   message.textContent = err.message;
 
@@ -74,7 +72,8 @@ const buildCodeDiffErrorMessage = function (err, li) {
   expectedHead.classList.add('error-sample-head');
 
   err.code.saw.forEach(function (line, i) {
-    var tag = document.createElement('code');
+    let tag = document.createElement('code');
+
     tag.textContent = line;
 
     if (i == err.code.line) tag.classList.add('error-sample-line');
@@ -83,7 +82,8 @@ const buildCodeDiffErrorMessage = function (err, li) {
   });
 
   err.code.expected.forEach(function (line, i) {
-    var tag = document.createElement('code');
+    let tag = document.createElement('code');
+
     tag.textContent = line;
 
     if (i == err.code.line) tag.classList.add('error-sample-line');
@@ -109,15 +109,13 @@ const displayDiffWindow = function (imgs, width) {
 };
 
 const buildImageDiffErrorMessage = function (err, li) {
-  var
-    message = document.createElement('span'),
-    diff = document.createElement('span'),
-    div = document.createElement('div'),
-    imgWrap = document.createElement('div'),
-    img = document.createElement('img'),
-    expectedPercent = Math.ceil(err.diff.expectedPercent * 100),
-    percent = Math.ceil(err.diff.percent * 100)
-  ;
+  let message = document.createElement('span');
+  let diff = document.createElement('span');
+  let div = document.createElement('div');
+  let imgWrap = document.createElement('div');
+  let img = document.createElement('img');
+  let expectedPercent = Math.ceil(err.diff.expectedPercent * 100);
+  let percent = Math.ceil(err.diff.percent * 100);
 
   div.classList.add('diff-wrap');
   message.textContent = err.message;
@@ -605,10 +603,8 @@ listener.on('app:all-done', function (event) {
 });
 
 listener.on('check-group:new', function (event, id, label) {
-  const
-    $groupHead = document.createElement('h2'),
-    $groupTitle = document.createElement('span')
-  ;
+  const $groupHead = document.createElement('h2');
+  const $groupTitle = document.createElement('span');
 
   groups[id] = {
     label: label,
@@ -626,11 +622,9 @@ listener.on('check-group:new', function (event, id, label) {
 });
 
 listener.on('check-group:item-new', function (event, group, id, label) {
-  var
-    checkLi = null,
-    checkId = group + id,
-    checkClass = classify(checkId)
-  ;
+  let checkLi = null;
+  let checkId = group + id;
+  let checkClass = classify(checkId);
 
   if (!checks[checkId]) {
     checks[checkId] = document.createElement('a');
@@ -646,14 +640,14 @@ listener.on('check-group:item-new', function (event, group, id, label) {
 });
 
 listener.on('check-group:item-computing', function (event, group, id) {
-  var checkId = group + id;
+  let checkId = group + id;
 
   checks[checkId].dataset.status = 'computing';
   statusBarUpdate();
 });
 
 listener.on('check-group:item-bypass', function (event, group, id, label, errors) {
-  var checkId = group + id;
+  let checkId = group + id;
 
   checks[checkId].dataset.status = 'bypassed';
   displayErrors(group, label, checks[checkId].dataset.id, errors, 'bypassed');
@@ -661,7 +655,7 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
 });
 
 listener.on('check-group:item-complete', function (event, group, id, label, errors, skip, messages) {
-  var checkId = group + id;
+  let checkId = group + id;
 
   if (errors && errors.length > 0) {
     checks[checkId].dataset.status = 'failed';
