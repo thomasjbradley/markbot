@@ -11,6 +11,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Functionality tests can now specify a `setup` option that will be injected into the page before it loads—it’s helpful for overwriting `prompt()` to pass fake data.
 
+### Fixed
+
+- Fixed a huge security hole when testing websites because of `nodeIntegration` being turned on. If the user’s website had downloaded a compromised Javascript file that used Node.js functionality it could completely control the user’s computer. `nodeIntegration` is now off (and `contextIsolation` is on) in testing windows & Markbot encapsulates Node.js required functionality into private methods.
+- The error messages for Javascript errors are cleaned up for when pieces of information are missing.
+
 ---
 
 ## [5.7.0] — 2017-03-30

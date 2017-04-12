@@ -42,10 +42,10 @@
   const makeJs = function () {
     return `
       (function () {
-        const webcoach = nodeRequire('webcoach');
+        const webcoach = window.__markbot.getPerformanceTestingService();
 
         webcoach.getDomAdvice().then(function (data) {
-          nodeRequire('electron').remote.BrowserWindow.fromId(${taskRunnerId}).webContents.send('__markbot-hidden-browser-perf-dom-advice', JSON.stringify(eval(data)));
+          window.__markbot.sendMessageToWindow(${taskRunnerId}, '__markbot-hidden-browser-perf-dom-advice', JSON.stringify(eval(data)));
         });
       }());
     `;

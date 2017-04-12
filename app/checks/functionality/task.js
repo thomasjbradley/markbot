@@ -22,9 +22,7 @@
         ${injectionJs}
 
         __MarkbotInjectedFunctions.browserWindowId = ${testWinId};
-        __MarkbotInjectedFunctions.browserWindow = nodeRequire('electron').remote.BrowserWindow.fromId(${testWinId}).webContents;
         __MarkbotInjectedFunctions.taskRunnerId = ${taskRunnerId};
-        __MarkbotInjectedFunctions.taskRunner = nodeRequire('electron').remote.BrowserWindow.fromId(${taskRunnerId}).webContents;
         __MarkbotInjectedFunctions.passLabel = '__markbot-functionality-test-pass-${label}';
         __MarkbotInjectedFunctions.failLabel = '__markbot-functionality-test-fail-${label}';
         __MarkbotInjectedFunctions.debugLabel = '__markbot-functionality-test-debug-${label}';
@@ -65,6 +63,7 @@
     const pagePath = path.resolve(fullPath + '/' + file.path);
     const listenerLabel = classify(`${file.path}-${Date.now()}`);
     let currentTestIndex = 1;
+    let hasErrors = false;
     let win;
 
     const cleanup = function () {
@@ -87,9 +86,17 @@
     markbotMain.send('check-group:item-computing', group, file.path, file.path);
 
     ipcRenderer.on('__markbot-functionality-error', function (event, message, line, filename) {
+      hasErrors = true;
       filename = filename.replace(fullPath, '').replace('file:///', '');
       cleanup();
-      markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message} — \`${filename}\` on line ${line}`]);
+
+      if (message) message = message.replace(/\.$/, '');
+      if (filename) filename = filename.replace(/https?:\/\/localhost:?\d+\//, '');
+
+      if (message && !filename && !line) markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message}`]);
+      if (message && filename && !line) markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message} — \`${filename}\``]);
+      if (message && filename && line) markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message} — \`${filename}\` on line ${line}`]);
+
       next();
     });
 
@@ -119,7 +126,7 @@
 
       if (file.tests) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
 
-      if (file.noErrors) {
+      if (file.noErrors && !hasErrors) {
         markbotMain.send('check-group:item-complete', group, file.path, file.path);
         next();
       }

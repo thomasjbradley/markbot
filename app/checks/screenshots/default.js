@@ -1,4 +1,3 @@
-const __Markbot_Screenshotting_IPC_Renderer = nodeRequire('electron').remote.BrowserWindow.fromId(taskRunnerId).webContents;
 let windowResizeEventThrottle;
 
 window.addEventListener('resize', function () {
@@ -11,7 +10,7 @@ window.addEventListener('resize', function () {
       window.requestAnimationFrame(function () {
         window.requestAnimationFrame(function () {
           window.requestAnimationFrame(function () {
-            __Markbot_Screenshotting_IPC_Renderer.send(listenerLabel, windowId, document.documentElement.clientWidth, document.documentElement.offsetHeight);
+            window.__markbot.sendMessageToWindow(taskRunnerId, listenerLabel, windowId, document.documentElement.clientWidth, document.documentElement.offsetHeight);
           });
         });
       });

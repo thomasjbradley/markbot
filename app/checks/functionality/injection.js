@@ -73,14 +73,14 @@ const __MarkbotInjectedFunctions = {
     let defaultOpts = { type: eventStr, isTrusted: true };
     let allOpts = Object.assign(defaultOpts, opts);
 
-    __MarkbotInjectedFunctions.browserWindow.sendInputEvent(allOpts);
+    window.__markbot.sendInputEventToWindow(__MarkbotInjectedFunctions.browserWindowId, allOpts);
 
     if (next) {
       setTimeout(function () {
         window.requestAnimationFrame(function () {
           window.requestAnimationFrame(function () {
             window.requestAnimationFrame(function () {
-              next()
+              next();
             });
           });
         });
@@ -101,21 +101,21 @@ const __MarkbotInjectedFunctions = {
 
     __MarkbotInjectedFunctions.send('mouseMove', {
       x: (x < 0) ? 0 : x,
-      y: (y < 0) ? 0 : y
+      y: (y < 0) ? 0 : y,
     }, next);
   },
 
   pass: function () {
-    if (!__MarkbotInjectedFunctions.failed) __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.passLabel);
+    if (!__MarkbotInjectedFunctions.failed) window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.passLabel);
   },
 
   fail: function (reason) {
     __MarkbotInjectedFunctions.failed = true;
-    __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.failLabel, reason);
+    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.failLabel, reason);
   },
 
   debug: function (...message) {
-    __MarkbotInjectedFunctions.taskRunner.send(__MarkbotInjectedFunctions.debugLabel, ...message);
-  }
+    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.debugLabel, ...message);
+  },
 
 };

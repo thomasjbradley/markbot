@@ -56,7 +56,8 @@ const getNewBrowserWindow = function (filename, userOpts, injectJs) {
     enableLargerThanScreen: true,
     backgroundColor: '#fff',
     webPreferences: {
-      nodeIntegration: true,
+      nodeIntegration: false,
+      contextIsolation: true,
       preload: (injectJs) ? createInjectableJsFile(filename, injectJs) : path.resolve(PRELOAD_JS),
     },
     defaultEncoding: 'UTF-8',
@@ -65,6 +66,13 @@ const getNewBrowserWindow = function (filename, userOpts, injectJs) {
 
 const getUrl = function (url) {
   return (url.match(/^https?:\/\//)) ? url : webServer.getHost() + '/' + url;
+};
+
+const getWindowLoadingOptions = function (listenerId) {
+  return {
+    httpReferrer: `https://${listenerId}.running-task-windows.markbot.web-dev.tools/`,
+    extraHeaders: 'Pragma: no-cache\n',
+  }
 };
 
 const destroy = function (win) {
@@ -144,8 +152,8 @@ const load = function (listenerId, url, opts, injectJs, next) {
 
   ipcRenderer.on('__markbot-hidden-browser-devtools-loaded', function (e) {
     process.nextTick(function () {
-      win.loadURL(getUrl(url), {'extraHeaders': 'Pragma: no-cache\n'});
-      win.webContents.executeJavaScript(`window.__markbot_hidden_browser_window_id = ${listenerId};`);
+      win.loadURL(getUrl(url), getWindowLoadingOptions(listenerId));
+      win.webContents.executeJavaScript(`window.__markbotHiddenTestingWindowId = ${listenerId};`);
     });
   });
 
@@ -175,8 +183,8 @@ const load = function (listenerId, url, opts, injectJs, next) {
     win.webContents.session.enableNetworkEmulation(speed);
   }
 
-  win.loadURL(PRELOAD_PATH, {'extraHeaders': 'Pragma: no-cache\n'});
-  win.webContents.executeJavaScript(`window.__markbot_hidden_browser_window_id = ${listenerId};`);
+  win.loadURL(PRELOAD_PATH, getWindowLoadingOptions(listenerId));
+  win.webContents.executeJavaScript(`window.__markbotHiddenTestingWindowId = ${listenerId};`);
 };
 
 module.exports = {
