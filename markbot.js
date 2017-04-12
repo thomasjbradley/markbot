@@ -51,7 +51,7 @@ let menuOptions = {
   signOutUsername: false,
   showDevelop: false,
   developMenuItems: false,
-  debugChecked: false,
+  debugChecked: global.DEBUG,
 };
 let markbotFilePath;
 let markbotLockFilePath;
@@ -132,6 +132,7 @@ const createDebugWindow = function () {
   })
 
   debugWindow.loadURL('file://' + __dirname + '/frontend/debug/debug.html');
+  global.markbotDebugWindow = debugWindow.id;
 };
 
 const createWindows = function (next) {
@@ -424,6 +425,7 @@ exports.showDifferWindow = function (imgs, width) {
   differWindow.webContents.executeJavaScript(js);
   differWindow.show();
   differWindow.setSize(width, 400);
+  global.markbotDifferWindow = differWindow.id;
 };
 
 exports.disableWebServer = function () {
@@ -432,8 +434,29 @@ exports.disableWebServer = function () {
 menuCallbacks.disableWebServer = exports.disableWebServer;
 
 exports.toggleDebug = function () {
+  let ignoreWindows = [global.markbotMainWindow, global.markbotDebugWindow];
+
   global.DEBUG = !global.DEBUG;
   menuOptions.debugChecked = global.DEBUG;
+
+  if (differWindow) ignoreWindows.push(global.markbotDifferWindow);
+
+  if (global.DEBUG) {
+    BrowserWindow.getAllWindows().forEach(function (win) {
+      if (ignoreWindows.indexOf(win.id) === -1) {
+        win.webContents.openDevTools({ mode: 'detach' });
+        win.show();
+      }
+    });
+  } else {
+    BrowserWindow.getAllWindows().forEach(function (win) {
+      if (ignoreWindows.indexOf(win.id) > -1) return;
+
+      win.hide();
+      win.webContents.closeDevTools();
+      mainWindow.focus();
+    });
+  }
 };
 menuCallbacks.toggleDebug = exports.toggleDebug;
 
