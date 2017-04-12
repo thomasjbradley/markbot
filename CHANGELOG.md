@@ -14,7 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Fixed a huge security hole when testing websites because of `nodeIntegration` being turned on. If the user’s website had downloaded a compromised Javascript file that used Node.js functionality it could completely control the user’s computer. `nodeIntegration` is now off (and `contextIsolation` is on) in testing windows & Markbot encapsulates Node.js required functionality into private methods.
+- Fixed a huge security hole when testing websites because of `nodeIntegration` being turned on. If the user’s website had downloaded a compromised Javascript file that used Node.js functionality it could completely control the user’s computer. `nodeIntegration` is now off in testing windows & Markbot encapsulates Node.js required functionality into private methods.
 - The error messages for Javascript errors are cleaned up for when pieces of information are missing.
 
 ---

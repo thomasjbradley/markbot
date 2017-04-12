@@ -54,7 +54,7 @@ const getNewBrowserWindow = function (filename, userOpts, injectJs) {
     backgroundColor: '#fff',
     webPreferences: {
       nodeIntegration: false,
-      contextIsolation: true,
+      // contextIsolation: true,
       preload: (injectJs) ? createInjectableJsFile(filename, injectJs) : path.resolve(PRELOAD_JS),
     },
     defaultEncoding: 'UTF-8',
