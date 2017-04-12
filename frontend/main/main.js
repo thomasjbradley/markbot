@@ -310,6 +310,7 @@ const reset = function () {
   $messages.dataset.state = 'hidden';
   $messagesPositive.dataset.state = 'hidden';
   $messageHeader.dataset.state = 'computing';
+  $robotLogo.setAttribute('aria-label', 'Computing…');
   // $failure.dataset.state = 'hidden';
   $submit.dataset.state = 'hidden';
   $allGoodCheck.style.animationName = 'none';
@@ -373,9 +374,11 @@ const triggerDoneState = function () {
   $refreshBtn.setAttribute('data-state', '');
 
   if (hasErrors()) {
-     $messageHeader.dataset.state = 'errors';
+    $messageHeader.dataset.state = 'errors';
+    $robotLogo.setAttribute('aria-label', 'Some checks failed.');
   } else {
     $messageHeader.dataset.state = 'no-errors';
+    $robotLogo.setAttribute('aria-label', 'All clear!');
     $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
     $submit.dataset.state = 'visible';
     $messages.dataset.state = 'hidden';
@@ -628,6 +631,7 @@ listener.on('check-group:new', function (event, id, label) {
   $groupTitle.textContent = label;
 
   $groupHead.setAttribute('tabindex', 0);
+  $groupHead.id = id;
   $groupHead.appendChild($groupTitle);
 
   $checksLoader.dataset.state = 'hidden';
@@ -639,6 +643,9 @@ listener.on('check-group:item-new', function (event, group, id, label) {
   let checkLi = null;
   let checkId = group + id;
   let checkClass = classify(checkId);
+  let groupLabel = group;
+  let $groupHeading = document.getElementById(group);
+
 
   if (!checks[checkId]) {
     checks[checkId] = document.createElement('a');
@@ -649,6 +656,9 @@ listener.on('check-group:item-new', function (event, group, id, label) {
     groups[group].elem.appendChild(checkLi);
   }
 
+  if ($groupHeading) groupLabel = $groupHeading.textContent;
+
+  checks[checkId].setAttribute('aria-label', `${groupLabel} — ${label}`);
   checks[checkId].textContent = label;
   statusBarUpdate();
 });

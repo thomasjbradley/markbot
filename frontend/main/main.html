@@ -144,7 +144,7 @@
   <main id="message-wrapper" data-state="hidden">
 
     <header id="message-header">
-      <button class="robot-logo">
+      <button class="robot-logo" aria-label="Computing…">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
           <defs>
             <clipPath id="hex-mask">
@@ -172,9 +172,11 @@
           </g>
         </svg>
       </button>
-      <h2 class="computing">Computing…</h2>
-      <h2 class="no-errors">All clear!</h2>
-      <h2 class="errors">Some checks failed.</h2>
+      <div id="robot-logo-label">
+        <h2 class="computing" tabindex="0"><span>Computing…</span></h2>
+        <h2 class="no-errors" tabindex="0"><span>All clear!</span></h2>
+        <h2 class="errors" tabindex="0"><span>Some checks failed.</span></h2>
+      </div>
     </header>
 
     <div class="success-fail" id="failure" data-state="hidden">
