@@ -253,10 +253,13 @@ const prepareErrorText = function (err) {
 const displayErrors = function (group, label, linkId, errors, status, isMessages) {
   const $errorGroup = document.createElement('div');
   const $groupHead = document.createElement('h2');
+  const $groupHeadText = document.createElement('span');
   const $messageList = document.createElement('ul');
 
-  $groupHead.textContent = groups[group].label + ' — ' + label;
   $groupHead.id = linkId;
+  $groupHead.setAttribute('tabindex', 0);
+  $groupHeadText.textContent = groups[group].label + ' — ' + label;
+  $groupHead.appendChild($groupHeadText);
 
   errors.forEach(function (err) {
     const li = document.createElement('li');
@@ -624,6 +627,7 @@ listener.on('check-group:new', function (event, id, label) {
   $groupTitle.classList.add('title-wrap');
   $groupTitle.textContent = label;
 
+  $groupHead.setAttribute('tabindex', 0);
   $groupHead.appendChild($groupTitle);
 
   $checksLoader.dataset.state = 'hidden';

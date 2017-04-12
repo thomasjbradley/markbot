@@ -167,6 +167,11 @@
   text-transform: uppercase;
 }
 
+#checks h2:focus {
+  outline: 2px solid rgba(0, 0, 0, .8);
+  outline-offset: 1px;
+}
+
 .title-wrap {
   display: inline-block;
   padding-right: 6px;
@@ -198,10 +203,11 @@
   position: relative;
 }
 
-#checks ul a {
+#checks a {
   display: inline-block;
   margin-left: 16px;
   padding: 3px 8px 4px;
+  position: relative;
 
   background-color: #d9d8e3;
   border: 1px solid #a8a6af;
@@ -215,15 +221,32 @@
   text-decoration: none;
 }
 
-#checks ul a::before {
+#checks a:focus {
+  background-color: #a8a6af;
+  outline: none;
+  color: #fff;
+}
+
+#checks a::before {
   content: " ";
   bottom: -2px;
-  left: 0;
+  left: -17px;
   position: absolute;
   top: -2px;
   width: 22px;
 
   background: transparent url("../images/pending.svg") no-repeat center center / contain;
+}
+
+#checks a:focus::after {
+  content: " ";
+  height: 12px;
+  position: absolute;
+  right: -16px;
+  top: calc(50% - 6px);
+  width: 12px;
+
+  background: transparent url("../images/focus-triangle.svg") no-repeat center center / contain;
 }
 
 #checks a[data-status="bypassed"]::before {
@@ -236,15 +259,25 @@
   color: #b09000;
 }
 
+#checks a[data-status="computing"]:focus {
+  background-color: #ffd30d;
+  color: #fff;
+}
+
 #checks a[data-status="computing"]::before {
   background-image: url("../images/computing.svg");
 }
 
 #checks a[data-status="succeeded"] {
-  border-color: #6dd110;
   background-color: #c1e89b;
+  border-color: #6dd110;
   pointer-events: none;
   color: #417d0a;
+}
+
+#checks a[data-status="succeeded"]:focus {
+  background-color: #6dd110;
+  color: #fff;
 }
 
 #checks a[data-status="succeeded"]::before {
@@ -252,9 +285,14 @@
 }
 
 #checks a[data-status="failed"] {
-  border-color: #f33;
   background-color: #ff9494;
+  border-color: #f33;
   color: #991f1f;
+}
+
+#checks a[data-status="failed"]:focus {
+  background-color: #f33;
+  color: #fff;
 }
 
 #checks a[data-status="failed"]::before {
@@ -310,9 +348,33 @@
 
 .robot-logo {
   margin-bottom: 10px;
+  height: 75px;
+  padding: 0;
   width: 75px;
 
+  background-color: transparent;
+  border: 0;
+
   cursor: pointer;
+}
+
+.robot-logo:focus {
+  outline: none;
+}
+
+.robot-logo svg {
+  width: 75px;
+  overflow: visible !important;
+}
+
+.hex-border-focus {
+  opacity: 0;
+  transform: scale(1.05);
+  transform-origin: center center;
+}
+
+.robot-logo:focus .hex-border-focus {
+  opacity: .8;
 }
 
 #message-header[data-state="computing"] .robot-logo {
@@ -401,6 +463,19 @@
 
   color: #991f1f;
   font-size: 15px;
+}
+
+.messages h2 span {
+  display: block;
+}
+
+.messages h2:focus {
+  outline: 0;
+}
+
+.messages h2:focus span {
+  outline: 2px solid rgba(0, 0, 0, .8);
+  outline-offset: 1px;
 }
 
 .messages mark {
