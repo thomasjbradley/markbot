@@ -341,10 +341,6 @@
 }
 
 #message-header h2:focus {
-  outline: none;
-}
-
-#message-header h2:focus span {
   outline: 2px solid rgba(0, 0, 0, .8);
   outline-offset: 2px;
 }
@@ -352,7 +348,7 @@
 #message-header[data-state="computing"] .computing,
 #message-header[data-state="no-errors"] .no-errors,
 #message-header[data-state="errors"] .errors {
-  display: block;
+  display: inline-block;
 }
 
 .robot-logo {
@@ -591,6 +587,11 @@
 
 .messages .diff-wrap:hover {
   background-color: #f2f2f2;
+}
+
+.messages .diff-wrap:focus {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, .8);
+  outline: 0;
 }
 
 .messages .diff-img-wrap {

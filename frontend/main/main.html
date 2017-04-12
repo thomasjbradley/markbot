@@ -68,12 +68,12 @@
       </ul>
       <ul class="toolbar-buttons toolbar-buttons-group">
         <li>
-          <button class="toolbar-button" id="open-repo" aria-label="Browse GitHub Repo" title="Browse GitHub Repo" disabled data-can-be-enabled="false">
+          <button class="toolbar-button" id="open-repo" aria-label="Browse GitHub Repo" title="Browse GitHub Repo" disabled data-can-be-enabled="false" tabindex="-1">
             <span><i class="icon i-16"><svg><use xlink:href="#icon-github"></use></svg></i></span>
           </button>
         </li>
         <li>
-          <button class="toolbar-button" id="create-issue" aria-label="Create New Issue" title="Create New Issue" disabled data-can-be-enabled="false">
+          <button class="toolbar-button" id="create-issue" aria-label="Create New Issue" title="Create New Issue" disabled data-can-be-enabled="false" tabindex="-1">
             <span><i class="icon i-16"><svg><use xlink:href="#icon-issue"></use></svg></i></span>
           </button>
         </li>
@@ -117,7 +117,7 @@
     <div class="toolbar-button-segment">
       <ul class="toolbar-buttons">
         <li>
-          <button class="toolbar-button toolbar-button-green" id="submit-btn" aria-label="Submit Assignment" title="Submit Assignment" data-can-submit="false" disabled>
+          <button class="toolbar-button toolbar-button-green" id="submit-btn" aria-label="Submit Assignment" title="Submit Assignment" data-can-submit="false" disabled tabindex="-1">
             <span>
              <i class="icon i-14 rotating-icon" id="submit-icon-gear"><svg><use xlink:href="#icon-gear"></use></svg></i>
              <i class="icon i-14" id="submit-icon-done"><svg><use xlink:href="#icon-done"></use></svg></i>
@@ -172,10 +172,10 @@
           </g>
         </svg>
       </button>
-      <div id="robot-logo-label">
-        <h2 class="computing" tabindex="0"><span>Computing…</span></h2>
-        <h2 class="no-errors" tabindex="0"><span>All clear!</span></h2>
-        <h2 class="errors" tabindex="0"><span>Some checks failed.</span></h2>
+      <div class="message-header-list">
+        <h2 class="computing" tabindex="0">Computing…</h2>
+        <h2 class="no-errors" tabindex="0">All clear!</h2>
+        <h2 class="errors" tabindex="0">Some checks failed.</h2>
       </div>
     </header>
 

@@ -118,6 +118,8 @@ const buildImageDiffErrorMessage = function (err, li) {
   let percent = Math.ceil(err.diff.percent * 100);
 
   div.classList.add('diff-wrap');
+  div.setAttribute('aria-role', 'button');
+  div.setAttribute('tabindex', 0);
   message.textContent = err.message;
   diff.innerHTML = `${percent}% difference<br>Expecting less than ${expectedPercent}%`;
   imgWrap.classList.add('diff-img-wrap');
@@ -132,6 +134,10 @@ const buildImageDiffErrorMessage = function (err, li) {
 
   div.addEventListener('click', function () {
     displayDiffWindow(JSON.stringify(err.images), err.width);
+  });
+
+  div.addEventListener('keyup', function (e) {
+    if (e.code == 'Enter' || e.code == 'Space') displayDiffWindow(JSON.stringify(err.images), err.width);
   });
 };
 
@@ -321,6 +327,7 @@ const reset = function () {
   $canvasBtn.setAttribute('disabled', true);
   $canvasBtnText.innerHTML = 'Submit';
   $canvasBtn.dataset.canSubmit = false;
+  $canvasBtn.setAttribute('tabindex', -1);
   markbot.disableSubmitAssignment();
 
   $dropbox.dataset.state = 'visible';
@@ -328,6 +335,8 @@ const reset = function () {
   $checksWrapper.dataset.state = 'hidden';
   $statusBar.setAttribute('disabled', true);
   $refreshBtn.setAttribute('disabled', true);
+  $refreshBtn.setAttribute('aria-label', 'Refresh');
+  $refreshBtn.setAttribute('title', 'Refresh');
   $refreshBtn.setAttribute('data-state', '');
   $openEditorBtn.setAttribute('disabled', true);
   $openBrowserBtn.setAttribute('disabled', true);
@@ -358,6 +367,8 @@ const refresh = function () {
     $checksWrapper.dataset.state = 'visible';
     $statusBar.removeAttribute('disabled');
     $refreshBtn.removeAttribute('disabled');
+    $refreshBtn.setAttribute('aria-label', 'Computing…');
+    $refreshBtn.setAttribute('title', 'Computing…');
     $refreshBtn.setAttribute('data-state', 'computing');
     $openEditorBtn.removeAttribute('disabled');
     $openBrowserBtn.removeAttribute('disabled');
@@ -372,6 +383,8 @@ const triggerDoneState = function () {
   clearInterval(isMarkbotDoneYet);
   $messagesLoader.dataset.state = 'hidden';
   $refreshBtn.setAttribute('data-state', '');
+  $refreshBtn.setAttribute('aria-label', 'Refresh');
+  $refreshBtn.setAttribute('title', 'Refresh');
 
   if (hasErrors()) {
     $messageHeader.dataset.state = 'errors';
@@ -436,6 +449,8 @@ const fileDropped = function (path) {
     $checksWrapper.dataset.state = 'visible';
     $statusBar.removeAttribute('disabled');
     $refreshBtn.removeAttribute('disabled');
+    $refreshBtn.setAttribute('aria-label', 'Computing…');
+    $refreshBtn.setAttribute('title', 'Computing…');
     $refreshBtn.setAttribute('data-state', 'computing');
     $openEditorBtn.removeAttribute('disabled');
     $openBrowserBtn.removeAttribute('disabled');
@@ -600,16 +615,21 @@ listener.on('app:file-exists', function (event, repo) {
 
 listener.on('app:without-github', function (event) {
   $createIssueBtn.dataset.canBeEnabled = false;
+  $createIssueBtn.setAttribute('tabindex', -1);
   $openRepoBtn.dataset.canBeEnabled = false;
+  $openRepoBtn.setAttribute('tabindex', -1);
 });
 
 listener.on('app:with-github', function (event) {
   $createIssueBtn.dataset.canBeEnabled = true;
+  $createIssueBtn.removeAttribute('tabindex');
   $openRepoBtn.dataset.canBeEnabled = true;
+  $openRepoBtn.removeAttribute('tabindex');
 });
 
 listener.on('app:with-canvas', function (event) {
   $canvasBtn.dataset.canSubmit = true;
+  $canvasBtn.removeAttribute('tabindex');
   $messageNoCanvas.setAttribute('hidden', true);
   $messageCanvas.removeAttribute('hidden');
 });
@@ -674,6 +694,7 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
   let checkId = group + id;
 
   checks[checkId].dataset.status = 'bypassed';
+  checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Bypassed')
   displayErrors(group, label, checks[checkId].dataset.id, errors, 'bypassed');
   statusBarUpdate();
 });
@@ -683,9 +704,13 @@ listener.on('check-group:item-complete', function (event, group, id, label, erro
 
   if (errors && errors.length > 0) {
     checks[checkId].dataset.status = 'failed';
+    checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Failed')
     displayErrors(group, label, checks[checkId].dataset.id, errors, skip);
   } else {
     checks[checkId].dataset.status = 'succeeded';
+    checks[checkId].setAttribute('aria-disabled', true);
+    checks[checkId].setAttribute('tabindex', -1);
+    checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Passed')
   }
 
   if (messages && messages.length > 0) displayErrors(group, label, id, messages, '', true);
@@ -701,6 +726,8 @@ listener.on('app:open-repo', function (event, path) {
   $checksWrapper.dataset.state = 'visible';
   $statusBar.removeAttribute('disabled');
   $refreshBtn.removeAttribute('disabled');
+  $refreshBtn.setAttribute('aria-label', 'Computing…');
+  $refreshBtn.setAttribute('title', 'Computing…');
   $refreshBtn.setAttribute('data-state', 'computing');
   $openEditorBtn.removeAttribute('disabled');
   $openBrowserBtn.removeAttribute('disabled');
@@ -717,6 +744,8 @@ listener.on('app:re-run', function (event) {
     $checksWrapper.dataset.state = 'visible';
     $statusBar.removeAttribute('disabled');
     $refreshBtn.removeAttribute('disabled');
+    $refreshBtn.setAttribute('aria-label', 'Computing…');
+    $refreshBtn.setAttribute('title', 'Computing…');
     $refreshBtn.setAttribute('data-state', 'computing');
     $openEditorBtn.removeAttribute('disabled');
     $openBrowserBtn.removeAttribute('disabled');
