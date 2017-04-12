@@ -46,6 +46,7 @@ let menuOptions = {
   revealFolder: false,
   viewLocal: false,
   viewLive: false,
+  browseRepo: false,
   submitAssignment: false,
   signOut: false,
   signOutUsername: false,
@@ -151,10 +152,20 @@ const initializeInterface = function () {
   menuOptions.viewLocal = true;
   menuOptions.developMenuItems = true;
 
+  if (markbotFile.canvasCourse) markbotMain.send('app:with-canvas');
+
   if (markbotFile.repo) {
     menuOptions.viewLive = `https://{{username}}.github.io/${repoOrFolder}/`;
     menuOptions.ghRepo = `https://github.com/{{username}}/${repoOrFolder}`;
     menuOptions.ghIssues = `https://github.com/{{username}}/${repoOrFolder}/issues/new`;
+    menuOptions.browseRepo = true;
+    markbotMain.send('app:with-github');
+  } else {
+    menuOptions.viewLive = false;
+    menuOptions.ghRepo = false;
+    menuOptions.ghIssues = false;
+    menuOptions.browseRepo = false;
+    markbotMain.send('app:without-github');
   }
 };
 
@@ -210,8 +221,6 @@ const startChecks = function () {
   markbotFile.username = menuOptions.signOutUsername;
 
   markbotMain.send('app:file-exists', repoOrFolder);
-
-  if (markbotFile.canvasCourse) markbotMain.send('app:with-canvas');
 
   markbotMain.send('check-group:new', markbotGroup, 'Markbot file');
 
@@ -338,6 +347,7 @@ exports.disableFolderMenuFeatures = function () {
   menuOptions.revealFolder = false;
   menuOptions.viewLocal = false;
   menuOptions.viewLive = false;
+  menuOptions.browseRepo = false;
   menuOptions.ghRepo = false;
   menuOptions.ghIssues = false;
   updateAppMenu();

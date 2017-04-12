@@ -941,8 +941,16 @@ button.toolbar-button-green:focus {
 }
 
 .window-blurred .toolbar-button,
+.toolbar-button[data-can-be-enabled="false"],
 .toolbar-button[disabled] {
+  pointer-events: none;
   opacity: .4;
+}
+
+.window-blurred .toolbar-button:focus,
+.toolbar-button[data-can-be-enabled="false"]:focus,
+.toolbar-button[disabled]:focus {
+  box-shadow: none;
 }
 
 .toolbar-buttons-group > li {

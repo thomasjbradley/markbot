@@ -592,6 +592,16 @@ listener.on('app:file-exists', function (event, repo) {
   $repoName.removeAttribute('disabled');
 });
 
+listener.on('app:without-github', function (event) {
+  $createIssueBtn.dataset.canBeEnabled = false;
+  $openRepoBtn.dataset.canBeEnabled = false;
+});
+
+listener.on('app:with-github', function (event) {
+  $createIssueBtn.dataset.canBeEnabled = true;
+  $openRepoBtn.dataset.canBeEnabled = true;
+});
+
 listener.on('app:with-canvas', function (event) {
   $canvasBtn.dataset.canSubmit = true;
   $messageNoCanvas.setAttribute('hidden', true);

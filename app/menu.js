@@ -76,7 +76,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
         },
         {
           label: 'Browse GitHub Repo',
-          enabled: (opts && opts.revealFolder) ? true : false,
+          enabled: (opts && opts.browseRepo) ? true : false,
           accelerator: 'CmdOrCtrl+G',
           click: function (item, focusedWindow) {
             cbs.openGitHubRepo();
