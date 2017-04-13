@@ -30,6 +30,7 @@ const $messageCanvas = document.querySelector('.with-canvas-message');
 const $messageNoCanvas = document.querySelector('.no-canvas-message');
 
 // TOOLBAR
+const $toolbar = document.getElementById('toolbar');
 const $openEditorBtn = document.getElementById('open-editor');
 const $openBrowserBtn = document.getElementById('open-browser');
 const $openRepoBtn = document.getElementById('open-repo');
@@ -359,22 +360,7 @@ const reset = function () {
 };
 
 const refresh = function () {
-  if (fullPath && !isRunning()) {
-    reset();
-    startChecks();
-    $dropbox.dataset.state = 'hidden';
-    $messagesWrapper.dataset.state = 'visible';
-    $checksWrapper.dataset.state = 'visible';
-    $statusBar.removeAttribute('disabled');
-    $refreshBtn.removeAttribute('disabled');
-    $refreshBtn.setAttribute('aria-label', 'Computing…');
-    $refreshBtn.setAttribute('title', 'Computing…');
-    $refreshBtn.setAttribute('data-state', 'computing');
-    $openEditorBtn.removeAttribute('disabled');
-    $openBrowserBtn.removeAttribute('disabled');
-    $openRepoBtn.removeAttribute('disabled');
-    $createIssueBtn.removeAttribute('disabled');
-  }
+  if (fullPath && !isRunning()) fileDropped(fullPath);
 };
 
 const triggerDoneState = function () {
@@ -613,27 +599,6 @@ listener.on('app:file-exists', function (event, repo) {
   $repoName.removeAttribute('disabled');
 });
 
-listener.on('app:without-github', function (event) {
-  $createIssueBtn.dataset.canBeEnabled = false;
-  $createIssueBtn.setAttribute('tabindex', -1);
-  $openRepoBtn.dataset.canBeEnabled = false;
-  $openRepoBtn.setAttribute('tabindex', -1);
-});
-
-listener.on('app:with-github', function (event) {
-  $createIssueBtn.dataset.canBeEnabled = true;
-  $createIssueBtn.removeAttribute('tabindex');
-  $openRepoBtn.dataset.canBeEnabled = true;
-  $openRepoBtn.removeAttribute('tabindex');
-});
-
-listener.on('app:with-canvas', function (event) {
-  $canvasBtn.dataset.canSubmit = true;
-  $canvasBtn.removeAttribute('tabindex');
-  $messageNoCanvas.setAttribute('hidden', true);
-  $messageCanvas.removeAttribute('hidden');
-});
-
 listener.on('app:all-done', function (event) {
   triggerDoneState();
 });
@@ -717,41 +682,41 @@ listener.on('check-group:item-complete', function (event, group, id, label, erro
   statusBarUpdate();
 })
 
-listener.on('app:open-repo', function (event, path) {
-  reset();
-  fullPath = path;
-  startChecks();
-  $dropbox.dataset.state = 'hidden';
-  $messagesWrapper.dataset.state = 'visible';
-  $checksWrapper.dataset.state = 'visible';
-  $statusBar.removeAttribute('disabled');
-  $refreshBtn.removeAttribute('disabled');
-  $refreshBtn.setAttribute('aria-label', 'Computing…');
-  $refreshBtn.setAttribute('title', 'Computing…');
-  $refreshBtn.setAttribute('data-state', 'computing');
-  $openEditorBtn.removeAttribute('disabled');
-  $openBrowserBtn.removeAttribute('disabled');
-  $openRepoBtn.removeAttribute('disabled');
-  $createIssueBtn.removeAttribute('disabled');
+listener.on('app:re-run', function (event) {
+  refresh(fullPath);
 });
 
-listener.on('app:re-run', function (event) {
-  if (fullPath && !isRunning()) {
-    reset();
-    startChecks();
-    $dropbox.dataset.state = 'hidden';
-    $messagesWrapper.dataset.state = 'visible';
-    $checksWrapper.dataset.state = 'visible';
-    $statusBar.removeAttribute('disabled');
-    $refreshBtn.removeAttribute('disabled');
-    $refreshBtn.setAttribute('aria-label', 'Computing…');
-    $refreshBtn.setAttribute('title', 'Computing…');
-    $refreshBtn.setAttribute('data-state', 'computing');
-    $openEditorBtn.removeAttribute('disabled');
-    $openBrowserBtn.removeAttribute('disabled');
-    $openRepoBtn.removeAttribute('disabled');
-    $createIssueBtn.removeAttribute('disabled');
-  }
+listener.on('app:without-github', function (event) {
+  $createIssueBtn.dataset.canBeEnabled = false;
+  $createIssueBtn.setAttribute('tabindex', -1);
+  $openRepoBtn.dataset.canBeEnabled = false;
+  $openRepoBtn.setAttribute('tabindex', -1);
+});
+
+listener.on('app:with-github', function (event) {
+  $createIssueBtn.dataset.canBeEnabled = true;
+  $createIssueBtn.removeAttribute('tabindex');
+  $openRepoBtn.dataset.canBeEnabled = true;
+  $openRepoBtn.removeAttribute('tabindex');
+});
+
+listener.on('app:with-canvas', function (event) {
+  $canvasBtn.dataset.canSubmit = true;
+  $canvasBtn.removeAttribute('tabindex');
+  $messageNoCanvas.setAttribute('hidden', true);
+  $messageCanvas.removeAttribute('hidden');
+});
+
+listener.on('app:focus-toolbar', function (event) {
+  $toolbar.focus();
+});
+
+listener.on('app:focus-checklist', function (event) {
+  $checksWrapper.focus();
+});
+
+listener.on('app:focus-errorlist', function (event) {
+  $messagesWrapper.focus();
 });
 
 listener.on('app:sign-out', function (event) {

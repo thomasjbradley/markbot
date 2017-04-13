@@ -93,6 +93,9 @@ const createMainWindow = function (next) {
     if (differWindow) differWindow.destroy();
     if (debugWindow) debugWindow.destroy();
 
+    exports.disableFolderMenuFeatures();
+    exports.disableWebServer();
+
     mainWindow = null;
 
     if (process.platform !== 'darwin') {
@@ -276,9 +279,7 @@ app.on('activate', function () {
   if (mainWindow === null) createWindows();
 });
 
-app.on('open-file', function (e, path) {
-  e.preventDefault();
-
+exports.openRepo = function (path) {
   if (typeof path !== 'string') path = path[0];
 
   if (mainWindow === null) {
@@ -288,6 +289,23 @@ app.on('open-file', function (e, path) {
   } else {
     markbotMain.send('app:file-dropped', path);
   }
+};
+menuCallbacks.openRepo = exports.openRepo;
+
+exports.fileMissing = function (path) {
+  if (mainWindow === null) {
+    createWindows(function () {
+      markbotMain.send('app:file-missing');
+    });
+  } else {
+    markbotMain.send('app:file-missing');
+  }
+};
+menuCallbacks.fileMissing = exports.fileMissing;
+
+app.on('open-file', function (e, path) {
+  e.preventDefault();
+  exports.openRepo(path);
 });
 
 exports.newDebugGroup = function (label) {
@@ -469,6 +487,24 @@ exports.toggleDebug = function () {
   }
 };
 menuCallbacks.toggleDebug = exports.toggleDebug;
+
+exports.focusToolbar = function () {
+  mainWindow.focus();
+  markbotMain.send('app:focus-toolbar');
+};
+menuCallbacks.focusToolbar = exports.focusToolbar;
+
+exports.focusCheckList = function () {
+  mainWindow.focus();
+  markbotMain.send('app:focus-checklist');
+};
+menuCallbacks.focusCheckList = exports.focusCheckList;
+
+exports.focusErrorList = function () {
+  mainWindow.focus();
+  markbotMain.send('app:focus-errorlist');
+};
+menuCallbacks.focusErrorList = exports.focusErrorList;
 
 exports.submitToCanvas = function (ghUsername, next) {
   let getVars = [

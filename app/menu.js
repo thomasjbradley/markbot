@@ -18,9 +18,9 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           click: function (item, focusedWindow) {
             dialog.showOpenDialog({ title: 'Open Repository…', properties: ['openDirectory']}, function (paths) {
               if (paths && paths.length > 0) {
-                markbotMain.send('app:open-repo', paths[0]);
+                cbs.openRepo(paths[0]);
               } else {
-                markbotMain.send('app:file-missing');
+                cbs.fileMissing();
               }
             });
           }
@@ -108,6 +108,33 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           label: 'Close',
           accelerator: 'CmdOrCtrl+W',
           role: 'close'
+        },
+        {
+          type: 'separator'
+        },
+        {
+          label: 'Focus Toolbar',
+          enabled: (opts && opts.revealFolder) ? true : false,
+          accelerator: 'CmdOrCtrl+1',
+          click: function (item, focusedWindow) {
+            cbs.focusToolbar();
+          }
+        },
+        {
+          label: 'Focus Check List',
+          enabled: (opts && opts.revealFolder) ? true : false,
+          accelerator: 'CmdOrCtrl+2',
+          click: function (item, focusedWindow) {
+            cbs.focusCheckList();
+          }
+        },
+        {
+          label: 'Focus Error List',
+          enabled: (opts && opts.revealFolder) ? true : false,
+          accelerator: 'CmdOrCtrl+3',
+          click: function (item, focusedWindow) {
+            cbs.focusErrorList();
+          }
         },
         {
           type: 'separator'

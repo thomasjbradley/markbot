@@ -150,6 +150,10 @@
   overflow-y: auto;
 }
 
+#checks:focus {
+  outline: none;
+}
+
 .os-win #checks,
 .macosx-lt-1010 #checks {
   padding-top: 13px;
@@ -311,6 +315,10 @@
   overflow-y: auto;
 
   font-size: 14px;
+}
+
+#message-wrapper:focus {
+  outline: 0;
 }
 
 [data-state="hidden"] {
@@ -590,6 +598,7 @@
 }
 
 .messages .diff-wrap:focus {
+  background-color: #f2f2f2;
   box-shadow: 0 0 0 2px rgba(0, 0, 0, .8);
   outline: 0;
 }
@@ -877,6 +886,10 @@ svg:not(:root) {
   border-bottom: 1px solid #b3b3b3;
   border-top: 1px solid #f6f6f6;
   height: 38px;
+}
+
+.toolbar:focus {
+  outline: 0;
 }
 
 .window-blurred .toolbar {
