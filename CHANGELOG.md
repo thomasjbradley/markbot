@@ -7,9 +7,19 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Shortcut keys and menu items to focus different regions of the Markbot window.
+
 ### Changed
 
 - Some more keyboard navigation & accessibility improvements, including improved focus states.
+- Refactored some of the menu-driven code for simplicity.
+
+### Fixed
+
+- A bug where the “Open Repository” menu item wouldn’t work when there was no window.
+- A bug where the menu items weren’t disabled when the main window was closed.
 
 ---
 
