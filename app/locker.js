@@ -1,12 +1,10 @@
 'use strict';
 
-const
-  fs = require('fs'),
-  path = require('path'),
-  crypto = require('crypto'),
-  yaml = require('js-yaml'),
-  exists = require('./file-exists')
-  ;
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const yaml = require('js-yaml');
+const exists = require('./file-exists');
 
 const getHash = function () {
   return crypto.createHash('sha256');

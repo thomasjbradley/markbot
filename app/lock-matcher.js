@@ -1,10 +1,8 @@
 'use strict';
 
 module.exports.match = function (primary, secondary) {
-  let
-    isCheater = false,
-    matches = {}
-    ;
+  let isCheater = false;
+  let matches = {};
 
   if (primary) {
     for (let key in primary) {
