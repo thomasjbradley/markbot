@@ -15,13 +15,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Some more keyboard navigation & accessibility improvements, including improved focus states.
 - Refactored some of the menu-driven code for simplicity.
+- Refactored some of the task completion & initialization logic for more reliability.
 
 ### Fixed
 
 - A bug where the “Open Repository” menu item wouldn’t work when there was no window.
 - A bug where the menu items weren’t disabled when the main window was closed.
-- If you held `Command/Ctrl` when clicking the check list items it would confusingly open a new instance of the Markbot window—it’s now fixed.
-- If the `.markbot.lock` file was missing locked files would get positively matched as “Unchanged”—that bug is fixed now.
+- Fixed a bug where if you held `Command/Ctrl` when clicking the check list links it would confusingly open a new instance of the Markbot window.
+- Fixed a bug where if the `.markbot.lock` file was missing locked files would get positively matched as “Unchanged”.
+- Fixed a bug where tasks were sometimes triggering their completion more than once, causing other tasks to never trigger completion.
 
 ---
 
