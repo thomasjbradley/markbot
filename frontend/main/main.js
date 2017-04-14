@@ -571,6 +571,11 @@ document.addEventListener('click', function (e) {
     e.preventDefault();
     shell.openExternal(e.target.href);
   }
+
+  if (e.target.matches('#checks a')) {
+    e.preventDefault();
+    window.location.hash = e.target.getAttribute('href');
+  }
 });
 
 window.addEventListener('will-navigate', function (e) {
