@@ -21,6 +21,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A bug where the “Open Repository” menu item wouldn’t work when there was no window.
 - A bug where the menu items weren’t disabled when the main window was closed.
 - If you held `Command/Ctrl` when clicking the check list items it would confusingly open a new instance of the Markbot window—it’s now fixed.
+- If the `.markbot.lock` file was missing locked files would get positively matched as “Unchanged”—that bug is fixed now.
 
 ---
 
