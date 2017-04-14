@@ -3,6 +3,7 @@
 const path = require('path');
 const electron = require('electron');
 const BrowserWindow = electron.BrowserWindow;
+const ipcMain = electron.ipcMain;
 const markbotMain = require('./markbot-main');
 const taskPoolQueue = require('./task-pool-queue');
 const appPkg = require('../package.json');
@@ -65,18 +66,24 @@ const executeTaskRunner = function (runner, task) {
 
   // All these variables are defined in `app/task-pool.html`
   let js = `
+    markbotTaskReset();
+
     taskDetails = ${taskDetailsJson};
-    tmpScriptElem  = document.createElement('script');
     taskRunnerId = ${runner.id};
+
     done = function () {
-      require('electron').remote.require('${taskPoolPath}').done(${runner.id});
+      if (alreadyDone) return;
+
+      alreadyDone = true;
+
+      require('electron').ipcRenderer.send('__markbot-taskpool-task-done', ${runner.id});
+      console.log('COMPLETED: ${task.module} — ${task.groupLabel} — ${task.priority}');
     };
 
     tmpScriptElem.src = 'file://${moduleUrl}';
-    tmpScriptElem.async = true;
     document.body.appendChild(tmpScriptElem);
 
-    console.log('${task.module}');
+    console.log('STARTED: ${task.module} — ${task.groupLabel} — ${task.priority}');
   `;
 
   runner.webContents.executeJavaScript(js);
@@ -212,6 +219,34 @@ const add = function (task, type = TYPE_STATIC, priority = PRIORITY_NORMAL) {
   }
 };
 
+const openConsoleGroups = function () {
+  availablePool.single.forEach(function (task) {
+    task.webContents.executeJavaScript('console.group()');
+  });
+
+  availablePool.static.forEach(function (task) {
+    task.webContents.executeJavaScript('console.group()');
+  });
+
+  availablePool.live.forEach(function (task) {
+    task.webContents.executeJavaScript('console.group()');
+  });
+};
+
+const closeConsoleGroups = function () {
+  availablePool.single.forEach(function (task) {
+    task.webContents.executeJavaScript('console.groupEnd()');
+  });
+
+  availablePool.static.forEach(function (task) {
+    task.webContents.executeJavaScript('console.groupEnd()');
+  });
+
+  availablePool.live.forEach(function (task) {
+    task.webContents.executeJavaScript('console.groupEnd()');
+  });
+};
+
 const start = function (next) {
   nextCallback = next;
 
@@ -220,6 +255,7 @@ const start = function (next) {
   if (taskQueueSingle.has()) {
     spawnSingleTaskRunner();
     executeAvailableSingleTaskRunner()
+    openConsoleGroups();
   } else {
     startStaticAndLive();
   }
@@ -228,6 +264,8 @@ const start = function (next) {
 const startStaticAndLive = function () {
   spawnAllottedStaticTaskRunners();
   spawnAllottedLiveTaskRunners();
+
+  openConsoleGroups();
 
   executeAvailableStaticTaskRunners();
   executeAvailableLiveTaskRunners();
@@ -238,7 +276,10 @@ const checkDoneAll = function () {
   const doneStaticTasks =  (!taskQueueStatic.has() && Object.keys(executingPool.static).length <= 0);
   const doneLiveTasks = (!taskQueueLive.has() && Object.keys(executingPool.live).length <= 0);
 
-  if (/*doneSingleTasks &&*/ doneStaticTasks && doneLiveTasks) nextCallback();
+  if (/*doneSingleTasks &&*/ doneStaticTasks && doneLiveTasks) {
+    closeConsoleGroups();
+    nextCallback();
+  }
 };
 
 const doneSingle = function (id) {
@@ -299,6 +340,10 @@ const stop = function () {
   destroyAllStaticTaskRunners();
   destroyAllLiveTaskRunners();
 };
+
+ipcMain.on('__markbot-taskpool-task-done', function (e, id) {
+  done(id);
+});
 
 module.exports = {
   TYPE_SINGLE: TYPE_SINGLE,

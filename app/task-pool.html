@@ -5,12 +5,24 @@
   <title>Task</title>
 </head>
 <body>
-  <script>
+  <script class="do-not-remove">
     'use strict';
-    var taskDetails;
-    var tmpScriptElem;
-    var taskRunnerId;
-    var done;
+
+    let taskDetails;
+    let tmpScriptElem;
+    let taskRunnerId;
+    let alreadyDone;
+    let done;
+
+    const markbotTaskReset = function () {
+      let scriptTags = document.querySelectorAll('script:not(.do-not-remove)');
+
+      alreadyDone = false;
+      tmpScriptElem  = document.createElement('script');
+      tmpScriptElem.async = true;
+
+      [].forEach.call(scriptTags, (scriptTag) => document.body.removeChild(scriptTag));
+    };
   </script>
 </body>
 </html>
