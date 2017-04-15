@@ -636,7 +636,6 @@ listener.on('check-group:item-new', function (event, group, id, label) {
   let groupLabel = group;
   let $groupHeading = document.getElementById(group);
 
-
   if (!checks[checkId]) {
     checks[checkId] = document.createElement('a');
     checks[checkId].href = '#' + checkClass;

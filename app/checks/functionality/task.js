@@ -63,6 +63,7 @@
   const check = function (file, next) {
     const pagePath = path.resolve(fullPath + '/' + file.path);
     const listenerLabel = classify(`${file.path}-${Date.now()}`);
+    const displayLabel = (file.label) ? `${file.path} — ${file.label}` : file.path;
     let currentTestIndex = 1;
     let hasErrors = false;
     let win;
@@ -77,14 +78,14 @@
       win = null;
     };
 
-    markbotMain.send('check-group:item-new', group, file.path, file.path);
+    markbotMain.send('check-group:item-new', group, listenerLabel, displayLabel);
 
     if (!fileExists.check(pagePath)) {
-      markbotMain.send('check-group:item-complete', group, file.path, file.path, [`The file \`${file.path}\` is missing or misspelled`]);
+      markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`The file \`${file.path}\` is missing or misspelled`]);
       return next();
     }
 
-    markbotMain.send('check-group:item-computing', group, file.path, file.path);
+    markbotMain.send('check-group:item-computing', group, listenerLabel, displayLabel);
 
     ipcRenderer.on('__markbot-functionality-error', function (event, message, line, filename) {
       hasErrors = true;
@@ -94,9 +95,9 @@
       if (message) message = message.replace(/\.$/, '');
       if (filename) filename = filename.replace(/https?:\/\/localhost:?\d+\//, '');
 
-      if (message && !filename && !line) markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message}`]);
-      if (message && filename && !line) markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message} — \`${filename}\``]);
-      if (message && filename && line) markbotMain.send('check-group:item-complete', group, file.path, file.path, [`${message} — \`${filename}\` on line ${line}`]);
+      if (message && !filename && !line) markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`${message}`]);
+      if (message && filename && !line) markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`${message} — \`${filename}\``]);
+      if (message && filename && line) markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`${message} — \`${filename}\` on line ${line}`]);
 
       next();
     });
@@ -107,14 +108,14 @@
         runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
       } else {
         cleanup();
-        markbotMain.send('check-group:item-complete', group, file.path, file.path);
+        markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel);
         next();
       }
     });
 
     ipcRenderer.on('__markbot-functionality-test-fail-' + listenerLabel, function(event, reason) {
       cleanup();
-      markbotMain.send('check-group:item-complete', group, file.path, file.path, [`The website isn’t functioning as expected: ${reason}`]);
+      markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`The website isn’t functioning as expected: ${reason}`]);
       next();
     });
 
@@ -128,7 +129,7 @@
       if (file.tests) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
 
       if (file.noErrors && !hasErrors) {
-        markbotMain.send('check-group:item-complete', group, file.path, file.path);
+        markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel);
         next();
       }
     });

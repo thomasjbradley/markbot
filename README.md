@@ -390,6 +390,12 @@ functionality:
     # The path to the HTML file to load in a hidden browser window
   - path: "index.html"
 
+    # The label can be used to help distinguish tests in the check list — it’s completely optional
+    # When you need a full refresh of the page, including another test with the same path makes sense
+    # But then they’re all listed the same in the check list
+    # Label gives you the ability to slightly distinguish the test names
+    label: "Dinosaur link"
+
     # A replacement for individual tests
     # Will just confirm that there are no Javascript errors
     noErrors: true
