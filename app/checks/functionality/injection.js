@@ -3,106 +3,142 @@ const __MarkbotInjectedFunctions = {
   failed: false,
 
   $: function (sel, trgt = document) {
-    const result = trgt.querySelector(sel);
+    try {
+      const result = trgt.querySelector(sel);
 
-    if (!result) __MarkbotInjectedFunctions.fail(`The element: \`${sel}\` doesn’t exist on the page`);
+      if (!result) __MarkbotInjectedFunctions.fail(`The element: \`${sel}\` doesn’t exist on the page`);
 
-    return result;
+      return result;
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
   },
 
   $$: function (sel, trgt = document) {
-    const results = trgt.querySelectorAll(sel);
+    try {
+      const results = trgt.querySelectorAll(sel);
 
-    if (!results) __MarkbotInjectedFunctions.fail(`The \`${sel}\` elements don’t exist on the page`);
+      if (!results) __MarkbotInjectedFunctions.fail(`The \`${sel}\` elements don’t exist on the page`);
 
-    return results;
+      return results;
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
   },
 
   css: function (elem) {
-    return getComputedStyle(elem);
+    try {
+      return getComputedStyle(elem);
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
   },
 
   bounds: function (elem) {
-    return elem.getBoundingClientRect();
+    try {
+      return elem.getBoundingClientRect();
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
   },
 
   on: function (sel, evt, next, timeoutLength = 2000) {
-    let eventHandlerTimeout;
+    try {
+      let eventHandlerTimeout;
 
-    document.addEventListener(evt, function (e) {
-      if (e.target.matches(sel)) {
+      document.addEventListener(evt, function (e) {
+        try {
+          if ((typeof sel == 'object' && e.target === sel) || e.target.matches(sel)) {
+            clearTimeout(eventHandlerTimeout);
+            next(false, e);
+          }
+        } catch (e) {
+          __MarkbotInjectedFunctions.debugFail(e);
+        }
+      });
+
+      eventHandlerTimeout = setTimeout(function () {
         clearTimeout(eventHandlerTimeout);
-        next(false, e);
-      }
-    });
-
-    eventHandlerTimeout = setTimeout(function () {
-      clearTimeout(eventHandlerTimeout);
-      next(true);
-    }, timeoutLength);
+        next(true);
+      }, timeoutLength);
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
   },
 
   ev: function (eventStr, opts = {}) {
-    let defaultOpts = { bubbles: true, cancelable: true };
-    let allOpts = Object.assign(defaultOpts, opts);
+    try {
+      let defaultOpts = { bubbles: true, cancelable: true };
+      let allOpts = Object.assign(defaultOpts, opts);
 
-    switch (eventStr) {
-      case 'click':
-      case 'dblclick':
-      case 'mouseup':
-      case 'mousedown':
-      case 'mouseover':
-      case 'mouseout':
-      case 'mouseenter':
-      case 'mouseleave':
-      case 'mousemove':
-        return new MouseEvent(eventStr, allOpts);
-        break;
-      case 'keypress':
-      case 'keydown':
-      case 'keyup':
-        return new KeyboardEvent(eventStr, allOpts);
-        break;
-      default:
-        return new Event(eventStr, allOpts);
-        break;
+      switch (eventStr) {
+        case 'click':
+        case 'dblclick':
+        case 'mouseup':
+        case 'mousedown':
+        case 'mouseover':
+        case 'mouseout':
+        case 'mouseenter':
+        case 'mouseleave':
+        case 'mousemove':
+          return new MouseEvent(eventStr, allOpts);
+          break;
+        case 'keypress':
+        case 'keydown':
+        case 'keyup':
+          return new KeyboardEvent(eventStr, allOpts);
+          break;
+        default:
+          return new Event(eventStr, allOpts);
+          break;
+      }
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
     }
   },
 
   send: function (eventStr, opts = {}, next = null) {
-    let defaultOpts = { type: eventStr, isTrusted: true };
-    let allOpts = Object.assign(defaultOpts, opts);
+    try {
+      let defaultOpts = { type: eventStr, isTrusted: true };
+      let allOpts = Object.assign(defaultOpts, opts);
 
-    window.__markbot.sendInputEventToWindow(__MarkbotInjectedFunctions.browserWindowId, allOpts);
+      window.__markbot.sendInputEventToWindow(__MarkbotInjectedFunctions.browserWindowId, allOpts);
 
-    if (next) {
-      setTimeout(function () {
-        window.requestAnimationFrame(function () {
+      if (next) {
+        setTimeout(function () {
           window.requestAnimationFrame(function () {
             window.requestAnimationFrame(function () {
-              next();
+              window.requestAnimationFrame(function () {
+                next();
+              });
             });
           });
-        });
-      }, 50);
+        }, 50);
+      }
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
     }
   },
 
   hover: function (sel, next) {
-    const elem = document.querySelector(sel);
-    const rect = elem.getBoundingClientRect();
-    let x = Math.round(rect.left + (rect.width / 2));
-    let y = Math.round(rect.top + (rect.height / 2));
+    try {
+      const elem = document.querySelector(sel);
+      const rect = elem.getBoundingClientRect();
+      let x = Math.round(rect.left + (rect.width / 2));
+      let y = Math.round(rect.top + (rect.height / 2));
 
-    if (window.outerHeight < y) window.resizeTo(window.outerWidth, y + 100);
-    if (window.outerWidth < x) window.resizeTo(x + 100, window.outerHeight);
-    if (rect.width <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its width is \`0px\``);
-    if (rect.height <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its height is \`0px\``);
+      if (window.outerHeight < y) window.resizeTo(window.outerWidth, y + 100);
+      if (window.outerWidth < x) window.resizeTo(x + 100, window.outerHeight);
+      if (rect.width <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its width is \`0px\``);
+      if (rect.height <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its height is \`0px\``);
 
-    __MarkbotInjectedFunctions.send('mouseMove', {
-      x: (x < 0) ? 0 : x,
-      y: (y < 0) ? 0 : y,
-    }, next);
+      __MarkbotInjectedFunctions.send('mouseMove', {
+        x: (x < 0) ? 0 : x,
+        y: (y < 0) ? 0 : y,
+      }, next);
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
   },
 
   pass: function () {
@@ -116,6 +152,11 @@ const __MarkbotInjectedFunctions = {
 
   debug: function (...message) {
     window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.debugLabel, ...message);
+  },
+
+  debugFail: function (e) {
+    if (e.message) __MarkbotInjectedFunctions.debug(`Functionality testing error, test #${__MarkbotInjectedFunctions.testIndex} —`, e.message);
+    __MarkbotInjectedFunctions.fail('Double check the Javascript');
   },
 
 };

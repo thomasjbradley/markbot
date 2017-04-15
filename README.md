@@ -436,10 +436,10 @@ Your injected code will have access to a few functions to simplify what you have
   - If the `selector` isn’t found on the page the test will fail with an error message
 - **`css(element)`** — A shortcut to `getComputedStyle()`
 - **`bounds(element)`** — A shortcut to `getBoundingClientRect()`
-- **`on(selector, eventname, callback[, timeoutlength = 2000])`** — This is instead of using `addEventListener`. The problem with `addEventListener` is timing.
+- **`on(selector/element, eventname, callback[, timeoutlength = 2000])`** — This is instead of using `addEventListener`. The problem with `addEventListener` is timing.
   - If the student’s code uses event delegation, but yours listens directly on the element, your listener will be fired first.
   - Using `on()` will always bind to the `document` and listen for the event to bubble back upwards—guaranteeing that your listener gets called second.
-  - `selector` is the CSS selector of the target for your event.
+  - `selector/element` a pre-selected DOM element object or CSS selector to match for the target for your event.
   - `eventname` is any standard event like `click`, `animationend`, etc.
   - `callback` is a function that will be executed when the event is triggered. It will receive two arguments:
     - `err` — (`bool`): whether or not the timeout was executed, meaning the event was never triggered.

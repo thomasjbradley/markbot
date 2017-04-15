@@ -7,6 +7,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- The `on()` function for testing now also accepts a pre-selected DOM element as it’s first argument.
+
+### Changed
+
+- There’s a lot more error catching in the functionality tests to be more helpful and show more error messages in the “Activity” window.
+
 ### Fixed
 
 - Fixed a small bug when there were empty tags, Markbot would force them onto separate lines which isn’t necessary.

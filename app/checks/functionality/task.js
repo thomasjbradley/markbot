@@ -21,6 +21,7 @@
       (function () {
         ${injectionJs}
 
+        __MarkbotInjectedFunctions.testIndex = ${testIndex};
         __MarkbotInjectedFunctions.browserWindowId = ${testWinId};
         __MarkbotInjectedFunctions.taskRunnerId = ${taskRunnerId};
         __MarkbotInjectedFunctions.passLabel = '__markbot-functionality-test-pass-${label}';
@@ -33,8 +34,7 @@
           try {
             eval(${js});
           } catch (e) {
-            if (e.message) debug('Functionality testing error, test #${testIndex} —', e.message);
-            fail('Double check the Javascript');
+            __MarkbotInjectedFunctions.debugFail(e);
           }
         }(
           __MarkbotInjectedFunctions.$,
