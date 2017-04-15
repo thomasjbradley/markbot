@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed a small bug when there were empty tags, Markbot would force them onto separate lines which isn’t necessary.
+
+---
+
 ## [5.9.0] — 2017-04-14
 
 ### Added

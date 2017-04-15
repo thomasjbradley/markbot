@@ -4,14 +4,13 @@ const forceLineBreak = require('./force-line-break-tags.json');
 const specificLineBreakChecks = require('./specific-line-break-checks.json');
 
 const notProperLineBreaks = function (line) {
-  var
-    lineRegEx = '\<\/?(' + forceLineBreak.join('|') + ')(?:(?: [^>]*\>)|(?:\>))\\s*\<\/?(' + forceLineBreak.join('|') + ')',
-    generalChecks = line.match(new RegExp(lineRegEx, 'i')),
-    i = 0, total = specificLineBreakChecks.length,
-    specificCheck
-  ;
+  const lineRegEx = '\<\/?(' + forceLineBreak.join('|') + ')(?:(?: [^>]*\>)|(?:\>))\\s*\<\/?(' + forceLineBreak.join('|') + ')';
+  let generalChecks = line.match(new RegExp(lineRegEx, 'i'));
+  let isEmptyTag = (generalChecks && generalChecks[1] && generalChecks[2]) ? new RegExp(`^<${generalChecks[1]}></${generalChecks[2]}>$`, '') : false;
+  let i = 0, total = specificLineBreakChecks.length;
+  let specificCheck;
 
-  if (generalChecks) return generalChecks;
+  if (generalChecks && (isEmptyTag && !isEmptyTag.test(line.trim()))) return generalChecks;
 
   for (i ; i < total; i++) {
     specificCheck = line.match(new RegExp(specificLineBreakChecks[i]));
@@ -23,11 +22,9 @@ const notProperLineBreaks = function (line) {
 }
 
 module.exports.check = function (fileContents, lines) {
-  var
-    errors = [],
-    i = 0,
-    total = lines.length
-  ;
+  let errors = [];
+  let i = 0;
+  let total = lines.length;
 
   for (i; i < total; i++) {
     let lineBreakIssues = notProperLineBreaks(lines[i]);
