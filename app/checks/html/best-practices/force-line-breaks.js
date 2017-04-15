@@ -6,7 +6,7 @@ const specificLineBreakChecks = require('./specific-line-break-checks.json');
 const notProperLineBreaks = function (line) {
   const lineRegEx = '\<\/?(' + forceLineBreak.join('|') + ')(?:(?: [^>]*\>)|(?:\>))\\s*\<\/?(' + forceLineBreak.join('|') + ')';
   let generalChecks = line.match(new RegExp(lineRegEx, 'i'));
-  let isEmptyTag = (generalChecks && generalChecks[1] && generalChecks[2]) ? new RegExp(`^<${generalChecks[1]}></${generalChecks[2]}>$`, '') : false;
+  let isEmptyTag = (generalChecks && generalChecks[1] && generalChecks[2]) ? new RegExp(`^<${generalChecks[1]}[^>]*></${generalChecks[2]}>$`, '') : false;
   let i = 0, total = specificLineBreakChecks.length;
   let specificCheck;
 
