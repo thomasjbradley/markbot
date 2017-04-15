@@ -220,6 +220,9 @@ html:
     # If given an array, the second argument can be a custom error message
     searchNot:
       - 'Thing-a-magic'
+
+    # Confirm that the code file has less than or equal to this many lines
+    maxLines: 4
 ```
 
 ### CSS file tests
@@ -282,6 +285,9 @@ css:
       - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
       - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
       - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
+
+    # Confirm that the code file has less than or equal to this many lines
+    maxLines: 4
 ```
 
 ### Javascript file tests
@@ -317,6 +323,9 @@ js:
     searchNot:
       - 'document.write\('
       - ['console.log\(', 'The `console.log()` function should not be left in your code after you’ve finished debugging']
+
+    # Confirm that the code file has less than or equal to this many lines
+    maxLines: 4
 ```
 
 ### Screenshot comparisons

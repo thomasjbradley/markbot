@@ -90,7 +90,18 @@
 
       markbotMain.send('check-group:item-complete', group, 'exists', 'Exists');
       checkIfDone();
-      lines = fileContents.toString().split(/[\n\u0085\u2028\u2029]|\r\n?/g);
+      lines = fileContents.toString().trim().split(/[\n\u0085\u2028\u2029]|\r\n?/g);
+
+      if (file.maxLines) {
+        checksToComplete++;
+        markbotMain.send('check-group:item-new', group, 'lines', '№ lines');
+
+        if (lines.length > file.maxLines) {
+          markbotMain.send('check-group:item-complete', group, 'lines', '№ lines', [`There are more lines of code in \`${file.path}\` than expected (has ${lines.length}, expecting <= ${file.maxLines})`]);
+        } else {
+          markbotMain.send('check-group:item-complete', group, 'lines', '№ lines');
+        }
+      }
 
       if (file.valid) {
         validationChecker.check(fileContents, lines, function (err) {
