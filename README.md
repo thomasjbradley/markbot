@@ -436,6 +436,14 @@ Your injected code will have access to a few functions to simplify what you have
   - If the `selector` isn’t found on the page the test will fail with an error message
 - **`css(element)`** — A shortcut to `getComputedStyle()`
 - **`bounds(element)`** — A shortcut to `getBoundingClientRect()`
+- **`offset(element)`** — Returns the complete offset for the element to the `top` and `left` of the page, using `getBoundingClientRect()` + `scrollY/X` for the calculation.
+  - Returns an object in the format:
+    ```js
+    {
+      left: 0,
+      top: 0,
+    }
+    ```
 - **`on(selector/element, eventname, callback[, timeoutlength = 2000])`** — This is instead of using `addEventListener`. The problem with `addEventListener` is timing.
   - If the student’s code uses event delegation, but yours listens directly on the element, your listener will be fired first.
   - Using `on()` will always bind to the `document` and listen for the event to bubble back upwards—guaranteeing that your listener gets called second.

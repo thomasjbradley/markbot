@@ -9,6 +9,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Add a new `offset()` function for functionality testing that will calculate the offset to the top of the page.
 - The `on()` function for testing now also accepts a pre-selected DOM element as it’s first argument.
 
 ### Changed

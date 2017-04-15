@@ -28,7 +28,7 @@
         __MarkbotInjectedFunctions.failLabel = '__markbot-functionality-test-fail-${label}';
         __MarkbotInjectedFunctions.debugLabel = '__markbot-functionality-test-debug-${label}';
 
-        (function ($, $$, css, bounds, on, ev, send, hover, pass, fail, debug) {
+        (function ($, $$, css, bounds, offset, on, ev, send, hover, pass, fail, debug) {
           'use strict';
 
           try {
@@ -41,6 +41,7 @@
           __MarkbotInjectedFunctions.$$,
           __MarkbotInjectedFunctions.css,
           __MarkbotInjectedFunctions.bounds,
+          __MarkbotInjectedFunctions.offset,
           __MarkbotInjectedFunctions.on,
           __MarkbotInjectedFunctions.ev,
           __MarkbotInjectedFunctions.send,

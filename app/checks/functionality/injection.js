@@ -42,13 +42,26 @@ const __MarkbotInjectedFunctions = {
     }
   },
 
+  offset: function (elem) {
+    try {
+      let bounds = elem.getBoundingClientRect();
+
+      return {
+        left: bounds.left + window.scrollX,
+        top: bounds.top + window.scrollY,
+      };
+    } catch (e) {
+      __MarkbotInjectedFunctions.debugFail(e);
+    }
+  },
+
   on: function (sel, evt, next, timeoutLength = 2000) {
     try {
       let eventHandlerTimeout;
 
       document.addEventListener(evt, function (e) {
         try {
-          if ((typeof sel == 'object' && e.target === sel) || e.target.matches(sel)) {
+          if ((typeof sel != 'string' && e.target === sel) || (typeof sel == 'string' && e.target.matches(sel))) {
             clearTimeout(eventHandlerTimeout);
             next(false, e);
           }
