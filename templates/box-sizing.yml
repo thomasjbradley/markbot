@@ -1,0 +1,5 @@
+allFiles:
+  css:
+    has:
+      - ['html', 'box-sizing', 'border-box']
+      - ['*', 'box-sizing', 'inherit']

@@ -1,0 +1,31 @@
+allFiles:
+  html:
+    has:
+      - ['link[href*="type.css"]', 'The `type.css` file isn’t included']
+    search:
+      - 'micro|milli|kilo|mega|giga|tera|peta|exa|zetta|yotta'
+  css:
+    except:
+      - 'css/type.css'
+    hasNot:
+      - ['@38em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
+      - ['@38em', 'html', ['line-height'], 'Typografier provides correct `line-height` values for each media query so you don’t have to repeat the code']
+      - ['@60em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
+      - ['@60em', 'html', ['line-height'], 'Typografier provides correct `line-height` values for each media query so you don’t have to repeat the code']
+      - ['@90em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
+    searchNot:
+      - ['padding(?:-top|-bottom|-right|-left)?\: 0?[^0;]+?\;$', 'Only `padding: 0;` should be used, all other paddings should be specified by the Typografier classes']
+      - ['margin(?:-top|-bottom|-right|-left)?\: 0?[^0;]+?\;$', 'Only `margin: 0;` should be used, all other margins should be specified by the Typografier classes']
+      - 'font-size'
+      - 'font-style'
+      - 'font-weight'
+      - 'text-align'
+      - 'line-height'
+      - 'text-transform'
+
+css:
+  - path: 'css/type.css'
+    valid: true
+    bestPractices: true
+    search:
+      - ['https://typografier.web-dev.tools/#0,100,1.3,1.067,0;38,110,1.4,1.125,1;60,120,1.5,1.125,1;90,130,1.5,1.125,1', 'The `type.css` should be generated with Typografier’s default settings']

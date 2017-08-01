@@ -1,0 +1,10 @@
+allFiles:
+  js:
+    valid: true
+    bestPractices: true
+    searchNot:
+      - 'document\.write\('
+      - 'console\.log\('
+      - 'alert\('
+      - 'prompt\('
+      - 'confirm\('

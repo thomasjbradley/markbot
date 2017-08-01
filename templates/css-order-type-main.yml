@@ -1,0 +1,3 @@
+allFiles:
+  html:
+    - ['link[href*="type.css"] + link[href*="main.css"]', 'The `type.css` file must come before the `main.css` file.']

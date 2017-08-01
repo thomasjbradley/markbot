@@ -1,0 +1,4 @@
+allFiles:
+  css:
+    has:
+      - ['body', 'margin', '0']

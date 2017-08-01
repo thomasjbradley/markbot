@@ -247,7 +247,7 @@ const handleMarkbotFile = function (mf, ignores) {
   markbotFile = mf;
   markbotIgnoreFile = ignores;
 
-  if (mf.inheritFileNotFound) markbotMain.debug(`Inherited Markbot file “${mf.inherit}” not found`);
+  if (mf.inheritFilesNotFound) markbotMain.debug(`Inherited Markbot file(s) “${mf.inheritFilesNotFound.join(', ')}” not found`);
 
   initializeInterface();
   updateAppMenu();

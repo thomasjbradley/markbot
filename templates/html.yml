@@ -1,0 +1,14 @@
+allFiles:
+  html:
+    valid: true
+    bestPractices: true
+    outline: true
+    has_not:
+      - ['a[name]', 'Use the `id` attribute on elements for internal links instead of `a[name]`']
+      - ['[target]', 'The `target` attribute should not be used — especially `target="_blank"`, which causes major accessibility & security problems']
+      - ['meta[name*="keyword"]', 'The `meta keywords` tag isn’t used by any search engines — it should be removed']
+      - ['[onclick]', 'The `onclick` attribute should not be used — it’s confusing & difficult to maintain Javascript that’s mixed into HTML']
+    searchNot:
+      - ['javascript\:void\(0\)', 'Use progressive enhancement inside your Javascript file instead of `javascript:void(0)` — it’s confusing & difficult to maintain Javascript that’s mixed into HTML']
+    unique:
+      - 'title'

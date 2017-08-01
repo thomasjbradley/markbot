@@ -1,0 +1,5 @@
+allFiles:
+  html:
+    unique:
+      - ['meta[name="description"][content]', 'meta description']
+      - 'h1'

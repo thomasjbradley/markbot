@@ -1,0 +1,3 @@
+allFiles:
+  html:
+    - ['link[href*="fonts.googleapis.com"]', 'A Google Font should be included on the page']

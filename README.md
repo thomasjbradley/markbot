@@ -685,6 +685,9 @@ allFiles:
     performance: true
     has:
       - 'h1'
+    # There’s also a screenshots entry to take screenshots for all HTML files specified
+    # Creates a `screentshots.path` entry for each HTML file
+    screenshots: [320, 400, 608, 960, 1440]
 
   # Supports any of the entries that `css` supports
   css:
@@ -758,18 +761,24 @@ If you want to check attribute content, select with the attribute selector. **Ma
 
 ### Inheriting from templates
 
-Markbot has a few templates inside the [templates folder](templates) that your Markbot files can inherit from, thereby getting all the requirements specified in that file. Your Markbot file is more powerful and will overwrite entries—but things like `has`, `search`, etc. will be merged together.
+Markbot has a bunch of templates inside the [templates folder](templates) that your Markbot files can inherit from, thereby getting all the requirements specified in that file. Your Markbot file is more powerful and will overwrite entries—but things like `has`, `search`, etc. will be merged together.
 
 The templates are just standard Markbot files, with all the same properties.
 
+To inherit from the built-in templates add an `inherit` property to your Markbot file—it’s a list of all the templates to use:
+
 ```yml
-inherit: responsive-website
+inherit:
+  - git-2
+  - html
+  - css
+  - responsive
 
 html:
   - path: index.html
 ```
 
-In the above scenario, everything from the `repsonsive-website` template will be applied to your Markbot file and therefore the `index.html` file.
+In the above scenario, everything from the all those templates will be applied to your Markbot file (overwrites based on order) and therefore to the `index.html` file.
 
 ### The Markbot ignore file
 

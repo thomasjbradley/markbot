@@ -3,7 +3,6 @@
 const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
-// const dir = require('node-dir');
 const merge = require('merge-objects');
 const glob = require('glob');
 
@@ -49,16 +48,29 @@ const findCompatibleFiles = function (folderpath, ignore, ext) {
   return files;
 };
 
-const mergeInheritedFile = function (markbotFile) {
-  let inheritPath = path.resolve(`${__dirname}/../templates/${markbotFile.inherit}.yml`);
+const mergeInheritedFiles = function (markbotFile) {
+  let newMarkbotFile = {
+    inheritFilesNotFound: [],
+  };
+  let templates = [];
 
-  if (exists.check(inheritPath)) {
-    newMarkbotFile = yaml.safeLoad(fs.readFileSync(inheritPath, 'utf8'));
-  } else {
-    newMarkbotFile.inheritFileNotFound = true;
-  }
+  markbotFile.inherit.forEach((templateId) => {
+    let inheritPath = path.resolve(`${__dirname}/../templates/${templateId}.yml`);
 
-  return merge(newMarkbotFile, markbotFile);
+    if (exists.check(inheritPath)) {
+      templates.push(yaml.safeLoad(fs.readFileSync(inheritPath, 'utf8')));
+    } else {
+      newMarkbotFile.inheritFilesNotFound.push(templateId);
+    }
+  });
+
+  templates.forEach((file) => {
+    newMarkbotFile = merge(newMarkbotFile, file);
+  });
+
+  newMarkbotFile = merge(newMarkbotFile, markbotFile);
+
+  return newMarkbotFile;
 };
 
 const bindFunctionalityToHtmlFiles = function (markbotFile) {
@@ -78,6 +90,10 @@ const mergeAllFilesProperties = function (markbotFile, key) {
 
   markbotFile[key].forEach((item, i) => {
     if (!markbotFile.allFiles[key]) return;
+
+    if ('path' in markbotFile[key][i] && markbotFile.allFiles[key].except) {
+      if (markbotFile.allFiles[key].except.includes(markbotFile[key][i].path)) return;
+    }
 
     markbotFile[key][i] = merge(Object.assign({}, markbotFile.allFiles[key]), item);
   });
@@ -106,19 +122,63 @@ const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, n
     markbotFile = mergeAllFilesProperties(markbotFile, key);
   });
 
+  if (markbotFile.allFiles.html.screenshots) {
+    if (!markbotFile.screenshots) markbotFile.screenshots = [];
+
+    markbotFile.html.forEach((item, i) => {
+      markbotFile.screenshots.push({
+        path: item.path,
+        sizes: markbotFile.allFiles.html.screenshots,
+      });
+    });
+  }
+
   next(markbotFile);
+};
+
+const removeDuplicateScreenshotSizes = function (markbotFile) {
+  if (!markbotFile.screenshots) return markbotFile;
+
+  markbotFile.screenshots.forEach((item, i) => {
+    markbotFile.screenshots[i].sizes = [...new Set(markbotFile.screenshots[i].sizes)];
+  });
+
+  return markbotFile;
+};
+
+const mergeDuplicateFiles = function (markbotFile) {
+  const keys = ['html', 'css', 'js', 'md', 'yml', 'files', 'screenshots', 'functionality', 'performance'];
+
+  keys.forEach((key) => {
+    let paths = {};
+
+    if (!markbotFile[key]) return;
+
+    markbotFile[key].forEach((item, i) => {
+      if (!item.path) return;
+
+      if (item.path in paths) {
+        markbotFile[key][paths[item.path]] = merge(markbotFile[key][paths[item.path]], item);
+        markbotFile[key].splice(i, 1);
+      } else {
+        paths[item.path] = i;
+      }
+    });
+  });
+
+  return removeDuplicateScreenshotSizes(markbotFile);
 };
 
 const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
   if (!markbotFile.allFiles && !markbotFile.inherit) return next(markbotFile, ignoreFiles);
-  if (markbotFile.inherit) markbotFile = mergeInheritedFile(markbotFile);
+  if (markbotFile.inherit) markbotFile = mergeInheritedFiles(markbotFile);
 
   if (markbotFile.allFiles) {
     bindAllFilesProperties(folderpath, ignoreFiles, markbotFile, (mf) => {
-      next(bindFunctionalityToHtmlFiles(mf), ignoreFiles);
+      next(mergeDuplicateFiles(bindFunctionalityToHtmlFiles(mf)), ignoreFiles);
     });
   } else {
-    next(markbotFile, ignoreFiles);
+    next(mergeDuplicateFiles(markbotFile), ignoreFiles);
   }
 }
 

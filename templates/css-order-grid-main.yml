@@ -1,0 +1,4 @@
+allFiles:
+  html:
+    has:
+      - ['link[href*="grid.css"] + link[href*="main.css"]', 'The `grid.css` file must come before the `main.css` file.']
