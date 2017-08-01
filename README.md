@@ -689,6 +689,10 @@ allFiles:
     # Creates a `screentshots.path` entry for each HTML file
     screenshots: [320, 400, 608, 960, 1440]
 
+    # You can add the `except` entry to all types to prevent all theses defaults from applying to specific files
+    except:
+      - 'test.html'
+
   # Supports any of the entries that `css` supports
   css:
     valid: true
