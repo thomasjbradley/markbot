@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- The Markbot file template `inherit` system now supports inheriting from multiple templates to make it more usable.
+
 ### Fixed
 
 - The `.markbotignore` file is now taken into account when checking for cheating, it’s locked & compared.
