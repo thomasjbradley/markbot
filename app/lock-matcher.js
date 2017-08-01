@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports.match = function (primary, secondary) {
+module.exports.match = function (primary, secondary, markbotIgnoreFile) {
   let isCheater = false;
   let matches = {};
 
@@ -23,6 +23,24 @@ module.exports.match = function (primary, secondary) {
     }
   } else {
     isCheater = true;
+  }
+
+  if (!matches.markbot) {
+    isCheater = true;
+    matches.markbot = {
+      equal: false,
+      expectedHash: false,
+      actualHash: false,
+    };
+  }
+
+  if (!matches.markbotignore && markbotIgnoreFile.length > 0) {
+    isCheater = true;
+    matches.markbotignore = {
+      equal: false,
+      expectedHash: false,
+      actualHash: false,
+    };
   }
 
   return {

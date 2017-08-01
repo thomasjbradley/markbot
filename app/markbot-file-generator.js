@@ -110,15 +110,15 @@ const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, n
 };
 
 const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
-  if (!markbotFile.allFiles && !markbotFile.inherit) return next(markbotFile);
+  if (!markbotFile.allFiles && !markbotFile.inherit) return next(markbotFile, ignoreFiles);
   if (markbotFile.inherit) markbotFile = mergeInheritedFile(markbotFile);
 
   if (markbotFile.allFiles) {
     bindAllFilesProperties(folderpath, ignoreFiles, markbotFile, (mf) => {
-      next(bindFunctionalityToHtmlFiles(mf));
+      next(bindFunctionalityToHtmlFiles(mf), ignoreFiles);
     });
   } else {
-    next(markbotFile);
+    next(markbotFile, ignoreFiles);
   }
 }
 

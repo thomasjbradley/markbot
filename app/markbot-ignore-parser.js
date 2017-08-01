@@ -12,7 +12,11 @@ const parse = function (fullPath, next) {
   if (!exists.check(ignoreFilePath)) return next([]);
 
   fs.readFile(ignoreFilePath, 'utf8', (err, data) => {
-    let lines = data.split(/[\n\u0085\u2028\u2029]|\r\n?/g)
+    let lines;
+
+    if (data.trim() === '') return next([]);
+
+    lines = data.split(/[\n\u0085\u2028\u2029]|\r\n?/g)
       .map((line) => line.trim())
       .filter((line) => (line))
     ;

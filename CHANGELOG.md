@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- The `.markbotignore` file is now taken into account when checking for cheating, it’s locked & compared.
+
+---
+
 ## [5.10.0] — 2017-04-16
 
 ### Added

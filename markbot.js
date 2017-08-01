@@ -36,6 +36,7 @@ const MARKBOT_LOCK_FILE = '.markbot.lock';
 let appPkg = require('./package.json');
 let config = require('./config.json');
 let markbotFile = {};
+let markbotIgnoreFile = {};
 let mainWindow;
 let debugWindow;
 let differWindow;
@@ -177,8 +178,8 @@ const checkForCheating = function () {
   actualFilesLocker = locker.new(config.passcodeHash);
 
   markbotLockFileLocker.read(markbotLockFilePath);
-  requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile);
-  isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks());
+  requirementsFinder.lock(actualFilesLocker, currentFolderPath, markbotFile, markbotIgnoreFile);
+  isCheater = lockMatcher.match(markbotLockFileLocker.getLocks(), actualFilesLocker.getLocks(), markbotIgnoreFile);
 
   if (isCheater.cheated) {
     markbotMain.debug('CHEATER!');
@@ -242,8 +243,9 @@ const startChecks = function () {
   });
 };
 
-const handleMarkbotFile = function (mf) {
+const handleMarkbotFile = function (mf, ignores) {
   markbotFile = mf;
+  markbotIgnoreFile = ignores;
 
   if (mf.inheritFileNotFound) markbotMain.debug(`Inherited Markbot file “${mf.inherit}” not found`);
 

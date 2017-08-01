@@ -11,6 +11,10 @@ const lockMarkbotFile = function (locker, markbotFile) {
   locker.lockString('markbot', JSON.stringify(markbotFile));
 };
 
+const lockMarkbotIgnoreFile = function (locker, markbotIgnoreFile) {
+  locker.lockString('markbotignore', JSON.stringify(markbotIgnoreFile));
+};
+
 const lockFiles = function (locker, currentFolderPath, files) {
   files.forEach(function (file) {
     let filePath = path.resolve(currentFolderPath + '/' + file.path);
@@ -26,7 +30,7 @@ const lockFiles = function (locker, currentFolderPath, files) {
   });
 };
 
-const lockScreenshots = function ( locker, currentFolderPath, files) {
+const lockScreenshots = function (locker, currentFolderPath, files) {
   files.forEach(function (file) {
     file.sizes.forEach(function (size) {
       let screenshotFileName = screenshotNamingService.getScreenshotFileName(file.path, size);
@@ -42,11 +46,12 @@ const lockScreenshots = function ( locker, currentFolderPath, files) {
   });
 };
 
-const lock = function ( locker, currentFolderPath, markbotFile) {
+const lock = function (locker, currentFolderPath, markbotFile, markbotIgnoreFile) {
   missingFiles = [];
   locker.reset();
 
   lockMarkbotFile(locker, markbotFile);
+  lockMarkbotIgnoreFile(locker, markbotIgnoreFile);
 
   if (markbotFile.html) lockFiles(locker, currentFolderPath, markbotFile.html);
   if (markbotFile.css) lockFiles(locker, currentFolderPath, markbotFile.css);
