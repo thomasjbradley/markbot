@@ -31,6 +31,18 @@ const matchesProfEmail = function (email, profEmails) {
   return !profEmails.indexOf(email);
 };
 
+const findSpellingErrorReplacement = function (commit, err) {
+  return commit.slice(err.offset, err.offset + err.length);
+};
+
+const processCommitText = function (commit, spellingErrorReplacements) {
+  spellingErrorReplacements.forEach((replacement) => {
+    commit = commit.replace(replacement, `~~${replacement}~~`);
+  });
+
+  return commit;
+};
+
 const isCorrectLength = function (message) {
   let words = message.trim().split(/\s+/);
 
@@ -71,10 +83,11 @@ const checkCommits = function (commits, group, id, label, next) {
     results.forEach((info, i) => {
       let data = false;
       let singleCommitErrors = [];
+      let spellingErrorReplacements = [];
 
       if (isLastCharacterPeriod(commits[i].title)) singleCommitErrors.push('The commit message should not end in a period (.) character');
       if (!isCorrectLength(commits[i].title)) singleCommitErrors.push(`The commit message should be at least ${MIN_COMMIT_WORDS} words & ${MIN_COMMIT_CHARS} characters long`);
-      if (startsWithWrongTenseVerb(commits[i].title)) singleCommitErrors.push('The commit message should start with a present-tense, imperative verb — pretend all commit messages begin with the phrase “This commit will…”');
+      if (startsWithWrongTenseVerb(commits[i].title)) singleCommitErrors.push('The commit message should start with a present-tense, imperative verb — imagine all commit messages begin with the phrase “This commit will…”');
 
       try {
         data = JSON.parse(info);
@@ -85,12 +98,18 @@ const checkCommits = function (commits, group, id, label, next) {
 
       if (data && data.matches.length > 0) {
         singleCommitErrors = singleCommitErrors.concat(data.matches.map((match) => {
+          if (match.rule.issueType = 'misspelling') {
+            spellingErrorReplacements.push(findSpellingErrorReplacement(commits[i].title, match));
+          }
+
           return match.message;
         }));
       }
 
       if (singleCommitErrors.length > 0) {
-        errors.push(`The following recent commit message has some errors: **“${commits[i].title}”** ---+++${singleCommitErrors.join('+++')}---`);
+        let commitText = processCommitText(commits[i].title, spellingErrorReplacements);
+
+        errors.push(`The following recent commit message has some errors: **“${commitText}”** ---+++${singleCommitErrors.join('+++')}---`);
       }
     });
 

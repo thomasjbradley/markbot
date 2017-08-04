@@ -265,6 +265,17 @@ const transformMark = function (err) {
   return err;
 };
 
+const transformUnderline = function (err) {
+  if (typeof err !== 'string') return err;
+
+  if (err.match(/\~\~/)) {
+    err = err.replace(/\~\~(.+?)\~\~/g, '<u>$1</u>');
+  }
+
+  return err;
+};
+
+
 const transformLists = function (err) {
   if (typeof err !== 'string') return err;
 
@@ -276,7 +287,21 @@ const transformLists = function (err) {
 }
 
 const prepareErrorText = function (err) {
-  return transformCodeBlocks(transformLists(transformStrong(transformMark(transformLinks(escapeHTML(err))))));
+  const transformations = [
+    escapeHTML,
+    transformLinks,
+    transformMark,
+    transformStrong,
+    transformUnderline,
+    transformLists,
+    transformCodeBlocks,
+  ];
+
+  transformations.forEach((func) => {
+    err = func(err);
+  });
+
+  return err;
 };
 
 const displayErrors = function (group, label, linkId, errors, status, messageType) {
