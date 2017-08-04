@@ -415,6 +415,8 @@ exports.onFileDropped = function(filePath) {
   currentFolderPath = filePath;
 
   webServer.start(currentFolderPath, function () {
+    // start language tool
+    // start html validator
     if (exists.check(markbotFilePath)) {
       markbotFileGenerator.get(markbotFilePath, handleMarkbotFile)
     } else {

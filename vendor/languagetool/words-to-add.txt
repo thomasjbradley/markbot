@@ -1,0 +1,15 @@
+#
+# Markbot specific
+markbot
+patternbot
+spritebot
+imageoptim
+github
+gridifier
+modulifier
+typografier
+mozilla
+google
+duckduckgo
+ucbrowser
+yandex

@@ -5,6 +5,7 @@
   const markbotMain = require('electron').remote.require('./app/markbot-main');
   const commits = require(__dirname + '/checks/git/commits');
   const status = require(__dirname + '/checks/git/status');
+  const bestPractices = require(__dirname + '/checks/git/best-practices');
 
   const fullPath = path.resolve(taskDetails.cwd);
 
@@ -24,5 +25,10 @@
   if (taskDetails.options.allCommitted || taskDetails.options.allSynced) {
     checksToComplete++;
     status.check(fullPath, taskDetails.options, taskDetails.group, checkIfDone);
+  }
+
+  if (taskDetails.options.bestPractices) {
+    checksToComplete++;
+    bestPractices.check(fullPath, taskDetails.options.ignoreCommitEmails, taskDetails.group, checkIfDone);
   }
 }());

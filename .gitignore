@@ -6,6 +6,8 @@ node_modules
 dist
 vendor/*.jar
 vendor/lib/*.jar
+vendor/languagetool/*
+!vendor/languagetool/words-to-add.txt
 build/background.tiff
 
 app/*.cert

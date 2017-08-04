@@ -44,6 +44,8 @@ Built with Javascript, Node.js & Electron.
       - [HTML validator](#html-validator)
       - [CSS validator](#css-validator)
         - [Compiling the CSS validator](#compiling-the-css-validator)
+      - [LanguageTool](#languagetool)
+        - [Add more words to the dictionary](#add-more-words-to-the-dictionary)
   - [Running Markbot](#running-markbot)
 - [Debugging Markbot](#debugging-markbot)
 - [Markbot Server](#markbot-server)
@@ -936,6 +938,33 @@ You’ll need the JDK and `ant` to compile the validator. Install `ant` with Hom
 1. Move into the directory and run `ant jar`.
 2. Move the `css-validator.jar` file into the `vendor` folder.
 3. Move the newly created `lib` folder and all its contents into the `vendor` folder.
+
+##### LanguageTool
+
+The LanguageTool is used to check spelling and grammar of commit messages. It’s another Java JAR to install in the `vendor` folder.
+
+1. Go here and download the `.zip` package:
+
+    [**https://languagetool.org/**](https://languagetool.org/)
+
+    (Further down the page, look for: “Stand-alone for the Desktop”)
+
+2. Copy the following items into the `vendor/languagetool` folder:
+
+    - `languagetool-commandline.jar`
+    - `libs/`
+    - `META-INF/`
+    - `org/`
+
+###### Add more words to the dictionary
+
+1. Find the English dictionary, here:
+
+    `org/languagetool/resource/en/hunspell/ignore.txt`
+
+2. Copy all the text from `words-to-add.txt` (it’s inside the `vendor` folder) into the bottom of `ignore.txt`
+
+    **Make sure there are now blank lines between the words.**
 
 ### Running Markbot
 
