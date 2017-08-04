@@ -2,3 +2,4 @@ git:
   numCommits: 10
   allCommitted: true
   allSynced: true
+  bestPractices: true
