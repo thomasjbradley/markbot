@@ -24,7 +24,6 @@ const $messageHeader = document.getElementById('message-header');
 const $robotLogo = document.querySelector('.robot-logo');
 const $messageHeading = document.querySelector('h2.no-errors');
 const $signin = document.getElementById('sign-in');
-// const $failure = document.getElementById('failure');
 const $submit = document.getElementById('submit');
 const $allGoodCheck = document.getElementById('all-good-check');
 const $messageCanvas = document.querySelector('.success-fail-message.with-canvas');
@@ -341,7 +340,6 @@ const reset = function () {
   $messagesWarning.dataset.state = 'hidden';
   $messageHeader.dataset.state = 'computing';
   $robotLogo.setAttribute('aria-label', 'Computing…');
-  // $failure.dataset.state = 'hidden';
   $submit.dataset.state = 'hidden';
   $allGoodCheck.style.animationName = 'none';
   $messageNoCanvas.removeAttribute('hidden');
