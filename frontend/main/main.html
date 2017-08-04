@@ -45,7 +45,7 @@
       <path d="M201.2 64.3a39.5 39.5 0 0 1-5.2 5.6q-18.8 17.3-39.1 49.2T124.7 181q-5.6 13.7-7.3 16.1a16 16 0 0 1-5 4.4q-3.3 2.1-13.7 2.1-8.2 0-10.5-1a12.7 12.7 0 0 1-3.5-2.1q-1.2-1.1-7.1-9.9a178.9 178.9 0 0 0-17.5-21.9q-6.6-7.2-6.6-12.1 0-7.1 7.5-12.3t13.3-5.3q6.3 0 13.5 5.1a52.4 52.4 0 0 1 12.9 13.6q7-14.6 16.6-32.1A385 385 0 0 1 139 90.8q12.2-17.4 17.7-23t9.4-9q3.9-3.3 13.7-4.9a105.9 105.9 0 0 1 14.9-1.5 7.6 7.6 0 0 1 5.5 2.1 7.1 7.1 0 0 1 2.1 5.4 7.8 7.8 0 0 1-1.1 4.4z"/>
     </symbol>
     <symbol id="icon-computing" viewBox="0 0 256 256">
-      <circle cx="140" cy="140" r="52.8"/>
+      <path transform="translate(0, 10)" d="M135.2 58.9l67.9 115.9a8.4 8.4 0 0 1-7.2 12.6H60.1a8.4 8.4 0 0 1-7.2-12.6l67.9-115.9a8.4 8.4 0 0 1 14.4 0z"/>
     </symbol>
     <symbol id="icon-error" viewBox="0 0 256 256">
       <path d="M106.9 121.2l-14-56.9a16.4 16.4 0 0 1-.9-5 17.3 17.3 0 0 1 3.7-11.2q3.7-4.6 8.4-4.6 8.4 0 17.5 11.6t16.8 31q2.1-1.7 18.3-19.4 13.4-14.6 17.6-17.7a14.4 14.4 0 0 1 8.7-3q5.7 0 10.6 5.6t5 11.4q0 5.4-5.8 5.7a4.7 4.7 0 0 0-2.5.4l-.6 2.1a15.6 15.6 0 0 1-2.3 3.5q-6.2 6.8-18.1 25.7Q156 121 154.2 123a11.1 11.1 0 0 0-2.8 7.1q0 7.6 4.9 20.7a108.3 108.3 0 0 0 13.4 25q3.6 5.5 3.6 7.3t-1.9 4.1a3.2 3.2 0 0 1 .8 2 3.6 3.6 0 0 1-1.3 3.1 57.2 57.2 0 0 1-6.2 3.5q0 6.5-5.4 6.5-2.3 0-6.5-2.8a19.3 19.3 0 0 1-5.7-5.2 8.7 8.7 0 0 0-3.3-2.6 6.8 6.8 0 0 1-2.6-1.2q-.9-.7-4.2-4.2a9.9 9.9 0 0 0-2.6-1.9q-3.1-1.3-6-6.9-1.4-3.5-7.6-13.1l-38 41.1a64.5 64.5 0 0 1-4.7 4.6q-2.8 2.4-4.4 2.4a4.2 4.2 0 0 1-3-1.1q-1.2-1.1-1.3-7.3l-1.4-1.5a8.4 8.4 0 0 1-1.3-3.4l-2.2-1.1a25.7 25.7 0 0 0-6-6.9l-.2-3.4-.7-3a12.1 12.1 0 0 1 1.4-4.3q1.4-3 13.7-17.9t15.2-17.7q10.8-10.1 11.5-13.3 2.1-8.8 7.5-10.4z"/>
@@ -179,15 +179,10 @@
       </div>
     </header>
 
-    <div class="success-fail" id="failure" data-state="hidden">
-      <img class="logo-small" src="../images/error.svg" alt="">
-      <p><strong id="failure-message">Everything looks good.</strong></p>
-    </div>
-
     <div class="success-fail" id="submit" data-state="hidden">
       <img class="logo" id="all-good-check" src="../images/check.svg" alt="">
-      <p class="no-canvas-message"><strong>Everything looks good.</strong></p>
-      <p class="with-canvas-message" hidden>Everything looks good.<br><strong>You’ve earned a grade.</strong></p>
+      <p class="success-fail-message no-canvas"><strong>Everything looks <span class="success-fail-message-warning">pretty</span> good.</strong><em class="success-fail-message-warning" hidden><br>There are still improvements for next time.</em></p>
+      <p class="success-fail-message with-canvas" hidden>Everything looks <span class="success-fail-message-warning">pretty</span> good.<em class="success-fail-message-warning" hidden><br>There are still improvements for next time.</em><br><strong>You’ve earned a grade.</strong></p>
     </div>
 
     <div class="messages-loader" id="messages-loader" aria-label="Loading…">
@@ -201,6 +196,7 @@
     </div>
 
     <article id="messages" class="messages" data-state="hidden"></article>
+    <article id="messages-warning" class="messages messages-warning" data-state="hidden"></article>
     <article id="messages-positive" class="messages messages-positive" data-state="hidden"></article>
 
   </main>

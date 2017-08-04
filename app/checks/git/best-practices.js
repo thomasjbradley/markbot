@@ -79,7 +79,8 @@ const checkCommits = function (commits, group, id, label, next) {
       try {
         data = JSON.parse(info);
       } catch (e) {
-        errors.push(`Cannot connect to the spelling & grammar checking tool — check that Java is properly installed`);
+        markbotMain.send('check-group:item-complete', group, id, label, [`Cannot connect to the spelling & grammar checking tool — check that Java is properly installed`]);
+        return next();
       }
 
       if (data && data.matches.length > 0) {
@@ -93,7 +94,7 @@ const checkCommits = function (commits, group, id, label, next) {
       }
     });
 
-    markbotMain.send('check-group:item-complete', group, id, label, errors);
+    markbotMain.send('check-group:item-complete', group, id, label, [], false, [], errors);
     next();
   })
   .catch((reason) => {

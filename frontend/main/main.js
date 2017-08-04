@@ -17,6 +17,7 @@ const $checks = document.getElementById('checks-container');
 const $checksLoader = document.getElementById('checks-loader');
 const $messages = document.getElementById('messages');
 const $messagesPositive = document.getElementById('messages-positive');
+const $messagesWarning = document.getElementById('messages-warning');
 const $messagesLoader = document.getElementById('messages-loader');
 const $messagesLoaderLabel = document.querySelector('.messages-loader-label');
 const $messageHeader = document.getElementById('message-header');
@@ -26,8 +27,8 @@ const $signin = document.getElementById('sign-in');
 // const $failure = document.getElementById('failure');
 const $submit = document.getElementById('submit');
 const $allGoodCheck = document.getElementById('all-good-check');
-const $messageCanvas = document.querySelector('.with-canvas-message');
-const $messageNoCanvas = document.querySelector('.no-canvas-message');
+const $messageCanvas = document.querySelector('.success-fail-message.with-canvas');
+const $messageNoCanvas = document.querySelector('.success-fail-message.no-canvas');
 
 // TOOLBAR
 const $toolbar = document.getElementById('toolbar');
@@ -51,6 +52,18 @@ let groups = {};
 let checks = {};
 let fullPath = false;
 let isMarkbotDoneYet;
+
+let ERROR_MESSAGE_TYPE = {
+  DEFAULT: false,
+  POSITIVE: 'POSITIVE',
+  WARNING: 'WARNING',
+};
+
+let ERROR_MESSAGE_STATUS = {
+  DEFAULT: false,
+  BYPASS: 'BYPASS',
+  SKIP: 'SKIP',
+};
 
 const buildCodeDiffErrorMessage = function (err, li) {
   const message = document.createElement('span');
@@ -257,7 +270,7 @@ const prepareErrorText = function (err) {
   return transformCodeBlocks(transformStrong(transformMark(transformLinks(escapeHTML(err)))));
 };
 
-const displayErrors = function (group, label, linkId, errors, status, isMessages) {
+const displayErrors = function (group, label, linkId, errors, status, messageType) {
   const $errorGroup = document.createElement('div');
   const $groupHead = document.createElement('h2');
   const $groupHeadText = document.createElement('span');
@@ -283,26 +296,34 @@ const displayErrors = function (group, label, linkId, errors, status, isMessages
   });
 
   switch (status) {
-    case 'bypassed':
+    case ERROR_MESSAGE_STATUS.BYPASS:
       $errorGroup.dataset.state = 'bypassed';
       break;
-    case 'skip':
+    case ERROR_MESSAGE_STATUS.SKIP:
       let skipLi = document.createElement('li');
       skipLi.textContent = 'More checks skipped because of the above errors';
       skipLi.dataset.state = 'skipped';
       $messageList.appendChild(skipLi)
+      break;
+    default:
       break;
   }
 
   $errorGroup.appendChild($groupHead);
   $errorGroup.appendChild($messageList);
 
-  if (isMessages) {
-    $messagesPositive.appendChild($errorGroup);
-    $messagesPositive.dataset.state = 'visible';
-  } else {
-    $messages.dataset.state = 'visible';
-    $messages.appendChild($errorGroup);
+  switch (messageType) {
+    case ERROR_MESSAGE_TYPE.POSITIVE:
+      $messagesPositive.appendChild($errorGroup);
+      $messagesPositive.dataset.state = 'visible';
+      break;
+    case ERROR_MESSAGE_TYPE.WARNING:
+      $messagesWarning.appendChild($errorGroup);
+      $messagesWarning.dataset.state = 'visible';
+      break;
+    default:
+      $messages.dataset.state = 'visible';
+      $messages.appendChild($errorGroup);
   }
 };
 
@@ -310,12 +331,14 @@ const reset = function () {
   clearInterval(isMarkbotDoneYet);
   $messages.innerHTML = '';
   $messagesPositive.innerHTML = '';
+  $messagesWarning.innerHTML = '';
   $checks.innerHTML = '';
   $checksLoader.dataset.state = 'visible';
   $messagesLoader.dataset.state = 'visible';
   $messagesLoaderLabel.innerHTML = robotBeeps[Math.floor(Math.random() * robotBeeps.length)] + '…';
   $messages.dataset.state = 'hidden';
   $messagesPositive.dataset.state = 'hidden';
+  $messagesWarning.dataset.state = 'hidden';
   $messageHeader.dataset.state = 'computing';
   $robotLogo.setAttribute('aria-label', 'Computing…');
   // $failure.dataset.state = 'hidden';
@@ -323,6 +346,7 @@ const reset = function () {
   $allGoodCheck.style.animationName = 'none';
   $messageNoCanvas.removeAttribute('hidden');
   $messageCanvas.setAttribute('hidden', true);
+  [].map.call(document.querySelectorAll('.success-fail-message-warning'), (elem) => elem.setAttribute('hidden', true));
 
   $canvasBtn.dataset.state = '';
   $canvasBtn.setAttribute('disabled', true);
@@ -378,10 +402,17 @@ const triggerDoneState = function () {
   } else {
     $messageHeader.dataset.state = 'no-errors';
     $robotLogo.setAttribute('aria-label', 'All clear!');
-    $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
     $submit.dataset.state = 'visible';
     $messages.dataset.state = 'hidden';
     $canvasBtn.removeAttribute('disabled');
+
+    if (hasWarnings()) {
+      $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '-ish!';
+      [].map.call(document.querySelector('.success-fail-message:not([hidden])').querySelectorAll('.success-fail-message-warning'), (elem) => elem.removeAttribute('hidden'));
+    } else {
+      $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '!';
+    }
+
     if ($canvasBtn.dataset.canSubmit === 'true') markbot.enableSubmitAssignment();
   }
 };
@@ -412,6 +443,20 @@ const hasErrors = function () {
 
     for (let a of aTags) {
       if (['bypassed', 'failed'].indexOf(a.dataset.status) >= 0) return true;
+    }
+  };
+
+  return false;
+};
+
+const hasWarnings = function () {
+  const allGroups = document.querySelectorAll('#checks ul');
+
+  for(let group of allGroups) {
+    let aTags = group.querySelectorAll('li a');
+
+    for (let a of aTags) {
+      if (['warnings'].indexOf(a.dataset.status) >= 0) return true;
     }
   };
 
@@ -460,12 +505,15 @@ const statusBarUpdate = function () {
         continue;
       }
 
+      if (['warnings'].indexOf(a.dataset.status) >= 0) {
+        yellowItems++;
+        continue;
+      }
+
       if (['failed'].indexOf(a.dataset.status) >= 0) {
         redItems++;
         continue;
       }
-
-      yellowItems++;
     }
   };
 
@@ -664,25 +712,35 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
 
   checks[checkId].dataset.status = 'bypassed';
   checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Bypassed')
-  displayErrors(group, label, checks[checkId].dataset.id, errors, 'bypassed');
+  displayErrors(group, label, checks[checkId].dataset.id, errors, ERROR_MESSAGE_STATUS.BYPASS);
   statusBarUpdate();
 });
 
-listener.on('check-group:item-complete', function (event, group, id, label, errors, skip, messages) {
+listener.on('check-group:item-complete', function (event, group, id, label, errors, skip, messages, warnings) {
   let checkId = group + id;
 
   if (errors && errors.length > 0) {
     checks[checkId].dataset.status = 'failed';
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Failed')
     displayErrors(group, label, checks[checkId].dataset.id, errors, skip);
-  } else {
+  }
+
+  if (warnings && warnings.length > 0) {
+    checks[checkId].dataset.status = 'warnings';
+    checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Has Warnings')
+    displayErrors(group, label, checks[checkId].dataset.id, warnings, ERROR_MESSAGE_STATUS.DEFAULT, ERROR_MESSAGE_TYPE.WARNING);
+  }
+
+  if ((!errors || errors.length <= 0) && (!warnings || warnings.length <= 0)) {
     checks[checkId].dataset.status = 'succeeded';
     checks[checkId].setAttribute('aria-disabled', true);
     checks[checkId].setAttribute('tabindex', -1);
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Passed')
+
+    if (messages && messages.length > 0)
+      displayErrors(group, label, checks[checkId].dataset.id, messages, ERROR_MESSAGE_STATUS.DEFAULT, ERROR_MESSAGE_TYPE.POSITIVE);
   }
 
-  if (messages && messages.length > 0) displayErrors(group, label, id, messages, '', true);
   statusBarUpdate();
 })
 
@@ -709,6 +767,7 @@ listener.on('app:with-canvas', function (event) {
   $canvasBtn.removeAttribute('tabindex');
   $messageNoCanvas.setAttribute('hidden', true);
   $messageCanvas.removeAttribute('hidden');
+  [].map.call(document.querySelectorAll('.success-fail-message-warning'), (elem) => elem.setAttribute('hidden', true));
 });
 
 listener.on('app:focus-toolbar', function (event) {

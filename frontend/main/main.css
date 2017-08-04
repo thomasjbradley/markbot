@@ -257,17 +257,6 @@
   background-image: url("../images/bypassed.svg");
 }
 
-#checks a[data-status="computing"] {
-  background-color: #ffefab;
-  border-color: #ffd30d;
-  color: #b09000;
-}
-
-#checks a[data-status="computing"]:focus {
-  background-color: #ffd30d;
-  color: #fff;
-}
-
 #checks a[data-status="computing"]::before {
   background-image: url("../images/computing.svg");
 }
@@ -286,6 +275,21 @@
 
 #checks a[data-status="succeeded"]::before {
   background-image: url("../images/check.svg");
+}
+
+#checks a[data-status="warnings"] {
+  background-color: #ffefab;
+  border-color: #ffd30d;
+  color: #b09000;
+}
+
+#checks a[data-status="warnings"]:focus {
+  background-color: #ffd30d;
+  color: #fff;
+}
+
+#checks a[data-status="warnings"]::before {
+  background-image: url("../images/warning.svg");
 }
 
 #checks a[data-status="failed"] {
@@ -404,15 +408,15 @@
 }
 
 .hex-border {
-  fill: #b09000;
+  fill: #63666a;
 }
 
 .hex {
-  fill: #ffd30d;
+  fill: #a8a6af;
 }
 
 .robot-part {
-  fill: #ffefab;
+  fill: #d9d8e3;
 }
 
 #message-header[data-state="no-errors"] .hex-border {
@@ -425,6 +429,18 @@
 
 #message-header[data-state="no-errors"] .robot-part {
   fill: #c1e89b;
+}
+
+#message-header[data-state="warnings"] .hex-border {
+  fill: #b09000;
+}
+
+#message-header[data-state="warnings"] .hex {
+  fill: #ffd30d;
+}
+
+#message-header[data-state="warnings"] .robot-part {
+  fill: #ffefab;
 }
 
 #message-header[data-state="errors"] .hex-border {
@@ -528,14 +544,33 @@
   color: #417d0a;
 }
 
-.messages h2:target {
-  border-color: #f33;
-  animation: border-fade-out 500ms linear forwards;
-}
-
 .messages-positive mark {
   background-color: #c1e89b;
   color: #44800d;
+}
+
+.messages-warning {
+  background-image: none;
+  border-color: #ffefab;
+}
+
+.messages-warning::after {
+  background-image: url("../images/warning.svg");
+}
+
+.messages-warning h2 {
+  background-image: url("../images/warning.svg");
+  color: #b09000;
+}
+
+.messages-warning mark {
+  background-color: #ffefab;
+  color: #b09000;
+}
+
+.messages h2:target {
+  border-color: #f33;
+  animation: border-fade-out 500ms linear forwards;
 }
 
 @keyframes border-fade-out {
@@ -570,6 +605,10 @@
 
 .messages-positive li::before {
   color: #6dd110;
+}
+
+.messages-warning li::before {
+  color: #ffd30d;
 }
 
 .messages [data-state="bypassed"] li::before {
