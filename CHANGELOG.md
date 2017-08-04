@@ -7,6 +7,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Git commit message best practice checking, including spelling, grammar, length & proper tense.
+- A warning message system that doesn’t impede handing homework in but gives “tips for next time”.
+
 ### Changed
 
 - The Markbot file template `inherit` system now supports inheriting from multiple templates to make it more usable.
