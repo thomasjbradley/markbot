@@ -265,8 +265,18 @@ const transformMark = function (err) {
   return err;
 };
 
+const transformLists = function (err) {
+  if (typeof err !== 'string') return err;
+
+  if (err.match(/\-\-\-\+\+\+/)) {
+    err = err.replace(/\-\-\-\+\+\+/g, '<ul><li>').replace(/\+\+\+/g, '</li><li>').replace(/\-\-\-/g, '</li></ul>');
+  }
+
+  return err;
+}
+
 const prepareErrorText = function (err) {
-  return transformCodeBlocks(transformStrong(transformMark(transformLinks(escapeHTML(err)))));
+  return transformCodeBlocks(transformLists(transformStrong(transformMark(transformLinks(escapeHTML(err))))));
 };
 
 const displayErrors = function (group, label, linkId, errors, status, messageType) {

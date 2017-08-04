@@ -594,10 +594,12 @@
 }
 
 .messages li::before {
-  content: "•";
+  content: "●";
   left: -20px;
   position: absolute;
   width: 16px;
+
+  transform: scale(.8);
 
   color: #f33;
   text-align: center;
@@ -611,6 +613,16 @@
   color: #ffd30d;
 }
 
+.messages ul ul {
+  padding-left: 16px;
+}
+
+.messages li li::before {
+  content: "•";
+}
+
+.messages-positive li li::before,
+.messages-warning li li::before,
 .messages [data-state="bypassed"] li::before {
   color: #a8a6af;
 }
