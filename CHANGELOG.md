@@ -11,6 +11,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Git commit message best practice checking, including spelling, grammar, length & proper tense.
 - A warning message system that doesn’t impede handing homework in but gives “tips for next time”.
+- Error messages can now output with sub-lists.
 
 ### Changed
 
