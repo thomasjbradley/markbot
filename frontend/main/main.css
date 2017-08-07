@@ -25,7 +25,8 @@
   opacity: .3;
 }
 
-.overlay h1 {
+.overlay h1,
+.overlay h2 {
   opacity: .4;
 }
 
@@ -47,6 +48,23 @@
   font-size: 19px;
   font-weight: normal;
   text-align: center;
+}
+
+.overlay h2 {
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.overlay a {
+  border-bottom: 1px solid rgba(0, 0, 0, .4);
+  color: rgba(0, 0, 0, .9);
+  text-decoration: none;
+}
+
+.overlay a:hover {
+  border-bottom-color: #000;
+
+  color: #000;
 }
 
 .arrow {
@@ -886,6 +904,10 @@ samp {
   }
 }
 
+#app-loader .messages-loader-icon {
+  opacity: .8;
+}
+
 /**
  *==========================================================
  * TOOLBAR
@@ -936,6 +958,11 @@ svg:not(:root) {
 .i-20 {
   height: 20px;
   width: 20px;
+}
+
+.i-64 {
+  height: 64px;
+  width: 64px;
 }
 
 .icon img,
@@ -1254,3 +1281,4 @@ button.toolbar-button-green:focus {
 .toolbar-button-refresh[data-state="computing"] #refresh-icon {
   display: none;
 }
+

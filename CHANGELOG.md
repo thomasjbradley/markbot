@@ -13,6 +13,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A warning message system that doesn’t impede handing homework in but gives “tips for next time”.
 - Error messages can now output with sub-lists.
 - An “underline” style for displayed messages.
+- Dependency checking on startup, specifically checks for Git command line & Java Development Kit.
 
 ### Changed
 

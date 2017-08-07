@@ -15,6 +15,8 @@ const mkdirp = require('mkdirp');
 
 const markbotMain = require('./app/markbot-main');
 const markbotFileGenerator = require('./app/markbot-file-generator');
+const dependencyChecker = require('./app/dependency-checker');
+const serverManager = require(path.resolve(`${__dirname}/app/server-manager.js`));
 const webServer = require('./app/web-server');
 const screenshotNamingService = require('./app/checks/screenshots/naming-service');
 const passcode = require('./app/passcode');
@@ -35,6 +37,7 @@ const MARKBOT_LOCK_FILE = '.markbot.lock';
 
 let appPkg = require('./package.json');
 let config = require('./config.json');
+let dependencies = {};
 let markbotFile = {};
 let markbotIgnoreFile = {};
 let mainWindow;
@@ -141,7 +144,16 @@ const createDebugWindow = function () {
 };
 
 const createWindows = function (next) {
-  createMainWindow(next);
+  createMainWindow(() => {
+    if (dependencies.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', dependencies);
+
+    if (next) {
+      next();
+    } else {
+      return mainWindow.webContents.send('app:ready');
+    }
+  });
+
   createDebugWindow();
 };
 
@@ -261,8 +273,19 @@ menuCallbacks.showDebugWindow = function () {
 };
 
 app.on('ready', function () {
-  createWindows();
   updateAppMenu();
+
+  createWindows(() => {
+    dependencyChecker.check((deps) => {
+      dependencies = deps;
+
+      if (deps.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', deps);
+
+      serverManager.start(() => {
+        mainWindow.webContents.send('app:ready');
+      });
+    });
+  });
 });
 
 app.on('window-all-closed', function () {

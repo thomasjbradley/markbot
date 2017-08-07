@@ -11,6 +11,8 @@ const successMessages = require('./success-messages.json');
 const robotBeeps = require('./robot-beeps.json');
 const $body = document.querySelector('body');
 const $dropbox = document.getElementById('dropbox');
+const $loader = document.getElementById('app-loader');
+const $dependencies = document.getElementById('dependencies');
 const $checksWrapper = document.getElementById('checks');
 const $messagesWrapper = document.getElementById('message-wrapper');
 const $checks = document.getElementById('checks-container');
@@ -58,6 +60,20 @@ const ERROR_MESSAGE_TYPE = {
   ERROR: '-error',
   WARNING: '-warning',
   MESSAGE: '-message',
+};
+
+const appReady = function () {
+  $loader.dataset.state = 'hidden';
+  $dependencies.dataset.state = 'hidden';
+
+  if (localStorage.getItem('github-username')) {
+    $signin.dataset.state = 'hidden';
+    $dropbox.dataset.state = 'visible';
+    markbot.enableSignOut(localStorage.getItem('github-username'));
+  } else {
+    $signin.dataset.state = 'visible';
+    $dropbox.dataset.state = 'hidden';
+  }
 };
 
 const buildCodeDiffErrorMessage = function (err, li) {
@@ -621,7 +637,7 @@ if (os.platform() == 'darwin') {
   }
 }
 
-$body.ondragover = function (e) {
+$body.ondragover = (e) => {
   e.stopImmediatePropagation();
   e.stopPropagation();
   e.preventDefault();
@@ -629,14 +645,14 @@ $body.ondragover = function (e) {
   return false;
 };
 
-$body.ondragleave = function (e) {
+$body.ondragleave = (e) => {
   e.stopImmediatePropagation();
   e.stopPropagation();
   e.preventDefault();
   return false;
 };
 
-$body.ondrop = function (e) {
+$body.ondrop = (e) => {
   e.preventDefault();
 
   if (!fs.statSync(e.dataTransfer.files[0].path).isDirectory()) {
@@ -649,7 +665,7 @@ $body.ondrop = function (e) {
   return false;
 };
 
-document.getElementById('username-form').addEventListener('submit', function (e) {
+document.getElementById('username-form').addEventListener('submit', (e) => {
   e.preventDefault();
   localStorage.setItem('github-username', document.getElementById('username').value);
   markbot.enableSignOut(localStorage.getItem('github-username'));
@@ -657,7 +673,7 @@ document.getElementById('username-form').addEventListener('submit', function (e)
   $dropbox.dataset.state = 'visible';
 });
 
-document.addEventListener('click', function (e) {
+document.addEventListener('click', (e) => {
   if (e.target.matches('#messages a') || e.target.matches('#messages-positive a')) {
     e.preventDefault();
     shell.openExternal(e.target.href);
@@ -670,11 +686,11 @@ document.addEventListener('click', function (e) {
   }
 });
 
-window.addEventListener('will-navigate', function (e) {
+window.addEventListener('will-navigate', (e) => {
   e.preventDefault();
 });
 
-$repoName.addEventListener('click', function (e) {
+$repoName.addEventListener('click', (e) => {
   e.preventDefault();
   markbot.revealFolder();
 });
@@ -687,20 +703,20 @@ $openRepoBtn.addEventListener('click', () => markbot.openGitHubRepo());
 $openEditorBtn.addEventListener('click', () => markbot.openInCodeEditor());
 $canvasBtn.addEventListener('click', () => submitAssignment());
 
-listener.on('app:file-missing', function (event) {
+listener.on('app:file-missing', () => {
   reset();
 });
 
-listener.on('app:file-exists', function (event, repo) {
+listener.on('app:file-exists', (e, repo) => {
   $repoName.querySelector('.icon-label').innerHTML = repo;
   $repoName.removeAttribute('disabled');
 });
 
-listener.on('app:all-done', function (event) {
+listener.on('app:all-done', () => {
   triggerDoneState();
 });
 
-listener.on('check-group:new', function (event, id, label) {
+listener.on('check-group:new', (e, id, label) => {
   const $groupHead = document.createElement('h2');
   const $groupTitle = document.createElement('span');
 
@@ -721,7 +737,7 @@ listener.on('check-group:new', function (event, id, label) {
   $checks.appendChild(groups[id].elem);
 });
 
-listener.on('check-group:item-new', function (event, group, id, label) {
+listener.on('check-group:item-new', (e, group, id, label) => {
   let checkLi = null;
   let checkId = `${group}-${id}`;
   let checkClass = classify(checkId);
@@ -744,14 +760,14 @@ listener.on('check-group:item-new', function (event, group, id, label) {
   statusBarUpdate();
 });
 
-listener.on('check-group:item-computing', function (event, group, id) {
+listener.on('check-group:item-computing', (e, group, id) => {
   let checkId = `${group}-${id}`;
 
   checks[checkId].dataset.status = 'computing';
   statusBarUpdate();
 });
 
-listener.on('check-group:item-bypass', function (event, group, id, label, errors) {
+listener.on('check-group:item-bypass', (e, group, id, label, errors) => {
   let checkId = `${group}-${id}`;
 
   checks[checkId].dataset.status = 'bypassed';
@@ -760,7 +776,7 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
   statusBarUpdate();
 });
 
-listener.on('check-group:item-complete', function (event, group, id, label, errors, messages, warnings, status) {
+listener.on('check-group:item-complete', (e, group, id, label, errors, messages, warnings, status) => {
   let checkId = `${group}-${id}`;
   let errorType = ERROR_MESSAGE_TYPE.ERROR;
   const hasErrors = (errors && errors.length > 0);
@@ -795,25 +811,25 @@ listener.on('check-group:item-complete', function (event, group, id, label, erro
   statusBarUpdate();
 })
 
-listener.on('app:re-run', function (event) {
+listener.on('app:re-run', () => {
   refresh(fullPath);
 });
 
-listener.on('app:without-github', function (event) {
+listener.on('app:without-github', () => {
   $createIssueBtn.dataset.canBeEnabled = false;
   $createIssueBtn.setAttribute('tabindex', -1);
   $openRepoBtn.dataset.canBeEnabled = false;
   $openRepoBtn.setAttribute('tabindex', -1);
 });
 
-listener.on('app:with-github', function (event) {
+listener.on('app:with-github', () => {
   $createIssueBtn.dataset.canBeEnabled = true;
   $createIssueBtn.removeAttribute('tabindex');
   $openRepoBtn.dataset.canBeEnabled = true;
   $openRepoBtn.removeAttribute('tabindex');
 });
 
-listener.on('app:with-canvas', function (event) {
+listener.on('app:with-canvas', () => {
   $canvasBtn.dataset.canSubmit = true;
   $canvasBtn.removeAttribute('tabindex');
   $messageNoCanvas.setAttribute('hidden', true);
@@ -821,19 +837,19 @@ listener.on('app:with-canvas', function (event) {
   [].map.call(document.querySelectorAll('.success-fail-message-warning'), (elem) => elem.setAttribute('hidden', true));
 });
 
-listener.on('app:focus-toolbar', function (event) {
+listener.on('app:focus-toolbar', () => {
   $toolbar.focus();
 });
 
-listener.on('app:focus-checklist', function (event) {
+listener.on('app:focus-checklist', () => {
   $checksWrapper.focus();
 });
 
-listener.on('app:focus-errorlist', function (event) {
+listener.on('app:focus-errorlist', () => {
   $messagesWrapper.focus();
 });
 
-listener.on('app:sign-out', function (event) {
+listener.on('app:sign-out', () => {
   localStorage.clear();
   markbot.disableSignOut();
   markbot.disableFolderMenuFeatures();
@@ -841,33 +857,50 @@ listener.on('app:sign-out', function (event) {
   window.location.reload();
 });
 
-listener.on('app:file-dropped', function (event, path) {
+listener.on('app:file-dropped', (e, path) => {
   fileDropped(path);
 });
 
-listener.on('app:submit-assignment', function (event, path) {
+listener.on('app:submit-assignment', () => {
   submitAssignment();
 });
 
-listener.on('debug', function (event, ...args) {
+listener.on('debug', (e, ...args) => {
   markbot.debug(args);
   console.log(...args);
 });
 
-listener.on('alert', function (event, message) {
+listener.on('alert', (e, message) => {
   alert(message);
 });
 
-listener.on('app:blur', function (e) {
+listener.on('app:blur', () => {
   $body.classList.add('window-blurred');
 });
 
-listener.on('app:focus', function (e) {
+listener.on('app:focus', () => {
   $body.classList.remove('window-blurred');
 });
 
-if (localStorage.getItem('github-username')) {
-  $signin.dataset.state = 'hidden';
-  $dropbox.dataset.state = 'visible';
-  markbot.enableSignOut(localStorage.getItem('github-username'));
-}
+listener.on('app:ready', () => {
+  appReady();
+});
+
+listener.on('error:missing-dependency', (e, deps) => {
+  $loader.dataset.state = 'hidden';
+  $dependencies.dataset.state = 'visible';
+
+  if (deps.hasGit === false) {
+    document.getElementById('dep-git').dataset.state = 'visible';
+  } else {
+    document.getElementById('dep-git').dataset.state = 'hidden';
+  }
+
+  if (deps.hasJava === false) {
+    document.getElementById('dep-java').dataset.state = 'visible';
+  } else {
+    document.getElementById('dep-java').dataset.state = 'hidden';
+  }
+});
+
+// if (electron.remote.app.isReady()) appReady();
