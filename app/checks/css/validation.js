@@ -73,7 +73,7 @@ const bypass = function (checkGroup, checkId, checkLabel) {
 };
 
 const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents, lines, next) {
-  const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor');
+  const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor/css-validator');
   const execPath = 'java -jar ' + escapeShell(validatorPath + '/css-validator.jar') + ' --output=soap12 --profile=css3svg ' + escapeShell('file://' + convertToUrl(fullPath));
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);

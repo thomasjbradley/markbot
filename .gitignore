@@ -4,8 +4,10 @@ config.json
 npm-debug.log
 node_modules
 dist
-vendor/*.jar
-vendor/lib/*.jar
+vendor/html-validator/*
+!vendor/html-validator/.gitignore
+vendor/css-validator/*
+!vendor/css-validator/.gitignore
 vendor/languagetool/*
 !vendor/languagetool/words-to-add.txt
 build/background.tiff
