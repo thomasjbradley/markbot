@@ -58,7 +58,8 @@ const mergeInheritedFiles = function (markbotFile) {
     let inheritPath = path.resolve(`${__dirname}/../templates/${templateId}.yml`);
 
     if (exists.check(inheritPath)) {
-      templates.push(yaml.safeLoad(fs.readFileSync(inheritPath, 'utf8')));
+      let y = yaml.safeLoad(fs.readFileSync(inheritPath, 'utf8'));
+      if (y) templates.push(y);
     } else {
       newMarkbotFile.inheritFilesNotFound.push(templateId);
     }
