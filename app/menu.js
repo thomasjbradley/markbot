@@ -310,6 +310,9 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           click: function(item, focusedWindow) {
             cbs.disableFolderMenuFeatures();
             focusedWindow.reload();
+            focusedWindow.webContents.once('did-finish-load', () => {
+              focusedWindow.webContents.send('app:ready');
+            });
           }
         },
         {

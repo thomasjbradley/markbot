@@ -144,16 +144,7 @@ const createDebugWindow = function () {
 };
 
 const createWindows = function (next) {
-  createMainWindow(() => {
-    if (dependencies.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', dependencies);
-
-    if (next) {
-      next();
-    } else {
-      return mainWindow.webContents.send('app:ready');
-    }
-  });
-
+  createMainWindow(next);
   createDebugWindow();
 };
 
@@ -301,7 +292,13 @@ menuCallbacks.quit = function () {
 };
 
 app.on('activate', function () {
-  if (mainWindow === null) createWindows();
+  if (mainWindow === null) {
+    createWindows(() => {
+      if (dependencies.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', dependencies);
+
+      return mainWindow.webContents.send('app:ready');
+    });
+  }
 });
 
 exports.openRepo = function (path) {
