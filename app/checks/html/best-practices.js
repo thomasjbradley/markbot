@@ -13,6 +13,8 @@ const doublespaceChecker = require(__dirname + '/best-practices/double-space');
 const spaceBeforeCloseGTChecker = require(__dirname + '/best-practices/space-before-close-greater-than');
 const indentationChecker = require(__dirname + '/best-practices/indentation');
 
+const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../error-message-status`);
+
 const bypass = function (checkGroup, checkId, checkLabel) {
   markbotMain.send('check-group:item-bypass', checkGroup, checkId, checkLabel, ['Skipped because of previous errors']);
 };
@@ -35,63 +37,63 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, lines, ne
   missingDocumentTags = documentTagChecker.check(fileContents, lines);
 
   if (missingDocumentTags && missingDocumentTags.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, missingDocumentTags, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, missingDocumentTags, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   forceLineBreaks = lineBreakChecker.check(fileContents, lines);
 
   if (forceLineBreaks && forceLineBreaks.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, forceLineBreaks, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, forceLineBreaks, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkClosingPSameLine = pTagCloseChecker.check(fileContents, lines);
 
   if (checkClosingPSameLine && checkClosingPSameLine.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkClosingPSameLine, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkClosingPSameLine, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkMissingOptionalTags = missingOptionalTagChecker.check(fileContents, lines);
 
   if (checkMissingOptionalTags && checkMissingOptionalTags.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkMissingOptionalTags, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkMissingOptionalTags, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkCodeStyle = codeStyleChecker.check(fileContents, lines);
 
   if (checkCodeStyle && checkCodeStyle.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkCodeStyle, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkCodeStyle, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkEmptyLines = emptyLineChecker.check(fileContents, lines);
 
   if (checkEmptyLines && checkEmptyLines.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkEmptyLines, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkEmptyLines, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkViewport = viewportChecker.check(fileContents, lines);
 
   if (checkViewport && checkViewport.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkViewport, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkViewport, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkDoubleSpacing = doublespaceChecker.check(fileContents, lines);
 
   if (checkDoubleSpacing && checkDoubleSpacing.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkDoubleSpacing, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkDoubleSpacing, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 
   checkSpaceBeforeCloseGT = spaceBeforeCloseGTChecker.check(fileContents, lines);
 
   if (checkSpaceBeforeCloseGT && checkSpaceBeforeCloseGT.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkSpaceBeforeCloseGT, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkSpaceBeforeCloseGT, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 

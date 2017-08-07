@@ -17,6 +17,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - The Markbot file template `inherit` system now supports inheriting from multiple templates to make it more usable.
+- A check can now output errors, messages & warnings all at the same time.
 
 ### Fixed
 

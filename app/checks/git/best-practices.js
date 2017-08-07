@@ -113,7 +113,7 @@ const checkCommits = function (commits, group, id, label, next) {
       }
     });
 
-    markbotMain.send('check-group:item-complete', group, id, label, [], false, [], errors);
+    markbotMain.send('check-group:item-complete', group, id, label, false, false, errors);
     next();
   })
   .catch((reason) => {

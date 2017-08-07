@@ -5,6 +5,8 @@ const linter = require('stylelint');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const viewportChecker = require(__dirname + '/best-practices/viewport');
 
+const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../error-message-status`);
+
 const shouldIncludeError = function (message, line, lines, fileContents) {
   /* SVG overflow: hidden CSS */
   if (message.match(/selector-root-no-composition/) && lines[line - 1] && lines[line - 1].match(/svg/)) return false;
@@ -28,7 +30,7 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, lines, ne
   checkViewport = viewportChecker.check(fileContents, lines);
 
   if (checkViewport && checkViewport.length > 0) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkViewport, 'skip');
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, checkViewport, false, false, ERROR_MESSAGE_STATUS.SKIP);
     return next();
   }
 

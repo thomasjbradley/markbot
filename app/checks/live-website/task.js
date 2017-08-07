@@ -21,7 +21,7 @@
 
   https.get(opts, function (res) {
     if(res.statusCode >= 200 && res.statusCode <= 299) {
-      markbotMain.send('check-group:item-complete', group, id, label, [], '', [`**Your website is online!** Check it out in your browser or on your mobile device:  @@https://${username.toLowerCase()}.github.io/${repo}/@@`]);
+      markbotMain.send('check-group:item-complete', group, id, label, false, [`**Your website is online!** Check it out in your browser or on your mobile device:  @@https://${username.toLowerCase()}.github.io/${repo}/@@`]);
     } else {
       markbotMain.send('check-group:item-complete', group, id, label, errors);
     }

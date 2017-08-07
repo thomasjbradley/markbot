@@ -161,9 +161,9 @@
         });
 
         if (errors.length <= 0) {
-          markbotMain.send('check-group:item-complete', group, file.path, label, [], '', messages);
+          markbotMain.send('check-group:item-complete', group, file.path, label, false, messages);
         } else {
-          markbotMain.send('check-group:item-complete', group, file.path, label, errors, '', messages);
+          markbotMain.send('check-group:item-complete', group, file.path, label, errors, messages);
         }
 
         next();

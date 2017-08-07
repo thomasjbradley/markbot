@@ -84,7 +84,7 @@
           break;
         default:
           if (message.messages) {
-            markbotMain.send(message.id, group, message.checkId, message.checkLabel, [], '', message.messages);
+            markbotMain.send(message.id, group, message.checkId, message.checkLabel, false, message.messages);
           } else {
             markbotMain.send(message.id, group, message.checkId, message.checkLabel, message.errors);
           }

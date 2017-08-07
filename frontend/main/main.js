@@ -52,17 +52,7 @@ let checks = {};
 let fullPath = false;
 let isMarkbotDoneYet;
 
-let ERROR_MESSAGE_TYPE = {
-  DEFAULT: false,
-  POSITIVE: 'POSITIVE',
-  WARNING: 'WARNING',
-};
-
-let ERROR_MESSAGE_STATUS = {
-  DEFAULT: false,
-  BYPASS: 'BYPASS',
-  SKIP: 'SKIP',
-};
+const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../app/error-message-status`);
 
 const buildCodeDiffErrorMessage = function (err, li) {
   const message = document.createElement('span');
@@ -304,16 +294,8 @@ const prepareErrorText = function (err) {
   return err;
 };
 
-const displayErrors = function (group, label, linkId, errors, status, messageType) {
-  const $errorGroup = document.createElement('div');
-  const $groupHead = document.createElement('h2');
-  const $groupHeadText = document.createElement('span');
-  const $messageList = document.createElement('ul');
-
-  $groupHead.id = linkId;
-  $groupHead.setAttribute('tabindex', 0);
-  $groupHeadText.textContent = groups[group].label + ' — ' + label;
-  $groupHead.appendChild($groupHeadText);
+const buildErrorMessageList = function (errors) {
+  const $errorList = document.createElement('ul');
 
   errors.forEach(function (err) {
     const li = document.createElement('li');
@@ -326,8 +308,21 @@ const displayErrors = function (group, label, linkId, errors, status, messageTyp
       li.innerHTML = prepareErrorText(err);
     }
 
-    $messageList.appendChild(li)
+    $errorList.appendChild(li)
   });
+
+  return $errorList;
+};
+
+const buildErrorMessageGroup = function (group, label, linkId, $errorList, status) {
+  const $errorGroup = document.createElement('div');
+  const $groupHead = document.createElement('h2');
+  const $groupHeadText = document.createElement('span');
+
+  $groupHead.id = linkId;
+  $groupHead.setAttribute('tabindex', 0);
+  $groupHeadText.textContent = groups[group].label + ' — ' + label;
+  $groupHead.appendChild($groupHeadText);
 
   switch (status) {
     case ERROR_MESSAGE_STATUS.BYPASS:
@@ -337,27 +332,36 @@ const displayErrors = function (group, label, linkId, errors, status, messageTyp
       let skipLi = document.createElement('li');
       skipLi.textContent = 'More checks skipped because of the above errors';
       skipLi.dataset.state = 'skipped';
-      $messageList.appendChild(skipLi)
+      $errorList.appendChild(skipLi)
       break;
     default:
       break;
   }
 
   $errorGroup.appendChild($groupHead);
-  $errorGroup.appendChild($messageList);
+  $errorGroup.appendChild($errorList);
 
-  switch (messageType) {
-    case ERROR_MESSAGE_TYPE.POSITIVE:
-      $messagesPositive.appendChild($errorGroup);
-      $messagesPositive.dataset.state = 'visible';
-      break;
-    case ERROR_MESSAGE_TYPE.WARNING:
-      $messagesWarning.appendChild($errorGroup);
-      $messagesWarning.dataset.state = 'visible';
-      break;
-    default:
-      $messages.dataset.state = 'visible';
-      $messages.appendChild($errorGroup);
+  return $errorGroup;
+};
+
+const displayErrors = function (group, label, linkId, errors, messages, warnings, status) {
+  const hasErrors = (errors && errors.length > 0);
+  const hasWarnings = (warnings && warnings.length > 0);
+  const hasMessages = (messages && messages.length > 0);
+
+  if (hasMessages) {
+    $messagesPositive.appendChild(buildErrorMessageGroup(group, label, linkId, buildErrorMessageList(messages), status));
+    $messagesPositive.dataset.state = 'visible';
+  }
+
+  if (hasWarnings) {
+    $messagesWarning.appendChild(buildErrorMessageGroup(group, label, linkId, buildErrorMessageList(warnings), status));
+    $messagesWarning.dataset.state = 'visible';
+  }
+
+  if (hasErrors) {
+    $messages.appendChild(buildErrorMessageGroup(group, label, linkId, buildErrorMessageList(errors), status));
+    $messages.dataset.state = 'visible';
   }
 };
 
@@ -745,33 +749,37 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
 
   checks[checkId].dataset.status = 'bypassed';
   checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Bypassed')
-  displayErrors(group, label, checks[checkId].dataset.id, errors, ERROR_MESSAGE_STATUS.BYPASS);
+  displayErrors(group, label, checks[checkId].dataset.id, errors, false, false, ERROR_MESSAGE_STATUS.BYPASS);
   statusBarUpdate();
 });
 
-listener.on('check-group:item-complete', function (event, group, id, label, errors, skip, messages, warnings) {
+listener.on('check-group:item-complete', function (event, group, id, label, errors, messages, warnings, status) {
   let checkId = group + id;
-
-  if (errors && errors.length > 0) {
-    checks[checkId].dataset.status = 'failed';
-    checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Failed')
-    displayErrors(group, label, checks[checkId].dataset.id, errors, skip);
-  }
-
-  if (warnings && warnings.length > 0) {
+  const hasErrors = (errors && errors.length > 0);
+  const hasWarnings = (warnings && warnings.length > 0);
+  const hasMessages = (messages && messages.length > 0);
+console.log(errors);
+console.log(warnings);
+console.log(messages);
+  if (hasWarnings && !hasErrors) {
     checks[checkId].dataset.status = 'warnings';
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Has Warnings')
-    displayErrors(group, label, checks[checkId].dataset.id, warnings, ERROR_MESSAGE_STATUS.DEFAULT, ERROR_MESSAGE_TYPE.WARNING);
+    displayErrors(group, label, checks[checkId].dataset.id, false, false, warnings);
   }
 
-  if ((!errors || errors.length <= 0) && (!warnings || warnings.length <= 0)) {
+  if (hasErrors) {
+    checks[checkId].dataset.status = 'failed';
+    checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Failed')
+    displayErrors(group, label, checks[checkId].dataset.id, errors, false, false, status);
+  }
+
+  if (!hasErrors && !hasWarnings) {
     checks[checkId].dataset.status = 'succeeded';
     checks[checkId].setAttribute('aria-disabled', true);
     checks[checkId].setAttribute('tabindex', -1);
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Passed')
 
-    if (messages && messages.length > 0)
-      displayErrors(group, label, checks[checkId].dataset.id, messages, ERROR_MESSAGE_STATUS.DEFAULT, ERROR_MESSAGE_TYPE.POSITIVE);
+    if (hasMessages) displayErrors(group, label, checks[checkId].dataset.id, false, messages);
   }
 
   statusBarUpdate();
