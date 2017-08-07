@@ -772,7 +772,12 @@ listener.on('check-group:item-bypass', (e, group, id, label, errors) => {
 
   checks[checkId].dataset.status = 'bypassed';
   checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Bypassed')
+
   displayErrors(group, label, checks[checkId].dataset.id, errors, false, false, ERROR_MESSAGE_STATUS.BYPASS);
+
+  checks[checkId].href += ERROR_MESSAGE_TYPE.ERROR;
+  checks[checkId].dataset.id += ERROR_MESSAGE_TYPE.ERROR;
+
   statusBarUpdate();
 });
 
@@ -902,5 +907,3 @@ listener.on('error:missing-dependency', (e, deps) => {
     document.getElementById('dep-java').dataset.state = 'hidden';
   }
 });
-
-// if (electron.remote.app.isReady()) appReady();
