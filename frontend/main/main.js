@@ -54,6 +54,12 @@ let isMarkbotDoneYet;
 
 const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../app/error-message-status`);
 
+const ERROR_MESSAGE_TYPE = {
+  ERROR: '-error',
+  WARNING: '-warning',
+  MESSAGE: '-message',
+};
+
 const buildCodeDiffErrorMessage = function (err, li) {
   const message = document.createElement('span');
   const code = document.createElement('section');
@@ -350,17 +356,17 @@ const displayErrors = function (group, label, linkId, errors, messages, warnings
   const hasMessages = (messages && messages.length > 0);
 
   if (hasMessages) {
-    $messagesPositive.appendChild(buildErrorMessageGroup(group, label, linkId, buildErrorMessageList(messages), status));
+    $messagesPositive.appendChild(buildErrorMessageGroup(group, label, linkId + ERROR_MESSAGE_TYPE.MESSAGE, buildErrorMessageList(messages), status));
     $messagesPositive.dataset.state = 'visible';
   }
 
   if (hasWarnings) {
-    $messagesWarning.appendChild(buildErrorMessageGroup(group, label, linkId, buildErrorMessageList(warnings), status));
+    $messagesWarning.appendChild(buildErrorMessageGroup(group, label, linkId + ERROR_MESSAGE_TYPE.WARNING, buildErrorMessageList(warnings), status));
     $messagesWarning.dataset.state = 'visible';
   }
 
   if (hasErrors) {
-    $messages.appendChild(buildErrorMessageGroup(group, label, linkId, buildErrorMessageList(errors), status));
+    $messages.appendChild(buildErrorMessageGroup(group, label, linkId + ERROR_MESSAGE_TYPE.ERROR, buildErrorMessageList(errors), status));
     $messages.dataset.state = 'visible';
   }
 };
@@ -659,7 +665,8 @@ document.addEventListener('click', function (e) {
 
   if (e.target.matches('#checks a')) {
     e.preventDefault();
-    window.location.hash = e.target.getAttribute('href');
+    window.location.hash = e.target.dataset.id;
+    document.getElementById(e.target.dataset.id).focus();
   }
 });
 
@@ -716,7 +723,7 @@ listener.on('check-group:new', function (event, id, label) {
 
 listener.on('check-group:item-new', function (event, group, id, label) {
   let checkLi = null;
-  let checkId = group + id;
+  let checkId = `${group}-${id}`;
   let checkClass = classify(checkId);
   let groupLabel = group;
   let $groupHeading = document.getElementById(group);
@@ -738,14 +745,14 @@ listener.on('check-group:item-new', function (event, group, id, label) {
 });
 
 listener.on('check-group:item-computing', function (event, group, id) {
-  let checkId = group + id;
+  let checkId = `${group}-${id}`;
 
   checks[checkId].dataset.status = 'computing';
   statusBarUpdate();
 });
 
 listener.on('check-group:item-bypass', function (event, group, id, label, errors) {
-  let checkId = group + id;
+  let checkId = `${group}-${id}`;
 
   checks[checkId].dataset.status = 'bypassed';
   checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Bypassed')
@@ -754,33 +761,36 @@ listener.on('check-group:item-bypass', function (event, group, id, label, errors
 });
 
 listener.on('check-group:item-complete', function (event, group, id, label, errors, messages, warnings, status) {
-  let checkId = group + id;
+  let checkId = `${group}-${id}`;
+  let errorType = ERROR_MESSAGE_TYPE.ERROR;
   const hasErrors = (errors && errors.length > 0);
   const hasWarnings = (warnings && warnings.length > 0);
   const hasMessages = (messages && messages.length > 0);
-console.log(errors);
-console.log(warnings);
-console.log(messages);
+
   if (hasWarnings && !hasErrors) {
+    errorType = ERROR_MESSAGE_TYPE.WARNING;
     checks[checkId].dataset.status = 'warnings';
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Has Warnings')
-    displayErrors(group, label, checks[checkId].dataset.id, false, false, warnings);
   }
 
   if (hasErrors) {
+    errorType = ERROR_MESSAGE_TYPE.ERROR;
     checks[checkId].dataset.status = 'failed';
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Failed')
-    displayErrors(group, label, checks[checkId].dataset.id, errors, false, false, status);
   }
 
   if (!hasErrors && !hasWarnings) {
+    errorType = ERROR_MESSAGE_TYPE.MESSAGE;
     checks[checkId].dataset.status = 'succeeded';
     checks[checkId].setAttribute('aria-disabled', true);
     checks[checkId].setAttribute('tabindex', -1);
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Passed')
-
-    if (hasMessages) displayErrors(group, label, checks[checkId].dataset.id, false, messages);
   }
+
+  displayErrors(group, label, checks[checkId].dataset.id, errors, messages, warnings, status);
+
+  checks[checkId].href += errorType;
+  checks[checkId].dataset.id += errorType;
 
   statusBarUpdate();
 })
