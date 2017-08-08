@@ -3,11 +3,8 @@
 const util = require('util');
 const path = require('path');
 const exec = require('child_process').exec;
+const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
-
-const escapeShell = function (cmd) {
-  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
-};
 
 const shouldIncludeError = function (message, line) {
   // The standard info: using HTML parser

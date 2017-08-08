@@ -4,6 +4,7 @@ const path = require('path');
 const util = require('util');
 const exec = require('child_process').exec;
 const xmlParser = require('xml2js').parseString;
+const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 /**
@@ -17,10 +18,6 @@ const convertToUrl = function (path) {
   if (urlPath[0] !== '/') urlPath = '/' + urlPath;
 
   return urlPath;
-};
-
-const escapeShell = function (cmd) {
-  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
 };
 
 const cleanMessage = function (message) {
