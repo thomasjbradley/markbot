@@ -123,7 +123,7 @@ const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, n
     markbotFile = mergeAllFilesProperties(markbotFile, key);
   });
 
-  if (markbotFile.allFiles.html.screenshots) {
+  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.screenshots) {
     if (!markbotFile.screenshots) markbotFile.screenshots = [];
 
     markbotFile.html.forEach((item, i) => {
