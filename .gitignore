@@ -14,5 +14,3 @@ build/background.tiff
 
 app/*.cert
 app/*.pem
-
-yarn.lock
