@@ -643,25 +643,7 @@
 }
 
 .messages u {
-  display: inline-block;
-
-  border-bottom: 2px dotted #f33;
-
-  line-height: 1em;
-  text-decoration: none;
-}
-
-@supports (text-decoration-style: wavy) {
-
-  .messages u {
-    display: inline;
-
-    border: 0;
-
-    line-height: inherit;
-    text-decoration: underline wavy #f33;
-  }
-
+  text-decoration: underline wavy #f33;
 }
 
 .messages-positive li li::before,
