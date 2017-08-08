@@ -53,6 +53,7 @@ let groups = {};
 let checks = {};
 let fullPath = false;
 let isMarkbotDoneYet;
+let appIsReady = false;
 
 const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../app/error-message-status`);
 
@@ -63,6 +64,8 @@ const ERROR_MESSAGE_TYPE = {
 };
 
 const appReady = function () {
+  appIsReady = true;
+
   $loader.dataset.state = 'hidden';
   $dependencies.dataset.state = 'hidden';
 
@@ -638,21 +641,29 @@ if (os.platform() == 'darwin') {
 }
 
 $body.ondragover = (e) => {
+  if (!appIsReady) return false;
+
   e.stopImmediatePropagation();
   e.stopPropagation();
   e.preventDefault();
   e.dataTransfer.dropEffect = 'copy';
+
   return false;
 };
 
 $body.ondragleave = (e) => {
+  if (!appIsReady) return false;
+
   e.stopImmediatePropagation();
   e.stopPropagation();
   e.preventDefault();
+
   return false;
 };
 
 $body.ondrop = (e) => {
+  if (!appIsReady) return false;
+
   e.preventDefault();
 
   if (!fs.statSync(e.dataTransfer.files[0].path).isDirectory()) {
