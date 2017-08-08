@@ -4,8 +4,11 @@
 }
 
 [title="and"] {
+  border-bottom: 0;
+
   font-family: Baskerville, Palatino, "Book Antiqua", serif;
   font-style: italic;
+  text-decoration: none;
 }
 
 .overlay {
