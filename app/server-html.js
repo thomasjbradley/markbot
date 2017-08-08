@@ -10,13 +10,8 @@ let opts = {
 
 let args = [
   '-cp',
-  'languagetool-server.jar',
-  'org.languagetool.server.HTTPServer',
-  // This makes start-up much, much longer, but the first commit test much shorter
-  // It’s currently disabled because I like the user experience of faster start-up with slower first commit better
-  // '--config',
-  // 'languagetool.properties',
-  '--port',
+  'vnu.jar',
+  'nu.validator.servlet.Main',
 ];
 
 let server;
@@ -29,7 +24,7 @@ if (is.renderer()) {
 }
 
 const start = function (port) {
-  const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../vendor/languagetool');
+  const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../vendor/html-validator');
 
   args.push(port);
   opts.cwd = validatorPath;
@@ -39,12 +34,15 @@ const start = function (port) {
     server.unref();
 
     server.stderr.on('data', (data) => {
-      reject(data.toString('utf8'));
+      let message = data.toString('utf8');
+      let info = /INFO/;
+
+      if (!info.test(message)) reject('There was an error starting the HTML validator');
     });
 
     server.stdout.on('data', (data) => {
       let message = data.toString('utf8');
-      let started = /server started/i;
+      let started = /initialization complete/i;
 
       if (started.test(message)) resolve();
     });

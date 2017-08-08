@@ -2,6 +2,7 @@
 
 const getPort = require('get-port');
 const markbotMain = require(`${__dirname}/markbot-main`);
+const serverHtml = require(`${__dirname}/server-html`);
 const serverLanguage = require(`${__dirname}/server-language`);
 
 const servers = {
@@ -38,6 +39,7 @@ const start = function (next) {
     setPorts(ports);
 
     Promise.all([
+      serverHtml.start(servers.html.port),
       serverLanguage.start(servers.language.port),
     ]).then(() => {
       next();
@@ -65,6 +67,7 @@ const getHostInfo = function (server) {
 
 const stopAll = function () {
   serverLanguage.stop();
+  serverHtml.stop();
 };
 
 module.exports = {
