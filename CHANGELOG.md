@@ -22,6 +22,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Upgraded the HTML & CSS validators.
 - Upgraded a bunch of dependencies.
 - The HTML validator now starts up when Markbot starts to make validation much faster: one initialization time instead of one of each HTML file.
+- The web server now starts immediately instead of on demand when a file is dropped.
 
 ### Fixed
 
