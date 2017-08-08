@@ -13,7 +13,7 @@ let args = [
   'languagetool-server.jar',
   'org.languagetool.server.HTTPServer',
   // This makes start-up much, much longer, but the first commit test much shorter
-  // It’s currently disabled because I like the user experience of faster start-up with slower first commit better
+  // It’s currently disabled because I prefer the user experience of faster start-up with slower first commit
   // '--config',
   // 'languagetool.properties',
   '--port',
