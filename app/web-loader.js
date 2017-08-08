@@ -9,8 +9,8 @@ const is = require('electron-is');
 const ipcRenderer = require('electron').ipcRenderer;
 const BrowserWindow = require('electron').remote.BrowserWindow;
 const markbotMain = require('electron').remote.require('./app/markbot-main');
+const serverManager = require('electron').remote.require('./app/server-manager');
 const networks = require(`${__dirname}/networks`);
-const webServer = require(`${__dirname}/web-server`);
 const classify = require(`${__dirname}/classify`);
 const appPkg = require(`${__dirname}/../package.json`);
 
@@ -62,7 +62,7 @@ const getNewBrowserWindow = function (filename, userOpts, injectJs) {
 };
 
 const getUrl = function (url) {
-  return (url.match(/^https?:\/\//)) ? url : webServer.getHost() + '/' + url;
+  return (url.match(/^https?:\/\//)) ? url : serverManager.getHost('web') + '/' + url;
 };
 
 const getWindowLoadingOptions = function (listenerId) {

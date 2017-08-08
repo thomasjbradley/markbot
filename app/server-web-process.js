@@ -1,49 +1,28 @@
 'use strict';
 
 const DIRECTORY_INDEX = '/index.html';
-const HTTPS_KEY = __dirname + '/https-key.pem';
-const HTTPS_CERT = __dirname + '/https-cert.pem';
+const HTTPS_KEY = `${__dirname}/https-key.pem`;
+const HTTPS_CERT = `${__dirname}/https-cert.pem`;
 
 const zlib = require('zlib');
-const http = require('http');
 const path = require('path');
 const fs = require('fs');
 const https = require('https');
-const is = require('electron-is');
 const mimeTypes = require('mime-types');
-const portfinder = require('portfinder');
 const finalhandler = require('finalhandler');
 const exists = require('./file-exists');
-const markbotMain = require('./markbot-main');
-const appPkg = require('../package.json');
 
 let webServer;
-let staticDir;
+let staticDir = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../http-public');
 
 const isRunning = function () {
   return !!(webServer && webServer.listening);
 };
 
-const setHost = function (port) {
-  global.localWebServerHost = `https://localhost:${port}`;
-};
-
-const getHost = function () {
-  if (is.renderer()) {
-    return require('electron').remote.getGlobal('localWebServerHost');
-  } else {
-    return global.localWebServerHost;
-  }
-};
-
-const start = function (dir, next) {
-  staticDir = dir;
-
-  if (isRunning()) return next(getHost());
-
-  fs.readFile(HTTPS_KEY, 'utf8', function(err, httpsKey) {
-    fs.readFile(HTTPS_CERT, 'utf8', function(err, httpsCert) {
-      webServer = https.createServer({key: httpsKey, cert: httpsCert}, function onRequest (request, response) {
+const start = function (port) {
+  fs.readFile(HTTPS_KEY, 'utf8', (err, httpsKey) => {
+    fs.readFile(HTTPS_CERT, 'utf8', (err, httpsCert) => {
+      webServer = https.createServer({key: httpsKey, cert: httpsCert}, (request, response) => {
         if (request.url.indexOf('?') > -1) request.url = request.url.substr(0, request.url.indexOf('?'));
         if (request.url == '/') request.url = DIRECTORY_INDEX;
 
@@ -62,7 +41,7 @@ const start = function (dir, next) {
 
           if (mime) headers['Content-Type'] = mime;
 
-          fs.readFile(filePath, function(error, content) {
+          fs.readFile(filePath, (error, content) => {
             if (error) {
               response.writeHead(500);
               response.end();
@@ -89,12 +68,8 @@ const start = function (dir, next) {
         }
       });
 
-      portfinder.getPort(function (err, port) {
-        setHost(port);
-
-        webServer.listen(port, function () {
-          next(getHost());
-        });
+      webServer.listen(port, () => {
+        process.send({ running: true });
       });
     });
   });
@@ -102,16 +77,19 @@ const start = function (dir, next) {
 
 const stop = function () {
   if (isRunning()) {
-    webServer.close(function () {
+    webServer.close(() => {
       webServer = null;
       staticDir = null;
     });
   }
 };
 
-module.exports = {
-  start: start,
-  stop: stop,
-  isRunning: isRunning,
-  getHost: getHost,
+const setRoot = function (dir) {
+  staticDir = dir;
 };
+
+process.on('message', (msg) => {
+  if (msg.start) start(msg.start);
+  if (msg.stop) stop();
+  if (msg.root) setRoot(msg.root);
+});

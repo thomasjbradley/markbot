@@ -6,9 +6,9 @@
   const webcoach = require('webcoach');
   const ipcRenderer = require('electron').ipcRenderer;
   const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const serverManager = require('electron').remote.require('./app/server-manager');
   const exists = require(__dirname + '/file-exists');
   const webLoader = require(__dirname + '/web-loader');
-  const webServer = require(__dirname + '/web-server');
   const adviceIgnoreIds = require(__dirname + '/checks/performance/ignore-advice-ids.json');
 
   const group = taskDetails.group;
@@ -102,7 +102,7 @@
       let offending = [];
 
       advice.offending.forEach(function (file) {
-        let simpleFile = file.replace(webServer.getHost(), '');
+        let simpleFile = file.replace(serverManager.getHost('web'), '');
 
         offending.push(`\`${simpleFile}\``);
       });

@@ -872,7 +872,6 @@ listener.on('app:sign-out', () => {
   localStorage.clear();
   markbot.disableSignOut();
   markbot.disableFolderMenuFeatures();
-  markbot.disableWebServer();
   window.location.reload();
 });
 

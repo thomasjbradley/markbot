@@ -17,7 +17,6 @@ const markbotMain = require('./app/markbot-main');
 const markbotFileGenerator = require('./app/markbot-file-generator');
 const dependencyChecker = require('./app/dependency-checker');
 const serverManager = require('./app/server-manager');
-const webServer = require('./app/web-server');
 const screenshotNamingService = require('./app/checks/screenshots/naming-service');
 const passcode = require('./app/passcode');
 const locker = require('./app/locker');
@@ -95,7 +94,6 @@ const createMainWindow = function (next) {
     if (debugWindow) debugWindow.destroy();
 
     exports.disableFolderMenuFeatures();
-    exports.disableWebServer();
 
     mainWindow = null;
 
@@ -205,7 +203,6 @@ const hasFilesToCheck = function () {
 
   if (noHtmlFiles && noCssFiles && noJsFiles && noMdFiles && noYmlFiles) {
     markbotMain.send('app:file-missing');
-    webServer.stop();
 
     setTimeout(function () {
       markbotMain.send('alert', 'There are no HTML, CSS, Javascript, Markdown, or YAML files for Markbot to check');
@@ -283,9 +280,8 @@ app.on('window-all-closed', function () {
 });
 
 app.on('will-quit', () => {
-  serverManager.stopAll();
+  serverManager.stop();
   checkManager.stop();
-  webServer.stop();
 });
 
 menuCallbacks.quit = function () {
@@ -347,7 +343,7 @@ exports.revealFolder = function () {
 menuCallbacks.revealFolder = exports.revealFolder;
 
 exports.openBrowserToServer = function () {
-  shell.openExternal(webServer.getHost());
+  shell.openExternal(serverManager.getHost('web'));
 };
 menuCallbacks.openBrowserToServer = exports.openBrowserToServer;
 
@@ -435,15 +431,13 @@ exports.onFileDropped = function(filePath) {
   markbotLockFilePath = path.resolve(filePath + '/' + MARKBOT_LOCK_FILE);
   currentFolderPath = filePath;
 
-  webServer.start(currentFolderPath, function () {
-    // start language tool
-    // start html validator
-    if (exists.check(markbotFilePath)) {
-      markbotFileGenerator.get(markbotFilePath, handleMarkbotFile)
-    } else {
-      markbotFileGenerator.buildFromFolder(filePath, handleMarkbotFile);
-    }
-  });
+  serverManager.getServer('web').setRoot(currentFolderPath);
+
+  if (exists.check(markbotFilePath)) {
+    markbotFileGenerator.get(markbotFilePath, handleMarkbotFile)
+  } else {
+    markbotFileGenerator.buildFromFolder(filePath, handleMarkbotFile);
+  }
 
   if (differWindow) differWindow.hide();
 };
@@ -480,11 +474,6 @@ exports.showDifferWindow = function (imgs, width) {
   differWindow.setSize(width, 400);
   global.markbotDifferWindow = differWindow.id;
 };
-
-exports.disableWebServer = function () {
-  webServer.stop();
-};
-menuCallbacks.disableWebServer = exports.disableWebServer;
 
 exports.toggleDebug = function () {
   let ignoreWindows = [global.markbotMainWindow, global.markbotDebugWindow];

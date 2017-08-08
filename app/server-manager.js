@@ -2,6 +2,7 @@
 
 const getPort = require('get-port');
 const markbotMain = require(`${__dirname}/markbot-main`);
+const serverWeb = require(`${__dirname}/server-web`);
 const serverHtml = require(`${__dirname}/server-html`);
 const serverLanguage = require(`${__dirname}/server-language`);
 
@@ -39,6 +40,7 @@ const start = function (next) {
     setPorts(ports);
 
     Promise.all([
+      serverWeb.start(servers.web.port),
       serverHtml.start(servers.html.port),
       serverLanguage.start(servers.language.port),
     ]).then(() => {
@@ -47,6 +49,12 @@ const start = function (next) {
       markbotMain.send('alert', `Internal servers won’t start: “${reason}” — try restarting Markbot`);
     });
   });
+};
+
+const stop = function () {
+  serverWeb.stop();
+  serverHtml.stop();
+  serverLanguage.stop();
 };
 
 const getHost = function (server) {
@@ -65,14 +73,26 @@ const getHostInfo = function (server) {
   };
 };
 
-const stopAll = function () {
-  serverLanguage.stop();
-  serverHtml.stop();
+const getServer = function (server) {
+  switch (server) {
+    case 'web':
+      return serverWeb;
+      break;
+    case 'html':
+      return serverHtml;
+      break;
+    case 'language':
+      return serverLanguage;
+      break;
+    default:
+      return false;
+  }
 };
 
 module.exports = {
   start: start,
-  stopAll: stopAll,
+  stop: stop,
   getHost: getHost,
   getHostInfo: getHostInfo,
+  getServer: getServer,
 };
