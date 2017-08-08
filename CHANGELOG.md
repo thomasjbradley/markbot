@@ -20,6 +20,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The Markbot file template `inherit` system now supports inheriting from multiple templates to make it more usable.
 - A check can now output errors, messages & warnings all at the same time.
 - Upgraded the HTML & CSS validators.
+- Upgraded a bunch of dependencies.
+- The HTML validator now starts up when Markbot starts to make validation much faster: one initialization time instead of one of each HTML file.
 
 ### Fixed
 
