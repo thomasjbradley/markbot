@@ -16,7 +16,7 @@ const mkdirp = require('mkdirp');
 const markbotMain = require('./app/markbot-main');
 const markbotFileGenerator = require('./app/markbot-file-generator');
 const dependencyChecker = require('./app/dependency-checker');
-const serverManager = require(path.resolve(`${__dirname}/app/server-manager.js`));
+const serverManager = require('./app/server-manager');
 const webServer = require('./app/web-server');
 const screenshotNamingService = require('./app/checks/screenshots/naming-service');
 const passcode = require('./app/passcode');
@@ -24,6 +24,7 @@ const locker = require('./app/locker');
 const requirementsFinder = require('./app/requirements-finder');
 const lockMatcher = require('./app/lock-matcher');
 const exists = require('./app/file-exists');
+const escapeShell = require(`./app/escape-shell`);
 const checkManager = require('./app/check-manager');
 
 global.ENV = process.env.NODE_ENV;
@@ -70,10 +71,6 @@ let isCheater = {
 
 app.commandLine.appendSwitch('--ignore-certificate-errors');
 app.commandLine.appendSwitch('--disable-http-cache');
-
-const escapeShell = function (cmd) {
-  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
-};
 
 const updateAppMenu = function () {
   menuOptions.showDevelop = (MARKBOT_DEVELOP_MENU && MARKBOT_LOCK_PASSCODE && passcode.matches(MARKBOT_LOCK_PASSCODE, config.secret, config.passcodeHash));
@@ -285,9 +282,13 @@ app.on('window-all-closed', function () {
   }
 });
 
-menuCallbacks.quit = function () {
+app.on('will-quit', () => {
+  serverManager.stopAll();
   checkManager.stop();
   webServer.stop();
+});
+
+menuCallbacks.quit = function () {
   app.quit();
 };
 

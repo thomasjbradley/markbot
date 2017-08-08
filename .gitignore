@@ -10,6 +10,7 @@ vendor/css-validator/*
 !vendor/css-validator/.gitignore
 vendor/languagetool/*
 !vendor/languagetool/words-to-add.txt
+!vendor/languagetool/languagetool.properties
 build/background.tiff
 
 app/*.cert

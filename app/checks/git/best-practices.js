@@ -7,12 +7,16 @@ const MIN_COMMIT_CHARS = 10;
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
+const http = require('http');
+const querystring = require('querystring');
 const is = require('electron-is');
-const promisify = require('es6-promisify');
-const exec = promisify(require('child_process').exec);
+// const promisify = require('es6-promisify');
+// const exec = promisify(require('child_process').exec);
 const gitCommits = require('git-commits');
 const exists = require(`${__dirname}/../../file-exists`);
+const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
+const serverManager = require('electron').remote.require('./app/server-manager');
 const blackListVerbs = require(`${__dirname}/best-practices/black-list-verbs.json`);
 
 let app;
@@ -22,10 +26,6 @@ if (is.renderer()) {
 } else {
   app = require('electron').app;
 }
-
-const escapeShell = function (cmd) {
-  return '"' + cmd.replace(/(["'$`\\])/g, '\\$1') + '"';
-};
 
 const matchesProfEmail = function (email, profEmails) {
   return !profEmails.indexOf(email);
@@ -64,14 +64,32 @@ const startsWithWrongTenseVerb = function (message) {
 };
 
 const checkSpellingAndGrammer = function (commit) {
-  const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor/languagetool');
-  const fullPath = path.resolve(app.getPath('temp') + `/markbot-commit-${commit.hash}.txt`);
-  const execPath = 'java -Dfile.encoding=UTF-8 -jar ' + escapeShell(validatorPath + '/languagetool-commandline.jar') + ' --language en-CA --encoding UTF-8 --json ' + escapeShell(fullPath);
+  const hostInfo = serverManager.getHostInfo('language');
+  const data = querystring.stringify({
+    language: 'en-CA',
+    text: commit.title,
+  });
+  const opts = {
+    hostname: hostInfo.hostname,
+    port: hostInfo.port,
+    path: '/v2/check',
+    method: 'POST',
+    protocol: `${hostInfo.protocol}:`,
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Content-Length': Buffer.byteLength(data),
+    }
+  };
 
-  markbotMain.debug(`@@${fullPath}@@`);
-  fs.writeFileSync(fullPath, commit.title, 'utf8');
+  return new Promise((resolve, reject) => {
+    const req = http.request(opts, (res) => {
+      res.setEncoding('utf8');
+      res.on('data', resolve);
+    });
 
-  return exec(execPath);
+    req.on('error', reject);
+    req.end(data, 'utf8');
+  });
 };
 
 const checkCommits = function (commits, group, id, label, next) {
