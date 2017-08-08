@@ -888,7 +888,3 @@ samp {
     transform: scale(1.2);
   }
 }
-
-#app-loader .messages-loader-icon {
-  opacity: .8;
-}

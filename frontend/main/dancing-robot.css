@@ -1,0 +1,172 @@
+:root {
+  --song-length: 7s;
+}
+
+#dancing-robot {
+  height: 180px;
+  width: 180px;
+
+  animation: bounce .5s infinite alternate;
+  overflow: visible;
+  opacity: .2;
+}
+
+#arm-left {
+  transform-origin: 57px 358px;
+  animation: wave 1s ease-in-out infinite alternate;
+}
+
+#arm-right {
+  transform-origin: 584px 357px;
+  animation: wave 1s ease-in-out infinite alternate;
+}
+
+#antenna-right {
+  animation: bounce .5s infinite alternate steps(2);
+}
+
+#antenna-left {
+  animation: bounce .5s infinite alternate steps(2);
+}
+
+@keyframes bounce {
+
+  0% {
+    transform: translateY(0);
+  }
+
+  100% {
+    transform: translateY(4px);
+  }
+
+}
+
+@keyframes wave {
+
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(-180deg);
+  }
+
+}
+
+.sign-frame {
+  margin: -23px auto 0;
+}
+
+.robot-song {
+  font-style: italic;
+  font-size: 1.25rem;
+  opacity: .4;
+}
+
+.robot-song span {
+  display: block;
+}
+
+.line-1 {
+  animation: line-highlight-1 var(--song-length) linear infinite;
+}
+
+.line-2 {
+  animation: line-highlight-2 var(--song-length) linear infinite;
+}
+
+.line-3 {
+  animation: line-highlight-3 var(--song-length) linear infinite;
+}
+
+.line-4 {
+  animation: line-highlight-4 var(--song-length) linear infinite;
+}
+
+@keyframes line-highlight-1 {
+
+  0% {
+    font-weight: bold;
+  }
+
+  24% {
+    font-weight: bold;
+  }
+
+  25% {
+    font-weight: normal;
+  }
+
+}
+
+@keyframes line-highlight-2 {
+
+  0% {
+    font-weight: normal;
+  }
+
+  24% {
+    font-weight: normal;
+  }
+
+  25% {
+    font-weight: bold;
+  }
+
+  49% {
+    font-weight: bold;
+  }
+
+  50% {
+    font-weight: normal;
+  }
+
+}
+
+@keyframes line-highlight-3 {
+
+  0% {
+    font-weight: normal;
+  }
+
+  49% {
+    font-weight: normal;
+  }
+
+  50% {
+    font-weight: bold;
+  }
+
+  74% {
+    font-weight: bold;
+  }
+
+  75% {
+    font-weight: normal;
+  }
+
+}
+
+@keyframes line-highlight-4 {
+
+  0% {
+    font-weight: normal;
+  }
+
+  74% {
+    font-weight: normal;
+  }
+
+  75% {
+    font-weight: bold;
+  }
+
+  99% {
+    font-weight: bold;
+  }
+
+  100% {
+    font-weight: normal;
+  }
+
+}

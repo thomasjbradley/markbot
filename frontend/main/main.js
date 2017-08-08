@@ -529,7 +529,7 @@ const startChecks = function () {
   console.log(fullPath);
   markbot.newDebugGroup(fullPath);
   markbot.onFileDropped(fullPath);
-  isMarkbotDoneYet = setInterval(triggerDoneState, 3000);
+  isMarkbotDoneYet = setInterval(triggerDoneState, 1000);
 };
 
 const fileDropped = function (path) {
