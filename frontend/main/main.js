@@ -680,9 +680,12 @@ document.addEventListener('click', (e) => {
   }
 
   if (e.target.matches('#checks a')) {
+    let elem = document.getElementById(e.target.dataset.id);
+
     e.preventDefault();
     window.location.hash = e.target.dataset.id;
-    document.getElementById(e.target.dataset.id).focus();
+
+    if (elem) elem.focus();
   }
 });
 
