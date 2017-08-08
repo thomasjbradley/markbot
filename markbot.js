@@ -291,9 +291,9 @@ menuCallbacks.quit = function () {
 app.on('activate', function () {
   if (mainWindow === null) {
     createWindows(() => {
-      if (dependencies.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', dependencies);
+      if (dependencies.hasMissingDependencies) return markbotMain.send('error:missing-dependency', dependencies);
 
-      return mainWindow.webContents.send('app:ready');
+      markbotMain.send('app:ready');
     });
   }
 });
@@ -303,6 +303,9 @@ exports.openRepo = function (path) {
 
   if (mainWindow === null) {
     createWindows(function () {
+      if (dependencies.hasMissingDependencies) return markbotMain.send('error:missing-dependency', dependencies);
+
+      markbotMain.send('app:ready');
       markbotMain.send('app:file-dropped', path);
     });
   } else {
