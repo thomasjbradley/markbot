@@ -9,6 +9,7 @@
   "private": true,
   "main": "markbot.js",
   "dependencies": {
+    "accessibility-developer-tools": "^2.12.0",
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",
     "calipers-png": "^2.0.0",
@@ -42,6 +43,7 @@
     "xml2js": "^0.4.17"
   },
   "devDependencies": {
+    "devtron": "^1.4.0",
     "electron": "^1.7.5",
     "electron-builder": "^19.19.1"
   },
