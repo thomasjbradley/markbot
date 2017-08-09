@@ -162,10 +162,13 @@ Using the `git` entry we can enforce some requirements on the status of the stud
 git:
   # The minimum number of commits students need—will automatically subtract your commits.
   numCommits: 2
+
   # Force the students to make sure all their files are committed.
   allCommitted: true
+
   # Force the students to make sure all their files are pushed & synced.
   allSynced: true
+
   # Confirm specific best practices on the last 5 Git commit messages.
   # Won’t prevent students from handing assignments in will only show warnings.
   # (Spelling & grammar, minimum word & character length, no trailing periods, attempts to enforce present-tense imperative verbs at the start)
