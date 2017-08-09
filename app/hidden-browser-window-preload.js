@@ -25,13 +25,22 @@ window.__markbot = (function () {
     require('electron').remote.BrowserWindow.fromId(windowId).webContents.sendInputEvent(inputEvent);
   };
 
-  const getPerformanceTestingService = function () {
-    return require('webcoach');
+  const getTestingService = function (service) {
+    switch (service) {
+      case 'perf':
+        return require('webcoach');
+        break;
+      case 'a11y':
+        return require('accessibility-developer-tools');
+        break;
+      default:
+        return false;
+    }
   };
 
   return {
     getCurrentTaskWindowId: getCurrentTaskWindowId,
-    getPerformanceTestingService: getPerformanceTestingService,
+    getTestingService: getTestingService,
     sendMessageToWindow: sendMessageToWindow,
     sendInputEventToWindow: sendInputEventToWindow,
   };

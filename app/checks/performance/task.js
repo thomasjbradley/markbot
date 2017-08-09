@@ -42,7 +42,7 @@
   const makeJs = function () {
     return `
       (function () {
-        const webcoach = window.__markbot.getPerformanceTestingService();
+        const webcoach = window.__markbot.getTestingService('perf');
 
         webcoach.getDomAdvice().then(function (data) {
           window.__markbot.sendMessageToWindow(${taskRunnerId}, '__markbot-hidden-browser-perf-dom-advice', JSON.stringify(eval(data)));
