@@ -698,6 +698,11 @@ document.addEventListener('click', (e) => {
 
     if (elem) elem.focus();
   }
+
+  if (e.target.matches('.deps-list a')) {
+    e.preventDefault();
+    shell.openExternal(e.target.href);
+  }
 });
 
 window.addEventListener('will-navigate', (e) => {
