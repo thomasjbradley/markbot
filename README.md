@@ -166,6 +166,10 @@ git:
   allCommitted: true
   # Force the students to make sure all their files are pushed & synced.
   allSynced: true
+  # Confirm specific best practices on the last 5 Git commit messages.
+  # Won’t prevent students from handing assignments in will only show warnings.
+  # (Spelling & grammar, minimum word & character length, no trailing periods, attempts to enforce present-tense imperative verbs at the start)
+  bestPractices: true
 ```
 
 ### HTML file tests
