@@ -270,6 +270,16 @@ const transformStrong = function (err) {
   return err;
 };
 
+const transformItalic = function (err) {
+  if (typeof err !== 'string') return err;
+
+  if (err.match(/\*/)) {
+    err = err.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  }
+
+  return err;
+};
+
 const transformMark = function (err) {
   if (typeof err !== 'string') return err;
 
@@ -307,6 +317,7 @@ const prepareErrorText = function (err) {
     transformLinks,
     transformMark,
     transformStrong,
+    transformItalic,
     transformUnderline,
     transformLists,
     transformCodeBlocks,
