@@ -210,6 +210,10 @@ html:
       - 'header nav[role="navigation"]'
       - 'main'
       - ['header nav li a[class][href*="index.html"]', 'The navigation should be highlighted on this page']
+      # You can emit warnings that won’t prevent students from submitting work using an alternative syntax
+      - check: 'main' # This could also be `selector: 'main'`
+        message: 'The `main` tag should be included for accessibility reasons'
+        type: 'warning'
 
     # Can be used to test that specific selectors are not used in the HTML
     # I would use this for ensuring that `<hr>` tags aren’t used when borders should be or that `<br>` tags aren’t used
@@ -218,17 +222,28 @@ html:
     hasNot:
       - 'br'
       - ['hr', 'The `hr` tag should not be used to create borders']
+      # Warnings too!
+      - selector: 'hr'
+        message: 'The `hr` tag should not be used to create borders'
+        type: 'warning'
 
     # Regex searches on the file, for confirming specific content
     # If given an array, the second argument can be a custom error message
     search:
       - 'Hello World!'
       - ['Hello World!', 'Whoa, don’t be so grumpy, say “Hello”']
+      # And warnings!
+      - regex: 'Hello World!' # (Using `check` instead of `regex` is okay too, so everything can be consistent)
+        message: 'Whoa, don’t be so grumpy, say “Hello”'
+        type: 'warning'
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
     searchNot:
       - 'Thing-a-magic'
+      # Warnings too!
+      - check: 'Thing-a-magic'
+        type: 'warning'
 
     # Confirm that the code file has less than or equal to this many lines
     maxLines: 4
@@ -268,6 +283,16 @@ css:
       # Adding another argument at the end will be a custom error message
       - ['html', 'font-size', '100%', 'The `font-size` should always be `100%`']
       - ['@38em', 'html', 'font-size', '110%', 'The `font-size` should always increase at `38em`']
+      # You can include all that same complexity with warnings
+      - check: ['@38em', 'html', 'font-size', '110%', 'The `font-size` should always increase at `38em`']
+        type: 'warning'
+      # Or a little cleaned-up version, can be used with or without warnings
+      - mediaQuery: '@38em'
+        selector: 'html'
+        property: 'font-size'
+        value: '110%'
+        message: 'The `font-size` should always increase at `38em`'
+        type: 'warning'
 
     # Can be used to test that specific selectors do not contain certain properties
     # I would use this for ensuring as little CSS duplication as possible, like forcing students to use multiple classes
@@ -281,12 +306,18 @@ css:
       # Adding another argument at the end will be a custom error message
       - ['.btn-subtle', ['font-size', 'text-decoration'], 'The `.btn-subtle` shouldn’t be used']
       - ['@110em', '.btn-subtle', ['font-size', 'text-decoration'], 'The `.btn-subtle` shouldn’t be used']
+      # Also with warnings!
+      - check: ['.btn-ghost', ['display']]
+        type: 'warning'
 
     # Regex searches on the file
     # If given an array, the second argument can be a custom error message
     search:
       - '@keyframes'
       - ['@viewport', 'The `@viewport` should be included for the best browser compatibility']
+      # Warnings—woot!
+      - check: '@keyframes'
+        type: 'warning'
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
@@ -294,6 +325,10 @@ css:
       - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
       - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
       - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
+      # Using the object syntax and `type` there can also be warning messages
+      - check: 'font-size\s*:\s*.+px'
+        message: 'Pixel units should not be used for `font-size` — use `rem` instead'
+        type: 'warning'
 
     # Confirm that the code file has less than or equal to this many lines
     maxLines: 4
@@ -326,12 +361,19 @@ js:
     search:
       - 'querySelector'
       - 'addEventListener'
+      # Using a slightly different syntax you can create warnings that don’t prevent the user from submitting
+      - check: 'querySelectorAll'
+        type: 'warning'
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
     searchNot:
       - 'document.write\('
       - ['console.log\(', 'The `console.log()` function should not be left in your code after you’ve finished debugging']
+      # Warnings work too!
+      - check: 'console.log\('
+        message: 'The `console.log()` function should not be left in your code after you’ve finished debugging'
+        type: 'warning'
 
     # Confirm that the code file has less than or equal to this many lines
     maxLines: 4
@@ -542,11 +584,13 @@ md:
     search:
       - 'Dinosaurs'
       - ['T\. Rex', 'Expected to see the T. Rex described']
+      # Warnings will work too!
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
     searchNot:
       - 'Mammals'
+      # Warnings will work too!
 ```
 
 ### YAML tests
@@ -568,11 +612,13 @@ yml:
     search:
       - 'Mammals'
       - ['Dimetrodon', 'Should have explained that the Dimetrodon isn’t a dinosaur']
+      # Warnings will work too!
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
     searchNot:
       - 'Dinosaurs'
+      # Warnings will work too!
 ```
 
 ### File & image tests
@@ -613,6 +659,7 @@ files:
     # If given an array, the second argument can be a custom error message
     search:
       - '^Sitemap\:.+sitemap\.xml\s+?$'
+      # Warnings will work too!
 
     # For text files only
     # Regex searches on the file, for confirming specific content isn’t found
@@ -620,6 +667,7 @@ files:
     searchNot:
       - 'Allow:'
       - ['Disallow\:\s*\/', 'The disallow all directive (`Disallow: /`) should not be used']
+      # Warnings will work too!
 
   # OR…
   # Just pass a directory & rely on the `allFiles` directive described below
@@ -630,7 +678,7 @@ files:
 
 Markbot can check the performance of a website on simulated networks—or without network throttling. Markbot will check specific performance statistics and compare them to a performance budget.
 
-*The `path` option is the only one that’s required—leaving any of the others off will skip the test.* If only the `path` is included the default performance budget will be used.
+*The `path` option is the only one that’s required.* If only the `path` is included the default performance budget will be used.
 
 ```yml
 performance:
@@ -653,7 +701,7 @@ performance:
 
 #### Simulated networks speeds
 
-Markbot has a few simulated network speeds built in—you can see all the details of here in the [app/networks.js](app/networks.js) file.
+Markbot has a few simulated network speeds built in—you can see all the details of in the [app/networks.js](app/networks.js) file.
 
 - WIFI-FAST
 - WIFI-REGULAR (WIFI)
@@ -698,7 +746,7 @@ allFiles:
     # Creates a `screentshots.path` entry for each HTML file
     screenshots: [320, 400, 608, 960, 1440]
 
-    # You can add the `except` entry to all types to prevent all theses defaults from applying to specific files
+    # You can add the `except` entry to all types to prevent all these defaults from applying to specific files
     except:
       - 'test.html'
 
