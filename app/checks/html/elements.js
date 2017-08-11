@@ -19,15 +19,15 @@ const convertToCheckObject = function (sel, defaultMessage) {
     obj.selector = sel;
   } else {
     if (Array.isArray(sel)) {
+      if (sel.length > 1) obj.customMessage = sel[1];
       obj.selector = sel[0];
-      if (sel[1]) obj.customMessage = sel[1];
     } else {
       obj = Object.assign(obj, sel);
 
       if (obj.check) obj.selector = obj.check;
 
       if (Array.isArray(obj.selector)) {
-        obj.customMessage = obj.selector[1];
+        if (obj.selector.length > 1) obj.customMessage = obj.selector[1];
         obj.selector = obj.selector[0];
       }
     }

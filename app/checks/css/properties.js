@@ -24,14 +24,14 @@ const convertToCheckObject = function (sel, opts) {
       obj.mediaQuery = checkArray.shift().replace(/\@/, '');
     }
 
-    if (checkArray.length >= 1) obj.selector = checkArray[0];
-    if (checkArray.length >= 2) obj.properties = checkArray[1];
+    if (checkArray.length > 0) obj.selector = checkArray[0];
+    if (checkArray.length > 1) obj.properties = checkArray[1];
 
     if (opts.hasValues) {
-      if (checkArray.length >= 3) obj.value = checkArray[2];
-      if (checkArray.length >= 4) obj.customMessage = checkArray[3];
+      if (checkArray.length > 2) obj.value = checkArray[2];
+      if (checkArray.length > 3) obj.customMessage = checkArray[3];
     } else {
-      if (checkArray.length >= 3) obj.customMessage = checkArray[2];
+      if (checkArray.length > 2) obj.customMessage = checkArray[2];
     }
   };
 
