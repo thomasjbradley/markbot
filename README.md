@@ -214,6 +214,10 @@ html:
       - check: 'main' # This could also be `selector: 'main'`
         message: 'The `main` tag should be included for accessibility reasons'
         type: 'warning'
+      # You can specify a limit for how many times an element should be inside the HTML code
+      - check: '[role="banner"]'
+        message: 'The “banner” role is used to define the header of the whole website so there should be only one per page'
+        limit: 1
 
     # Can be used to test that specific selectors are not used in the HTML
     # I would use this for ensuring that `<hr>` tags aren’t used when borders should be or that `<br>` tags aren’t used
@@ -236,6 +240,8 @@ html:
       - regex: 'Hello World!' # (Using `check` instead of `regex` is okay too, so everything can be consistent)
         message: 'Whoa, don’t be so grumpy, say “Hello”'
         type: 'warning'
+        # Limits work inside search to prevent content duplication
+        limit: 1
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
@@ -318,6 +324,8 @@ css:
       # Warnings—woot!
       - check: '@keyframes'
         type: 'warning'
+        # Limits work inside search to prevent content duplication
+        limit: 1
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
@@ -364,6 +372,8 @@ js:
       # Using a slightly different syntax you can create warnings that don’t prevent the user from submitting
       - check: 'querySelectorAll'
         type: 'warning'
+        # Limits work inside search to prevent content duplication
+        limit: 1
 
     # Regex searches on the file for confirming certain things don’t exist
     # If given an array, the second argument can be a custom error message
@@ -585,6 +595,7 @@ md:
       - 'Dinosaurs'
       - ['T\. Rex', 'Expected to see the T. Rex described']
       # Warnings will work too!
+      # And so do limits!
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
@@ -613,6 +624,7 @@ yml:
       - 'Mammals'
       - ['Dimetrodon', 'Should have explained that the Dimetrodon isn’t a dinosaur']
       # Warnings will work too!
+      # And so do limits!
 
     # Regex searches on the file, for confirming specific content isn’t found
     # If given an array, the second argument can be a custom error message
@@ -660,6 +672,7 @@ files:
     search:
       - '^Sitemap\:.+sitemap\.xml\s+?$'
       # Warnings will work too!
+      # And so do limits!
 
     # For text files only
     # Regex searches on the file, for confirming specific content isn’t found

@@ -13,6 +13,7 @@ const convertToCheckObject = function (search, defaultMessage) {
   let obj = {
     check: false,
     regex: false,
+    limit: false,
     message: '',
     customMessage: '',
     type: 'error',
@@ -58,8 +59,15 @@ const findSearchErrors = function (fileContents, searches) {
 
   searches.forEach(function (searchItem) {
     let search = convertToHasObject(searchItem);
+    let matches = fileContents.match(new RegExp(search.regex, 'gm'));
 
-    if (!fileContents.match(new RegExp(search.regex, 'gm'))) {
+    if (!matches) {
+      allMessages = messageGroup.bind(search, allMessages);
+    }
+
+    if (search.limit && matches.length > search.limit) {
+      let plural = (search.limit === 1) ? '' : 's';
+      search.message = `Expected to see the \`${search.regex}\` content at most ${search.limit} time${plural}`;
       allMessages = messageGroup.bind(search, allMessages);
     }
   });

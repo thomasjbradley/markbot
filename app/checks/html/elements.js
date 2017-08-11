@@ -10,6 +10,7 @@ const convertToCheckObject = function (sel, defaultMessage) {
   let obj = {
     check: false,
     selector: false,
+    limit: false,
     message: '',
     customMessage: '',
     type: 'error',
@@ -24,6 +25,7 @@ const convertToCheckObject = function (sel, defaultMessage) {
     } else {
       obj = Object.assign(obj, sel);
 
+      if (obj.message) obj.customMessage = obj.message;
       if (obj.check) obj.selector = obj.check;
 
       if (Array.isArray(obj.selector)) {
@@ -57,7 +59,15 @@ const checkHasElements = function (code, sels) {
     let check = convertToHasObject(sel);
 
     try {
-      if (code(check.selector).length <= 0) {
+      let results = code(check.selector);
+
+      if (results.length <= 0) {
+        allMessages = messageGroup.bind(check, allMessages);
+      }
+
+      if (check.limit && results.length > check.limit) {
+        let plural = (check.limit === 1) ? '' : 's';
+        check.message = `Expected to see the \`${check.selector}\` element at most ${check.limit} time${plural}`;
         allMessages = messageGroup.bind(check, allMessages);
       }
     } catch (e) {

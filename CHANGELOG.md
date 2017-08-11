@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Error messages can now output with sub-lists.
 - An “underline” style for displayed messages.
 - Dependency checking on startup, specifically checks for Git command line & Java Development Kit.
+- For `html.has` and `*.search` there’s now a `limit` option to disallow repetition of specific content.
 
 ### Changed
 
