@@ -6,16 +6,19 @@ allFiles:
       - check: '[role="banner"]'
         message: 'The “banner” role is used to define the header of the whole website so there should be only one per page'
         limit: 1
+
       - check: 'main[role="main"]'
         message: 'The role of “main” should be assigned to the `<main>` tag'
       - check: '[role="main"]'
         message: 'The “main” role is used to define the main content of the whole page so there should be only one per page'
         limit: 1
+
       - check: 'nav[role="navigation"]'
         message: 'The role of “navigation” should be assigned to the `<nav>` tag'
       - check: '[role="navigation"]'
         message: 'The “navigation” role is used to define the primary navigation of the whole website so there should be only one per page'
         limit: 1
+
       - '[role="contentinfo"]'
       - check: '[role="contentinfo"]'
         message: 'The “contentinfo” role is used to define the copyright notice, terms, etc. of the whole website so there should be only one per page'
