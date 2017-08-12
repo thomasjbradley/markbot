@@ -273,8 +273,8 @@ const transformStrong = function (err) {
 const transformItalic = function (err) {
   if (typeof err !== 'string') return err;
 
-  if (err.match(/\*/)) {
-    err = err.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  if (err.match(/\_\_/)) {
+    err = err.replace(/\_\_(.+?)\_\_/g, '<em>$1</em>');
   }
 
   return err;

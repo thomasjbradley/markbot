@@ -9,7 +9,7 @@ const createMessageGroup = function () {
 };
 
 const bindMessageGroup = function (check, allMessages) {
-  const messageAfter = (check.customMessage) ? ` — *${check.customMessage}*` : '';
+  const messageAfter = (check.customMessage) ? ` — __${check.customMessage}__` : '';
 
   switch (check.type) {
     case 'warning':
