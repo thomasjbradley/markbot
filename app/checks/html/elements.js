@@ -2,6 +2,7 @@
 
 const util = require('util');
 const cheerio = require('cheerio');
+const parse5 = require('parse5');
 const merge = require('merge-objects');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const messageGroup = require(`${__dirname}/../message-group`);
@@ -85,10 +86,18 @@ const checkHasNotElements = function (code, sels) {
     let check = convertToHasNotObject(sel);
 
     try {
-      if (code(check.selector).length > 0) {
+      let results = code(check.selector);
+
+      if (results.length > 0) {
+        let plural = (results.length > 1) ? 's' : '';
+        let lines = [];
+
+        results.map((i, elem) => lines.push(elem.__location.line));
+        check.message = `Line${plural} ${lines.join(', ')}: ` + check.message;
         allMessages = messageGroup.bind(check, allMessages);
       }
     } catch (e) {
+      markbotMain.debug(`Line ${e.lineNumber}: ${e.message}`);
       allMessages = messageGroup.bind(check, allMessages);
     }
   });
@@ -99,10 +108,14 @@ const checkHasNotElements = function (code, sels) {
 const check = function (checkGroup, checkId, checkLabel, fileContents, hasSels, hasNotSels, next) {
   let code = {};
   let allMessages;
+  const parsedHtml = parse5.parse(fileContents, {
+    treeAdapter: parse5.treeAdapters.htmlparser2,
+    locationInfo: true,
+  });
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);
 
-  code = cheerio.load(fileContents);
+  code = cheerio.load(parsedHtml.children);
   allMessages = merge(checkHasElements(code, hasSels), checkHasNotElements(code, hasNotSels));
 
   markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, allMessages.errors, allMessages.messages, allMessages.warnings);
