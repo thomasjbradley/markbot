@@ -92,7 +92,7 @@ const checkHasNotElements = function (code, sels) {
         let plural = (results.length > 1) ? 's' : '';
         let lines = [];
 
-        results.map((i, elem) => lines.push(elem.__location.line));
+        results.each((i, elem) => lines.push(elem.__location.line));
         check.message = `Line${plural} ${lines.join(', ')}: ` + check.message;
         allMessages = messageGroup.bind(check, allMessages);
       }
