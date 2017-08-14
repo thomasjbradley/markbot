@@ -25,6 +25,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The HTML validator now starts up when Markbot starts to make validation much faster: one initialization time instead of one of each HTML file.
 - The web server now starts immediately instead of on demand when a file is dropped.
 - The `has/Not` & `search/Not` checks can now emit warnings with a new object syntax for each entry. Remains backwards compatible with the old array syntax, but warnings must use the new object syntax.
+- More error messages now display line numbers when available.
 
 ### Fixed
 
