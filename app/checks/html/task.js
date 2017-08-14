@@ -4,12 +4,13 @@
   const fs = require('fs');
   const path = require('path');
   const markbotMain = require('electron').remote.require('./app/markbot-main');
-  const exists = require(__dirname + '/file-exists');
-  const validation = require(__dirname + '/checks/html/validation');
-  const bestPractices = require(__dirname + '/checks/html/best-practices');
-  const outline = require(__dirname + '/checks/html/outline');
-  const elements = require(__dirname + '/checks/html/elements');
-  const content = require(__dirname + '/checks/content');
+  const exists = require(`${__dirname}/file-exists`);
+  const validation = require(`${__dirname}/checks/html/validation`);
+  const bestPractices = require(`${__dirname}/checks/html/best-practices`);
+  const outline = require(`${__dirname}/checks/html/outline`);
+  const accessibility = require(`${__dirname}/checks/html/accessibility`);
+  const elements = require(`${__dirname}/checks/html/elements`);
+  const content = require(`${__dirname}/checks/content`);
 
   const group = taskDetails.group;
   const file = taskDetails.options.file;
@@ -31,6 +32,7 @@
     let validationChecker;
     let bestPracticesChecker;
     let outlineChecker;
+    let accessibilityChecker;
     let elementsChecker;
     let contentChecker;
 
@@ -44,6 +46,7 @@
       if (f.valid) validationChecker.bypass();
       if (f.bestPractices) bestPracticesChecker.bypass();
       if (f.outline) outlineChecker.bypass();
+      if (f.accessibility) accessibilityChecker.bypass();
       if (f.has || f.hasNot) elementsChecker.bypass();
       if (f.search || f.searchNot) contentChecker.bypass();
     };
@@ -57,13 +60,18 @@
 
       if (file.bestPractices) {
         checksToComplete++;
-        bestPracticesChecker = bestPractices.init(group)
-      };
+        bestPracticesChecker = bestPractices.init(group);
+      }
 
       if (file.outline) {
         checksToComplete++;
-        outlineChecker = outline.init(group)
-      };
+        outlineChecker = outline.init(group);
+      }
+
+      if (file.accessibility) {
+        checksToComplete++;
+        accessibilityChecker = accessibility.init(group);
+      }
 
       if (file.has || file.hasNot) {
         checksToComplete++;
@@ -128,6 +136,7 @@
 
             if (file.bestPractices) bestPracticesChecker.check(fileContents, lines, checkIfDone);
             if (file.outline) outlineChecker.check(fileContents, checkIfDone);
+            if (file.accessibility) accessibilityChecker.check(fileContents, checkIfDone);
 
             if (file.has || file.hasNot) {
               if (file.has && !file.hasNot) elementsChecker.check(fileContents, file.has, [], checkIfDone);
@@ -142,6 +151,11 @@
 
             if (file.outline) {
               outlineChecker.bypass();
+              checksToComplete--;
+            }
+
+            if (file.accessibility) {
+              accessibilityChecker.bypass();
               checksToComplete--;
             }
 
