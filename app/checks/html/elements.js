@@ -14,6 +14,7 @@ const convertToCheckObject = function (sel, defaultMessage) {
     limit: false,
     message: '',
     customMessage: '',
+    lines: false,
     type: 'error',
   };
 
@@ -26,7 +27,11 @@ const convertToCheckObject = function (sel, defaultMessage) {
     } else {
       obj = Object.assign(obj, sel);
 
-      if (obj.message) obj.customMessage = obj.message;
+      if (obj.message) {
+        obj.customMessage = obj.message;
+        obj.message = '';
+      }
+
       if (obj.check) obj.selector = obj.check;
 
       if (Array.isArray(obj.selector)) {
@@ -89,11 +94,10 @@ const checkHasNotElements = function (code, sels) {
       let results = code(check.selector);
 
       if (results.length > 0) {
-        let plural = (results.length > 1) ? 's' : '';
         let lines = [];
 
         results.each((i, elem) => lines.push(elem.__location.line));
-        check.message = `Line${plural} ${lines.join(', ')}: ` + check.message;
+        check.lines = lines;
         allMessages = messageGroup.bind(check, allMessages);
       }
     } catch (e) {

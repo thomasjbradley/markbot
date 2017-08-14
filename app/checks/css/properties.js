@@ -14,6 +14,7 @@ const convertToCheckObject = function (sel, opts) {
     value: false,
     message: '',
     customMessage: '',
+    lines: false,
     type: 'error',
   };
 
@@ -122,7 +123,8 @@ const checkHasProperties = function (code, sels) {
       });
 
       if (!decs || decs.length <= 0) {
-        check.message = `Line ${rules[0].position.start.line}: Expected to see \`${prop}\` inside \`${check.selector} {}\`${context}`;
+        check.message = `Expected to see \`${prop}\` inside \`${check.selector} {}\`${context}`;
+        check.lines = [rules[0].position.start.line];
         allMessages = messageGroup.bind(check, allMessages);
       }
     });
@@ -130,7 +132,8 @@ const checkHasProperties = function (code, sels) {
     if (!check.value || check.properties.length > 1) continue;
 
     if (decs[0].value != check.value) {
-      check.message = `Line ${decs[0].position.start.line}: Expected to see \`${check.properties[0]}\` with a different value inside \`${check.selector} {}\`${context}`;
+      check.message = `Expected to see \`${check.properties[0]}\` with a different value inside \`${check.selector} {}\`${context}`;
+        check.lines = [decs[0].position.start.line];
       allMessages = messageGroup.bind(check, allMessages);
       continue;
     }
@@ -162,7 +165,8 @@ const checkHasNotProperties = function (code, sels) {
       if (!tmpRules || tmpRules.length <= 0 || tmpRules[0].rules.length <= 0) continue;
 
       if (!check.selector) {
-        check.message = `Line ${tmpRules[0].position.start.line}: The \`@${check.mediaQuery}\` media query should not be used`;
+        check.message = `The \`@${check.mediaQuery}\` media query should not be used`;
+        check.lines = [tmpRules[0].position.start.line];
         allMessages = messageGroup.bind(check, allMessages);
         continue;
       }
@@ -181,7 +185,8 @@ const checkHasNotProperties = function (code, sels) {
     if (!rules || rules.length <= 0) continue;
 
     if (rules && !check.properties) {
-      check.message = `Line ${rules[0].position.start.line}: The \`${check.selector}\` selector should not be used${context}`;
+      check.message =  `The \`${check.selector}\` selector should not be used${context}`;
+      check.lines = [rules[0].position.start.line];
       allMessages = messageGroup.bind(check, allMessages);
       continue;
     }
@@ -193,7 +198,8 @@ const checkHasNotProperties = function (code, sels) {
       });
 
       if (decs && decs.length > 0) {
-        check.message = `Line ${decs[0].position.start.line}: The \`${check.selector}\` selector cannot have the \`${prop}\` property${context}`;
+        check.message = `The \`${check.selector}\` selector cannot have the \`${prop}\` property${context}`;
+        check.lines = [decs[0].position.start.line];
         allMessages = messageGroup.bind(check, allMessages);
       }
     });
