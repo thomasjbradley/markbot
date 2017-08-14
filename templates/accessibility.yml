@@ -37,8 +37,8 @@ allFiles:
       # IMAGES & MEDIA
       - check: 'img[alt=" "], area[alt=" "], area[alt=""], input[type="image"][alt=" "], img:not([alt]), area:not([alt]), input[type="image"]:not([alt])'
         message: 'An `<img>` tag must always have a proper `alt` attribute'
-      - check: 'img[alt=""]:not([role="presentation"])'
-        message: 'Is this image an important part of the content? If so it needs a descriptive `alt=""` attribute. If it’s only for presentation consider adding the attribute `role="presentation"`'
+      - check: 'img[alt=""]:not([role="presentation"]):not([aria-details])'
+        message: 'Is this image an important part of the content? If so it needs a descriptive `alt=""` attribute or the `aria-details` attribute. If it’s only for presentation consider adding the attribute `role="presentation"`'
         type: warning
       - check: '[role="img"]:not([aria-label]):not([aria-labelledby]), svg[role="img"]:not([aria-label]):not([aria-labelledby])'
         message: 'Whenever `role="img"` is used a label must be specified using the attributes `aria-label` or `aria-labelledby`'
@@ -48,7 +48,7 @@ allFiles:
       - check: 'video:not([controls]), audio:not([controls])'
         message: 'Make sure there are `controls` available for `<audio>` and `<video>` tags'
         type: warning
-      - check: 'svg[aria-hidden="true"][aria-label], svg[aria-hidden="true"][aria-labelledby], svg[aria-hidden="true"][aria-describedby], svg[role="presentation"][aria-label], svg[role="presentation"][aria-labelledby], svg[role="presentation"][aria-describedby]'
+      - check: 'svg[aria-hidden="true"][aria-label], svg[aria-hidden="true"][aria-labelledby], svg[aria-hidden="true"][aria-describedby], svg[aria-hidden="true"][aria-details], svg[role="presentation"][aria-label], svg[role="presentation"][aria-labelledby], svg[role="presentation"][aria-describedby], svg[role="presentation"][aria-details]'
         message: 'A presentation-only `<svg>` tag should not have any labels'
       - check: 'figure:not([role="group"])'
         message: 'The `<figure>` tag would benefit from having the attribute of `role="group"`'
