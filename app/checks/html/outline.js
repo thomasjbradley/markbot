@@ -1,6 +1,7 @@
 'use strict';
 
 const util = require('util');
+const parse5 = require('parse5');
 const cheerio = require('cheerio');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
@@ -18,10 +19,14 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
   let errors = [];
   let lastLevel = 1;
   let lastLevelText = '';
+  const parsedHtml = parse5.parse(fileContents, {
+    treeAdapter: parse5.treeAdapters.htmlparser2,
+    locationInfo: true,
+  });
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);
 
-  code = cheerio.load(fileContents);
+  code = cheerio.load(parsedHtml.children);
   headings = code('h1, h2, h3, h4, h5, h6');
 
   if (headings.length <= 0) {
@@ -30,7 +35,7 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
   }
 
   if (getLevel(headings[0]) != 1) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, [`The first heading in the document is an \`<h${getLevel(headings[0])}>\` — but documents must start with an \`<h1>\``]);
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, [`Line ${headings[0].__location.line}: The first heading in the document is an \`<h${getLevel(headings[0])}>\` — but documents must start with an \`<h1>\``]);
     return next();
   }
 
@@ -42,11 +47,11 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
     if (i === 0) return;
 
     if (level == 1) {
-      errors.push(`Another \`<h1>\` was found, \`<h1>${cheerio(elem).html()}</h1>\` — there can only be one \`<h1>\` per page`);
+      errors.push(`Line ${elem.__location.line}: Another \`<h1>\` was found, \`<h1>${cheerio(elem).html()}</h1>\` — there can only be one \`<h1>\` per page`);
     }
 
     if (level > lastLevel + 1) {
-      errors.push(`Heading, \`<h${level}>${cheerio(elem).html()}</h${level}>\`, is level ${level} but the previous heading was level ${lastLevel} \`<h${lastLevel}>${lastLevelText}</h${lastLevel}>\``);
+      errors.push(`Line ${elem.__location.line}: Heading, \`<h${level}>${cheerio(elem).html()}</h${level}>\`, is level ${level} but the previous heading was level ${lastLevel} \`<h${lastLevel}>${lastLevelText}</h${lastLevel}>\``);
     }
 
     lastLevel = level;
