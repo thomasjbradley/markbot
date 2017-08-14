@@ -213,7 +213,7 @@ const add = function (task, type = TYPE_STATIC, priority = PRIORITY_NORMAL) {
     case TYPE_LIVE:
       addTask(taskQueueLive, task, priority);
       break;
-    case TYPE_LIVE:
+    case TYPE_STATIC:
     default:
       addTask(taskQueueStatic, task, priority);
   }
