@@ -129,11 +129,11 @@ const checkHasProperties = function (code, sels) {
       }
     });
 
-    if (!check.value || check.properties.length > 1) continue;
+    if (!check.value || check.properties.length > 1 || !decs || decs.length <= 0) continue;
 
     if (decs[0].value != check.value) {
       check.message = `Expected to see \`${check.properties[0]}\` with a different value inside \`${check.selector} {}\`${context}`;
-        check.lines = [decs[0].position.start.line];
+      check.lines = [decs[0].position.start.line];
       allMessages = messageGroup.bind(check, allMessages);
       continue;
     }

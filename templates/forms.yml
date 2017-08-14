@@ -5,6 +5,14 @@
 
 allFiles:
   html:
+    has:
+      - check: '[required]'
+        message: 'There should probably be at least one required input in the form'
+        type: warning
+      - check: 'form button[type="submit"]'
+        message: 'The `<form>` appears to be missing a submit button, maybe the `type="submit"` attribute is missing'
+        type: warning
+
     hasNot:
       - check: 'form:not([action]), form[action=" "], form[action=""]'
         message: 'The `action` attribute on a `<form>` tag must point somewhere'
