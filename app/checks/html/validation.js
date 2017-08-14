@@ -30,7 +30,7 @@ const bypass = function (checkGroup, checkId, checkLabel) {
 const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents, lines, next) {
   const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor/html-validator');
   const hostInfo = serverManager.getHostInfo('html');
-  const execPath = `java -Dnu.validator.client.port=${hostInfo.port} -Dnu.validator.client.level=error -Dnu.validator.client.out=json -cp ` + escapeShell(validatorPath + '/vnu.jar') + ' nu.validator.client.HttpClient ' + escapeShell(fullPath);
+  const execPath = `java -Dnu.validator.client.port=${hostInfo.port} -Dnu.validator.client.charset=utf-8 -Dnu.validator.client.level=error -Dnu.validator.client.out=json -cp ` + escapeShell(validatorPath + '/vnu.jar') + ' nu.validator.client.HttpClient ' + escapeShell(fullPath);
 
   markbotMain.debug(`@@${validatorPath}@@`);
   markbotMain.debug(`\`${execPath}\``);
