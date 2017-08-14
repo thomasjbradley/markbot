@@ -5,6 +5,15 @@
 
 allFiles:
   html:
+    has:
+      # SKIP LINKS
+      - check: 'body > ul.skip-links:first-child'
+        message: 'The skip links list should be the first child inside the `<body>` element'
+      - check: '.skip-links a[href="#main"]'
+        message: 'The `.skip-links` should have a link to the main content, jumping to the ID of `#main`'
+      - check: '.skip-links a[href="#nav"]'
+        message: 'The `.skip-links` should have a link to the navigation, jumping to the ID of `#nav`'
+
     hasNot:
       # GENERAL
       - check: '[accesskey]'
