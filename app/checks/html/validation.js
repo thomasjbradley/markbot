@@ -5,6 +5,7 @@ const path = require('path');
 const exec = require('child_process').exec;
 const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
+const serverManager = require('electron').remote.require('./app/server-manager');
 
 const shouldIncludeError = function (message, line) {
   // The standard info: using HTML parser
@@ -28,7 +29,8 @@ const bypass = function (checkGroup, checkId, checkLabel) {
 
 const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents, lines, next) {
   const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor/html-validator');
-  const execPath = 'java -Dnu.validator.client.level=error -Dnu.validator.client.out=json -cp ' + escapeShell(validatorPath + '/vnu.jar') + ' nu.validator.client.HttpClient ' + escapeShell(fullPath);
+  const hostInfo = serverManager.getHostInfo('html');
+  const execPath = `java -Dnu.validator.client.port=${hostInfo.port} -Dnu.validator.client.level=error -Dnu.validator.client.out=json -cp ` + escapeShell(validatorPath + '/vnu.jar') + ' nu.validator.client.HttpClient ' + escapeShell(fullPath);
 
   markbotMain.debug(`@@${validatorPath}@@`);
   markbotMain.debug(`\`${execPath}\``);
@@ -36,17 +38,16 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
 
   exec(execPath, function (err, data) {
     let messages = {};
-    let errorJsonBits = [];
-    let errorJson = '';
     let errors = [];
 
-    if (err && err.message && typeof err.message == 'string') {
-      errorJsonBits = err.message.trim().split(/[\n\u0085\u2028\u2029]|\r\n?/g);
+    if (data) {
+      try {
+        messages = JSON.parse(data);
+      } catch (e) {
+        markbotMain.debug('Error parsing the HTML validator JSON response');
+      }
 
-      if (errorJsonBits[1]) errorJson = errorJsonBits[1].trim();
-      if (errorJson) messages = JSON.parse(errorJson);
-
-      if (errorJson && messages.messages) {
+      if (messages.messages) {
         messages.messages.forEach(function (item) {
           if (shouldIncludeError(item.message, item.line)) {
             errors.push(util.format('Line %d: %s', item.lastLine, item.message.replace(/“/g, '`').replace(/”/g, '`')));
