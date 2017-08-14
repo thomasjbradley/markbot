@@ -700,6 +700,59 @@
   font-style: italic;
 }
 
+.messages .outline {
+  margin-top: 8px;
+  padding: 4px 0 8px;
+
+  border-bottom: 1px solid #dfdcda;
+  border-top: 1px solid #dfdcda;
+
+  list-style-type: none;
+}
+
+.messages .outline li {
+  margin-top: 4px;
+}
+
+.messages .outline li::before {
+  content: " ";
+  display: inline-block;
+  height: 0;
+  left: 0;
+  margin-right: 4px;
+  overflow: hidden;
+  position: relative;
+  top: -.3em;
+  width: 1em;
+
+  border-bottom: 1px solid #a8a6af;
+  transform: none;
+
+  color: inherit;
+  line-height: 1px;
+}
+
+.messages .outline li[data-outline-depth="1"]::before {
+  content: none;
+  display: none;
+}
+
+.messages .outline li[data-outline-depth="3"]::before {
+  width: 2em;
+}
+
+.messages .outline li[data-outline-depth="4"]::before {
+  width: 3em;
+}
+
+.messages .outline li[data-outline-depth="5"]::before {
+  width: 4em;
+}
+
+.messages .outline li[data-outline-depth="6"]::before {
+  width: 5em;
+}
+
 .messages img {
   display: block;
   width: 100%;

@@ -213,6 +213,28 @@ const buildTableErrorMessage = function (err, li) {
   li.appendChild(table);
 };
 
+const buildOutlineErrorMessage = function (err, li) {
+  const ol = document.createElement('ol');
+  const message = document.createElement('span');
+
+  ol.classList.add('outline');
+  message.innerHTML = prepareErrorText(err.message);
+
+  err.items.forEach((item) => {
+    const itemLi = document.createElement('li');
+
+    itemLi.dataset.outlineDepth = item.depth;
+    itemLi.innerHTML = prepareErrorText(item.text);
+
+    if (item.hasError) itemLi.classList.add('has-error');
+
+    ol.appendChild(itemLi);
+  });
+
+  li.appendChild(message);
+  li.appendChild(ol);
+};
+
 const buildErrorMessageFromObject = function (err, li) {
   switch (err.type) {
     case 'code-diff':
@@ -223,6 +245,9 @@ const buildErrorMessageFromObject = function (err, li) {
       break;
     case 'table':
       buildTableErrorMessage(err, li);
+      break;
+    case 'outline':
+      buildOutlineErrorMessage(err, li);
       break;
   }
 };
