@@ -15,6 +15,7 @@
     "calipers-png": "^2.0.0",
     "cheerio": "^1.0.0-rc.2",
     "css": "^2.2.1",
+    "css-select": "^1.3.0-rc0",
     "electron-is": "^2.3.0",
     "entities": "^1.1.1",
     "es6-promisify": "^5.0.0",
