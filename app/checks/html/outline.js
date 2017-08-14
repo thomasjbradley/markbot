@@ -45,7 +45,7 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
 
   headings.each(function (i, elem) {
     let level = getLevel(elem);
-    let text = cheerio(elem).html();
+    let text = cheerio(elem).text();
     let outlineItem = {
       text: `\`<h${level}>\` ${text}`,
       depth: level,
