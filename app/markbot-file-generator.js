@@ -10,6 +10,13 @@ const markbotIgnoreParser = require('./markbot-ignore-parser');
 const exists = require('./file-exists');
 const stripPath = require('./strip-path');
 
+const accessibilityTemplates = [
+  'accessibility',
+  'aria-landmarks',
+  'html',
+  'forms',
+];
+
 const getFileCodeLang = function (fullPath) {
   return fullPath.match(/\.(html|css|js)$/)[1];
 };
@@ -22,6 +29,46 @@ const getAlternativeExtensions = function (ext) {
     default:
       return ext;
   }
+};
+
+const isCheckingAccessibility = function (markbotFile) {
+  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.accessibility) return true;
+
+  if (markbotFile.html) {
+    let i = 0, total = markbotFile.html.length;
+
+    for (i = 0; i < total; i++) {
+      if (markbotFile.html[i].accessibility) return true;
+    }
+  }
+
+  return false;
+};
+
+const bindAccessibilityProperties = function (markbotFile) {
+  const forcedProperties = [
+    'outline',
+  ];
+
+  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.accessibility) {
+    forcedProperties.forEach((prop) => {
+      markbotFile.allFiles.html[prop] = true;
+    });
+  }
+
+  if (markbotFile.html) {
+    let i = 0, total = markbotFile.html.length;
+
+    for (i = 0; i < total; i++) {
+      if (markbotFile.html[i].accessibility) {
+        forcedProperties.forEach((prop) => {
+          markbotFile.html[i][prop] = true;
+        });
+      }
+    }
+  }
+
+  return markbotFile;
 };
 
 const findCompatibleFiles = function (folderpath, ignore, ext) {
@@ -171,6 +218,16 @@ const mergeDuplicateFiles = function (markbotFile) {
 };
 
 const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
+  if (isCheckingAccessibility(markbotFile)) {
+    if (markbotFile.inherit) {
+      markbotFile.inherit = [...new Set(markbotFile.inherit.concat(accessibilityTemplates))];
+    } else {
+      markbotFile.inherit = accessibilityTemplates;
+    }
+
+    markbotFile = bindAccessibilityProperties(markbotFile);
+  }
+
   if (!markbotFile.allFiles && !markbotFile.inherit) return next(markbotFile, ignoreFiles);
   if (markbotFile.inherit) markbotFile = mergeInheritedFiles(markbotFile);
 
