@@ -1,0 +1,35 @@
+# Some of these rules are taken from, or inspired by, a11y.css
+# © 2013-2016 Gaël Poupard
+# Licensed under the MIT license
+# https://ffoodd.github.io/a11y.css/
+
+allFiles:
+  html:
+    hasNot:
+      - check: 'form:not([action]), form[action=" "], form[action=""]'
+        message: 'The `action` attribute on a `<form>` tag must point somewhere'
+      - check: 'fieldset > *:not(legend):first-child, fieldset > legend:not(:first-child)'
+        message: 'The `<legend>` tag must be the first element inside a `<fieldset>`'
+      - check: 'button[class*="disabled"]:not([disabled]):not([readonly])'
+        message: 'Instead of using a “disabled” class the button should be set to `disabled` with the `disabled` attribute'
+      - check: 'button:empty:not([aria-label]):not([aria-labelledby])'
+        message: 'Buttons need to have content inside the open & close tags or a labeling attribute: `aria-label` or `aria-labelledby`'
+      - check: 'button[aria-label=""], button[aria-labelledby=""]'
+        message: 'The `aria-label` or `aria-labelledby` cannot be empty on a `<button>` tag'
+      - check: '[type="radio"]:not([name])'
+        message: 'Radio buttons must always have a `name` attribute for grouping elements together'
+      - check: 'label:not([for]), label[for=" "], label[for=""]'
+        message: 'The `<label>` tag must always have a proper `for` attribute'
+      - check: 'input:not([type="button"]):not([type="submit"]):not([type="hidden"]):not([type="reset"]):not([type="image"]):not([id]):not([aria-label]):not([aria-labelledby]), textarea:not([id]):not([aria-label]):not([aria-labelledby]), select:not([id]):not([aria-label]):not([aria-labelledby])'
+        message: 'All form fields should have `id` attributes so their `label` tags can be associated properly, or at least one of these attributes: `aria-label`, `aria-labelledby`'
+      - check: 'input[type="reset"]:not([value]):not([aria-label]):not([aria-labelledby]), input[type="submit"]:not([value]):not([aria-label]):not([aria-labelledby]), input[type="button"]:not([value]):not([aria-label]):not([aria-labelledby])'
+        message: 'Button `<input>` tags must have a label using one of the following attributes: `value`, `aria-label`, `aria-labelledby`'
+      - check: 'button:not([type]):not([form]):not([formaction]):not([formtarget])'
+        message: 'The `<button>` tag should always specify a `type` attribute and if outside a `<form>` should specify `form`, `formaction` or `formtarget` attributes'
+      - check: 'button[type="reset"][formmethod], button[type="reset"][formaction], button[type="reset"][formtarget], button[type="reset"][formenctype], button[type="reset"][formnovalidate], button[type="button"][formmethod], button[type="button"][formaction], button[type="button"][formtarget], button[type="button"][formenctype], button[type="button"][formnovalidate]'
+        message: 'Only `<button>` tags with `type="submit"` should use the `form*` attributes'
+      - check: 'optgroup:not([label])'
+        message: 'The `<optgroup>` tag must always specify a `label` attribute'
+      - check: '[placeholder]:not([aria-label]):not([aria-labelledby])'
+        message: 'When using a `placeholder` also make sure there’s a `<label>` or one of these labeling attributes: `aria-label`, `aria-labelledby`'
+        type: warning

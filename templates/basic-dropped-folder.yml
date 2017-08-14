@@ -4,6 +4,7 @@ inherit:
   - html
   - css
   - js
+  - aria-landmarks
   - accessibility
   - seo
 

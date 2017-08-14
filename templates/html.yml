@@ -1,3 +1,8 @@
+# Some of these rules are taken from, or inspired by, a11y.css
+# © 2013-2016 Gaël Poupard
+# Licensed under the MIT license
+# https://ffoodd.github.io/a11y.css/
+
 allFiles:
   html:
     valid: true
@@ -7,13 +12,14 @@ allFiles:
       - 'title'
 
     hasNot:
-      - check: '[target$="blank"]:not([rel]), [target$="blank"]:not([rel*="noopener"]), [target$="blank"]:not([rel*="noreferrer"])'
-        message: 'The `target` attribute should not be used — especially `target="_blank"`, which causes major accessibility & security problems, but if you must use it make sure it has the following attribute: `rel="noopener noreferrer"` and make sure it’s acknowledged on the page that it will open a new window'
-        type: warning
+      - check: 'html:not([lang]), html[lang=" "], html[lang=""]'
+        message: 'The language should always be defined for an HTML document, add the `lang` attribute to the `<html>` tag'
+      - check: 'title:empty'
+        message: 'The `<title>` tag of a website should never be empty'
       - check: 'meta[name*="keyword"]'
         message: 'The `meta keywords` tag isn’t used by any search engines — it should be removed'
-      - check: 'meta[charset]:not([charset="utf-8"]), meta[charset]:not([charset="UTF-8"]), meta[charset="utf-8"]:not(:first-child), meta[charset="UTF-8"]:not(:first-child)'
-        message: 'UTF-8 is the recommended character set for all HTML files, make sure `meta charset` is `utf-8` and the first element inside `<head>`'
+      - check: 'meta[charset]:not([charset="utf-8" i]), meta[charset="utf-8" i]:not(:first-child)'
+        message: 'UTF-8 is the recommended character set for all HTML files, make sure `<meta charset>` is `utf-8` and the first element inside `<head>`'
       - check: 'meta[name="viewport"][content*="maximum-scale"], meta[name="viewport"][content*="minimum-scale"], meta[name="viewport"][content*="user-scalable=no"]'
         message: 'The `viewport` tag should never disable zooming & scaling'
       - check: '[dir]:not([dir="rtl"]):not([dir="ltr"]):not([dir="auto"])'
@@ -25,6 +31,9 @@ allFiles:
         message: 'There’s no reason to have an empty `class` attribute'
       - check: '[id=""], [id=" "]'
         message: 'There’s no reason to have an empty `id` attribute'
+      - check: '[target$="blank"]:not([rel]), [target$="blank"]:not([rel*="noopener"]), [target$="blank"]:not([rel*="noreferrer"])'
+        message: 'The `target` attribute should not be used — especially `target="_blank"`, which causes major accessibility & security problems, but if you must use it make sure it has the following attribute: `rel="noopener noreferrer"` and make sure it’s acknowledged on the page that it will open a new window'
+        type: warning
 
       # SEMANTICS
       - check: 'main:not(:first-of-type)'
@@ -42,12 +51,16 @@ allFiles:
       - check: 'figcaption:not(:first-child):not(:last-child)'
         message: 'The `<figcaption>` element should be the first or the last element inside a `<figure>`'
 
+      # IMAGES & MEDIA
+      - check: 'img:not([src]):not([srcset]), img[src=""], img[src=" "], img[src="#"], img[src="/"], img[srcset=""], img[srcset=" "], img[srcset="#"], img[srcset="/"], input[type="image"]:not([src]):not([srcset]), input[type="image"][src=""], input[type="image"][src=" "], input[type="image"][src="#"], input[type="image"][src="/"], input[type="image"][srcset=""], input[type="image"][srcset=" "], input[type="image"][srcset="#"] input[type="image"][srcset="/"]'
+        message: 'The `<img>` tag must always have a valid `src` attribute'
+
       # TABLES
-      - check: 'table:not([role="presentation"]) > caption + tbody, table:not([role="presentation"]) > tbody:first-child'
+      - check: 'table > caption + tbody, table > tbody:first-child'
         message: 'The `<thead>` tag is required when using the `<tbody>` tag'
       - check: 'table table'
         message: 'The `<table>` tag should not be nested'
-      - check: 'table:not([role="presentation"]) > caption:not(:first-child), table:not([role="presentation"]) > *:first-child:not(caption)'
+      - check: 'table > caption:not(:first-child), table > *:first-child:not(caption)'
         message: 'Every data `<table>` must have a `<caption>` as it’s first child'
       - check: 'table > tfoot ~ thead, table > tbody ~ tfoot, table > tbody ~ thead, table > tfoot ~ colgroup, table > tbody ~ colgroup, table > tbody ~ colgroup'
         message: 'The `<thead>` `<tbody>` & `<tfoot>` elements must be in the correct order'
@@ -56,6 +69,6 @@ allFiles:
 
       # JS RELATED
       - check: '[onafterprint], [onbeforeprint], [onbeforeunload], [onerror], [onhaschange], [onload], [onmessage], [onoffline], [ononline], [onpagehide], [onpageshow], [onpopstate], [onredo], [onresize], [onstorage], [onundo], [onunload], [onblur], [onchage], [oncontextmenu], [onfocus], [onformchange], [onforminput], [oninput], [oninvalid], [onreset], [onselect], [onsubmit], [onkeydown], [onkeypress], [onkeyup], [onclick], [ondblclick], [ondrag], [ondragend], [ondragenter], [ondragleave], [ondragover], [ondragstart], [ondrop], [onmousedown], [onmousemove], [onmouseout], [onmouseover], [onmouseup], [onmousewheel], [onscroll], [onabort], [oncanplay], [oncanplaythrough], [ondurationchange], [onemptied], [onended], [onerror], [onloadeddata], [onloadedmetadata], [onloadstart], [onpause], [onplay], [onplaying], [onprogress], [onratechange], [onreadystatechange], [onseeked], [onseeking], [onstalled], [onsuspend], [ontimeupdate], [onvolumechange], [onwaiting]'
-        message: 'The Javascript event attributes, like`onclick` & `onmouseover`, should not be used — it’s confusing & difficult to maintain Javascript that’s mixed into HTML']
-      - check: 'a[href=^"javascript"]'
+        message: 'The Javascript event attributes, like`onclick` & `onmouseover`, should not be used — it’s confusing & difficult to maintain Javascript that’s mixed into HTML'
+      - check: 'a[href^="javascript"]'
         message: 'Use progressive enhancement inside your Javascript file instead of `javascript:` in `a href=""` tags — it’s confusing & difficult to maintain Javascript that’s mixed into HTML'
