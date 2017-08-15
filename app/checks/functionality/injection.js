@@ -164,10 +164,16 @@ const __MarkbotInjectedFunctions = {
   },
 
   convertElementToString: function (elem) {
-    const classes = (elem.classList.length > 0) ? '.' + [].join.call(elem.classList.values(), ', .') : '';
     const id = (elem.id) ? `#${elem.id}` : '';
+    let classes = [];
 
-    return '&lt;' + elem.tagName.toLowerCase() + id + classes + '&gt;';
+    if (elem.classList.length > 0) {
+      for (let theClass of elem.classList) {
+        classes.push(`.${theClass}`);
+      }
+    }
+
+    return '&lt;' + elem.tagName.toLowerCase() + id + classes.join('') + '&gt;';
   },
 
   convertNodeListToString: function (elems) {
@@ -184,7 +190,9 @@ const __MarkbotInjectedFunctions = {
     let args = message.map((arg) => {
       if (arg instanceof NodeList) return __MarkbotInjectedFunctions.convertNodeListToString(arg);
       if (arg instanceof HTMLElement) return __MarkbotInjectedFunctions.convertElementToString(arg);
-      if (arg.toString) return arg.toString();
+      if (arg === null) return 'null';
+      if (arg === void 0) return 'undefined';
+      if (typeof arg === 'object' && arg.toString) return arg.toString();
 
       return arg;
     });
