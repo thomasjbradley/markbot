@@ -488,7 +488,7 @@ Each test entry will be embedded into a Javascript anonymous self-executing func
   'use strict';
 
   try {
-    eval(/* Your test code will be embedded here */);
+    eval("(function(){'use strict';/* Your test code will be embedded here */}())");
   } catch (e) {
     /* Show error messages in Markbot & console */
   }
@@ -496,6 +496,8 @@ Each test entry will be embedded into a Javascript anonymous self-executing func
 ```
 
 *Yes, eval is evil, etc. But it’s useful here to catch any syntax errors you may have in your code so they can be displayed in the debugging console.*
+
+Also notice that your test code will be wrapped in a self-executing function, this allows you to use `return` to short-circuit functions when they `fail` or `pass`.
 
 Your injected code will have access to a few functions to simplify what you have to write:
 
