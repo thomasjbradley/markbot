@@ -5,14 +5,6 @@
 
 allFiles:
   html:
-    has:
-      - check: '[required]'
-        message: 'There should probably be at least one required input in the form'
-        type: warning
-      - check: 'form button[type="submit"]'
-        message: 'The `<form>` appears to be missing a submit button, maybe the `type="submit"` attribute is missing'
-        type: warning
-
     hasNot:
       - check: 'form:not([action]), form[action=" "], form[action=""]'
         message: 'The `action` attribute on a `<form>` tag must point somewhere'
@@ -41,3 +33,62 @@ allFiles:
       - check: '[placeholder]:not([aria-label]):not([aria-labelledby])'
         message: 'When using a `placeholder` also make sure there’s a `<label>` or one of these labeling attributes: `aria-label`, `aria-labelledby`'
         type: warning
+
+  functionality:
+    tests:
+      # Test that all radio button groups are inside `<fieldset>` tags
+      - |
+        const elems = $$('[type="radio"]');
+
+        for (let elem of elems) {
+          let hasFieldset = elem.closest('fieldset');
+
+          if (!hasFieldset) return fail('All radio button groups must be inside a `<fieldset>` tag');
+        }
+
+        pass();
+
+      # Test that there are no duplicate `<label for="">` attributes
+      - |
+        const elems = $$('label');
+        let labelFors = [];
+
+        for (let elem of elems) {
+          let labelFor = elem.getAttribute('for').trim();
+
+          if (!labelFor) return fail('All `<label>` tags must have a `for` attribute');
+          if (labelFors.includes(labelFor)) return fail(`More than one label’s \`for\` attribute points to the \`id\` of \`${labelFor}\``);
+
+          labelFors.push(labelFor);
+        }
+
+        pass();
+
+      # Test that at least one form input element is `required`
+      - |
+        const elems = $$('input, select, textarea');
+        let foundRequired = false;
+
+        for (let elem of elems) {
+          if (elem.required) foundRequired = true;
+        }
+
+        if (elems && elems.length > 0 && !foundRequired) return fail('At least one form input field (`<input>`, `<select>` or `<textarea>`) must be required, using the `required` attribute');
+
+        pass();
+
+      # Test to make sure there’s an associated `<label>` for every input or `aria-label` or `aria-labelledby`
+      - |
+        const elems = $$('input:not([aria-labelledby]):not([aria-label]), select:not([aria-labelledby]):not([aria-label]), textarea:not([aria-labelledby]):not([aria-label])');
+
+        for (let elem of elems) {
+          let theLabel;
+
+          if (!elem.id) return fail('Some form input fields (`<input>`, `<select>` or `<textarea>`) are missing `id` attributes');
+
+          theLabel = document.querySelector(`label[for="${elem.id}"]`);
+
+          if (!theLabel) return fail(`The form input \`<${elem.tagName.toLowerCase()}#${elem.id}>\` does not have an associated \`<label>\` element or one of the following attributes: \`aria-label\`, \`aria-labelledby\``);
+        }
+
+        pass();
