@@ -55,7 +55,7 @@
   };
 
   const runTest = function (win, testJs, testIndex, listenerLabel) {
-    let bindFunction = `(function(){${testJs.trim()}}())`;
+    let bindFunction = `(function(){'use strict';${testJs.trim()}}())`;
     let js = makeExecTestJs(JSON.stringify(bindFunction), testIndex, listenerLabel, win.id);
 
     win.webContents.executeJavaScript(js);
