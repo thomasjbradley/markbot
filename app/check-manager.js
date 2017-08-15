@@ -58,7 +58,7 @@ const generateTasks = function (check, markbotFile, isCheater) {
   tasks.forEach(function (task, i) {
     markbotMain.send('check-group:new', task.group, task.groupLabel);
 
-    tasks[i] = merge(check, tasks[i]);
+    tasks[i] = merge(Object.assign({}, check), tasks[i]);
     tasks[i].cwd = markbotFile.cwd;
 
     if (!tasks[i].priority) tasks[i].priority = taskPool.PRIORITY_NORMAL;

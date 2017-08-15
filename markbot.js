@@ -441,7 +441,7 @@ exports.onFileDropped = function(filePath) {
   serverManager.getServer('web').setRoot(currentFolderPath);
 
   if (exists.check(markbotFilePath)) {
-    markbotFileGenerator.get(markbotFilePath, handleMarkbotFile)
+    markbotFileGenerator.get(markbotFilePath, handleMarkbotFile);
   } else {
     markbotFileGenerator.buildFromFolder(filePath, handleMarkbotFile);
   }
