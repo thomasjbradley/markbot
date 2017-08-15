@@ -9,8 +9,8 @@ const createMessageGroup = function () {
 };
 
 const bindMessageGroup = function (check, allMessages) {
-  let messageAfter = (check.customMessage) ? ` — __${check.customMessage}__` : '';
   let messageBefore = '';
+  let theMessage = (check.customMessage) ? check.customMessage : check.message;
 
   if (check.lines) {
     let plural = (check.lines.length > 1) ? 's' : '';
@@ -20,13 +20,13 @@ const bindMessageGroup = function (check, allMessages) {
 
   switch (check.type) {
     case 'warning':
-      allMessages.warnings.push(`${messageBefore}${check.message}${messageAfter}`);
+      allMessages.warnings.push(`${messageBefore}${theMessage}`);
       break;
     case 'message':
-      allMessages.messages.push(`${messageBefore}${check.message}${messageAfter}`);
+      allMessages.messages.push(`${messageBefore}${theMessage}`);
       break;
     default:
-      allMessages.errors.push(`${messageBefore}${check.message}${messageAfter}`);
+      allMessages.errors.push(`${messageBefore}${theMessage}`);
   }
 
   return allMessages;
