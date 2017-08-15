@@ -163,8 +163,33 @@ const __MarkbotInjectedFunctions = {
     window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.failLabel, reason);
   },
 
+  convertElementToString: function (elem) {
+    const classes = (elem.classList.length > 0) ? '.' + [].join.call(elem.classList.values(), ', .') : '';
+    const id = (elem.id) ? `#${elem.id}` : '';
+
+    return '&lt;' + elem.tagName.toLowerCase() + id + classes + '&gt;';
+  },
+
+  convertNodeListToString: function (elems) {
+    const prettyElems = [];
+
+    for (let elem of elems) {
+      prettyElems.push(__MarkbotInjectedFunctions.convertElementToString(elem));
+    }
+
+    return `[${prettyElems.join(', ')}]`;
+  },
+
   debug: function (...message) {
-    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.debugLabel, ...message);
+    let args = message.map((arg) => {
+      if (arg instanceof NodeList) return __MarkbotInjectedFunctions.convertNodeListToString(arg);
+      if (arg instanceof HTMLElement) return __MarkbotInjectedFunctions.convertElementToString(arg);
+      if (arg.toString) return arg.toString();
+
+      return arg;
+    });
+
+    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.debugLabel, ...args);
   },
 
   debugFail: function (e) {

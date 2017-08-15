@@ -55,7 +55,8 @@
   };
 
   const runTest = function (win, testJs, testIndex, listenerLabel) {
-    let js = makeExecTestJs(JSON.stringify(testJs.trim()), testIndex, listenerLabel, win.id);
+    let bindFunction = `(function(){${testJs.trim()}}())`;
+    let js = makeExecTestJs(JSON.stringify(bindFunction), testIndex, listenerLabel, win.id);
 
     win.webContents.executeJavaScript(js);
   };
