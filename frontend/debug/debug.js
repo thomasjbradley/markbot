@@ -59,6 +59,11 @@ ipcRenderer.on('__markbot-debug-group', function (e, label) {
 document.addEventListener('click', function (e) {
   if (e.target.matches('a')) {
     e.preventDefault();
-    shell.showItemInFolder(e.target.getAttribute('href'));
+
+    if (e.target.getAttribute('href').slice(0, 4) === 'http') {
+      shell.openExternal(e.target.getAttribute('href'));
+    } else {
+      shell.showItemInFolder(e.target.getAttribute('href'));
+    }
   }
 });

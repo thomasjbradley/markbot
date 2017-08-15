@@ -25,10 +25,6 @@ const setPorts = function (ports) {
   servers.web.port = ports[0];
   servers.html.port = ports[1];
   servers.language.port = ports[2];
-
-  Object.keys(servers).forEach((key) => {
-    markbotMain.send('debug', `Server “${key}”: ` + getHost(key));
-  });
 };
 
 const start = function (next) {
