@@ -1,5 +1,6 @@
 'use strict';
 
+const merge = require('merge-objects');
 const markbotMain = require('./markbot-main');
 const taskPool = require('./task-pool');
 
@@ -56,13 +57,16 @@ const generateTasks = function (check, markbotFile, isCheater) {
 
   tasks.forEach(function (task, i) {
     markbotMain.send('check-group:new', task.group, task.groupLabel);
-    Object.assign(tasks[i], check);
+
+    tasks[i] = merge(check, tasks[i]);
     tasks[i].cwd = markbotFile.cwd;
+
     if (!tasks[i].priority) tasks[i].priority = taskPool.PRIORITY_NORMAL;
+    if (!tasks[i].type) tasks[i].type = taskPool.TYPE_STATIC;
   });
 
   return tasks;
-}
+};
 
 const run = function (markbotFile, isCheater = null, next) {
   let allTasks = [];

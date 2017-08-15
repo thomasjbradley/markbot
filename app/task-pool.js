@@ -77,13 +77,13 @@ const executeTaskRunner = function (runner, task) {
       alreadyDone = true;
 
       require('electron').ipcRenderer.send('__markbot-taskpool-task-done', ${runner.id});
-      console.log('COMPLETED: ${task.module} — ${task.groupLabel} — ${task.priority}');
+      console.log('COMPLETED: ${task.module} — ${task.groupLabel} — ${task.type} — ${task.priority}');
     };
 
     tmpScriptElem.src = 'file://${moduleUrl}';
     document.body.appendChild(tmpScriptElem);
 
-    console.log('STARTED: ${task.module} — ${task.groupLabel} — ${task.priority}');
+    console.log('STARTED: ${task.module} — ${task.groupLabel} — ${task.type} — ${task.priority}');
   `;
 
   runner.webContents.executeJavaScript(js);

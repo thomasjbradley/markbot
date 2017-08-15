@@ -1,5 +1,7 @@
 'use strict';
 
+const taskPool = require(`${__dirname}/../../task-pool`);
+
 module.exports.generateTaskList = function (markbotFile, isCheater) {
   var tasks = [];
 
@@ -13,6 +15,12 @@ module.exports.generateTaskList = function (markbotFile, isCheater) {
           cheater: (isCheater.matches[file.path]) ? !isCheater.matches[file.path].equal : (isCheater.cheated) ? true : false,
         },
       };
+
+      if (file.accessibility) {
+        task.type = taskPool.TYPE_LIVE;
+      } else {
+        task.type = taskPool.TYPE_STATIC;
+      }
 
       tasks.push(task);
     });
