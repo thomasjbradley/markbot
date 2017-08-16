@@ -235,6 +235,33 @@ const buildOutlineErrorMessage = function (err, li) {
   li.appendChild(ol);
 };
 
+const buildBigNumberErrorMessage = function (err, li) {
+  const message = document.createElement('span');
+  const wrap = document.createElement('div');
+  const left = document.createElement('div');
+  const right = document.createElement('div');
+  const num = document.createElement('strong');
+  const title = document.createElement('em');
+  const desc = document.createElement('span');
+
+  message.innerHTML = prepareErrorText(err.message);
+  wrap.classList.add('big-number');
+  left.classList.add('big-number-left');
+  right.classList.add('big-number-right');
+
+  num.innerText = err.number;
+  title.innerText = err.title;
+  desc.innerText = err.desc;
+
+  left.appendChild(num);
+  right.appendChild(title);
+  right.appendChild(desc);
+  wrap.appendChild(left);
+  wrap.appendChild(right);
+  li.appendChild(message);
+  li.appendChild(wrap);
+};
+
 const buildErrorMessageFromObject = function (err, li) {
   switch (err.type) {
     case 'code-diff':
@@ -248,6 +275,9 @@ const buildErrorMessageFromObject = function (err, li) {
       break;
     case 'outline':
       buildOutlineErrorMessage(err, li);
+      break;
+    case 'big-number':
+      buildBigNumberErrorMessage(err, li);
       break;
   }
 };

@@ -638,6 +638,14 @@
   padding-left: 16px;
 }
 
+.messages li li {
+  margin-bottom: 4px;
+}
+
+.messages li li:last-child {
+  margin-bottom: 0;
+}
+
 .messages li li::before {
   content: "•";
 }
@@ -702,9 +710,8 @@
 
 .messages .outline {
   margin-top: 8px;
-  padding: 4px 0 8px;
+  padding: 4px 0 0;
 
-  border-bottom: 1px solid #dfdcda;
   border-top: 1px solid #dfdcda;
 
   list-style-type: none;
@@ -751,6 +758,31 @@
 
 .messages .outline li[data-outline-depth="6"]::before {
   width: 5em;
+}
+
+.messages .big-number {
+  display: flex;
+  flex-direction: row;
+  padding: 8px 0;
+}
+
+.messages .big-number-left {
+  margin-right: 1rem;
+
+  font-size: 3.6rem;
+  line-height: 1;
+}
+
+.messages .big-number-left strong {
+  font-weight: normal;
+  color: #417d0a;
+}
+
+.messages .big-number-right em {
+  display: block;
+
+  font-weight: bold;
+  font-style: normal;
 }
 
 .messages img {
