@@ -101,6 +101,8 @@ const mergeInheritedFiles = function (markbotFile) {
   };
   let templates = [];
 
+  if (typeof markbotFile.inherit === 'string') markbotFile.inherit = [markbotFile.inherit];
+
   markbotFile.inherit.forEach((templateId) => {
     let inheritPath = path.resolve(`${__dirname}/../templates/${templateId}.yml`);
 
