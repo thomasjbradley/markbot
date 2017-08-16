@@ -9,11 +9,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- Accessibility testing using a bunch of built-in template checks and the axe-core library.
 - Git commit message best practice checking, including spelling, grammar, length & proper tense.
+- Dependency checking on startup, specifically checks for Git command line & Java Development Kit.
 - A warning message system that doesn’t impede handing homework in but gives “tips for next time”.
 - Error messages can now output with sub-lists.
 - An “underline” style for displayed messages.
-- Dependency checking on startup, specifically checks for Git command line & Java Development Kit.
+- A “big-number” style for displayed messages.
 - For `html.has` and `*.search` there’s now a `limit` option to disallow repetition of specific content.
 
 ### Changed
@@ -26,6 +28,9 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The web server now starts immediately instead of on demand when a file is dropped.
 - The `has/Not` & `search/Not` checks can now emit warnings with a new object syntax for each entry. Remains backwards compatible with the old array syntax, but warnings must use the new object syntax.
 - More error messages now display line numbers when available.
+- Improved the `debug()` function’s ability to better handle different types.
+- Functionality tests are now wrapped in a function so they can `return` to short-circuit themselves.
+- The `outline` test now outputs the heading structure as a visible outline.
 
 ### Fixed
 
