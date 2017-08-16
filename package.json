@@ -9,7 +9,7 @@
   "private": true,
   "main": "markbot.js",
   "dependencies": {
-    "accessibility-developer-tools": "^2.12.0",
+    "axe-core": "^2.3.1",
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",
     "calipers-png": "^2.0.0",

@@ -20,6 +20,10 @@ allFiles:
         message: 'The `accesskey` attribute isn’t usually a good idea; too often it conflicts with predefined browser shortcuts'
       - check: '[tabindex]:not([tabindex="0"]):not([tabindex="-1"])'
         message: 'The `tabindex` attribute should only be `0` or `-1`'
+      - check: 'blink'
+        message: 'The `blink` element should never be used—ever'
+      - check: 'marquee'
+        message: 'The `marquee` element should never be used—ever'
 
       # SEMANTICS
       - check: '[title]:not(abbr)'

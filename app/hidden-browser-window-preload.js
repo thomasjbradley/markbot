@@ -31,7 +31,7 @@ window.__markbot = (function () {
         return require('webcoach');
         break;
       case 'a11y':
-        return require('accessibility-developer-tools');
+        return require('axe-core');
         break;
       default:
         return false;

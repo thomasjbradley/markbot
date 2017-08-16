@@ -136,7 +136,7 @@
 
             if (file.bestPractices) bestPracticesChecker.check(fileContents, lines, checkIfDone);
             if (file.outline) outlineChecker.check(fileContents, checkIfDone);
-            if (file.accessibility) accessibilityChecker.check(fileContents, checkIfDone);
+            if (file.accessibility) accessibilityChecker.check(taskRunnerId, file, checkIfDone);
 
             if (file.has || file.hasNot) {
               if (file.has && !file.hasNot) elementsChecker.check(fileContents, file.has, [], checkIfDone);
