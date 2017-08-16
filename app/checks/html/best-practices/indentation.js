@@ -48,6 +48,14 @@ const shouldThrowBreakingError = function (line1, line2) {
   return true;
 };
 
+const isCatchableSpacingError = function (line) {
+  let attrSpaceMatch = line.match(/\<[^>]+?([\w-]+?)\s+=/);
+
+  if (attrSpaceMatch) return `There’s a space before or after the equals sign of the \`${attrSpaceMatch[1]}\` attribute`;
+
+  return false;
+};
+
 module.exports.check = function (fileContents, lines) {
   var
     errors = [],
@@ -69,12 +77,19 @@ module.exports.check = function (fileContents, lines) {
 
     if (lines[i].trim() != beautifiedLines[i].trim()) {
       if (shouldThrowBreakingError(lines[i], beautifiedLines[i])) {
-        errors.push({
-          type: 'code-diff',
-          message: util.format('Around line %d: Unexpected spacing or indentation', i + 1),
-          code: grabChunk(i, lines, beautifiedLines),
-          status: true
-        });
+        let catchableError = isCatchableSpacingError(lines[i]);
+
+        if (catchableError) {
+          errors.push(`Line: ${i + 1}: ${catchableError}`);
+        } else {
+          errors.push({
+            type: 'code-diff',
+            message: util.format('Around line %d: Unexpected spacing or indentation', i + 1),
+            code: grabChunk(i, lines, beautifiedLines),
+            status: true
+          });
+        }
+
         break;
       }
     }

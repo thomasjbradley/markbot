@@ -30,18 +30,32 @@ const shouldIncludeError = function (line, message, lines) {
   return true;
 };
 
+const escapeTags = function (message) {
+  return message.replace(/</g, '`<').replace(/>/g, '>`');
+};
+
+const deConfusifyError = function (line, message, lines) {
+  let finalMessage = escapeTags(message);
+
+  if (message.match(/Attribute value must be closed by double quotes/i)) {
+    let matches = lines[line - 1].match(/\<[^>]+?([\w-]+?)\s*=\s+/);
+
+    if (matches) finalMessage = `There’s a space before or after the equals sign of the \`${matches[1]}\` attribute`;
+  }
+
+  return `Line ${line}: ${finalMessage}`;
+};
+
 module.exports.check = function (fileContents, lines) {
-  var
-    lintResults,
-    errors = []
-  ;
+  let lintResults;
+  let errors = [];
 
   lintResults = linter.hint(fileContents, htmlcsOptions)
 
   if (lintResults.length > 0) {
-    lintResults.forEach(function (item) {
+    lintResults.forEach((item) => {
       if (shouldIncludeError(item.line, item.message, lines)) {
-        errors.push(`Line ${item.line}: ${item.message.replace(/</g, '`<').replace(/>/g, '>`')}`);
+        errors.push(deConfusifyError(item.line, item.message, lines));
       }
     });
   }

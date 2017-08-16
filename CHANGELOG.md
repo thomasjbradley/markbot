@@ -17,6 +17,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - An “underline” style for displayed messages.
 - A “big-number” style for displayed messages.
 - For `html.has` and `*.search` there’s now a `limit` option to disallow repetition of specific content.
+- Spaces before and after attribute equals signs are now called out as separate, more descriptive error messages.
 
 ### Changed
 
