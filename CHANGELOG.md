@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- The accessibility tests are now run on the full `document` instead of just `body`.
+- Some accessibility errors messages have been clarified or ignored as appropriate.
+
+---
+
 ## [6.0.0] — 2017-08-16
 
 ### Added
