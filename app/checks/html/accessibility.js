@@ -21,7 +21,7 @@ const makeJs = function () {
       const axeRules = JSON.parse('${JSON.stringify(axeRules)}');
       const axe = window.__markbot.getTestingService('a11y');
 
-      axe.run(document.body, axeRules, (err, results) => {
+      axe.run(document, axeRules, (err, results) => {
         if (err) {
           window.__markbot.sendMessageToWindow(${taskRunnerId}, '__markbot-hidden-browser-a11y-error-${taskRunnerId}', 'There was an error running the accessibility tests—try running Markbot again');
         } else {
@@ -39,6 +39,7 @@ const isErrorWarning = function (err) {
 };
 
 const shouldIgnoreError = function (err) {
+  // Ignore aria-details warnings while they're not supported by axe-core
   if (err.id === 'aria-valid-attr') {
     let numNodes = err.nodes.length;
 
@@ -49,6 +50,23 @@ const shouldIgnoreError = function (err) {
     });
 
     if (numNodes <= 0) return true;
+  }
+
+  // Ignore region warnings when they're only concerned with the skip links outside a region
+  if (err.id === 'region') {
+    if (err.nodes.length > 0 && err.nodes[0].html.match(/\<html/)) {
+      let numNodes = 0;
+
+      if (err.nodes[0].any.length > 0 && err.nodes[0].any[0].relatedNodes.length > 0){
+        numNodes = err.nodes[0].any[0].relatedNodes.length;
+
+        err.nodes[0].any[0].relatedNodes.forEach((node) => {
+          if (node.html.match(/\<a[^>]+href\=\"\#.+(skip|jump)/i)) numNodes--;
+        });
+
+        if (numNodes <= 0) return true;
+      }
+    }
   }
 
   return false;
@@ -64,7 +82,17 @@ const constructErrorMessage = function (err) {
   let allTheNodes = err.nodes.map((node) => {
     if (shouldIncludeNode(node)) return `\`${node.html}\``;
   });
-  let message = `${err.help}; the following elements are affected: ---+++${allTheNodes.join('+++')}---`;
+  let errMsg = err.help;
+  let message = '';
+
+  switch (err.id) {
+    // Helpfully remind users that `tabindex="0"` is necessary on the element skip links point to
+    case 'skip-link':
+      errMsg += ', the element the skip link points must be focusable, try adding `tabindex="0"` to the element with the matching `id`';
+      break;
+  }
+
+  message = `${errMsg}; the following elements are affected: ---+++${allTheNodes.join('+++')}---`;
 
   return message;
 };
