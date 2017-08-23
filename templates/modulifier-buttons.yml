@@ -3,4 +3,5 @@ allFiles:
     has:
       - '.btn'
     search:
-      - '\.btn\-(ghost|light)'
+      - check: 'btn\-(ghost|light)'
+        message: 'Expected to see a button style modifier: `.btn-ghost` or `.btn-light`'

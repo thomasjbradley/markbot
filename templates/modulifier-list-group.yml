@@ -1,4 +1,5 @@
 allFiles:
   html:
     has:
-      - '[class*="list-group"]'
+      - check: '[class*="list-group"]'
+        message: 'Expected to see a list group used, either `.list-group` or `.list-group-inline`'

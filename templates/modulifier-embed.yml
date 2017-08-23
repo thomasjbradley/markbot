@@ -2,5 +2,6 @@ allFiles:
   html:
     has:
       - '.embed'
-      - '[class*="embed-"]'
+      - check: '[class*="embed-"]'
+        message: 'The `.embed` aspect ratio class is missing, e.g. `.embed-16by9`'
       - '.embed-item'
