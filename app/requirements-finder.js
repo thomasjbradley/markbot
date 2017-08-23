@@ -46,7 +46,7 @@ const lockScreenshots = function (locker, currentFolderPath, files) {
   });
 };
 
-const lock = function (locker, currentFolderPath, markbotFile, markbotIgnoreFile) {
+const lock = function (locker, currentFolderPath, markbotFileParsed, markbotFile, markbotIgnoreFile) {
   missingFiles = [];
   locker.reset();
 
@@ -57,6 +57,7 @@ const lock = function (locker, currentFolderPath, markbotFile, markbotIgnoreFile
   if (markbotFile.css) lockFiles(locker, currentFolderPath, markbotFile.css);
   if (markbotFile.js) lockFiles(locker, currentFolderPath, markbotFile.js);
   if (markbotFile.screenshots) lockScreenshots(locker, currentFolderPath, markbotFile.screenshots);
+  if (markbotFileParsed.screenshots) lockScreenshots(locker, currentFolderPath, markbotFileParsed.screenshots);
 
   if (missingFiles.length > 0) {
     markbotMain.send('alert', `The following files could not be locked because they’re missing:\n• ${missingFiles.join('\n• ')}`);

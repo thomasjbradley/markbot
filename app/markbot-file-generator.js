@@ -138,6 +138,21 @@ const bindFunctionalityToHtmlFiles = function (markbotFile) {
   return markbotFile;
 };
 
+const bindScreenshotsToHtmlFiles = function (markbotFile) {
+  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.screenshots) {
+    if (!markbotFile.screenshots) markbotFile.screenshots = [];
+
+    markbotFile.html.forEach((item, i) => {
+      markbotFile.screenshots.push({
+        path: item.path,
+        sizes: markbotFile.allFiles.html.screenshots,
+      });
+    });
+  }
+
+  return markbotFile;
+};
+
 const mergeAllFilesProperties = function (markbotFile, key) {
   if (!markbotFile[key]) return markbotFile;
 
@@ -174,17 +189,6 @@ const bindAllFilesProperties = function (folderpath, ignoreFiles, markbotFile, n
 
     markbotFile = mergeAllFilesProperties(markbotFile, key);
   });
-
-  if (markbotFile.allFiles && markbotFile.allFiles.html && markbotFile.allFiles.html.screenshots) {
-    if (!markbotFile.screenshots) markbotFile.screenshots = [];
-
-    markbotFile.html.forEach((item, i) => {
-      markbotFile.screenshots.push({
-        path: item.path,
-        sizes: markbotFile.allFiles.html.screenshots,
-      });
-    });
-  }
 
   next(markbotFile);
 };
@@ -223,6 +227,8 @@ const mergeDuplicateFiles = function (markbotFile) {
 };
 
 const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
+  const markbotFileOriginal = Object.assign({}, markbotFile);
+
   if (isCheckingAccessibility(markbotFile)) {
     if (markbotFile.inherit) {
       markbotFile.inherit = [...new Set(markbotFile.inherit.concat(accessibilityTemplates))];
@@ -238,10 +244,10 @@ const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
 
   if (markbotFile.allFiles) {
     bindAllFilesProperties(folderpath, ignoreFiles, markbotFile, (mf) => {
-      next(mergeDuplicateFiles(bindFunctionalityToHtmlFiles(mf)), ignoreFiles);
+      next(mergeDuplicateFiles(bindScreenshotsToHtmlFiles(bindFunctionalityToHtmlFiles(mf))), ignoreFiles, markbotFileOriginal);
     });
   } else {
-    next(mergeDuplicateFiles(markbotFile), ignoreFiles);
+    next(mergeDuplicateFiles(markbotFile), ignoreFiles, markbotFileOriginal);
   }
 }
 

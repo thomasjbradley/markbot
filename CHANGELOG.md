@@ -16,6 +16,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
+- [**Backwards incompatible**] The cheat detection system was getting bungled when the templates changed, now only the original `.markbot.yml` is locked, not the template-parsed version.
 - Removed the `text-align` restriction when using Typografier to allow for responsive alignments.
 - Offscreen elements that should be hovered with functionality tests are now made visible with `scrollIntoView()` instead of resizing the browser window.
 
@@ -44,7 +45,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Changed
 
-- The Markbot file template `inherit` system now supports inheriting from multiple templates to make it more usable.
+- [**Backwards incompatible**] The Markbot file template `inherit` system now supports inheriting from multiple templates to make it more usable.
 - A check can now output errors, messages & warnings all at the same time.
 - Upgraded the HTML & CSS validators.
 - Upgraded a bunch of dependencies.
@@ -58,7 +59,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- The `.markbotignore` file is now taken into account when checking for cheating, it’s locked & compared.
+- [**Backwards incompatible**] The `.markbotignore` file is now taken into account when checking for cheating, it’s locked & compared.
 
 ---
 
