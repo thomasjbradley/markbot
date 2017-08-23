@@ -19,7 +19,6 @@ allFiles:
       - 'font-size'
       - 'font-style'
       - 'font-weight'
-      - 'text-align'
       - 'line-height'
       - 'text-transform'
 
