@@ -1,0 +1,6 @@
+allFiles:
+  html:
+    has:
+      - '.btn'
+    search:
+      - '\.btn\-(ghost|light)'
