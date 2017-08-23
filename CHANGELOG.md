@@ -17,6 +17,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Removed the `text-align` restriction when using Typografier to allow for responsive alignments.
+- Offscreen elements that should be hovered with functionality tests are now made visible with `scrollIntoView()` instead of resizing the browser window.
 
 ### Fixed
 

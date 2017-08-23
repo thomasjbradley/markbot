@@ -136,19 +136,27 @@ const __MarkbotInjectedFunctions = {
   hover: function (sel, next) {
     try {
       const elem = document.querySelector(sel);
-      const rect = elem.getBoundingClientRect();
-      let x = Math.round(rect.left + (rect.width / 2));
-      let y = Math.round(rect.top + (rect.height / 2));
+      let rect, x, y;
 
-      if (window.outerHeight < y) window.resizeTo(window.outerWidth, y + 100);
-      if (window.outerWidth < x) window.resizeTo(x + 100, window.outerHeight);
-      if (rect.width <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its width is \`0px\``);
-      if (rect.height <= 0) __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its height is \`0px\``);
+      elem.scrollIntoView();
 
-      __MarkbotInjectedFunctions.send('mouseMove', {
-        x: (x < 0) ? 0 : x,
-        y: (y < 0) ? 0 : y,
-      }, next);
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          rect = elem.getBoundingClientRect();
+          x = Math.round(rect.left + (rect.width / 2));
+          y = Math.round(rect.top + (rect.height / 2));
+
+          // if (window.outerHeight < y) window.resizeTo(window.outerWidth, y + 100);
+          // if (window.outerWidth < x) window.resizeTo(x + 100, window.outerHeight);
+          if (rect.width <= 0) return __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its width is \`0px\``);
+          if (rect.height <= 0) return __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its height is \`0px\``);
+
+          __MarkbotInjectedFunctions.send('mouseMove', {
+            x: (x < 0) ? 0 : x,
+            y: (y < 0) ? 0 : y,
+          }, next);
+        });
+      });
     } catch (e) {
       __MarkbotInjectedFunctions.debugFail(e);
     }
