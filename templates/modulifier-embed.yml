@@ -1,0 +1,6 @@
+allFiles:
+  html:
+    has:
+      - '.embed'
+      - '[class*="embed-"]'
+      - '.embed-item'

@@ -11,6 +11,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - A new screenshots template for only 320 size.
 - A new template for testing the hover state of navigation.
+- A new template for checking common HTML semantic tags exist.
+- A couple new templates for checking specific Modulifier classes.
 
 ### Changed
 
@@ -20,6 +22,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - The accessibility tests are now run on the full `document` instead of just `body`.
 - Some accessibility errors messages have been clarified or ignored as appropriate.
+- The `allFiles.functionality` tests weren’t merging properly causing the tests to hang.
 
 ---
 

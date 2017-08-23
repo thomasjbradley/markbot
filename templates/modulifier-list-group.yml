@@ -1,0 +1,4 @@
+allFiles:
+  html:
+    has:
+      - '[class*="list-group"]'

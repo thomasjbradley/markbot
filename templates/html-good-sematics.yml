@@ -1,0 +1,10 @@
+allFiles:
+  html:
+    has:
+      - 'header'
+      - 'header nav'
+      - 'header nav ul li a'
+      - 'main'
+      - 'footer'
+    search:
+      - '\<(section|article)'
