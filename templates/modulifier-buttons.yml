@@ -5,3 +5,13 @@ allFiles:
     search:
       - check: 'btn\-(ghost|light)'
         message: 'Expected to see a button style modifier: `.btn-ghost` or `.btn-light`'
+
+  functionality:
+    - |
+      let btn = $('.btn');
+      let oldBg = css(btn).backgroundColor;
+
+      hover('.btn', () => {
+        if (css(btn).backgroundColor == oldBg) return fail('The `background-color` of the buttons don’t change when hovered');
+        pass();
+      });
