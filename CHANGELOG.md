@@ -23,6 +23,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The accessibility tests are now run on the full `document` instead of just `body`.
 - Some accessibility errors messages have been clarified or ignored as appropriate.
 - The `allFiles.functionality` tests weren’t merging properly causing the tests to hang.
+- Attempted again to fix the font display issues before screenshots are taken by listening for a secondary font load event.
 
 ---
 

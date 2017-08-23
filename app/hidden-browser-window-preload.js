@@ -4,10 +4,13 @@
  * Trying to isolate all the Node.js functionality away from the user scripts for security
  * =============================================================================
  */
+
 window.__markbot = (function () {
   'use strict';
 
-  const getCurrentTaskWindowId = function () {
+  let allFontsLoaded = [];
+
+  const getCurrentTaskWindowId = () => {
     if (window.__markbotHiddenTestingWindowId) return window.__markbotHiddenTestingWindowId;
 
     return document.referrer.replace(/^https:\/\//, '').replace(/\.running-task-windows\.markbot\.web\-dev\.tools\/$/, '');
@@ -38,11 +41,19 @@ window.__markbot = (function () {
     }
   };
 
+  const dispatchIfFontsLoaded = function () {
+    if (allFontsLoaded.length < 2) return false;
+
+    sendMessageToWindow(getCurrentTaskWindowId(), '__markbot-hidden-browser-window-fonts-loaded', {location: window.location.href});
+  };
+
   return {
+    allFontsLoaded: allFontsLoaded,
     getCurrentTaskWindowId: getCurrentTaskWindowId,
     getTestingService: getTestingService,
     sendMessageToWindow: sendMessageToWindow,
     sendInputEventToWindow: sendInputEventToWindow,
+    dispatchIfFontsLoaded: dispatchIfFontsLoaded,
   };
 }());
 
@@ -51,16 +62,16 @@ window.__markbot = (function () {
  * Document & window event catchers for events Markbot needs to know about
  * =============================================================================
  */
-window.addEventListener('error', function (err) {
+window.addEventListener('error', (err) => {
   window.__markbot.sendMessageToWindow(window.__markbot.getCurrentTaskWindowId(), '__markbot-functionality-error', err.message, err.lineno, err.filename);
 });
 
-window.addEventListener('load', function (ev) {
-  window.requestAnimationFrame(function () {
-    window.requestAnimationFrame(function () {
-      window.requestAnimationFrame(function () {
-        window.requestAnimationFrame(function () {
-          process.nextTick(function () {
+window.addEventListener('load', (ev) => {
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          process.nextTick(() => {
             window.__markbot.sendMessageToWindow(window.__markbot.getCurrentTaskWindowId(), '__markbot-hidden-browser-window-loaded', {location: window.location.href});
           });
         });
@@ -69,13 +80,29 @@ window.addEventListener('load', function (ev) {
   });
 });
 
-document.fonts.ready.then(function () {
-  window.requestAnimationFrame(function () {
-    window.requestAnimationFrame(function () {
-      window.requestAnimationFrame(function () {
-        window.requestAnimationFrame(function () {
-          process.nextTick(function () {
-            window.__markbot.sendMessageToWindow(window.__markbot.getCurrentTaskWindowId(), '__markbot-hidden-browser-window-fonts-loaded', {location: window.location.href});
+document.fonts.ready.then(() => {
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          process.nextTick(() => {
+            window.__markbot.allFontsLoaded.push(true);
+            window.__markbot.dispatchIfFontsLoaded();
+          });
+        });
+      });
+    });
+  });
+});
+
+document.fonts.addEventListener('loadingdone', () => {
+  window.requestAnimationFrame(() => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          process.nextTick(() => {
+            window.__markbot.allFontsLoaded.push(true);
+            window.__markbot.dispatchIfFontsLoaded();
           });
         });
       });
