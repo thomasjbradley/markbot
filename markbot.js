@@ -246,6 +246,7 @@ const handleMarkbotFile = function (mf, ignores) {
 
   if (mf.inheritFilesNotFound && mf.inheritFilesNotFound.length > 0) markbotMain.debug(`Inherited Markbot file(s) “${mf.inheritFilesNotFound.join(', ')}” not found`);
 
+  if (global.DEBUG) console.log(mf);
   markbotMain.debug(`Server “web”: @@${serverManager.getHost('web')}@@`);
   markbotMain.debug(`Server “html”: @@${serverManager.getHost('html')}@@`);
   markbotMain.debug(`Server “language”: @@${serverManager.getHost('language')}@@`);
