@@ -7,6 +7,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- A new screenshots template for only 320 size.
+- A new template for testing the hover state of navigation.
+
+### Changed
+
+- Removed the `text-align` restriction when using Typografier to allow for responsive alignments.
+
 ### Fixed
 
 - The accessibility tests are now run on the full `document` instead of just `body`.

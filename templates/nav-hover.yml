@@ -1,0 +1,10 @@
+allFiles:
+  functionality:
+    - |
+      let link = $('header nav:last-of-type a');
+      let oldBg = css(link).backgroundColor;
+
+      hover('header nav:last-of-type a', function () {
+        if (css(link).backgroundColor == oldBg) fail('The background colour of the navigation links don’t change when hovered')
+        pass();
+      });
