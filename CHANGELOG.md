@@ -20,6 +20,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - [**Backwards incompatible**] The cheat detection system was getting bungled when the templates changed, now only the original `.markbot.yml` is locked, not the template-parsed version.
 - Removed the `text-align` restriction when using Typografier to allow for responsive alignments.
 - Offscreen elements that should be hovered with functionality tests are now made visible with `scrollIntoView()` instead of resizing the browser window.
+- Upgraded some dependencies.
 
 ### Fixed
 
