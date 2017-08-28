@@ -227,7 +227,7 @@ const mergeDuplicateFiles = function (markbotFile) {
 };
 
 const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
-  const markbotFileOriginal = Object.assign({}, markbotFile);
+  const markbotFileOriginal = JSON.parse(JSON.stringify(markbotFile));
 
   if (isCheckingAccessibility(markbotFile)) {
     if (markbotFile.inherit) {
@@ -239,7 +239,7 @@ const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
     markbotFile = bindAccessibilityProperties(markbotFile);
   }
 
-  if (!markbotFile.allFiles && !markbotFile.inherit) return next(markbotFile, ignoreFiles);
+  if (!markbotFile.allFiles && !markbotFile.inherit) return next(markbotFile, ignoreFiles, markbotFileOriginal);
   if (markbotFile.inherit) markbotFile = mergeInheritedFiles(markbotFile);
 
   if (markbotFile.allFiles) {
