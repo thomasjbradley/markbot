@@ -134,6 +134,13 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
     let numPasses = a11yResults.passes.length;
     let numFails = a11yResults.violations.length;
 
+    const introError = {
+      type: 'intro',
+      message: 'Refer to the accessibility checklist to help understand these errors:',
+      link: 'https://learn-the-web.algonquindesign.ca/topics/accessibility-checklist/',
+      linkText: 'https://mkbt.io/a11y-checklist/',
+    };
+
     cleanup();
 
     if (numFails <= 0) {
@@ -155,6 +162,9 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
         errors.push(constructErrorMessage(item));
       }
     });
+
+    if (warnings.length > 0) warnings.unshift(introError);
+    if (errors.length > 0) errors.unshift(introError);
 
     messages = constructPositiveMessage(numPasses, numFails);
     markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors, messages, warnings);

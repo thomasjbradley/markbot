@@ -13,6 +13,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A new template for testing the hover state of navigation.
 - A new template for checking common HTML semantic tags exist.
 - A couple new templates for checking specific Modulifier classes.
+- Some error messages now show links to cheat sheets and checklists on Learn the Web.
 
 ### Changed
 

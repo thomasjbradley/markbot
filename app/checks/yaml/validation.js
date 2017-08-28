@@ -32,6 +32,15 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
     }
   }
 
+  if (errors.length > 0) {
+    errors.unshift({
+      type: 'intro',
+      message: 'Refer to the Markdown & YAML cheat sheet to help understand these errors:',
+      link: 'https://learn-the-web.algonquindesign.ca/topics/markdown-yaml-cheat-sheet/',
+      linkText: 'https://mkbt.io/md-yml-cheat-sheet/',
+    });
+  }
+
   markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
   next(errors);
 };

@@ -56,13 +56,29 @@
     let namingErrors = [];
     let restrictedErrors = [];
 
+    const introError = {
+      type: 'intro',
+      message: 'Refer to the naming conventions cheat sheet to help understand these errors:',
+      link: 'https://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/',
+      linkText: 'https://mkbt.io/name-cheat-sheet/',
+    };
+
     files.forEach(function (file) {
       if (taskDetails.options.naming) namingErrors = namingErrors.concat(checkNaming(file));
       if (taskDetails.options.restrictFileTypes) restrictedErrors = restrictedErrors.concat(checkRestrictedFiles(file));
     });
 
-    if (taskDetails.options.naming) markbotMain.send('check-group:item-complete', taskDetails.group, 'naming', namingLabel, namingErrors);
-    if (taskDetails.options.restrictFileTypes) markbotMain.send('check-group:item-complete', taskDetails.group, 'file-types', restrictedLabel, restrictedErrors);
+    if (taskDetails.options.naming) {
+      if (namingErrors.length > 0) namingErrors.unshift(introError);
+
+      markbotMain.send('check-group:item-complete', taskDetails.group, 'naming', namingLabel, namingErrors);
+    }
+
+    if (taskDetails.options.restrictFileTypes) {
+      if (restrictedErrors.length > 0) restrictedErrors.unshift(introError);
+
+      markbotMain.send('check-group:item-complete', taskDetails.group, 'file-types', restrictedLabel, restrictedErrors);
+    }
 
     done();
   });

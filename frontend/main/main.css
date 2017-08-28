@@ -785,6 +785,28 @@
   font-style: normal;
 }
 
+.messages .error-intro::before {
+  content: none;
+}
+
+.messages .error-intro-content {
+  margin: 0 -.6rem 13px;
+  padding: .4rem .6rem .6rem calc(1.2rem + 20px);
+
+  background: rgba(255, 148, 148, .2) url("../images/help-red.svg") no-repeat .6rem center / 20px 20px;
+  border-radius: 4px;
+}
+
+.messages-positive .error-intro-content {
+  background-color: rgba(193, 232, 155, .3);
+  background-image: url("../images/help-green.svg");
+}
+
+.messages-warning .error-intro-content {
+  background-color: rgba(255, 239, 171, .4);
+  background-image: url("../images/help-yellow.svg");
+}
+
 .messages img {
   display: block;
   width: 100%;

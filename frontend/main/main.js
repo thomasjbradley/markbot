@@ -262,6 +262,26 @@ const buildBigNumberErrorMessage = function (err, li) {
   li.appendChild(wrap);
 };
 
+const buildIntroErrorMessage = function (err, li) {
+  const wrap = document.createElement('div');
+  const message = document.createElement('em');
+  const link = document.createElement('a');
+
+  li.classList.add('error-intro');
+  wrap.classList.add('error-intro-content');
+  message.innerHTML = prepareErrorText(err.message);
+  wrap.appendChild(message);
+
+  if (err.link) {
+    message.innerHTML += ' ';
+    link.href = err.link;
+    link.textContent = err.linkText;
+    wrap.appendChild(link);
+  }
+
+  li.appendChild(wrap);
+};
+
 const buildErrorMessageFromObject = function (err, li) {
   switch (err.type) {
     case 'code-diff':
@@ -278,6 +298,9 @@ const buildErrorMessageFromObject = function (err, li) {
       break;
     case 'big-number':
       buildBigNumberErrorMessage(err, li);
+      break;
+    case 'intro':
+      buildIntroErrorMessage(err, li);
       break;
   }
 };

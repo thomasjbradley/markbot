@@ -782,6 +782,7 @@ allFiles:
     valid: true
 
   # The functionality tests will be applied to every HTML file
+  # Supports any of the entries that `functionality` supports
   functionality:
     noErrors: true
 
