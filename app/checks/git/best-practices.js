@@ -124,16 +124,18 @@ const checkCommits = function (commits, group, id, label, next) {
 
       if (singleCommitErrors.length > 0) {
         let commitText = processCommitText(commits[i].title, spellingErrorReplacements);
-
-        errors.push({
-          type: 'intro',
-          message: 'Refer to the Git commit message cheat sheet to help understand these errors:',
-          link: 'https://learn-the-web.algonquindesign.ca/topics/commit-message-cheat-sheet/',
-          linkText: 'https://mkbt.io/git-cheat-sheet/',
-        });
         errors.push(`The following recent commit message has some errors: **“${commitText}”** ---+++${singleCommitErrors.join('+++')}---`);
       }
     });
+
+    if (errors.length > 0) {
+      errors.unshift({
+        type: 'intro',
+        message: 'Refer to the Git commit message cheat sheet to help understand these errors:',
+        link: 'https://learn-the-web.algonquindesign.ca/topics/commit-message-cheat-sheet/',
+        linkText: 'https://mkbt.io/git-cheat-sheet/',
+      });
+    }
 
     markbotMain.send('check-group:item-complete', group, id, label, false, false, errors);
     next();
