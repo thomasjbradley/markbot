@@ -128,10 +128,7 @@ const bindFunctionalityToHtmlFiles = function (markbotFile) {
     if (!markbotFile.functionality) markbotFile.functionality = [];
 
     markbotFile.html.forEach((file) => {
-      markbotFile.functionality.push({
-        path: file.path,
-        tests: markbotFile.allFiles.functionality.tests,
-      });
+      markbotFile.functionality.push(merge({ path: file.path }, markbotFile.allFiles.functionality));
     });
   }
 

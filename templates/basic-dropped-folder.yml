@@ -2,11 +2,14 @@ internalTemplate: true
 
 inherit:
   - html
+  - html-good-semantics
   - css
   - js
   - aria-landmarks
   - accessibility
   - seo
+  - nav-hover
+  - forms
 
 naming: true
 restrictFileTypes: true
