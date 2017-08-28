@@ -22,8 +22,8 @@
     "eslint": "^3.19.0",
     "exif": "^0.6.0",
     "finalhandler": "^1.0.4",
-    "front-matter": "^2.1.2",
-    "get-port": "^3.1.0",
+    "front-matter": "^2.2.0",
+    "get-port": "^3.2.0",
     "git-commits": "^1.2.0",
     "git-get-status": "^1.0.5",
     "glob": "^7.1.1",
@@ -41,13 +41,13 @@
     "portfinder": "^1.0.10",
     "string": "^3.3.3",
     "stylelint": "^7.6.0",
-    "webcoach": "^0.36.0",
-    "xml2js": "^0.4.18"
+    "webcoach": "^0.37.0",
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "devtron": "^1.4.0",
     "electron": "^1.7.5",
-    "electron-builder": "^19.22.1"
+    "electron-builder": "^19.26.3"
   },
   "scripts": {
     "debug": "NODE_ENV=development electron markbot.js",
