@@ -130,7 +130,7 @@ const bindFunctionalityToHtmlFiles = function (markbotFile) {
     markbotFile.html.forEach((file) => {
       markbotFile.functionality.push({
         path: file.path,
-        tests: markbotFile.allFiles.functionality,
+        tests: markbotFile.allFiles.functionality.tests,
       });
     });
   }

@@ -1,11 +1,12 @@
 allFiles:
   functionality:
-    - |
-      let headerLink = $('header nav:last-of-type a');
-      let oldBg = css(headerLink).backgroundColor;
-      let oldColor = css(headerLink).color;
+    tests:
+      - |
+        let headerLink = $('header nav:last-of-type a');
+        let oldBg = css(headerLink).backgroundColor;
+        let oldColor = css(headerLink).color;
 
-      hover('header nav:last-of-type a', function () {
-        if (css(headerLink).backgroundColor == oldBg && css(headerLink).color == oldColor) return fail('The `background-color` or `color` of the navigation links don’t change when hovered')
-        pass();
-      });
+        hover('header nav:last-of-type a', function () {
+          if (css(headerLink).backgroundColor == oldBg && css(headerLink).color == oldColor) return fail('The `background-color` or `color` of the navigation links don’t change when hovered')
+          pass();
+        });

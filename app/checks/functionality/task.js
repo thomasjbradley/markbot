@@ -127,7 +127,7 @@
     webLoader.load(taskRunnerId, file.path, {}, (file.setup) ? file.setup : false, function (theWindow) {
       win = theWindow;
 
-      if (file.tests) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
+      if (file.tests && Array.isArray(file.tests)) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
 
       if (file.noErrors && !hasErrors) {
         markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel);
