@@ -8,7 +8,7 @@
 window.__markbot = (function () {
   'use strict';
 
-  let allFontsLoaded = [];
+  let fontsLoadedInterval;
 
   const getCurrentTaskWindowId = () => {
     if (window.__markbotHiddenTestingWindowId) return window.__markbotHiddenTestingWindowId;
@@ -41,19 +41,33 @@ window.__markbot = (function () {
     }
   };
 
-  const dispatchIfFontsLoaded = function () {
-    if (allFontsLoaded.length < 2) return false;
+  const checkIfFontsDoneLoading = function () {
+    if (document.fonts.status === 'loaded') {
+      clearInterval(fontsLoadedInterval);
 
-    sendMessageToWindow(getCurrentTaskWindowId(), '__markbot-hidden-browser-window-fonts-loaded', {location: window.location.href});
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          window.requestAnimationFrame(() => {
+            window.requestAnimationFrame(() => {
+              process.nextTick(() => {
+                setTimeout(() => {
+                  sendMessageToWindow(getCurrentTaskWindowId(), '__markbot-hidden-browser-window-fonts-loaded', {location: window.location.href});
+                }, 50);
+              });
+            });
+          });
+        });
+      });
+    }
   };
 
+  fontsLoadedInterval = setInterval(checkIfFontsDoneLoading, 100);
+
   return {
-    allFontsLoaded: allFontsLoaded,
     getCurrentTaskWindowId: getCurrentTaskWindowId,
     getTestingService: getTestingService,
     sendMessageToWindow: sendMessageToWindow,
     sendInputEventToWindow: sendInputEventToWindow,
-    dispatchIfFontsLoaded: dispatchIfFontsLoaded,
   };
 }());
 
@@ -73,36 +87,6 @@ window.addEventListener('load', (ev) => {
         window.requestAnimationFrame(() => {
           process.nextTick(() => {
             window.__markbot.sendMessageToWindow(window.__markbot.getCurrentTaskWindowId(), '__markbot-hidden-browser-window-loaded', {location: window.location.href});
-          });
-        });
-      });
-    });
-  });
-});
-
-document.fonts.ready.then(() => {
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          process.nextTick(() => {
-            window.__markbot.allFontsLoaded.push(true);
-            window.__markbot.dispatchIfFontsLoaded();
-          });
-        });
-      });
-    });
-  });
-});
-
-document.fonts.addEventListener('loadingdone', () => {
-  window.requestAnimationFrame(() => {
-    window.requestAnimationFrame(() => {
-      window.requestAnimationFrame(() => {
-        window.requestAnimationFrame(() => {
-          process.nextTick(() => {
-            window.__markbot.allFontsLoaded.push(true);
-            window.__markbot.dispatchIfFontsLoaded();
           });
         });
       });
