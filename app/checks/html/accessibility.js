@@ -103,13 +103,14 @@ const constructPositiveMessage = function (numPass, numFail) {
   const passPlural = (numPass === 1) ? '' : 's';
   const failPlural = (numFail === 1) ? '' : 's';
 
-  return [{
+  return {
     type: 'big-number',
     message: 'The website passes many accessibility tests, but there’s always room for improvement — make sure to do some real user testing',
     number: `${percent}%`,
     title: `Passed ${numPass} test${passPlural}`,
     desc: `Failed ${numFail} test${failPlural}`,
-  }];
+    grade: percent,
+  };
 };
 
 const bypass = function (checkGroup, checkId, checkLabel) {
@@ -133,6 +134,7 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
     let warnings = [];
     let numPasses = a11yResults.passes.length;
     let numFails = a11yResults.violations.length;
+    let positiveMessage;
 
     const introError = {
       type: 'intro',
@@ -144,7 +146,7 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
     cleanup();
 
     if (numFails <= 0) {
-      messages = constructPositiveMessage(numPasses, numFails);
+      messages.push(constructPositiveMessage(numPasses, numFails));
       markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors, messages, warnings);
       return next();
     }
@@ -166,7 +168,10 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
     if (warnings.length > 0) warnings.unshift(introError);
     if (errors.length > 0) errors.unshift(introError);
 
-    messages = constructPositiveMessage(numPasses, numFails);
+    positiveMessage = constructPositiveMessage(numPasses, numFails);
+
+    if (positiveMessage.grade >= 75) messages.push(positiveMessage);
+
     markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors, messages, warnings);
     next();
   });
