@@ -52,7 +52,7 @@ window.__markbot = (function () {
               process.nextTick(() => {
                 setTimeout(() => {
                   sendMessageToWindow(getCurrentTaskWindowId(), '__markbot-hidden-browser-window-fonts-loaded', {location: window.location.href});
-                }, 50);
+                }, 100);
               });
             });
           });
