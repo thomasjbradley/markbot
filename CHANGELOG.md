@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [7.0.1] — 2017-01-05
+
+### Changed
+
+- Modified some of the error messages to match the language used in the new GitHub application.
+- Added “Starting up…” to the start-up screen for a little better on-boarding.
+
+---
+
 ## [7.0.0] — 2017-01-01
 
 ### Added
