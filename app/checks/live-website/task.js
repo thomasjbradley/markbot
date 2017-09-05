@@ -9,7 +9,7 @@
   const username = taskDetails.options.username;
   const id = 'live-website';
   const label = 'Online';
-  const errors = [`**Your website is not online.** Double check that all the commits have been synced & that the \`index.html\` file, on GitHub’s website, follows the naming conventions. @@https://${username.toLowerCase()}.github.io/${repo}/@@`];
+  const errors = [`**Your website is not online.** Double check that all the commits have been pushed & that the \`index.html\` file, on GitHub’s website, follows the naming conventions. @@https://${username.toLowerCase()}.github.io/${repo}/@@`];
   const opts = {
     method: 'HEAD',
     host: `${username.toLowerCase()}.github.io`,

@@ -38,7 +38,7 @@ module.exports.check = function (fullPath, gitOpts, group, next) {
 
     if (gitOpts.allSynced) {
       if (status.remote_diff !== null) {
-        markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel, ['There are some commits waiting to be synced']);
+        markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel, ['There are some commits waiting to be pushed']);
       } else {
         markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel);
       }
