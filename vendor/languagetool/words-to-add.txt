@@ -26,6 +26,7 @@ http
 https
 ip
 url
+gh-pages
 #
 # All the dinosaur names
 dino
