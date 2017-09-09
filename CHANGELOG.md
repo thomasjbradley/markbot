@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Added `gh-pages` to the list of words ignored by the dictionary.
+
+---
+
 ## [7.0.1] — 2017-01-05
 
 ### Changed
