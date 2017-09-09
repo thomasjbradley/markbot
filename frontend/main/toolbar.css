@@ -72,6 +72,16 @@ svg:not(:root) {
   height: 38px;
 }
 
+.os-win .toolbar,
+.os-win32 .toolbar {
+  padding-left: 6px;
+
+  background-color: #f0f0f0;
+  background-image: none;
+  border-top: 0;
+  border-bottom-color: #dadbdc;
+}
+
 .toolbar:focus {
   outline: 0;
 }
@@ -131,6 +141,19 @@ svg:not(:root) {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
   font-size: var(--control-font-size);
   letter-spacing: .02em;
+}
+
+.os-win .toolbar-button,
+.os-win32 .toolbar-button {
+  background-image: none;
+  border-radius: 0;
+  border-color: #dadbdc;
+}
+
+.os-win .toolbar-button:not(.toolbar-status):hover,
+.os-win32 .toolbar-button:not(.toolbar-status):hover {
+  background-color: #e8eff7;
+  border-color: #a4cef9;
 }
 
 button.toolbar-button * {
@@ -265,6 +288,22 @@ button.toolbar-button-green:focus {
 .toolbar-buttons-group > :last-child .toolbar-button {
   border-radius: 0 var(--control-border-radius) var(--control-border-radius) 0;
   border-right: 1px solid var(--control-border-color);
+}
+
+.os-win .toolbar-buttons-group > :first-child .toolbar-button,
+.os-win32 .toolbar-buttons-group > :first-child .toolbar-button,
+.os-win .toolbar-buttons-group > :last-child .toolbar-button,
+.os-win32 .toolbar-buttons-group > :last-child .toolbar-button {
+  border-radius: 0;
+  border-color: #dadbdc;
+}
+
+.os-win .toolbar-buttons-group > :first-child .toolbar-button:not(.toolbar-status):hover,
+.os-win32 .toolbar-buttons-group > :first-child .toolbar-button:not(.toolbar-status):hover,
+.os-win .toolbar-buttons-group > :last-child .toolbar-button:not(.toolbar-status):hover,
+.os-win32 .toolbar-buttons-group > :last-child .toolbar-button:not(.toolbar-status):hover {
+  background-color: #e8eff7;
+  border-color: #a4cef9;
 }
 
 .toolbar-status {

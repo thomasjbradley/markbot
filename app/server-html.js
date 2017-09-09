@@ -34,10 +34,12 @@ const start = function (port) {
     server.unref();
 
     server.stderr.on('data', (data) => {
-      let message = data.toString('utf8');
-      let info = /INFO/;
+      if (process.platform === 'darwin') {
+        let message = data.toString('utf8');
+        let info = /INFO/;
 
-      if (!info.test(message)) reject('There was an error starting the HTML validator');
+        if (!info.test(message)) reject('There was an error starting the HTML validator');
+      }
     });
 
     server.stdout.on('data', (data) => {

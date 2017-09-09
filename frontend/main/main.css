@@ -176,6 +176,7 @@
 }
 
 .os-win #checks,
+.os-win32 #checks,
 .macosx-lt-1010 #checks {
   padding-top: 13px;
 }

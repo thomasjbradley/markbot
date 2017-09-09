@@ -72,6 +72,7 @@
   display: none;
 }
 
-.os-win .dep-mac {
+.os-win .dep-mac,
+.os-win32 .dep-mac {
   display: none;
 }

@@ -10,10 +10,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Added `gh-pages` to the list of words ignored by the dictionary.
+- The toolbar design for Windows to more closely match the OS.
 
 ### Fixed
 
 - When you signed-out of the Markbot interface it got stuck on the start-up screen.
+- A bug in the start-up when detecting if the browser has started on Windows.
 
 ---
 
