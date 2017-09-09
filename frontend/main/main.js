@@ -53,7 +53,6 @@ let groups = {};
 let checks = {};
 let fullPath = false;
 let isMarkbotDoneYet;
-let appIsReady = false;
 
 const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../app/error-message-status`);
 
@@ -64,7 +63,7 @@ const ERROR_MESSAGE_TYPE = {
 };
 
 const appReady = function () {
-  appIsReady = true;
+  if (!sessionStorage.appIsReady) return false;
 
   $loader.dataset.state = 'hidden';
   $dependencies.dataset.state = 'hidden';
@@ -730,7 +729,7 @@ if (os.platform() == 'darwin') {
 }
 
 $body.ondragover = (e) => {
-  if (!appIsReady) return false;
+  if (!sessionStorage.appIsReady) return false;
 
   e.stopImmediatePropagation();
   e.stopPropagation();
@@ -741,7 +740,7 @@ $body.ondragover = (e) => {
 };
 
 $body.ondragleave = (e) => {
-  if (!appIsReady) return false;
+  if (!sessionStorage.appIsReady) return false;
 
   e.stopImmediatePropagation();
   e.stopPropagation();
@@ -751,7 +750,7 @@ $body.ondragleave = (e) => {
 };
 
 $body.ondrop = (e) => {
-  if (!appIsReady) return false;
+  if (!sessionStorage.appIsReady) return false;
 
   e.preventDefault();
 
@@ -796,6 +795,10 @@ document.addEventListener('click', (e) => {
 
 window.addEventListener('will-navigate', (e) => {
   e.preventDefault();
+});
+
+window.addEventListener('load', () => {
+  appReady();
 });
 
 $repoName.addEventListener('click', (e) => {
@@ -995,6 +998,7 @@ listener.on('app:focus', () => {
 });
 
 listener.on('app:ready', () => {
+  sessionStorage.appIsReady = true;
   appReady();
 });
 

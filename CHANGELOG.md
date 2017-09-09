@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added `gh-pages` to the list of words ignored by the dictionary.
 
+### Fixed
+
+- When you signed-out of the Markbot interface it got stuck on the start-up screen.
+
 ---
 
 ## [7.0.1] — 2017-01-05
