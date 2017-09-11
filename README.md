@@ -651,6 +651,10 @@ files:
   # The file’s path
   - path: "images/mars-2.jpg"
 
+    # Essentially checks to make sure the file doesn’t exist
+    # All other checks will be ignored
+    exists: false
+
     # The maximum allowed file size represented in kilobytes (kB)
     maxSize: 300
 

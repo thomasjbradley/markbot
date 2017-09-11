@@ -176,11 +176,22 @@
 
   const check = function (folderPath, file, next) {
     const fullPath = path.resolve(`${folderPath}/${file.path}`);
+    const fileExists = exists.check(fullPath);
 
     markbotMain.send('check-group:item-new', group, file.path, file.path);
     markbotMain.send('check-group:item-computing', group, file.path, file.path);
 
-    if (!exists.check(fullPath)) {
+    if (file.hasOwnProperty('exists') && file.exists === false && fileExists) {
+      markbotMain.send('check-group:item-complete', group, file.path, file.path, [`The \`${file.path}\` file is unnecessary and should be deleted`]);
+      return next();
+    }
+
+    if (file.hasOwnProperty('exists') && file.exists === false && !fileExists) {
+      markbotMain.send('check-group:item-complete', group, file.path, file.path);
+      return next();
+    }
+
+    if (!fileExists) {
       markbotMain.send('check-group:item-complete', group, file.path, file.path, [`The \`${file.path}\` file is missing or misspelled`]);
       return next();
     }

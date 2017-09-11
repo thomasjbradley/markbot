@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- The ability to display an error when a file exists and it shouldn’t.
+
 ### Changed
 
 - The error messages created by Typografier for `margin` & `padding` have been down-graded to warnings.
