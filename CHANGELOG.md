@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- The error messages created by Typografier for `margin` & `padding` have been down-graded to warnings.
+
+---
+
 ## [7.0.2] — 2017-09-09
 
 ### Changed
