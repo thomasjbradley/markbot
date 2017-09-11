@@ -14,13 +14,17 @@ allFiles:
       - ['@60em', 'html', ['line-height'], 'Typografier provides correct `line-height` values for each media query so you don’t have to repeat the code']
       - ['@90em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
     searchNot:
-      - ['padding(?:-top|-bottom|-right|-left)?\: 0?[^0;]+?\;$', 'Only `padding: 0;` should be used, all other paddings should be specified by the Typografier classes']
-      - ['margin(?:-top|-bottom|-right|-left)?\: 0?[^0;]+?\;$', 'Only `margin: 0;` should be used, all other margins should be specified by the Typografier classes']
       - 'font-size'
       - 'font-style'
       - 'font-weight'
       - 'line-height'
       - 'text-transform'
+      - check: 'padding(?:-top|-bottom|-right|-left)?\: 0?[^0;]+?\;$'
+        message: 'Is this instance of `padding` necessary? Ideally only `padding: 0;` should be used, all other paddings should be specified by the Typografier classes'
+        type: warning
+      - check: 'margin(?:-top|-bottom|-right|-left)?\: 0?[^0;]+?\;$'
+        message: 'Is this instance of `margin` necessary? Ideally only `margin: 0;` should be used, all other margins should be specified by the Typografier classes'
+        type: warning
 
 css:
   - path: 'css/type.css'
