@@ -903,7 +903,9 @@ Because Markbot shells out to two JAR files, the JDK must be available on the us
 
 Check out my lesson for the students on installing it on their computers.
 
-*Specifically starting at set 13:* [**Student Markbot installation lesson.**](http://learn-the-web.algonquindesign.ca/courses/web-dev-1/install-all-the-things/#step-13)
+*Specifically starting at set 12:* [**Student Markbot installation lesson.**](http://learn-the-web.algonquindesign.ca/courses/web-dev-1/install-all-the-things/#step-12)
+
+**Or install each tool separately, look in the [docs](docs) folder for instructions.**
 
 ---
 
