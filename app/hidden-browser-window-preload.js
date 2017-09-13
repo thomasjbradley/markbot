@@ -19,13 +19,13 @@ window.__markbot = (function () {
   const sendMessageToWindow = function (windowId, messageId, ...message) {
     if (typeof windowId === 'string') windowId = parseInt(windowId, 10);
 
-    require('electron').remote.BrowserWindow.fromId(windowId).webContents.send(messageId, ...message);
+    if (windowId) require('electron').remote.BrowserWindow.fromId(windowId).webContents.send(messageId, ...message);
   };
 
   const sendInputEventToWindow = function (windowId, inputEvent) {
     if (typeof windowId === 'string') windowId = parseInt(windowId, 10);
 
-    require('electron').remote.BrowserWindow.fromId(windowId).webContents.sendInputEvent(inputEvent);
+    if (windowId) require('electron').remote.BrowserWindow.fromId(windowId).webContents.sendInputEvent(inputEvent);
   };
 
   const getTestingService = function (service) {
