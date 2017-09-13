@@ -14,13 +14,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - The error messages created by Typografier for `margin` & `padding` have been down-graded to warnings.
-- The Command Line Tools & Java installation links to match the new unique tutorials.
+- Updated the links for the Command Line Tools & Java installations to match the new unique tutorials.
 - When a file is `locked` no other tests will be run.
 
 ### Fixed
 
-- The Markbot file generator wasn’t combining duplicate files properly because some were being skipped because of the way the code ran.
-- There were errors being thrown when the Web Loader was trying load the page initially.
+- The Markbot file generator wasn’t combining duplicate files properly, some were being skipped because of the way the code ran.
+- There were errors being thrown when the WebLoader was trying load the page initially.
 - When multiple hover functionality tests were activated they didn’t work properly because the previous hover would still be active—the mouse position is reset before each functionality test now.
 
 ---
