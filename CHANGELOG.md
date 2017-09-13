@@ -21,6 +21,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - The Markbot file generator wasn’t combining duplicate files properly because some were being skipped because of the way the code ran.
 - There were errors being thrown when the Web Loader was trying load the page initially.
+- When multiple hover functionality tests were activated they didn’t work properly because the previous hover would still be active—the mouse position is reset before each functionality test now.
 
 ---
 

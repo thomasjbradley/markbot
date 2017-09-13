@@ -28,28 +28,30 @@
         __MarkbotInjectedFunctions.failLabel = '__markbot-functionality-test-fail-${label}';
         __MarkbotInjectedFunctions.debugLabel = '__markbot-functionality-test-debug-${label}';
 
-        (function ($, $$, css, bounds, offset, on, ev, send, hover, pass, fail, debug) {
-          'use strict';
+        __MarkbotInjectedFunctions.send('mouseMove', { x: -10, y: -10 }, () => {
+          (function ($, $$, css, bounds, offset, on, ev, send, hover, pass, fail, debug) {
+            'use strict';
 
-          try {
-            eval(${js});
-          } catch (e) {
-            __MarkbotInjectedFunctions.debugFail(e);
-          }
-        }(
-          __MarkbotInjectedFunctions.$,
-          __MarkbotInjectedFunctions.$$,
-          __MarkbotInjectedFunctions.css,
-          __MarkbotInjectedFunctions.bounds,
-          __MarkbotInjectedFunctions.offset,
-          __MarkbotInjectedFunctions.on,
-          __MarkbotInjectedFunctions.ev,
-          __MarkbotInjectedFunctions.send,
-          __MarkbotInjectedFunctions.hover,
-          __MarkbotInjectedFunctions.pass,
-          __MarkbotInjectedFunctions.fail,
-          __MarkbotInjectedFunctions.debug
-        ));
+            try {
+              eval(${js});
+            } catch (e) {
+              __MarkbotInjectedFunctions.debugFail(e);
+            }
+          }(
+            __MarkbotInjectedFunctions.$,
+            __MarkbotInjectedFunctions.$$,
+            __MarkbotInjectedFunctions.css,
+            __MarkbotInjectedFunctions.bounds,
+            __MarkbotInjectedFunctions.offset,
+            __MarkbotInjectedFunctions.on,
+            __MarkbotInjectedFunctions.ev,
+            __MarkbotInjectedFunctions.send,
+            __MarkbotInjectedFunctions.hover,
+            __MarkbotInjectedFunctions.pass,
+            __MarkbotInjectedFunctions.fail,
+            __MarkbotInjectedFunctions.debug
+          ));
+        });
       }());
     `;
   };
