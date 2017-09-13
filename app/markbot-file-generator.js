@@ -212,11 +212,16 @@ const mergeDuplicateFiles = function (markbotFile) {
       if (!item.path) return;
 
       if (item.path in paths) {
-        markbotFile[key][paths[item.path]] = merge(markbotFile[key][paths[item.path]], item);
-        markbotFile[key].splice(i, 1);
+        paths[item.path] = merge(paths[item.path], item);
       } else {
-        paths[item.path] = i;
+        paths[item.path] = item;
       }
+    });
+
+    markbotFile[key] = [];
+
+    Object.keys(paths).forEach((path) => {
+      markbotFile[key].push(paths[path]);
     });
   });
 
