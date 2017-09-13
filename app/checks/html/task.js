@@ -54,36 +54,6 @@
     checksToComplete++;
     markbotMain.send('check-group:item-new', group, 'exists', 'Exists');
 
-    if (file.valid) {
-      checksToComplete++;
-      validationChecker = validation.init(group);
-
-      if (file.bestPractices) {
-        checksToComplete++;
-        bestPracticesChecker = bestPractices.init(group);
-      }
-
-      if (file.outline) {
-        checksToComplete++;
-        outlineChecker = outline.init(group);
-      }
-
-      if (file.accessibility) {
-        checksToComplete++;
-        accessibilityChecker = accessibility.init(group);
-      }
-
-      if (file.has || file.hasNot) {
-        checksToComplete++;
-        elementsChecker = elements.init(group);
-      }
-    }
-
-    if (file.search || file.searchNot) {
-      checksToComplete++;
-      contentChecker = content.init(group);
-    }
-
     if (!exists.check(fullPath)) {
       markbotMain.send('check-group:item-complete', group, 'exists', 'Exists', [`The file \`${file.path}\` is missing or misspelled`]);
       bypassAllChecks(file);
@@ -102,6 +72,36 @@
       }
 
       checkIfDone();
+    } else {
+      if (file.valid) {
+        checksToComplete++;
+        validationChecker = validation.init(group);
+
+        if (file.bestPractices) {
+          checksToComplete++;
+          bestPracticesChecker = bestPractices.init(group);
+        }
+
+        if (file.outline) {
+          checksToComplete++;
+          outlineChecker = outline.init(group);
+        }
+
+        if (file.accessibility) {
+          checksToComplete++;
+          accessibilityChecker = accessibility.init(group);
+        }
+
+        if (file.has || file.hasNot) {
+          checksToComplete++;
+          elementsChecker = elements.init(group);
+        }
+      }
+
+      if (file.search || file.searchNot) {
+        checksToComplete++;
+        contentChecker = content.init(group);
+      }
     }
 
     fs.readFile(fullPath, 'utf8', function (err, fileContents) {
@@ -116,6 +116,9 @@
 
       markbotMain.send('check-group:item-complete', group, 'exists', 'Exists');
       checkIfDone();
+
+      if (file.locked) return;
+
       lines = fileContents.toString().trim().split(/[\n\u0085\u2028\u2029]|\r\n?/g);
 
       if (file.maxLines) {
