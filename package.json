@@ -9,7 +9,7 @@
   "private": true,
   "main": "markbot.js",
   "dependencies": {
-    "axe-core": "^2.3.1",
+    "axe-core": "^2.4.1",
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",
     "calipers-png": "^2.0.0",
@@ -25,15 +25,15 @@
     "front-matter": "^2.2.0",
     "get-port": "^3.2.0",
     "git-commits": "^1.2.0",
-    "git-get-status": "^1.0.5",
+    "git-state": "^4.0.0",
     "glob": "^7.1.1",
     "htmlcs": "^0.4.1",
     "jimp": "^0.2.27",
     "js-beautify": "^1.6.4",
-    "js-yaml": "^3.6.1",
-    "markdownlint": "^0.6.0",
+    "js-yaml": "^3.10.0",
+    "markdownlint": "^0.6.1",
     "merge-objects": "^1.0.5",
-    "mime-types": "^2.1.13",
+    "mime-types": "^2.1.17",
     "mkdirp": "^0.5.1",
     "node-dir": "^0.1.16",
     "parse5": "^3.0.2",
@@ -46,8 +46,8 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "^1.7.5",
-    "electron-builder": "^19.26.3"
+    "electron": "^1.7.6",
+    "electron-builder": "^19.27.7"
   },
   "scripts": {
     "debug": "NODE_ENV=development electron markbot.js",
