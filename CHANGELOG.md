@@ -16,6 +16,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - The error messages created by Typografier for `margin` & `padding` have been down-graded to warnings.
 - Updated the links for the Command Line Tools & Java installations to match the new unique tutorials.
 - When a file is `locked` no other tests will be run.
+- Switched to another Git state checking library that’s more up-to-date and compatible with Windows.
 
 ### Fixed
 

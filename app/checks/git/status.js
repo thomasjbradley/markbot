@@ -3,7 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 const exec = require('child_process').exec;
-const gitStatus = require('git-get-status');
+const gitState = require('git-state');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 module.exports.check = function (fullPath, gitOpts, group, next) {
@@ -12,8 +12,8 @@ module.exports.check = function (fullPath, gitOpts, group, next) {
   const allCommitted = 'all-committed';
   const allCommittedLabel = 'Everything committed';
   const errors = ['There was an error getting the status of your Git repository'];
-  const opts = { cwd: fullPath };
-  const cmd = 'git status --porcelain -b';
+  // const opts = { cwd: fullPath };
+  // const cmd = 'git status --porcelain -b';
 
   let status;
 
@@ -27,26 +27,30 @@ module.exports.check = function (fullPath, gitOpts, group, next) {
     markbotMain.send('check-group:item-computing', group, allCommitted, allCommittedLabel);
   }
 
-  exec(cmd, opts, function (err, stdout) {
+  gitState.check(fullPath, function (err, status) {
     if (err) {
       markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel, errors);
       markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel, errors);
       return next();
     }
 
-    status = gitStatus.parse_status(stdout);
-
     if (gitOpts.allSynced) {
-      if (status.remote_diff !== null) {
-        markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel, ['There are some commits waiting to be pushed']);
+      if (status.ahead > 0) {
+        let plural = (status.ahead === 1) ? '' : 's';
+        let isOrAre = (status.ahead === 1) ? 'is' : 'are';
+
+        markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel, [`There ${isOrAre} ${status.ahead} commit${plural} waiting to be pushed`]);
       } else {
         markbotMain.send('check-group:item-complete', group, allSynced, allSyncedLabel);
       }
     }
 
     if (gitOpts.allCommitted) {
-      if (!status.clean) {
-        markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel, ['There are some files waiting to be committed']);
+      if (status.dirty > 0) {
+        let plural = (status.dirty === 1) ? '' : 's';
+        let isOrAre = (status.dirty === 1) ? 'is' : 'are';
+
+        markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel, [`There ${isOrAre} ${status.dirty} file${plural} waiting to be committed`]);
       } else {
         markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel);
       }
