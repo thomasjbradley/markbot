@@ -46,11 +46,12 @@ module.exports.check = function (fullPath, gitOpts, group, next) {
     }
 
     if (gitOpts.allCommitted) {
-      if (status.dirty > 0) {
-        let plural = (status.dirty === 1) ? '' : 's';
-        let isOrAre = (status.dirty === 1) ? 'is' : 'are';
+      if (status.dirty > 0 || status.untracked > 0) {
+        let totalFiles = status.dirty + status.untracked;
+        let plural = (totalFiles === 1) ? '' : 's';
+        let isOrAre = (totalFiles === 1) ? 'is' : 'are';
 
-        markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel, [`There ${isOrAre} ${status.dirty} file${plural} waiting to be committed`]);
+        markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel, [`There ${isOrAre} ${totalFiles} file${plural} waiting to be committed`]);
       } else {
         markbotMain.send('check-group:item-complete', group, allCommitted, allCommittedLabel);
       }
