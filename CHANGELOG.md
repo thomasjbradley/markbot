@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Changed the toolbar drag ability so it can’t be dragged when clicking the buttons.
+
+---
+
 ## [7.1.0] — 2017-09-18
 
 ### Added
