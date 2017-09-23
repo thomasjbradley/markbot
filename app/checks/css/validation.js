@@ -62,6 +62,9 @@ const shouldIncludeError = function (context, message, skippedstring, line, line
   // Ignore CSS4 form selectors
   if (message && /pseudo.+\:(invalid|valid|required|optional|in-range|out-of-range)/.test(message)) return false;
 
+  // clip-path: inset
+  if (message && /inset\(.+\%.+clip-path/i.test(message)) return false;
+
   return true;
 };
 
