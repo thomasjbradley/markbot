@@ -67,7 +67,8 @@
   const takeScreenshotAtSize = function (windowId, width, height, next) {
     const win = BrowserWindow.fromId(windowId);
 
-    win.capturePage({x: 0, y:0, width: width, height: getCropHeight(height)}, next);
+    win.setContentSize(width, height);
+    win.capturePage(next);
   };
 
   const diffScreenshot = function (fullPath, group, filename, width, next) {
@@ -110,20 +111,28 @@
 
   const check = function (fullPath, file, next) {
     const pagePath = path.resolve(fullPath + '/' + file.path);
+    const idExtra = (file.label) ? `-${file.label}` : '';
+    const labelExtra = (file.label) ? ` — ${file.label}` : '';
     const ipcListenerLabel = classify(`${file.path}-${Date.now()}`);
     const ipcListenerResizeChannel = `__markbot-screenshots-resized-${ipcListenerLabel}`;
-    const listenerId = function (size) { return `${file.path}-${size}`; };
-    const listenerLabel = function (size) { return `${file.path} — ${size}px`; };
+    const listenerId = function (size) { return `${file.path}-${size}${idExtra}`; };
+    const listenerLabel = function (size) { return `${file.path}: ${size}px${labelExtra}`; };
     let screenshotSizes = file.sizes.slice(0);
     let screenshotSizesDiffing = [];
     let screenshotSizesDone = [];
+
+    const getWindowHeight = function (width) {
+      const aspectRatio = 0.5625;
+
+      return Math.round((width < 600) ? width * (1 + aspectRatio) : width * aspectRatio);
+    };
 
     const nextScreenshot = function (windowId) {
       let nextSize = screenshotSizes.shift();
 
       if (nextSize) {
         markbotMain.send('check-group:item-computing', group, listenerId(nextSize), listenerLabel(nextSize));
-        BrowserWindow.fromId(windowId).setSize(nextSize, MAX_WINDOW_HEIGHT);
+        BrowserWindow.fromId(windowId).setSize(nextSize, getWindowHeight(nextSize));
       } else {
         cleanup(windowId);
       }
@@ -186,7 +195,11 @@
     webLoader.load(taskRunnerId, file.path, {width: MAX_WINDOW_WIDTH, height: MAX_WINDOW_HEIGHT}, function (theWindow) {
       theWindow.webContents.insertCSS(defaultScreenshotCSS);
       theWindow.webContents.executeJavaScript(getResizeInjectionJs(theWindow.id, taskRunnerId, ipcListenerResizeChannel), function (windowId) {
-        nextScreenshot(windowId);
+        if (file.before) {
+
+        } else {
+          nextScreenshot(windowId);
+        }
       });
     });
   };

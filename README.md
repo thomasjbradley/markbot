@@ -539,6 +539,10 @@ Your injected code will have access to a few functions to simplify what you have
   - Allows for testing to make sure student’s apply hover states to elements in CSS.
   - `selector` is the CSS selector of the target for your event.
   - `callback` is a function that will be executed when the hover has triggered.
+- **`activate(selector, callback)`** — A specialized event dispatch that “activates” an element triggering the CSS `:active` styles.
+  - Allows for testing to make sure student’s apply actives states to elements in CSS.
+  - `selector` is the CSS selector of the target for your event.
+  - `callback` is a function that will be executed when the hover has triggered.
 
 *Here’s an example of using `ev()` and `on()`:*
 

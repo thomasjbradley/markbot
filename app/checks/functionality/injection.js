@@ -133,7 +133,7 @@ const __MarkbotInjectedFunctions = {
     }
   },
 
-  hover: function (sel, next) {
+  sendTrustedMouseEvent: function (sel, ev, errType, next) {
     try {
       const elem = document.querySelector(sel);
       let rect, x, y;
@@ -148,10 +148,10 @@ const __MarkbotInjectedFunctions = {
 
           // if (window.outerHeight < y) window.resizeTo(window.outerWidth, y + 100);
           // if (window.outerWidth < x) window.resizeTo(x + 100, window.outerHeight);
-          if (rect.width <= 0) return __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its width is \`0px\``);
-          if (rect.height <= 0) return __MarkbotInjectedFunctions.fail(`Markbot can’t hover the element \`${sel}\` because its height is \`0px\``);
+          if (rect.width <= 0) return __MarkbotInjectedFunctions.fail(`Markbot can’t ${errType} the element \`${sel}\` because its width is \`0px\``);
+          if (rect.height <= 0) return __MarkbotInjectedFunctions.fail(`Markbot can’t ${errType} the element \`${sel}\` because its height is \`0px\``);
 
-          __MarkbotInjectedFunctions.send('mouseMove', {
+          __MarkbotInjectedFunctions.send(ev, {
             x: (x < 0) ? 0 : x,
             y: (y < 0) ? 0 : y,
           }, next);
@@ -160,6 +160,14 @@ const __MarkbotInjectedFunctions = {
     } catch (e) {
       __MarkbotInjectedFunctions.debugFail(e);
     }
+  },
+
+  hover: function (sel, next) {
+    __MarkbotInjectedFunctions.sendTrustedMouseEvent(sel, 'mouseMove', 'hover', next);
+  },
+
+  activate: function (sel, next) {
+    __MarkbotInjectedFunctions.sendTrustedMouseEvent(sel, 'mouseDown', 'activate', next);
   },
 
   pass: function () {

@@ -29,7 +29,7 @@
         __MarkbotInjectedFunctions.debugLabel = '__markbot-functionality-test-debug-${label}';
 
         __MarkbotInjectedFunctions.send('mouseMove', { x: -10, y: -10 }, () => {
-          (function ($, $$, css, bounds, offset, on, ev, send, hover, pass, fail, debug) {
+          (function ($, $$, css, bounds, offset, on, ev, send, hover, activate, pass, fail, debug) {
             'use strict';
 
             try {
@@ -47,6 +47,7 @@
             __MarkbotInjectedFunctions.ev,
             __MarkbotInjectedFunctions.send,
             __MarkbotInjectedFunctions.hover,
+            __MarkbotInjectedFunctions.activate,
             __MarkbotInjectedFunctions.pass,
             __MarkbotInjectedFunctions.fail,
             __MarkbotInjectedFunctions.debug

@@ -201,7 +201,7 @@ const removeDuplicateScreenshotSizes = function (markbotFile) {
 };
 
 const mergeDuplicateFiles = function (markbotFile) {
-  const keys = ['html', 'css', 'js', 'md', 'yml', 'files', 'screenshots', 'functionality', 'performance'];
+  const keys = ['html', 'css', 'js', 'md', 'yml', 'files', 'performance'];
 
   keys.forEach((key) => {
     let paths = {};

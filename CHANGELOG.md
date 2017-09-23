@@ -7,10 +7,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- There’s a new `activate` function for functionality tests that will trigger the CSS `:active` state.
+
 ### Changed
 
 - Changed the toolbar drag ability so it can’t be dragged when clicking the buttons.
 - Ignore the `clip-path: inset` CSS validation error messages.
+
+### Fixed
+
+- When using `vh` units the screenshot capturing didn’t work because the window was really long. The windows now have an aspect ratio and still the full screen is captured. *It still doesn’t work perfectly—works only when a single element on the page uses `vh` and there’s nothing else.*
 
 ---
 
