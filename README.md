@@ -688,8 +688,9 @@ files:
     maxHeight: 1500
     minHeight: 240
 
-    # For images only
-    # Check if the image has been smushed with a tool like ImageOptim
+    # Check if the image/file has been smushed
+    # For images it’ll look for extraneous metadata, something ImageOptim would remove
+    # For text files & SVGs it’ll just look for line breaks
     smushed: true
 
     # For text files only
