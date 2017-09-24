@@ -594,8 +594,28 @@
   animation: border-fade-out 500ms linear forwards;
 }
 
+.messages-positive h2:target {
+  border-color: #6dd110;
+  animation-name: border-fade-out-positive;
+}
+
+.messages-warning h2:target {
+  border-color: #ffd30d;
+  animation-name: border-fade-out-warning;
+}
+
 @keyframes border-fade-out {
   0% { border-color: #f33; }
+  100% { border-color: #f5f2f0; }
+}
+
+@keyframes border-fade-out-positive {
+  0% { border-color: #6dd110; }
+  100% { border-color: #f5f2f0; }
+}
+
+@keyframes border-fade-out-warning {
+  0% { border-color: #ffd30d; }
   100% { border-color: #f5f2f0; }
 }
 
