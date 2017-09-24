@@ -15,21 +15,31 @@ if (is.renderer()) {
   app = require('electron').app;
 }
 
-const formatScreenshotFileName = function (filename, width, prefix) {
+const removeExtensionFromFile = function (filename) {
+  return filename.replace(/\.html$/, '');
+};
+
+const makeScreenshotBasename = function (file) {
+  const labelExtra = (file.label) ? `-${file.label}` : '';
+
+  return classify(removeExtensionFromFile(file.path) + labelExtra);
+};
+
+const getScreenshotFilename = function (filename, width, prefix) {
   let pre = (prefix) ? `${prefix}-` : '';
 
   return `${pre}${classify(filename.replace(/\.html$/, ''))}-${width}.png`;
 };
 
-const getImagePath = function (projectPath, filename, width, genRefScreens) {
+const getScreenshotPath = function (projectPath, filename, width, genRefScreens) {
   let formattedFilename, imgPath, fullPath;
 
   if (genRefScreens) {
-    formattedFilename = formatScreenshotFileName(filename, width);
+    formattedFilename = getScreenshotFilename(filename, width);
     imgPath = path.resolve(path.resolve(projectPath) + '/' + REFERENCE_SCREENSHOT_FOLDER);
     fullPath = path.resolve(imgPath + '/' + formattedFilename);
   } else {
-    formattedFilename = formatScreenshotFileName(filename, width, SCREENSHOT_PREFIX);
+    formattedFilename = getScreenshotFilename(filename, width, SCREENSHOT_PREFIX);
     fullPath = path.resolve(app.getPath('temp') + '/' + formattedFilename);
   }
 
@@ -38,6 +48,7 @@ const getImagePath = function (projectPath, filename, width, genRefScreens) {
 
 module.exports = {
   REFERENCE_SCREENSHOT_FOLDER: REFERENCE_SCREENSHOT_FOLDER,
-  getScreenshotFileName: formatScreenshotFileName,
-  getScreenshotPath: getImagePath,
+  getScreenshotFilename: getScreenshotFilename,
+  getScreenshotPath: getScreenshotPath,
+  makeScreenshotBasename: makeScreenshotBasename,
 };

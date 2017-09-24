@@ -1,68 +1,18 @@
 (function () {
   'use strict';
 
-  const fs = require('fs');
   const path = require('path');
   const ipcRenderer = require('electron').ipcRenderer;
   const markbotMain = require('electron').remote.require('./app/markbot-main');
   const fileExists = require(__dirname + '/file-exists');
   const classify = require(__dirname + '/classify');
   const webLoader = require(__dirname + '/web-loader');
-  const defaultsService = require(__dirname + '/checks/functionality/defaults-service');
-  const injectionJs = defaultsService.get('injection.js');
+  const functionalityInjector = require(__dirname + '/functionality-injector');
 
   const group = taskDetails.group;
   const fullPath = taskDetails.cwd;
 
   let totalFiles = 0;
-
-  const makeExecTestJs = function (js, testIndex, label, testWinId) {
-    return `
-      (function () {
-        ${injectionJs}
-
-        __MarkbotInjectedFunctions.testIndex = ${testIndex};
-        __MarkbotInjectedFunctions.browserWindowId = ${testWinId};
-        __MarkbotInjectedFunctions.taskRunnerId = ${taskRunnerId};
-        __MarkbotInjectedFunctions.passLabel = '__markbot-functionality-test-pass-${label}';
-        __MarkbotInjectedFunctions.failLabel = '__markbot-functionality-test-fail-${label}';
-        __MarkbotInjectedFunctions.debugLabel = '__markbot-functionality-test-debug-${label}';
-
-        __MarkbotInjectedFunctions.send('mouseMove', { x: -10, y: -10 }, () => {
-          (function ($, $$, css, bounds, offset, on, ev, send, hover, activate, pass, fail, debug) {
-            'use strict';
-
-            try {
-              eval(${js});
-            } catch (e) {
-              __MarkbotInjectedFunctions.debugFail(e);
-            }
-          }(
-            __MarkbotInjectedFunctions.$,
-            __MarkbotInjectedFunctions.$$,
-            __MarkbotInjectedFunctions.css,
-            __MarkbotInjectedFunctions.bounds,
-            __MarkbotInjectedFunctions.offset,
-            __MarkbotInjectedFunctions.on,
-            __MarkbotInjectedFunctions.ev,
-            __MarkbotInjectedFunctions.send,
-            __MarkbotInjectedFunctions.hover,
-            __MarkbotInjectedFunctions.activate,
-            __MarkbotInjectedFunctions.pass,
-            __MarkbotInjectedFunctions.fail,
-            __MarkbotInjectedFunctions.debug
-          ));
-        });
-      }());
-    `;
-  };
-
-  const runTest = function (win, testJs, testIndex, listenerLabel) {
-    let bindFunction = `(function(){'use strict';${testJs.trim()}}())`;
-    let js = makeExecTestJs(JSON.stringify(bindFunction), testIndex, listenerLabel, win.id);
-
-    win.webContents.executeJavaScript(js);
-  };
 
   const check = function (file, next) {
     const pagePath = path.resolve(fullPath + '/' + file.path);
@@ -109,7 +59,7 @@
     ipcRenderer.on('__markbot-functionality-test-pass-' + listenerLabel, function(event) {
       if (file.tests.length > 0) {
         currentTestIndex++
-        runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
+        functionalityInjector.runCode(win, file.tests.shift(), currentTestIndex, listenerLabel);
       } else {
         cleanup();
         markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel);
@@ -130,7 +80,7 @@
     webLoader.load(taskRunnerId, file.path, {}, (file.setup) ? file.setup : false, function (theWindow) {
       win = theWindow;
 
-      if (file.tests && Array.isArray(file.tests)) runTest(win, file.tests.shift(), currentTestIndex, listenerLabel);
+      if (file.tests && Array.isArray(file.tests)) functionalityInjector.runCode(win, file.tests.shift(), currentTestIndex, listenerLabel);
 
       if (file.noErrors && !hasErrors) {
         markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel);

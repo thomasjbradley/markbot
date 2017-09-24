@@ -10,6 +10,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - There’s a new `activate` function for functionality tests that will trigger the CSS `:active` state.
+- Screenshots can now execute some Javascript before capturing using the new `before` property.
+- Screenshot groups can now be labeled using the new `label` property, similar to functionality.
 
 ### Changed
 
@@ -18,7 +20,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- When using `vh` units the screenshot capturing didn’t work because the window was really long. The windows now have an aspect ratio and still the full screen is captured. *It still doesn’t work perfectly—works only when a single element on the page uses `vh` and there’s nothing else.*
+- Screenshots and functionality tests of the same path are not merged together any more—it was originally this way.
 
 ---
 

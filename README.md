@@ -399,6 +399,19 @@ screenshots:
   - path: 'index.html'
     # An array of different screen widths for taking screenshots
     sizes: [400, 650, 960]
+    # If there are multiple screenshots of the same path the label is a require to distinguish them
+    # It can also be used to add a little extra information to the check list
+    label: 'Clicked'
+    # Some Javascript to execute before capturing the screenshots
+    # Happens immediately, before the first screenshot is taken and is not repeated for each size
+    # Has access to all the same functions as the `functionality` tests with a few small exceptions:
+    #   - `pass()` & `fail()` don’t exist
+    #   - `done()` must be called when the screenshots capturing should begin
+    before: |
+      on('.btn', 'transitionend', () => {
+        done();
+      });
+      activate('.btn');
 ```
 
 *Markbot will look in the `screenshots` folder for images to compare against.*

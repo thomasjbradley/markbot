@@ -15,6 +15,7 @@
   const fileExists = require(__dirname + '/file-exists');
   const webLoader = require(__dirname + '/web-loader');
   const classify = require(__dirname + '/classify');
+  const functionalityInjector = require(__dirname + '/functionality-injector');
   const screenshotNamingService = require(__dirname + '/checks/screenshots/naming-service');
   const defaultsService = require(__dirname + '/checks/screenshots/defaults-service');
   const defaultScreenshotCSS = defaultsService.get('default.css');
@@ -67,8 +68,9 @@
   const takeScreenshotAtSize = function (windowId, width, height, next) {
     const win = BrowserWindow.fromId(windowId);
 
-    win.setContentSize(width, height);
-    win.capturePage(next);
+    // win.setContentSize(width, height);
+    // win.capturePage(next);
+    win.capturePage({x: 0, y:0, width: width, height: getCropHeight(height)}, next);
   };
 
   const diffScreenshot = function (fullPath, group, filename, width, next) {
@@ -89,7 +91,7 @@
           } else {
             markbotMain.send(message.id, group, message.checkId, message.checkLabel, message.errors);
           }
-          next(width);
+          next(filename, width);
           break;
       }
     });
@@ -115,7 +117,8 @@
     const labelExtra = (file.label) ? ` — ${file.label}` : '';
     const ipcListenerLabel = classify(`${file.path}-${Date.now()}`);
     const ipcListenerResizeChannel = `__markbot-screenshots-resized-${ipcListenerLabel}`;
-    const listenerId = function (size) { return `${file.path}-${size}${idExtra}`; };
+    const screenshotFilename = screenshotNamingService.makeScreenshotBasename(file);
+    const listenerId = function (size) { return `${screenshotFilename}-${size}`; };
     const listenerLabel = function (size) { return `${file.path}: ${size}px${labelExtra}`; };
     let screenshotSizes = file.sizes.slice(0);
     let screenshotSizesDiffing = [];
@@ -132,7 +135,8 @@
 
       if (nextSize) {
         markbotMain.send('check-group:item-computing', group, listenerId(nextSize), listenerLabel(nextSize));
-        BrowserWindow.fromId(windowId).setSize(nextSize, getWindowHeight(nextSize));
+        BrowserWindow.fromId(windowId).setSize(nextSize, MAX_WINDOW_HEIGHT);
+        // BrowserWindow.fromId(windowId).setSize(nextSize, getWindowHeight(nextSize));
       } else {
         cleanup(windowId);
       }
@@ -146,6 +150,9 @@
       let win = BrowserWindow.fromId(windowId);
 
       ipcRenderer.removeAllListeners(ipcListenerResizeChannel);
+      ipcRenderer.removeAllListeners('__markbot-functionality-error');
+      ipcRenderer.removeAllListeners('__markbot-functionality-test-done-' + ipcListenerLabel);
+      ipcRenderer.removeAllListeners('__markbot-functionality-test-debug-' + ipcListenerLabel);
 
       webLoader.destroy(win);
       win = null;
@@ -157,12 +164,12 @@
       screenshotSizesDiffing.push(width);
 
       takeScreenshotAtSize(windowId, width, height, function (img) {
-        let imagePath = screenshotNamingService.getScreenshotPath(fullPath, file.path, width);
+        let imagePath = screenshotNamingService.getScreenshotPath(fullPath, screenshotFilename, width);
 
         saveScreenshot(imagePath, width, img, function () {
-          if (fileExists.check(screenshotNamingService.getScreenshotPath(fullPath, file.path, width, true))) {
-            diffScreenshot(fullPath, group, file.path, width, function (w) {
-              if (screenshotSizesDone.indexOf(w) < 0) screenshotSizesDone.push(w);
+          if (fileExists.check(screenshotNamingService.getScreenshotPath(fullPath, screenshotFilename, width, true))) {
+            diffScreenshot(fullPath, group, screenshotFilename, width, function (f, w) {
+              if (screenshotSizesDone.indexOf(f + w) < 0) screenshotSizesDone.push(f + w);
               checkAllDiffsDone();
             });
           } else {
@@ -177,6 +184,27 @@
           }
         });
       });
+    });
+
+    ipcRenderer.on('__markbot-functionality-error', function (event, message, line, filename) {
+      hasErrors = true;
+      filename = filename.replace(fullPath, '').replace('file:///', '');
+      cleanup(windowId);
+
+      if (message) message = message.replace(/\.$/, '');
+      if (filename) filename = filename.replace(/https?:\/\/localhost:?\d+\//, '');
+
+      if (message && !filename && !line) markbotMain.debug(message);
+      if (message && filename && !line) markbotMain.debug(`${message} — \`${filename}\``);
+      if (message && filename && line) markbotMain.debug(`${message} — \`${filename}\` on line ${line}`);
+    });
+
+    ipcRenderer.on('__markbot-functionality-test-done-' + ipcListenerLabel, function(event, windowId) {
+      nextScreenshot(windowId);
+    });
+
+    ipcRenderer.on('__markbot-functionality-test-debug-' + ipcListenerLabel, function (event, ...e) {
+      markbotMain.debug(...e);
     });
 
     if (!fileExists.check(pagePath)) {
@@ -196,7 +224,7 @@
       theWindow.webContents.insertCSS(defaultScreenshotCSS);
       theWindow.webContents.executeJavaScript(getResizeInjectionJs(theWindow.id, taskRunnerId, ipcListenerResizeChannel), function (windowId) {
         if (file.before) {
-
+          functionalityInjector.runCode(theWindow, file.before, 0, ipcListenerLabel);
         } else {
           nextScreenshot(windowId);
         }

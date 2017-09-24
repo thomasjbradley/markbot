@@ -33,7 +33,7 @@ const lockFiles = function (locker, currentFolderPath, files) {
 const lockScreenshots = function (locker, currentFolderPath, files) {
   files.forEach(function (file) {
     file.sizes.forEach(function (size) {
-      let screenshotFileName = screenshotNamingService.getScreenshotFileName(file.path, size);
+      let screenshotFileName = screenshotNamingService.getScreenshotFilename(screenshotNamingService.makeScreenshotBasename(file), size);
       let screenshotPath = path.resolve(currentFolderPath + '/' + screenshotNamingService.REFERENCE_SCREENSHOT_FOLDER + '/' + screenshotFileName);
 
       if (!exists.check(screenshotPath)) {
@@ -58,6 +58,8 @@ const lock = function (locker, currentFolderPath, markbotFileParsed, markbotFile
   if (markbotFile.js) lockFiles(locker, currentFolderPath, markbotFile.js);
   if (markbotFile.screenshots) lockScreenshots(locker, currentFolderPath, markbotFile.screenshots);
   if (markbotFileParsed.screenshots) lockScreenshots(locker, currentFolderPath, markbotFileParsed.screenshots);
+
+  missingFiles = [...new Set(missingFiles)];
 
   if (missingFiles.length > 0) {
     markbotMain.send('alert', `The following files could not be locked because they’re missing:\n• ${missingFiles.join('\n• ')}`);

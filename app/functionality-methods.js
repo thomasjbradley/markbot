@@ -170,6 +170,10 @@ const __MarkbotInjectedFunctions = {
     __MarkbotInjectedFunctions.sendTrustedMouseEvent(sel, 'mouseDown', 'activate', next);
   },
 
+  done: function () {
+    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.doneLabel, __MarkbotInjectedFunctions.browserWindowId);
+  },
+
   pass: function () {
     if (!__MarkbotInjectedFunctions.failed) window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.passLabel);
   },
