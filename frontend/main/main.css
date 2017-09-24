@@ -286,7 +286,6 @@
 #checks a[data-status="succeeded"] {
   background-color: #c1e89b;
   border-color: #6dd110;
-  pointer-events: none;
   color: #417d0a;
 }
 

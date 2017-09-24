@@ -914,8 +914,6 @@ listener.on('check-group:item-complete', (e, group, id, label, errors, messages,
   if (!hasErrors && !hasWarnings) {
     errorType = ERROR_MESSAGE_TYPE.MESSAGE;
     checks[checkId].dataset.status = 'succeeded';
-    checks[checkId].setAttribute('aria-disabled', true);
-    checks[checkId].setAttribute('tabindex', -1);
     checks[checkId].setAttribute('aria-label', checks[checkId].getAttribute('aria-label') + ' — Passed')
   }
 
@@ -923,6 +921,12 @@ listener.on('check-group:item-complete', (e, group, id, label, errors, messages,
 
   checks[checkId].href += errorType;
   checks[checkId].dataset.id += errorType;
+
+  if (!document.getElementById(checks[checkId].dataset.id)) {
+    checks[checkId].setAttribute('aria-disabled', true);
+    checks[checkId].setAttribute('tabindex', -1);
+    checks[checkId].style.pointerEvents = 'none';
+  }
 
   statusBarUpdate();
 })

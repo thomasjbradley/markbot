@@ -17,6 +17,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Changed the toolbar drag ability so it can’t be dragged when clicking the buttons.
 - Ignore the `clip-path: inset` CSS validation error messages.
+- Successful checks can now also be clicked in the check list when they have a matching element to focus.
 
 ### Fixed
 
