@@ -83,8 +83,8 @@
   const checkImageMetadata = function (file, fullPath, next) {
     if (!file.smushed) return next([]);
 
-    if (file.path.match(/\.jpe?g$/)) return checkExif(file, fullPath, next);
-    if (file.path.match(/\.png$/)) return checkPngChunks(file, fullPath, next);
+    if (/\.jpe?g$/.test(file.path)) return checkExif(file, fullPath, next);
+    if (/\.png$/.test(file.path)) return checkPngChunks(file, fullPath, next);
 
     next([]);
   };
@@ -142,16 +142,25 @@
     });
   };
 
+  const checkFileSmushed = function (file, fullPath, next) {
+    fs.readFile(fullPath, 'utf8', (err, data) => {
+      if (!err && !data) next([]);
+      if (/[\n\r\u0085\u2028\u2029]/.test(data)) return next([`The \`${file.path}\` file needs to be smushed`]);
+
+      next([]);
+    });
+  };
+
   const checkImage = function (file, fullPath, next) {
     let errors = [];
 
-    checkFileSize(file, fullPath, function (err) {
+    checkFileSize(file, fullPath, (err) => {
       errors = errors.concat(err);
 
-      checkImageDimensions(file, fullPath, function (err) {
+      checkImageDimensions(file, fullPath, (err) => {
         errors = errors.concat(err);
 
-        checkImageMetadata(file, fullPath, function (err) {
+        checkImageMetadata(file, fullPath, (err) => {
           errors = errors.concat(err);
 
           next(errors);
@@ -163,13 +172,17 @@
   const checkTextFile = function (file, fullPath, next) {
     let errors = [];
 
-    checkFileSize(file, fullPath, function (err) {
+    checkFileSize(file, fullPath, (err) => {
       errors = errors.concat(err);
 
-      checkFileContent(file, fullPath, function (err) {
+      checkFileSmushed(file, fullPath, (err) => {
         errors = errors.concat(err);
 
-        next(errors);
+        checkFileContent(file, fullPath, (err) => {
+          errors = errors.concat(err);
+
+          next(errors);
+        });
       });
     });
   };

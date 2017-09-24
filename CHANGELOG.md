@@ -12,6 +12,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - There’s a new `activate` function for functionality tests that will trigger the CSS `:active` state.
 - Screenshots can now execute some Javascript before capturing using the new `before` property.
 - Screenshot groups can now be labeled using the new `label` property, similar to functionality.
+- Text files, including SVG graphics, can now be checked if they are smushed, essentially just checks for line breaks.
 
 ### Changed
 
