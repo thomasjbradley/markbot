@@ -37,13 +37,6 @@
     checksToComplete++;
     markbotMain.send('check-group:item-new', group, 'exists', 'Exists');
 
-    if (!exists.check(fullPath)) {
-      markbotMain.send('check-group:item-complete', group, 'exists', 'Exists', [`The file \`${file.path}\` is missing or misspelled`]);
-      bypassAllChecks(file);
-      checkIfDone();
-      return;
-    }
-
     if (file.locked) {
       checksToComplete++;
       markbotMain.send('check-group:item-new', group, 'unchanged', 'Unchanged');
@@ -65,6 +58,13 @@
         checksToComplete++;
         contentChecker = content.init(group);
       }
+    }
+
+    if (!exists.check(fullPath)) {
+      markbotMain.send('check-group:item-complete', group, 'exists', 'Exists', [`The file \`${file.path}\` is missing or misspelled`]);
+      bypassAllChecks(file);
+      checkIfDone();
+      return;
     }
 
     fs.readFile(fullPath, 'utf8', function (err, fileContents) {

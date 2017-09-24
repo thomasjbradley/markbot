@@ -23,6 +23,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Screenshots and functionality tests of the same path are not merged together any more—it was originally this way.
+- Fixed a bug where the checks wouldn’t be bypassed properly when the file didn’t exist.
 
 ---
 
