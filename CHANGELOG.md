@@ -13,6 +13,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Screenshots can now execute some Javascript before capturing using the new `before` property.
 - Screenshot groups can now be labeled using the new `label` property, similar to functionality.
 - Text files, including SVG graphics, can now be checked if they are smushed, essentially just checks for line breaks.
+- The four new font-sizes to the Typografier checker.
 
 ### Changed
 

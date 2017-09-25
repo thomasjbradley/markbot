@@ -3,7 +3,7 @@ allFiles:
     has:
       - ['link[href*="type.css"]', 'The `type.css` file isn’t included']
     search:
-      - 'micro|milli|kilo|mega|giga|tera|peta|exa|zetta|yotta'
+      - 'micro|milli|kilo|mega|giga|tera|peta|exa|zetta|yotta|nina|tena|tenakilo|tenamega'
   css:
     except:
       - 'css/type.css'
