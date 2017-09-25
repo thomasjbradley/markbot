@@ -26,7 +26,7 @@ if (is.renderer()) {
 }
 
 const matchesProfEmail = function (email, profEmails) {
-  return !profEmails.indexOf(email);
+  return (profEmails.indexOf(email) > -1);
 };
 
 const findSpellingErrorReplacement = function (commit, err) {

@@ -8,7 +8,7 @@ const exists = require(__dirname + '/../../file-exists');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 const matchesProfEmail = function (email, profEmails) {
-  return !profEmails.indexOf(email);
+  return (profEmails.indexOf(email) > -1);
 };
 
 module.exports.check = function (fullPath, commitNum, ignoreCommitEmails, group, next) {

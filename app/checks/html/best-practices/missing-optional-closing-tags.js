@@ -4,17 +4,15 @@ const htmlparser = require('./htmlparser/Parser');
 const voidElements = require('./void-elements.json');
 
 const shouldIncludeError = function (tag) {
-  if (voidElements.indexOf(tag)) return false;
+  if (voidElements.indexOf(tag) > -1) return false;
 
   return true;
 };
 
 module.exports.check = function (fileContents, lines) {
-  var
-    errors = [],
-    parser,
-    stack = fileContents.match(/^((?:.|([\n\u0085\u2028\u2029]|\r\n))*?)<body[^>]*>/)[0]
-  ;
+  let errors = [];
+  let parser;
+  let stack = fileContents.match(/^((?:.|([\n\u0085\u2028\u2029]|\r\n))*?)<body[^>]*>/)[0];
 
   parser = new htmlparser({
     onopentagname: function (name, attr) {
