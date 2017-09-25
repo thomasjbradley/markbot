@@ -1,4 +1,9 @@
 #
+# Extra English words
+mistype
+mistyped
+mistypes
+#
 # Markbot specific
 markbot
 patternbot
@@ -27,6 +32,7 @@ https
 ip
 url
 gh-pages
+wikipedia
 #
 # All the dinosaur names
 dino
