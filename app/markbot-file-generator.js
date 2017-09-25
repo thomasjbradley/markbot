@@ -6,6 +6,7 @@ const yaml = require('js-yaml');
 const merge = require('merge-objects');
 const glob = require('glob');
 
+const markbotMain = require('./markbot-main');
 const markbotIgnoreParser = require('./markbot-ignore-parser');
 const exists = require('./file-exists');
 const stripPath = require('./strip-path');
@@ -107,8 +108,13 @@ const mergeInheritedFiles = function (markbotFile) {
     let inheritPath = path.resolve(`${__dirname}/../templates/${templateId}.yml`);
 
     if (exists.check(inheritPath)) {
-      let y = yaml.safeLoad(fs.readFileSync(inheritPath, 'utf8'));
-      if (y) templates.push(y);
+      try {
+        let y = yaml.safeLoad(fs.readFileSync(inheritPath, 'utf8'));
+        if (y) templates.push(y);
+      } catch (e) {
+        let ln = (e.mark && e.mark.line) ? e.mark.line + 1 : '?';
+        markbotMain.debug(`Error in the \`${templateId}\` template MarkbotFile, line ${ln}: ${e.message}`);
+      }
     } else {
       newMarkbotFile.inheritFilesNotFound.push(templateId);
     }
@@ -254,8 +260,16 @@ const populateDefaults = function (folderpath, ignoreFiles, markbotFile, next) {
 }
 
 const getMarkbotFile = function (markbotFilePath, next) {
-  let markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
-  let folderpath = path.parse(markbotFilePath).dir;
+  let markbotFile, folderpath;
+
+  try {
+    markbotFile = yaml.safeLoad(fs.readFileSync(markbotFilePath, 'utf8'));
+  } catch (e) {
+    let ln = (e.mark && e.mark.line) ? e.mark.line + 1 : '?';
+    markbotMain.debug(`Error in the folder’s MarkbotFile, line ${ln}: ${e.message}`);
+  }
+
+  folderpath = path.parse(markbotFilePath).dir;
 
   markbotIgnoreParser.parse(folderpath, (ignoreFiles) => {
     populateDefaults(folderpath, ignoreFiles, markbotFile, next);
@@ -263,7 +277,14 @@ const getMarkbotFile = function (markbotFilePath, next) {
 };
 
 const buildFromFolder = function (folderpath, next) {
-  let markbotFile = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname + '/../templates/basic-dropped-folder.yml'), 'utf8'));
+  let markbotFile;
+
+  try {
+    markbotFile = yaml.safeLoad(fs.readFileSync(path.resolve(__dirname + '/../templates/basic-dropped-folder.yml'), 'utf8'));
+  } catch (e) {
+    let ln = (e.mark && e.mark.line) ? e.mark.line + 1 : '?';
+    markbotMain.debug(`Error in the \`basic-dropped-folder\` MarkbotFile, line ${ln}: ${e.message}`);
+  }
 
   markbotIgnoreParser.parse(folderpath, (ignoreFiles) => {
     populateDefaults(folderpath, ignoreFiles, markbotFile, next);
