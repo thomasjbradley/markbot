@@ -135,7 +135,7 @@ const __MarkbotInjectedFunctions = {
 
   sendTrustedMouseEvent: function (sel, ev, errType, next) {
     try {
-      const elem = document.querySelector(sel);
+      const elem = (typeof sel === 'string') ? __MarkbotInjectedFunctions.$(sel) : sel;
       let rect, x, y;
 
       elem.scrollIntoView();
