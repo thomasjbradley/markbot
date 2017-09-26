@@ -22,6 +22,9 @@
     let hasErrors = false;
     let win;
 
+    if (file.test) file.tests = file.test;
+    if (!Array.isArray(file.tests)) file.tests = [file.tests];
+
     const cleanup = function () {
       ipcRenderer.removeAllListeners('__markbot-functionality-error');
       ipcRenderer.removeAllListeners('__markbot-functionality-test-pass-' + listenerLabel);
