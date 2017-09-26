@@ -551,14 +551,18 @@ Your injected code will have access to a few functions to simplify what you have
   - It creates a `new Event`, `new MouseEvent` or `new KeyboardEvent`
   - `options` has a default of: `{bubbles: true, cancelable: true}`
   - If you provide an options argument it will be merged with the defaults
-- **`hover(selector, callback)`** — A specialized event dispatch that hovers the mouse over an element—regular JS events aren’t “trusted” and therefore won’t trigger the CSS `:hover` styles.
+- **`hover(selector/element, callback)`** — A specialized event dispatch that hovers the mouse over an element—regular JS events aren’t “trusted” and therefore won’t trigger the CSS `:hover` styles.
   - Allows for testing to make sure student’s apply hover states to elements in CSS.
-  - `selector` is the CSS selector of the target for your event.
+  - `selector/element` a pre-selected DOM element object or the CSS selector of the target for your event.
   - `callback` is a function that will be executed when the hover has triggered.
-- **`activate(selector, callback)`** — A specialized event dispatch that “activates” an element triggering the CSS `:active` styles.
+- **`activate(selector/element, callback)`** — A specialized event dispatch that “activates” an element triggering the CSS `:active` styles.
   - Allows for testing to make sure student’s apply actives states to elements in CSS.
-  - `selector` is the CSS selector of the target for your event.
+  - `selector/element` a pre-selected DOM element object or the CSS selector of the target for your event.
   - `callback` is a function that will be executed when the hover has triggered.
+- **`send(eventname[, options[, callback]])`** — sends trusted input events to the browser window. This is what `hover()` and `activate()` do internally.
+  - It’s essentially a wrapper around Electron’s `webContents.sendInputEvent()`—[See the Electron docs.](https://electron.atom.io/docs/api/web-contents/#contentssendinputeventevent)
+  - `eventname` is one of Electron’s allowed events: `mouseDown`, `mouseUp`, `mouseEnter`, `mouseLeave`, `contextMenu`, `mouseWheel`, `mouseMove`, `keyDown`, `keyUp`, `char`
+  - `options` allows you to set extra properties, like Electron’s `modifiers`. But most importantly it sets the `isTrusted` flag to `true` by default to allow `hover`, etc. activate the CSS changes.
 
 *Here’s an example of using `ev()` and `on()`:*
 

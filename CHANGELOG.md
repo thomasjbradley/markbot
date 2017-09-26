@@ -15,12 +15,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Text files, including SVG graphics, can now be checked if they are smushed, essentially just checks for line breaks.
 - The four new font-sizes to the Typografier checker.
 - Replaced the default `alert()` with a custom one that has the ability to restart the application.
+- Allow functionality tests to now provide a `test` (singular) string that will function properly.
+- Allow `hover()` & `activate()` to accept already selected DOM elements instead of just a CSS selector.
 
 ### Changed
 
 - Changed the toolbar drag ability so it can’t be dragged when clicking the buttons.
 - Ignore the `clip-path: inset` CSS validation error messages.
 - Successful checks can now also be clicked in the check list when they have a matching element to focus.
+- If the functionality `tests` property isn’t an array it’ll be converted to one.
 
 ### Fixed
 
