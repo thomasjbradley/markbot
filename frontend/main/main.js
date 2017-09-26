@@ -78,6 +78,78 @@ const appReady = function () {
   }
 };
 
+const displayAlert = function (msg, opts) {
+  const eventsList = ['mousedown', 'mouseup', 'click', 'dblclick', 'mousemove', 'mouseover', 'mouseout', 'mousewheel', 'keydown', 'keyup', 'keypress', 'textInput', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'resize', 'scroll', 'zoom', 'focus', 'blur', 'select', 'change', 'submit', 'reset'];
+  const alertWrap = document.getElementById('alert');
+  const alertBox = document.getElementById('alert-box');
+  const alertMsg = document.getElementById('alert-text');
+  const alertOkay = document.getElementById('alert-btn-okay');
+  const alertRestart = document.getElementById('alert-btn-restart');
+
+  if (!opts) opts = {};
+
+  const handleDisabledToolbar = function (e) {
+    e.preventDefault();
+    e.stopImmediatePropagation();
+  };
+
+  const disableToolbar = function () {
+    $toolbar.style.pointerEvents = 'none';
+
+    eventsList.forEach((evName) => {
+      $toolbar.addEventListener(evName, handleDisabledToolbar, true);
+    });
+  };
+
+  const enableToolbar = function () {
+    $toolbar.style.pointerEvents = 'auto';
+
+    eventsList.forEach((evName) => {
+      $toolbar.removeEventListener(evName, handleDisabledToolbar, true);
+    });
+  };
+
+  const handleOkayClick = function (e) {
+    e.preventDefault();
+    alertWrap.setAttribute('hidden', true);
+    alertOkay.removeEventListener('click', handleRestartClick);
+    alertOkay.removeEventListener('blur', handleButtonBlur);
+    $toolbar.focus();
+  };
+
+  const handleRestartClick = function (e) {
+    e.preventDefault();
+    markbot.relaunch();
+  };
+
+  const handleButtonBlur = function (e) {
+    alertBox.focus();
+  };
+
+  if (!opts.type) opts.type = 'okay';
+
+  switch (opts.type) {
+    case 'restart':
+      alertOkay.setAttribute('hidden', true);
+      alertRestart.removeAttribute('hidden');
+      alertRestart.addEventListener('click', handleRestartClick);
+      alertRestart.addEventListener('blur', handleButtonBlur);
+      break;
+    case 'okay':
+    default:
+      alertOkay.removeAttribute('hidden');
+      alertOkay.addEventListener('click', handleOkayClick);
+      alertOkay.addEventListener('blur', handleButtonBlur);
+      alertRestart.setAttribute('hidden', true);
+      break;
+  }
+
+  disableToolbar();
+  alertMsg.innerText = msg;
+  alertWrap.removeAttribute('hidden');
+  alertBox.focus();
+};
+
 const buildCodeDiffErrorMessage = function (err, li) {
   const message = document.createElement('span');
   const code = document.createElement('section');
@@ -712,7 +784,7 @@ const submitAssignment = function (e) {
         $canvasBtnText.innerHTML = 'Submit';
         $allGoodCheck.style.animationName = 'none';
         markbot.enableSubmitAssignment();
-        if (data.message) alert(data.message);
+        if (data.message) displayAlert(data.message);
       }
     });
   }
@@ -755,7 +827,7 @@ $body.ondrop = (e) => {
   e.preventDefault();
 
   if (!fs.statSync(e.dataTransfer.files[0].path).isDirectory()) {
-    alert('Drop a folder onto Markbot instead of a single file');
+    displayAlert('Drop a folder onto Markbot instead of a single file');
     return false;
   }
 
@@ -990,7 +1062,11 @@ listener.on('debug', (e, ...args) => {
 });
 
 listener.on('alert', (e, message) => {
-  alert(message);
+  displayAlert(message);
+});
+
+listener.on('restart', (e, message) => {
+  displayAlert(message, { type: 'restart' });
 });
 
 listener.on('app:blur', () => {

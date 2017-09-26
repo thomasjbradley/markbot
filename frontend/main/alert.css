@@ -1,0 +1,41 @@
+.alert-wrap {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+  justify-content: center;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  top: 38px;
+  z-index: 3000;
+
+  background-color: rgba(0, 0, 0, .5);
+}
+
+.alert {
+  padding: 2em;
+  width: 34em;
+
+  background-color: #fff;
+  border-radius: 4px;
+
+  font-size: 1.125rem;
+}
+
+.alert:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, .5);
+}
+
+.alert p {
+  margin: 0 0 1.5em;
+}
+
+.btn-wrap {
+  text-align: center;
+}
+
+.alert-btn {
+  font-size: 1.125rem;
+}

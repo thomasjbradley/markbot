@@ -8,6 +8,7 @@
   <link href="toolbar.css" rel="stylesheet">
   <link href="deps.css" rel="stylesheet">
   <link href="dancing-robot.css" rel="stylesheet">
+  <link href="alert.css" rel="stylesheet">
 </head>
 <body>
 
@@ -304,7 +305,7 @@
           <h1>Enter your GitHub username:</h1>
         </label>
         <input class="username-input" id="username" autofocus>
-        <button class="btn" id="username-go" type="submit">Go</button>
+        <button class="btn btn-hidden" id="username-go" type="submit">Go</button>
       </form>
     </div>
   </div>
@@ -440,7 +441,17 @@
           <span class="line-3">Rockin’ robot,</span>
           <span class="line-4">Do the robot dance!</span>
         </p>
-      </path>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert-wrap" id="alert" hidden>
+    <div class="alert" id="alert-box" tabindex="0">
+      <p><strong id="alert-text">Unable to connect to the HTML validator; the background process may have crashed. Please quit & restart Markbot.</strong></p>
+      <div class="btn-wrap">
+        <button class="btn alert-btn toolbar-button" id="alert-btn-okay">Okay</button>
+        <button class="btn alert-btn toolbar-button" id="alert-btn-restart" hidden>Restart Markbot</button>
+      </div>
     </div>
   </div>
 

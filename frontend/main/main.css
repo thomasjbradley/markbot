@@ -153,7 +153,7 @@
   border-color: #999;
 }
 
-.btn {
+.btn-hidden {
   position: absolute;
   left: -10em;
 }

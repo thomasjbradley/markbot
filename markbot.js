@@ -305,6 +305,11 @@ app.on('activate', function () {
   }
 });
 
+exports.relaunch = function () {
+  app.relaunch();
+  app.quit();
+};
+
 exports.openRepo = function (path) {
   if (typeof path !== 'string') path = path[0];
 

@@ -91,11 +91,23 @@ const checkSpellingAndGrammer = function (commit) {
 };
 
 const checkCommits = function (commits, group, id, label, next) {
+  const crashMessage = 'Cannot connect to the spelling & grammar checking tool; the background process may have crashed. Please quit & restart Markbot.';
   let errors = [];
+
+  if (commits.length <= 0) {
+    markbotMain.send('check-group:item-complete', group, id, label);
+    return next();
+  }
 
   Promise.all(
     commits.slice(0, MAX_COMMITS_TO_CHECK).map(checkSpellingAndGrammer)
   ).then((results) => {
+    if (results.length <= 0) {
+      markbotMain.send('check-group:item-complete', group, id, label, [crashMessage]);
+      markbotMain.send('restart', crashMessage);
+      return next();
+    }
+
     results.forEach((info, i) => {
       let data = false;
       let singleCommitErrors = [];
@@ -141,7 +153,8 @@ const checkCommits = function (commits, group, id, label, next) {
     next();
   })
   .catch((reason) => {
-    markbotMain.send('check-group:item-complete', group, id, label, [`Cannot connect to the spelling & grammar checking tool — check that Java is properly installed`]);
+    markbotMain.send('check-group:item-complete', group, id, label, [crashMessage]);
+    markbotMain.send('restart', crashMessage);
     return next();
   })
   ;

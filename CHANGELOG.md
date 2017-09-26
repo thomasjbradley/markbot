@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Screenshot groups can now be labeled using the new `label` property, similar to functionality.
 - Text files, including SVG graphics, can now be checked if they are smushed, essentially just checks for line breaks.
 - The four new font-sizes to the Typografier checker.
+- Replaced the default `alert()` with a custom one that has the ability to restart the application.
 
 ### Changed
 
@@ -27,6 +28,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug where the checks wouldn’t be bypassed properly when the file didn’t exist.
 - Fixed a bug in the missing optional tag checking where it would actually ignore missing optional tags.
 - Markbot will now display MarkbotFile errors in the Activity window for easier debugging.
+- There’s better error handling if the background servers crash while Markbot is still open.
 
 ---
 

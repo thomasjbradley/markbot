@@ -37,10 +37,18 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
   markbotMain.send('check-group:item-computing', checkGroup, checkId);
 
   exec(execPath, function (err, data) {
+    const crashMessage = 'Unable to connect to the HTML validator; the background process may have crashed. Please quit & restart Markbot.';
     let messages = {};
     let errors = [];
 
     if (data) {
+      if (/^error\:.+stopping/i.test(data.trim())) {
+        errors.push(crashMessage);
+        markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+        markbotMain.send('restart', crashMessage);
+        return next(errors);
+      }
+
       try {
         messages = JSON.parse(data);
       } catch (e) {
@@ -54,10 +62,15 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
           }
         });
       }
-    }
 
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
-    next(errors);
+      markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+      return next(errors);
+    } else {
+      errors.push(crashMessage);
+      markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+      markbotMain.send('restart', crashMessage);
+      return next(errors);
+    }
   });
 };
 

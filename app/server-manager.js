@@ -42,7 +42,7 @@ const start = function (next) {
     ]).then(() => {
       next();
     }).catch((reason) => {
-      markbotMain.send('alert', `Internal servers won’t start: “${reason}” — try restarting Markbot`);
+      markbotMain.send('restart', `Internal servers won’t start: “${reason}”. Please quit & restart Markbot.`);
     });
   });
 };
