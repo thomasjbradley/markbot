@@ -2,10 +2,12 @@
 
 const util = require('util');
 const path = require('path');
+const http = require('http');
 const exec = require('child_process').exec;
 const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const serverManager = require('electron').remote.require('./app/server-manager');
+const userAgentService = require(`${__dirname}/../../user-agent-service`);
 
 const shouldIncludeError = function (message, line) {
   // The standard info: using HTML parser
@@ -30,48 +32,66 @@ const bypass = function (checkGroup, checkId, checkLabel) {
 const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents, lines, next) {
   const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor/html-validator');
   const hostInfo = serverManager.getHostInfo('html');
-  const execPath = `java -Dnu.validator.client.port=${hostInfo.port} -Dnu.validator.client.charset=utf-8 -Dnu.validator.client.level=error -Dnu.validator.client.out=json -cp ` + escapeShell(validatorPath + '/vnu.jar') + ' nu.validator.client.HttpClient ' + escapeShell(fullPath);
+  const crashMessage = 'Unable to connect to the HTML validator; the background process may have crashed. Please quit & restart Markbot.';
+  let messages = {};
+  let errors = [];
 
-  markbotMain.debug(`@@${validatorPath}@@`);
-  markbotMain.debug(`\`${execPath}\``);
-  markbotMain.send('check-group:item-computing', checkGroup, checkId);
+  const requestOpts = {
+    hostname: hostInfo.hostname,
+    port: hostInfo.port,
+    path: '/?out=json&level=error&parser=html5',
+    method: 'POST',
+    protocol: `${hostInfo.protocol}:`,
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Length': Buffer.byteLength(fileContents),
+      'User-Agent': userAgentService.get(),
+    }
+  };
 
-  exec(execPath, function (err, data) {
-    const crashMessage = 'Unable to connect to the HTML validator; the background process may have crashed. Please quit & restart Markbot.';
-    let messages = {};
-    let errors = [];
+  const req = http.request(requestOpts, (res) => {
+    res.setEncoding('utf8');
+    res.on('data', (data) => {
+      if (data) {
+        try {
+          messages = JSON.parse(data);
+        } catch (e) {
+          errors.push(crashMessage);
+          markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+          markbotMain.send('restart', crashMessage);
+          return next(errors);
+        }
 
-    if (data) {
-      if (/^error\:.+stopping/i.test(data.trim())) {
+        if (messages.messages) {
+          messages.messages.forEach(function (item) {
+            if (shouldIncludeError(item.message, item.line)) {
+              errors.push(util.format('Line %d: %s', item.lastLine, item.message.replace(/“/g, '`').replace(/”/g, '`')));
+            }
+          });
+        }
+
+        markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+        return next(errors);
+      } else {
         errors.push(crashMessage);
         markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
         markbotMain.send('restart', crashMessage);
         return next(errors);
       }
-
-      try {
-        messages = JSON.parse(data);
-      } catch (e) {
-        markbotMain.debug('Error parsing the HTML validator JSON response');
-      }
-
-      if (messages.messages) {
-        messages.messages.forEach(function (item) {
-          if (shouldIncludeError(item.message, item.line)) {
-            errors.push(util.format('Line %d: %s', item.lastLine, item.message.replace(/“/g, '`').replace(/”/g, '`')));
-          }
-        });
-      }
-
-      markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
-      return next(errors);
-    } else {
-      errors.push(crashMessage);
-      markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
-      markbotMain.send('restart', crashMessage);
-      return next(errors);
-    }
+    });
   });
+
+  req.on('error', () => {
+    errors.push(crashMessage);
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+    markbotMain.send('restart', crashMessage);
+    return next(errors);
+  });
+
+  markbotMain.debug(`@@${validatorPath}@@`);
+  markbotMain.send('check-group:item-computing', checkGroup, checkId);
+
+  req.end(fileContents, 'utf8');
 };
 
 module.exports.init = function (group) {
