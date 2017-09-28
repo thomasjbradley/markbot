@@ -5,15 +5,16 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [7.2.1] — 2017-09-28
 
 ### Changed
 
-- Added a `User-Agent` to the live website check and internally to HTML validation and Git commit best practices checks.
+- Added a `User-Agent` to the live website check, and internally to HTML validation and Git commit best practices checks.
 
 ### Fixed
 
 - Fixed a bug in the HTML validator where it wouldn’t run if there were spaces in filenames.
+- Added some detections and logging for different possible errors Git may show, like `license` and not in `$PATH`
 
 ---
 
