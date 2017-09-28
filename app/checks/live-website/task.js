@@ -3,6 +3,7 @@
 
   const https = require('https');
   const markbotMain = require('electron').remote.require('./app/markbot-main');
+  const userAgentService = require(`${__dirname}/user-agent-service`);
 
   const group = taskDetails.group;
   const repo = taskDetails.options.repo;
@@ -14,6 +15,9 @@
     method: 'HEAD',
     host: `${username.toLowerCase()}.github.io`,
     path: `/${repo}/`,
+    headers: {
+      'User-Agent': userAgentService.get(),
+    }
   };
 
   markbotMain.send('check-group:item-new', group, id, label);

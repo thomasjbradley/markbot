@@ -15,6 +15,7 @@ const exists = require(`${__dirname}/../../file-exists`);
 const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const serverManager = require('electron').remote.require('./app/server-manager');
+const userAgentService = require(`${__dirname}/../../user-agent-service`);
 const blackListVerbs = require(`${__dirname}/best-practices/black-list-verbs.json`);
 
 let app;
@@ -76,6 +77,7 @@ const checkSpellingAndGrammer = function (commit) {
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded',
       'Content-Length': Buffer.byteLength(data),
+      'User-Agent': userAgentService.get(),
     }
   };
 
