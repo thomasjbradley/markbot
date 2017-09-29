@@ -12,6 +12,7 @@ const util = require('util');
 const https = require('https');
 const crypto = require('crypto');
 const mkdirp = require('mkdirp');
+const fixPath = require('fix-path');
 
 const markbotMain = require('./app/markbot-main');
 const markbotFileGenerator = require('./app/markbot-file-generator');
@@ -28,6 +29,7 @@ const checkManager = require('./app/check-manager');
 
 global.ENV = process.env.NODE_ENV;
 global.DEBUG = (global.ENV === 'development');
+fixPath();
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;

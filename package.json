@@ -23,6 +23,7 @@
     "eslint": "^3.19.0",
     "exif": "^0.6.0",
     "finalhandler": "^1.0.4",
+    "fix-path": "^2.1.0",
     "front-matter": "^2.2.0",
     "get-port": "^3.2.0",
     "git-commits": "^1.2.0",
