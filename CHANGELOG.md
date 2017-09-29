@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Added some more words to the spelling dictionary
+
+### Fixed
+
+- On some MacOS environments the `$PATH` variable wasn’t inheriting into Electron—added some path-fixing code.
+
+---
+
 ## [7.2.1] — 2017-09-28
 
 ### Changed
