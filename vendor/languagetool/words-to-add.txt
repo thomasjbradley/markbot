@@ -1,10 +1,12 @@
-#
+##
 # Extra English words
+##
 mistype
 mistyped
 mistypes
-#
+##
 # Markbot specific
+##
 markbot
 patternbot
 spritebot
@@ -13,6 +15,10 @@ github
 gridifier
 modulifier
 typografier
+gh-pages
+##
+# Around the web names
+##
 mozilla
 google
 duckduckgo
@@ -31,8 +37,39 @@ http
 https
 ip
 url
-gh-pages
 wikipedia
-#
+##
+# All the weirdly spelled HTML tags
+##
+figcaption
+ol
+ul
+li
+dl
+dd
+dt
+h1
+h2
+h3
+h4
+h5
+h6
+sup
+kbd
+samp
+br
+hr
+wbr
+##
+# All the weirdly spelled SVG tags
+##
+defs
+linearGradient
+tspan
+textPath
+rect
+feGaussianBlur
+##
 # All the dinosaur names
+##
 dino
