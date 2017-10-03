@@ -221,7 +221,8 @@
     }
 
     webLoader.load(taskRunnerId, file.path, {width: MAX_WINDOW_WIDTH, height: MAX_WINDOW_HEIGHT}, function (theWindow) {
-      theWindow.webContents.insertCSS(defaultScreenshotCSS);
+      if (!file.allowAnimations) theWindow.webContents.insertCSS(defaultScreenshotCSS);
+
       theWindow.webContents.executeJavaScript(getResizeInjectionJs(theWindow.id, taskRunnerId, ipcListenerResizeChannel), function (windowId) {
         if (file.before) {
           functionalityInjector.runCode(theWindow, file.before, 0, ipcListenerLabel);
