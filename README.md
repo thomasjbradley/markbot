@@ -405,6 +405,12 @@ screenshots:
     # It can also be used to add a little extra information to the check list
     label: 'Clicked'
 
+    # By default animations & transitions are generally disabled using the * selector and !important
+    # This will allow you to enable them again
+    # Be careful to wait for them to complete before taking a screenshot
+    # Something like: on('.elem', 'animationend', done);
+    allowAnimations: true
+
     # Execute some Javascript before capturing the screenshots
     # Happens immediately, before the first screenshot is taken and is not repeated for each size
     # Has access to all the same functions as the `functionality` tests with a few small exceptions:

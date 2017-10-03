@@ -7,9 +7,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Allow screenshots tests to enabled animations & transitions with the `allowAnimations` option.
+
 ### Changed
 
-- Added some more words to the spelling dictionary
+- Added some more words to the spelling dictionary.
+- Added labels to all the template functionality tests.
 
 ### Fixed
 
