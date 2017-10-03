@@ -35,6 +35,7 @@ allFiles:
         type: warning
 
   functionality:
+    label: 'Forms'
     tests:
       # Test that all radio button groups are inside `<fieldset>` tags
       - |

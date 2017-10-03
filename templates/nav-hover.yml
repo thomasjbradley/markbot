@@ -1,5 +1,6 @@
 allFiles:
   functionality:
+    label: 'Nav hover'
     tests:
       - |
         let headerLink = $('header nav:last-of-type a');

@@ -7,6 +7,7 @@ allFiles:
         message: 'Expected to see a button style modifier: `.btn-ghost` or `.btn-light`'
 
   functionality:
+    label: 'Button hover'
     tests:
       - |
         let btn = $('.btn');
