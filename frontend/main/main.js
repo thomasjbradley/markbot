@@ -78,6 +78,7 @@ const appReady = function () {
   }
 };
 
+
 const displayAlert = function (msg, opts) {
   const eventsList = ['mousedown', 'mouseup', 'click', 'dblclick', 'mousemove', 'mouseover', 'mouseout', 'mousewheel', 'keydown', 'keyup', 'keypress', 'textInput', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'resize', 'scroll', 'zoom', 'focus', 'blur', 'select', 'change', 'submit', 'reset'];
   const alertWrap = document.getElementById('alert');
@@ -115,6 +116,7 @@ const displayAlert = function (msg, opts) {
     alertOkay.removeEventListener('click', handleRestartClick);
     alertOkay.removeEventListener('blur', handleButtonBlur);
     $toolbar.focus();
+    enableToolbar();
   };
 
   const handleRestartClick = function (e) {

@@ -19,6 +19,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - On some MacOS environments the `$PATH` variable wasn’t inheriting into Electron—added some path-fixing code.
+- After an alert was shown the toolbar wasn’t re-enabling.
 
 ---
 
