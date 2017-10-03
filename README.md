@@ -550,7 +550,7 @@ Your injected code will have access to a few functions to simplify what you have
   - `selector/element` a pre-selected DOM element object or CSS selector to match for the target for your event.
   - `eventname` is any standard event like `click`, `animationend`, etc.
   - `callback` is a function that will be executed when the event is triggered. It will receive two arguments:
-    - `err` — (`bool`): whether or not the timeout was executed, meaning the event was never triggered.
+    - `hasError` — (`bool`): whether or not the timeout was executed, meaning the event was never triggered. Set to `true` when there is an error and `false` otherwise.
     - `ev` — the standard Javascript event object passed through.
   - `timeoutlength` is an optional argument you can pass to control the maximum length the listener will wait to be called.
 - **`ev(eventString[, options])`** — Can be used to fire an event with `dispatchEvent()`
