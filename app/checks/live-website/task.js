@@ -11,10 +11,11 @@
   const id = 'live-website';
   const label = 'Online';
   const errors = [`**Your website is not online.** Double check that all the commits have been pushed & that the \`index.html\` file, on GitHub’s website, follows the naming conventions. @@https://${username.toLowerCase()}.github.io/${repo}/@@`];
+  const dtNow = Date.now();
   const opts = {
     method: 'HEAD',
     host: `${username.toLowerCase()}.github.io`,
-    path: `/${repo}/`,
+    path: `/${repo}/?dt=${dtNow}`,
     headers: {
       'User-Agent': userAgentService.get(),
     }
