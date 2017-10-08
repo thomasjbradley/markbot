@@ -45,6 +45,8 @@
     if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors);
 
     calipers.measure(fullPath, function (err, result) {
+      if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
+
       if (file.maxWidth) {
         if (result.pages[0].width > file.maxWidth) errors.push(`The width of \`${file.path}\` is too large (expecting: ${file.maxWidth}px, actual: ${result.pages[0].width}px)`);
       }
@@ -67,17 +69,20 @@
 
   const checkExif = function (file, fullPath, next) {
     new exif({image:fullPath}, function (err, data) {
-      if (err && err.code == 'NO_EXIF_SEGMENT' && !data) next([]);
-      if (data) next([`The \`${file.path}\` image needs to be smushed`]);
+      if (err && err.code == 'NO_EXIF_SEGMENT' && !data) return next([]);
+      if (data) return next([`The \`${file.path}\` image needs to be smushed`]);
+      next([`The JPG, \`${file.path}\`, seems to be corrupt—try exporting it again`]);
     });
   };
 
   const checkPngChunks = function (file, fullPath, next) {
     fs.createReadStream(fullPath).pipe(pngitxt.get(function (err, data) {
-      if (!err && !data) next([]);
+      if (!err && !data) return next([]);
 
       if (data) next([`The \`${file.path}\` image needs to be smushed`]);
-    }));
+    })).on('error', (err) => {
+      next([`The PNG, \`${file.path}\`, seems to be corrupt—try exporting it again`]);
+    });
   };
 
   const checkImageMetadata = function (file, fullPath, next) {
