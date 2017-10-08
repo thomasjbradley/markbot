@@ -10,8 +10,9 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Allow screenshots tests to enabled animations & transitions with the `allowAnimations` option.
-- A datetime to the end of the request URL for live website checking to see if it becomes a little more reliable.
-- A template that checks images for `block` and `width: 100%`
+- Added a datetime to the end of the request URL for live website checking to see if it becomes a little more reliable.
+- Added a template that checks images for `block` and `width: 100%`
+- Added a template for checking button hovering with the `.btn` class—it’s very similar to the Modulifier button hover without the requirement of a modifier class.
 
 ### Changed
 
