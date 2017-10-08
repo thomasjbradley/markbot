@@ -5,11 +5,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [7.3.0] — 2017-10-08
 
 ### Added
 
-- Allow screenshots tests to enabled animations & transitions with the `allowAnimations` option.
+- Allow screenshot tests to enable animations & transitions with the `allowAnimations` option.
 - Added a datetime to the end of the request URL for live website checking to see if it becomes a little more reliable.
 - Added a template that checks images for `block` and `width: 100%`
 - Added a template for checking button hovering with the `.btn` class—it’s very similar to the Modulifier button hover without the requirement of a modifier class.
@@ -22,8 +22,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- On some MacOS environments the `$PATH` variable wasn’t inheriting into Electron—added some path-fixing code.
-- After an alert was shown the toolbar wasn’t re-enabling.
+- Added some path-fixing code because on some MacOS environments the `$PATH` variable wasn’t inheriting into Electron.
+- Fixed a bug where after an alert was shown the toolbar wasn’t re-enabling.
 - Added better error handling for corrupt and improperly formated images.
 
 ---
