@@ -4,6 +4,7 @@
 mistype
 mistyped
 mistypes
+polaroid
 ##
 # Markbot specific
 ##
