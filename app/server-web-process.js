@@ -76,11 +76,13 @@ const start = function (port) {
 };
 
 const stop = function () {
-  if (isRunning()) {
-    webServer.close(() => {
-      webServer = null;
-      staticDir = null;
-    });
+  try {
+    webServer.close();
+    webServer = null;
+    staticDir = null;
+    process.kill();
+  } catch (e) {
+    console.log('Web server is already stopped.');
   }
 };
 

@@ -29,7 +29,6 @@ const checkManager = require('./app/check-manager');
 
 global.ENV = process.env.NODE_ENV;
 global.DEBUG = (global.ENV === 'development');
-fixPath();
 
 const MARKBOT_DEVELOP_MENU = !!process.env.MARKBOT_DEVELOP_MENU || false;
 const MARKBOT_LOCK_PASSCODE = process.env.MARKBOT_LOCK_PASSCODE || false;
@@ -96,13 +95,11 @@ const createMainWindow = function (next) {
     if (differWindow) differWindow.destroy();
     if (debugWindow) debugWindow.destroy();
 
+    checkManager.stop();
     exports.disableFolderMenuFeatures();
 
+    mainWindow.destroy();
     mainWindow = null;
-
-    if (process.platform !== 'darwin') {
-      menuCallbacks.quit();
-    }
   });
 
   mainWindow.once('ready-to-show', function () {
@@ -267,6 +264,7 @@ menuCallbacks.showDebugWindow = function () {
 };
 
 app.on('ready', function () {
+  fixPath();
   updateAppMenu();
 
   createWindows(() => {
@@ -282,18 +280,27 @@ app.on('ready', function () {
   });
 });
 
+const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
+  if (mainWindow) {
+    if (mainWindow.isMinimized()) mainWindow.restore()
+    mainWindow.focus()
+  }
+});
+if (shouldQuit) app.quit();
+
 app.on('window-all-closed', function () {
   if (process.platform !== 'darwin') {
-    menuCallbacks.quit();
+    app.quit();
   }
 });
 
 app.on('will-quit', () => {
   serverManager.stop();
-  checkManager.stop();
+  app.releaseSingleInstance();
 });
 
-menuCallbacks.quit = function () {
+exports.relaunch = function () {
+  app.relaunch();
   app.quit();
 };
 
@@ -306,11 +313,6 @@ app.on('activate', function () {
     });
   }
 });
-
-exports.relaunch = function () {
-  app.relaunch();
-  app.quit();
-};
 
 exports.openRepo = function (path) {
   if (typeof path !== 'string') path = path[0];

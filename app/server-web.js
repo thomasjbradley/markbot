@@ -36,9 +36,11 @@ const start = function (port) {
 };
 
 const stop = function () {
-  if (server) {
+  try {
     server.send({ stop: true });
     server.kill();
+  } catch (e) {
+    console.log('Web server already stopped.');
   }
 };
 

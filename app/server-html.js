@@ -52,7 +52,11 @@ const start = function (port) {
 };
 
 const stop = function () {
-  if (server) server.kill();
+  try {
+    server.kill();
+  } catch (e) {
+    console.log('HTML server already stopped.');
+  }
 };
 
 module.exports = {

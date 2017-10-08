@@ -100,13 +100,9 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
       role: 'window',
       submenu: [
         {
-          label: 'Minimize',
-          accelerator: 'CmdOrCtrl+M',
           role: 'minimize'
         },
         {
-          label: 'Close',
-          accelerator: 'CmdOrCtrl+W',
           role: 'close'
         },
         {
@@ -216,26 +212,19 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           type: 'separator'
         },
         {
-          label: 'Hide Markbot',
-          accelerator: 'Command+H',
           role: 'hide'
         },
         {
-          label: 'Hide Others',
-          accelerator: 'Command+Alt+H',
           role: 'hideothers'
         },
         {
-          label: 'Show All',
           role: 'unhide'
         },
         {
           type: 'separator'
         },
         {
-          label: 'Quit',
-          accelerator: 'Command+Q',
-          click: function() { cbs.quit(); }
+          role: 'quit',
         },
       ]
     });
@@ -246,7 +235,6 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
         type: 'separator'
       },
       {
-        label: 'Bring All to Front',
         role: 'front'
       }
     );
@@ -269,9 +257,6 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
         type: 'separator'
       },
       {
-        label: 'Quit',
-        accelerator: 'Ctrl+Q',
-        click: function() { cbs.quit(); }
       }
     );
 
@@ -301,7 +286,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
             }
           })(),
           click: function(item, focusedWindow) {
-            focusedWindow.toggleDevTools();
+            if (focusedWindow) focusedWindow.toggleDevTools();
           }
         },
         {
@@ -309,10 +294,13 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           accelerator: 'CmdOrCtrl+Alt+R',
           click: function(item, focusedWindow) {
             cbs.disableFolderMenuFeatures();
-            focusedWindow.reload();
-            focusedWindow.webContents.once('did-finish-load', () => {
-              focusedWindow.webContents.send('app:ready');
-            });
+
+            if (focusedWindow) {
+              focusedWindow.reload();
+              focusedWindow.webContents.once('did-finish-load', () => {
+                focusedWindow.webContents.send('app:ready');
+              });
+            }
           }
         },
         {
