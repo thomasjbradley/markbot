@@ -1,0 +1,5 @@
+allFiles:
+  css:
+    has:
+      - ['img', 'display', 'block']
+      - ['img', 'width', '100%']
