@@ -11,6 +11,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Allow screenshots tests to enabled animations & transitions with the `allowAnimations` option.
 - A datetime to the end of the request URL for live website checking to see if it becomes a little more reliable.
+- A template that checks images for `block` and `width: 100%`
 
 ### Changed
 
