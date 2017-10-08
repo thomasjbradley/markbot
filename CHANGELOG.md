@@ -16,6 +16,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added some more words to the spelling dictionary.
 - Added labels to all the template functionality tests.
+- Improved the shutdown procedure a little bit.
 
 ### Fixed
 
