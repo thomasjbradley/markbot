@@ -6,7 +6,7 @@ const __MarkbotInjectedFunctions = {
     try {
       const result = trgt.querySelector(sel);
 
-      if (!result) __MarkbotInjectedFunctions.fail(`The element: \`${sel}\` doesn’t exist on the page`);
+      if (!result) __MarkbotInjectedFunctions.fail(`The element, \`${sel}\`, doesn’t exist on the page`);
 
       return result;
     } catch (e) {
