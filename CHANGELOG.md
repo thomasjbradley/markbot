@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Fixed some confusing grammar in the functionality error tests.
+- Added another word to the dictionary.
 
 ---
 
