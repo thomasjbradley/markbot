@@ -4,6 +4,7 @@
 mistype
 mistyped
 mistypes
+unclosed
 polaroid
 ##
 # Markbot specific
