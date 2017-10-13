@@ -187,7 +187,6 @@
     });
 
     ipcRenderer.on('__markbot-functionality-error', function (event, message, line, filename) {
-      hasErrors = true;
       filename = filename.replace(fullPath, '').replace('file:///', '');
       cleanup(windowId);
 
