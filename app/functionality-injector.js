@@ -51,7 +51,16 @@ const makeExecTestJs = function (js, testIndex, label, testWinId) {
 };
 
 const runCode = function (win, testJs, testIndex, listenerLabel) {
-  let bindFunction = `(function(){'use strict';${testJs.trim()}}())`;
+  let bindFunction = `
+    (function () {
+      'use strict';
+
+      window.__markbot.playAnimations();
+
+      ${testJs.trim()}
+    }());
+  `;
+
   let js = makeExecTestJs(JSON.stringify(bindFunction), testIndex, listenerLabel, win.id);
 
   win.webContents.executeJavaScript(js);

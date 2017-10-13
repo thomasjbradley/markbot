@@ -1,14 +1,14 @@
 /*!
  * =============================================================================
  * Internal abilities required for Markbot to function
- * Trying to isolate all the Node.js functionality away from the user scripts for security
+ * Isolates all the Node.js functionality away from the user scripts for security
  * =============================================================================
  */
-
 window.__markbot = (function () {
   'use strict';
 
   let fontsLoadedInterval;
+  let animationPauseStyleTag;
 
   const getCurrentTaskWindowId = () => {
     if (window.__markbotHiddenTestingWindowId) return window.__markbotHiddenTestingWindowId;
@@ -61,6 +61,22 @@ window.__markbot = (function () {
     }
   };
 
+  const pauseAnimations = function () {
+    animationPauseStyleTag = document.createElement('style');
+    animationPauseStyleTag.id = '__markbot-style-chunk-animation-pause';
+    animationPauseStyleTag.textContent = `
+      *, *::before, *::after {
+        animation-play-state: paused !important;
+      }
+    `;
+
+    document.body.appendChild(animationPauseStyleTag);
+  };
+
+  const playAnimations = function () {
+    if (animationPauseStyleTag) animationPauseStyleTag.remove();
+  };
+
   fontsLoadedInterval = setInterval(checkIfFontsDoneLoading, 100);
 
   return {
@@ -68,6 +84,8 @@ window.__markbot = (function () {
     getTestingService: getTestingService,
     sendMessageToWindow: sendMessageToWindow,
     sendInputEventToWindow: sendInputEventToWindow,
+    pauseAnimations: pauseAnimations,
+    playAnimations: playAnimations,
   };
 }());
 
@@ -92,6 +110,16 @@ window.addEventListener('load', (ev) => {
       });
     });
   });
+});
+
+/*!
+ * =============================================================================
+ * Default to pausing the animations for more consistent screenshots
+ * & functionality tests
+ * =============================================================================
+ */
+document.addEventListener('DOMContentLoaded', (ev) => {
+  window.__markbot.pauseAnimations();
 });
 
 /*!

@@ -226,6 +226,7 @@
         if (file.before) {
           functionalityInjector.runCode(theWindow, file.before, 0, ipcListenerLabel);
         } else {
+          if (file.allowAnimations) theWindow.webContents.executeJavaScript(`window.__markbot.playAnimations();`);
           nextScreenshot(windowId);
         }
       });
