@@ -13,6 +13,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added another word to the dictionary.
 - All CSS animations are now paused in the browser window until the screenshot or the functionality test is ready to execute.
 
+### Fixed
+
+- Added back in a Windows full-quit check that accidentally got removed with I was debugging a Mac quitting problem.
+
 ---
 
 ## [7.3.0] — 2017-10-08

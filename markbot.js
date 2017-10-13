@@ -100,6 +100,8 @@ const createMainWindow = function (next) {
 
     mainWindow.destroy();
     mainWindow = null;
+
+    if (process.platform !== 'darwin') app.quit();
   });
 
   mainWindow.once('ready-to-show', function () {
@@ -289,9 +291,7 @@ const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
 if (shouldQuit) app.quit();
 
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+  if (process.platform !== 'darwin') app.quit();
 });
 
 app.on('will-quit', () => {
