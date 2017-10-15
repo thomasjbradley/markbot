@@ -12,6 +12,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed some confusing grammar in the functionality error tests.
 - Added another word to the dictionary.
 - All CSS animations are now paused in the browser window until the screenshot or the functionality test is ready to execute.
+- Changed the “nav-hover” template so that it doesn’t choose the `.current` `<a>` tag to check for hovering.
 
 ### Fixed
 
