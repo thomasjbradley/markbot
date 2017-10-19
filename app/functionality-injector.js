@@ -56,6 +56,9 @@ const runCode = function (win, testJs, testIndex, listenerLabel) {
       'use strict';
 
       window.__markbot.playAnimations();
+      setTimeout(() => {
+        __MarkbotInjectedFunctions.fail('The Markbot requirements test code took too long to run or didn’t execute the required \`done()\` or \`pass()\` functions');
+      }, 7000);
 
       ${testJs.trim()}
     }());
