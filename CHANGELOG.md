@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed a bug when the `before` method of a screenshot had an error Markbot would just hang and wait.
+- Fixed a bug when the test code takes too long to run—there’s now a time limit before a failure is executed.
+
+---
+
 ## [7.3.1] — 2017-10-15
 
 ### Changed
