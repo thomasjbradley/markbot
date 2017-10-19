@@ -142,6 +142,12 @@
       }
     };
 
+    const failAllScreenshots = function (reason) {
+      screenshotSizes.forEach((width) => {
+        markbotMain.send('check-group:item-complete', group, listenerId(width), listenerLabel(width), [`The website isn’t functioning as expected: ${reason}`]);
+      });
+    };
+
     const checkAllDiffsDone = function () {
       if (screenshotSizesDone.length >= file.sizes.length) next();
     };
@@ -152,6 +158,7 @@
       ipcRenderer.removeAllListeners(ipcListenerResizeChannel);
       ipcRenderer.removeAllListeners('__markbot-functionality-error');
       ipcRenderer.removeAllListeners('__markbot-functionality-test-done-' + ipcListenerLabel);
+      ipcRenderer.removeAllListeners('__markbot-functionality-test-fail-' + ipcListenerLabel);
       ipcRenderer.removeAllListeners('__markbot-functionality-test-debug-' + ipcListenerLabel);
 
       webLoader.destroy(win);
@@ -200,6 +207,12 @@
 
     ipcRenderer.on('__markbot-functionality-test-done-' + ipcListenerLabel, function(event, windowId) {
       nextScreenshot(windowId);
+    });
+
+    ipcRenderer.on('__markbot-functionality-test-fail-' + ipcListenerLabel, function(event, reason, windowId) {
+      cleanup(windowId);
+      failAllScreenshots(reason);
+      next();
     });
 
     ipcRenderer.on('__markbot-functionality-test-debug-' + ipcListenerLabel, function (event, ...e) {

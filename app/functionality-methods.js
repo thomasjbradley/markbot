@@ -175,12 +175,12 @@ const __MarkbotInjectedFunctions = {
   },
 
   pass: function () {
-    if (!__MarkbotInjectedFunctions.failed) window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.passLabel);
+    if (!__MarkbotInjectedFunctions.failed) window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.passLabel, __MarkbotInjectedFunctions.browserWindowId);
   },
 
   fail: function (reason) {
     __MarkbotInjectedFunctions.failed = true;
-    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.failLabel, reason);
+    window.__markbot.sendMessageToWindow(__MarkbotInjectedFunctions.taskRunnerId, __MarkbotInjectedFunctions.failLabel, reason, __MarkbotInjectedFunctions.browserWindowId);
   },
 
   convertElementToString: function (elem) {
