@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a new template for checking to make sure the standard `.img-flex` class exists.
+
 ### Fixed
 
 - Fixed a bug when the `before` method of a screenshot had an error Markbot would just hang and wait.

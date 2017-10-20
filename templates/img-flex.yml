@@ -1,0 +1,5 @@
+allFiles:
+  css:
+    has:
+      - ['.img-flex', 'display', 'block']
+      - ['.img-flex', 'width', '100%']
