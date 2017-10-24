@@ -3,7 +3,7 @@ allFiles:
     has:
       - 'header'
       - 'header nav'
-      - 'header nav ul li a'
+      - 'header nav li a'
       - 'main'
       - 'footer'
     search:
