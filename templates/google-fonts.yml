@@ -1,3 +1,8 @@
 allFiles:
   html:
-    - ['link[href*="fonts.googleapis.com"]', 'A Google Font should be included on the page']
+    has:
+      - check: 'link[href*="fonts.googleapis.com"]'
+        message: 'A Google Font should be included on the page'
+    hasNot:
+      - check: 'link[href*="fonts.googleapis.com"] ~ link[href*="fonts.googleapis.com"]'
+        message: 'There should only be a single Google Fonts `<link>` tag—add all the fonts to a single “cart” on Google Fonts'
