@@ -17,9 +17,9 @@ allFiles:
     hasNot:
       # GENERAL
       - check: '[accesskey]'
-        message: 'The `accesskey` attribute isn’t usually a good idea; too often it conflicts with predefined browser shortcuts'
+        message: 'The `accesskey="…"` attribute isn’t usually a good idea; too often it conflicts with predefined browser shortcuts'
       - check: '[tabindex]:not([tabindex="0"]):not([tabindex="-1"])'
-        message: 'The `tabindex` attribute should only be `0` or `-1`'
+        message: 'The `tabindex="…"` attribute should only be `0` or `-1`'
       - check: 'blink'
         message: 'The `blink` element should never be used—ever'
       - check: 'marquee'
@@ -27,7 +27,7 @@ allFiles:
 
       # SEMANTICS
       - check: '[title]:not(abbr)'
-        message: 'The `<title>` attribute has very little accessibility significance and is generally ignored, consider using a different attribute for descriptions'
+        message: 'The `title="…"` attribute has very little accessibility significance and is generally ignored, consider using a different attribute for descriptions'
         type: warning
 
       # LINKS
