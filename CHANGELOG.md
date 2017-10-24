@@ -10,11 +10,17 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Added a new template for checking to make sure the standard `.img-flex` class exists.
+- Added another new template to confirm `modules.css` comes before `main.css`
+
+### Changed
+
+- Added another check to the Google Fonts template to confirm there aren’t multiple `<link>` tags.
 
 ### Fixed
 
 - Fixed a bug when the `before` method of a screenshot had an error Markbot would just hang and wait.
 - Fixed a bug when the test code takes too long to run—there’s now a time limit before a failure is executed.
+- Fixed a small bug in one of the templates: the `has` property was missing.
 
 ---
 

@@ -1,0 +1,4 @@
+allFiles:
+  html:
+    has:
+      - ['link[href*="modules.css"] + link[href*="main.css"]', 'The `modules.css` file must come before the `main.css` file.']
