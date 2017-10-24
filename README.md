@@ -203,6 +203,10 @@ html:
     # Will be skipped if validation isn’t also checked—the document must be valid first
     outline: true
 
+    # Run accessibility tests on the HTML documents using AxeCore
+    # It’s usually more convenient to just inherit the accessibility template which includes more tests
+    accessibility: true
+
     # Can be used to test for specific elements; each entry should be a valid CSS selector
     # Will be skipped if validation isn’t also checked—the document must be valid first
     # If given an array, the second argument can be a custom error message

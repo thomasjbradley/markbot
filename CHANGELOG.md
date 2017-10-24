@@ -16,6 +16,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added another check to the Google Fonts template to confirm there aren’t multiple `<link>` tags.
 - Clarified an accessibility error message in the accessibility template.
+- Add the `accessibility` & `outline` properties to `allFiles.html` inside the accessibility template for convenience.
 
 ### Fixed
 

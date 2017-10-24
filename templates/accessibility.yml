@@ -5,6 +5,9 @@
 
 allFiles:
   html:
+    outline: true
+    accessibility: true
+
     has:
       # SKIP LINKS
       - check: 'body > ul.skip-links:first-child'
