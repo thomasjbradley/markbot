@@ -121,6 +121,8 @@ const mergeInheritedFiles = function (markbotFile) {
   });
 
   templates.forEach((file) => {
+    if (file.allFiles && file.allFiles.functionality && !Array.isArray(file.allFiles.functionality)) file.allFiles.functionality = [file.allFiles.functionality];
+
     newMarkbotFile = merge(newMarkbotFile, file);
   });
 
@@ -134,7 +136,9 @@ const bindFunctionalityToHtmlFiles = function (markbotFile) {
     if (!markbotFile.functionality) markbotFile.functionality = [];
 
     markbotFile.html.forEach((file) => {
-      markbotFile.functionality.push(merge({ path: file.path }, markbotFile.allFiles.functionality));
+      markbotFile.allFiles.functionality.forEach((func) => {
+        markbotFile.functionality.push(merge({ path: file.path }, func));
+      })
     });
   }
 
