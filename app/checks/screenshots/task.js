@@ -198,7 +198,7 @@
       cleanup(windowId);
 
       if (message) message = message.replace(/\.$/, '');
-      if (filename) filename = filename.replace(/https?:\/\/localhost:?\d+\//, '');
+      if (filename) filename = filename.replace(/https?:\/\/(localhost|127\.0\.0\.1):?\d+\//, '');
 
       if (message && !filename && !line) markbotMain.debug(message);
       if (message && filename && !line) markbotMain.debug(`${message} — \`${filename}\``);

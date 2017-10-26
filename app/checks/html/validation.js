@@ -73,10 +73,6 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
         markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
         return next(errors);
       } else {
-        // Error: getaddrinfo ENOTFOUND
-        // Debugging tip:
-        // - Check localhost has a loop-back resolver pointing to 127.0.0.1
-        // - /etc/hosts
         errors.push(crashMessage);
         markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
         markbotMain.send('restart', crashMessage);

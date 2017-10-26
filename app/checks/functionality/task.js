@@ -50,7 +50,7 @@
       cleanup();
 
       if (message) message = message.replace(/\.$/, '');
-      if (filename) filename = filename.replace(/https?:\/\/localhost:?\d+\//, '');
+      if (filename) filename = filename.replace(/https?:\/\/(localhost|127\.0\.0\.1):?\d+\//, '');
 
       if (message && !filename && !line) markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`${message}`]);
       if (message && filename && !line) markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`${message} — \`${filename}\``]);

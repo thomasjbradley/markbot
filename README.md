@@ -1019,7 +1019,7 @@ npm run gen-https-cert
 
 The script will create the appropriate files and place them into the `app` directory.
 
-*While Markbot is running the tested website will be available at `https://localhost:PORT` with a randomly assigned port number.*
+*While Markbot is running the tested website will be available at `https://127.0.0.1:PORT` with a randomly assigned port number.*
 
 #### 5. Markbot dependencies
 

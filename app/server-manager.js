@@ -56,14 +56,14 @@ const stop = function () {
 const getHost = function (server) {
   if (!servers[server]) return false;
 
-  return `${servers[server].protocol}://localhost:${servers[server].port}`;
+  return `${servers[server].protocol}://127.0.0.1:${servers[server].port}`;
 };
 
 const getHostInfo = function (server) {
   if (!servers[server]) return false;
 
   return {
-    hostname: 'localhost',
+    hostname: '127.0.0.1',
     port: servers[server].port,
     protocol: servers[server].protocol,
   };
