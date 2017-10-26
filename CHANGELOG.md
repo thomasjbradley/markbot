@@ -11,6 +11,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added a new template for checking to make sure the standard `.img-flex` class exists.
 - Added another new template to confirm `modules.css` comes before `main.css`
+- Added new templates for checking the focus state of navigation links and main body content links.
 
 ### Changed
 
@@ -24,6 +25,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug when the `before` method of a screenshot had an error Markbot would just hang and wait.
 - Fixed a bug when the test code takes too long to run—there’s now a time limit before a failure is executed.
 - Fixed a small bug in one of the templates: the `has` property was missing.
+- Fixed a bug in the `allFiles.functionality` tests where only the last functionality test was actually run, causing the requirements to be easier than they should be.
 
 ---
 
