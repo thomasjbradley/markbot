@@ -3,9 +3,9 @@ allFiles:
     label: 'Nav hover'
     tests:
       - |
-        let headerLink = $('header nav:last-of-type a:not(.current)');
-        let oldBg = css(headerLink).backgroundColor;
-        let oldColor = css(headerLink).color;
+        const headerLink = $('header nav:last-of-type a:not(.current)');
+        const oldBg = css(headerLink).backgroundColor;
+        const oldColor = css(headerLink).color;
 
         hover(headerLink, function () {
           if (css(headerLink).backgroundColor == oldBg && css(headerLink).color == oldColor) return fail('The `background-color` or `color` of the navigation links don’t change when hovered')

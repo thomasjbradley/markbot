@@ -1,0 +1,23 @@
+allFiles:
+  functionality:
+    label: 'Nav focus'
+    tests:
+      - |
+        const getStatus = function (elem) {
+          return {
+            backgroundColor: css(elem).backgroundColor,
+            boxShadow: css(elem).boxShadow,
+            outline: css(elem).outline,
+          };
+        };
+
+        const headerLink = $('header nav:last-of-type a:not(.current)');
+        const oldStatus = getStatus(headerLink);
+        let newStatus;
+
+        headerLink.focus();
+        newStatus = getStatus(headerLink);
+
+        if (JSON.stringify(oldStatus) == JSON.stringify(newStatus)) return fail('The `background-color`, `box-shadow` or `outline` of the navigation links don’t change when focused');
+
+        pass();

@@ -1,0 +1,23 @@
+allFiles:
+  functionality:
+    label: 'Main link focus'
+    tests:
+      - |
+        const getStatus = function (elem) {
+          return {
+            backgroundColor: css(elem).backgroundColor,
+            boxShadow: css(elem).boxShadow,
+            outline: css(elem).outline,
+          };
+        };
+
+        const mainLink = $('main a, section a, article a');
+        const oldStatus = getStatus(mainLink);
+        let newStatus;
+
+        mainLink.focus();
+        newStatus = getStatus(mainLink);
+
+        if (JSON.stringify(oldStatus) == JSON.stringify(newStatus)) return fail('The `background-color`, `box-shadow` or `outline` of the links in the main content don’t change when focused');
+
+        pass();
