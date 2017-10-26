@@ -1019,7 +1019,7 @@ npm run gen-https-cert
 
 The script will create the appropriate files and place them into the `app` directory.
 
-*While Markbot is running the tested website will be available at [https://localhost:8080/](https://localhost:8080/).*
+*While Markbot is running the tested website will be available at `https://localhost:PORT` with a randomly assigned port number.*
 
 #### 5. Markbot dependencies
 
@@ -1028,8 +1028,9 @@ Markbot has a few external dependencies that it shells out to internally:
 - Git
 - Nu HTML validator (JAR)
 - CSS validator (JAR)
+- LanguageTool (JAR)
 
-The `vendor` folder should contain a bunch of JAR files for the HTML validator and the CSS validator.
+The `vendor` folder should contain a bunch of JAR files for the HTML validator, the CSS validator and LanguageTool.
 
 ##### HTML validator
 
@@ -1076,7 +1077,7 @@ The LanguageTool is used to check spelling and grammar of commit messages. It’
 
 2. Copy all the text from `words-to-add.txt` (it’s inside the `vendor` folder) into the bottom of `ignore.txt`
 
-    **Make sure there are now blank lines between the words.**
+    **Make sure there are no blank lines between the words.**
 
 ### Running Markbot
 
