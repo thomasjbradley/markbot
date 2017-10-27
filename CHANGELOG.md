@@ -21,6 +21,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Changed the `html-good-semantics` template to not enforce a `<ul>` for navigation so an `<ol>` is also acceptable.
 - Changed all instances of `localhost` to `127.0.0.1` to help alleviate incorrectly configured `/etc/hosts` files that are missing the `localhost` loopback.
 - Adjusted the HTTPS certificate creation to put the domains into the `subjectAltName` field instead of the `CN` field.
+- Switched to a white list of commit verbs to be more strict on commit message conventions.
 
 ### Fixed
 

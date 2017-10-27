@@ -16,7 +16,7 @@ const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const serverManager = require('electron').remote.require('./app/server-manager');
 const userAgentService = require(`${__dirname}/../../user-agent-service`);
-const blackListVerbs = require(`${__dirname}/best-practices/black-list-verbs.json`);
+const verbsWhiteList = require(`${__dirname}/best-practices/verb-white-list.json`);
 
 let app;
 
@@ -54,10 +54,10 @@ const isLastCharacterPeriod = function (message) {
   return /\.$/.test(message.trim());
 };
 
-const startsWithWrongTenseVerb = function (message) {
+const startsWithImperativeVerb = function (message) {
   let firstWord = message.toLowerCase().trim().split(/\s+/)[0];
 
-  if (blackListVerbs.includes(firstWord)) return true;
+  if (verbsWhiteList.includes(firstWord)) return true;
 
   return false;
 };
@@ -117,7 +117,7 @@ const checkCommits = function (commits, group, id, label, next) {
 
       if (isLastCharacterPeriod(commits[i].title)) singleCommitErrors.push('The commit message should not end in a period (.) character');
       if (!isCorrectLength(commits[i].title)) singleCommitErrors.push(`The commit message should be at least ${MIN_COMMIT_WORDS} words & ${MIN_COMMIT_CHARS} characters long`);
-      if (startsWithWrongTenseVerb(commits[i].title)) singleCommitErrors.push('The commit message should start with a present-tense, imperative verb — imagine all commit messages begin with the phrase “This commit will…”');
+      if (!startsWithImperativeVerb(commits[i].title)) singleCommitErrors.push('The commit message should start with a present-tense, imperative verb — imagine all commit messages begin with the phrase “This commit will…”');
 
       try {
         data = JSON.parse(info);
