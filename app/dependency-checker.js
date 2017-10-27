@@ -3,6 +3,8 @@
 const exec = require('child_process').exec;
 const log = require('electron-log');
 
+let previousCheck = false;
+
 log.transports.file.level = 'silly';
 
 const hasGit = function () {
@@ -52,17 +54,20 @@ const hasJava = function () {
 };
 
 const check = function (next) {
+  if (previousCheck) return next(previousCheck);
+
   log.info('## Dependencies');
 
   Promise.all([
     hasGit(),
     hasJava(),
   ]).then((results) => {
-    next({
+    previousCheck = {
       hasMissingDependencies: (results.includes(false)) ? true : false,
       hasGit: results[0],
       hasJava: results[1],
-    });
+    };
+    next(previousCheck);
   }).catch((e) => {
     next({
       hasMissingDependencies: true,

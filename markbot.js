@@ -63,6 +63,7 @@ let menuOptions = {
 let markbotFilePath;
 let markbotLockFilePath;
 let currentFolderPath;
+let startupCurrentFolderPath;
 let markbotLockFileLocker;
 let actualFilesLocker;
 let isCheater = {
@@ -141,8 +142,25 @@ const createDebugWindow = function () {
 };
 
 const createWindows = function (next) {
-  createMainWindow(next);
-  createDebugWindow();
+  createMainWindow(() => {
+    dependencyChecker.check((deps) => {
+      dependencies = deps;
+
+      if (deps.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', deps);
+
+      serverManager.start(() => {
+        mainWindow.webContents.send('app:ready');
+        createDebugWindow();
+
+        if (startupCurrentFolderPath) {
+          markbotMain.send('app:file-dropped', startupCurrentFolderPath);
+          startupCurrentFolderPath = false;
+        } else {
+          if (next) next();
+        }
+      });
+    });
+  });
 };
 
 const initializeInterface = function () {
@@ -268,18 +286,7 @@ menuCallbacks.showDebugWindow = function () {
 app.on('ready', function () {
   fixPath();
   updateAppMenu();
-
-  createWindows(() => {
-    dependencyChecker.check((deps) => {
-      dependencies = deps;
-
-      if (deps.hasMissingDependencies) return mainWindow.webContents.send('error:missing-dependency', deps);
-
-      serverManager.start(() => {
-        mainWindow.webContents.send('app:ready');
-      });
-    });
-  });
+  createWindows();
 });
 
 const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
@@ -305,25 +312,22 @@ exports.relaunch = function () {
 };
 
 app.on('activate', function () {
-  if (mainWindow === null) {
-    createWindows(() => {
-      if (dependencies.hasMissingDependencies) return markbotMain.send('error:missing-dependency', dependencies);
-
-      markbotMain.send('app:ready');
-    });
+  if (app.isReady()) {
+    if (!mainWindow) createWindows();
   }
 });
 
 exports.openRepo = function (path) {
   if (typeof path !== 'string') path = path[0];
 
-  if (mainWindow === null) {
-    createWindows(function () {
-      if (dependencies.hasMissingDependencies) return markbotMain.send('error:missing-dependency', dependencies);
-
-      markbotMain.send('app:ready');
-      markbotMain.send('app:file-dropped', path);
-    });
+  if (!mainWindow) {
+    if (app.isReady()) {
+      createWindows(() => {
+        markbotMain.send('app:file-dropped', path);
+      });
+    } else {
+      startupCurrentFolderPath = path;
+    }
   } else {
     markbotMain.send('app:file-dropped', path);
   }
@@ -331,10 +335,12 @@ exports.openRepo = function (path) {
 menuCallbacks.openRepo = exports.openRepo;
 
 exports.fileMissing = function (path) {
-  if (mainWindow === null) {
-    createWindows(function () {
-      markbotMain.send('app:file-missing');
-    });
+  if (!mainWindow) {
+    if (app.isReady()) {
+      createWindows(() => {
+        markbotMain.send('app:file-missing');
+      });
+    }
   } else {
     markbotMain.send('app:file-missing');
   }
