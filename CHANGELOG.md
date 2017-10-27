@@ -12,6 +12,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added a new template for checking to make sure the standard `.img-flex` class exists.
 - Added another new template to confirm `modules.css` comes before `main.css`
 - Added new templates for checking the focus state of navigation links and main body content links.
+- Added the ability to confirm the dimensions of `favicon.ico` files—always forcing both `16` and `32` pixels sizes.
 
 ### Changed
 
@@ -22,6 +23,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Changed all instances of `localhost` to `127.0.0.1` to help alleviate incorrectly configured `/etc/hosts` files that are missing the `localhost` loopback.
 - Adjusted the HTTPS certificate creation to put the domains into the `subjectAltName` field instead of the `CN` field.
 - Switched to a white list of commit verbs to be more strict on commit message conventions.
+- Relaxed the requirements for running Markbot tests to allow just files or functionality or performance tests too.
 
 ### Fixed
 
