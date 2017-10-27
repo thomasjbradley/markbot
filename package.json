@@ -13,6 +13,7 @@
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",
     "calipers-png": "^2.0.0",
+    "calipers-svg": "^2.0.0",
     "cheerio": "^1.0.0-rc.2",
     "css": "^2.2.1",
     "css-select": "^1.3.0-rc0",

@@ -4,7 +4,7 @@
   const fs = require('fs');
   const path = require('path');
   const util = require('util');
-  const calipers = require('calipers')('png', 'jpeg');
+  const calipers = require('calipers')('png', 'jpeg', 'svg');
   const exif = require('exif').ExifImage;
   const pngitxt = require('png-itxt');
   const imageSize = require('image-size');
@@ -27,7 +27,11 @@
 
   const isFavicon = function (fileName) {
     return /\.ico$/.test(fileName);
-  }
+  };
+
+  const isSVG = function (fileName) {
+    return /\.svg$/.test(fileName);
+  };
 
   const isImage = function (fileName) {
     return /\.(jpg|jpeg|png|ico)$/.test(fileName);
@@ -109,6 +113,19 @@
         return next(errors);
       });
     }
+  };
+
+  const checkSVGImageDimensions = function (file, fullPath, next) {
+    let errors = [];
+
+    if (!isSVG(file.path)) return next(errors);
+    if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors);
+
+    calipers.measure(fullPath, (err, result) => {
+      if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
+      errors = errors.concat(handleImageDimensionsResults(result.pages[0].width, result.pages[0].height, file));
+      return next(errors);
+    });
   };
 
   const checkExif = function (file, fullPath, next) {
@@ -224,13 +241,17 @@
     checkFileSize(file, fullPath, (err) => {
       errors = errors.concat(err);
 
-      checkFileSmushed(file, fullPath, (err) => {
+      checkSVGImageDimensions(file, fullPath, (err) => {
         errors = errors.concat(err);
 
-        checkFileContent(file, fullPath, (err) => {
+        checkFileSmushed(file, fullPath, (err) => {
           errors = errors.concat(err);
 
-          next(errors);
+          checkFileContent(file, fullPath, (err) => {
+            errors = errors.concat(err);
+
+            next(errors);
+          });
         });
       });
     });
