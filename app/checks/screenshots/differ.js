@@ -28,8 +28,8 @@ const getDiffPercentByArea = function (width, height) {
   if (area >= 6000000) return 0.10;
 };
 
-const compare = function (distance, percent, imgPaths, width, height) {
-  let allowedPercentDifference = getDiffPercentByArea(width, height);
+const compare = function (distance, percent, allowedDiff, imgPaths, width, height) {
+  let allowedPercentDifference = allowedDiff || getDiffPercentByArea(width, height);
 
   process.send({
     type: 'debug',
@@ -88,7 +88,7 @@ const compare = function (distance, percent, imgPaths, width, height) {
   process.send({type: 'kill'});
 };
 
-const calculateImageDifference = function (paths, refImg, newImg) {
+const calculateImageDifference = function (paths, refImg, newImg, allowedDiff) {
   let diffImgPath = paths.new.replace(/\.png$/, '-diff.png');
   let distance = jimp.distance(refImg, newImg);
   let diff = jimp.diff(refImg, newImg);
@@ -109,7 +109,7 @@ const calculateImageDifference = function (paths, refImg, newImg) {
       }
     })
     .write(diffImgPath, function () {
-      compare(distance, diff.percent, {
+      compare(distance, diff.percent, allowedDiff, {
         ref: paths.ref,
         new: paths.new,
         diff: diffImgPath
@@ -118,25 +118,25 @@ const calculateImageDifference = function (paths, refImg, newImg) {
     ;
 };
 
-const resizeImagesToMatchHeight = function (paths, refImg, newImg) {
+const resizeImagesToMatchHeight = function (paths, refImg, newImg, allowedDiff) {
   if (newImg.bitmap.height != refImg.bitmap.height) {
     let tmpImgHeight = (newImg.bitmap.height > refImg.bitmap.height) ? newImg.bitmap.height : refImg.bitmap.height;
 
     new jimp(refImg.bitmap.width, tmpImgHeight, 0xff00ffff, function (err, rightLengthImg) {
       if (newImg.bitmap.height > refImg.bitmap.height) {
         rightLengthImg.composite(refImg, 0, 0);
-        calculateImageDifference(paths, rightLengthImg, newImg);
+        calculateImageDifference(paths, rightLengthImg, newImg, allowedDiff);
       } else {
         rightLengthImg.composite(newImg, 0, 0);
-        calculateImageDifference(paths, refImg, rightLengthImg);
+        calculateImageDifference(paths, refImg, rightLengthImg, allowedDiff);
       }
     });
   } else {
-    calculateImageDifference(paths, refImg, newImg);
+    calculateImageDifference(paths, refImg, newImg, allowedDiff);
   }
 };
 
-const check = function (paths) {
+const check = function (paths, allowedDiff = false) {
   if (!paths.new) {
     newNotFound();
     return;
@@ -149,7 +149,7 @@ const check = function (paths) {
         return;
       }
 
-      resizeImagesToMatchHeight(paths, refImg, newImg);
+      resizeImagesToMatchHeight(paths, refImg, newImg, allowedDiff);
     });
   });
 };
@@ -165,7 +165,7 @@ process.on('message', function (message) {
       init(message.filename, message.width);
       break;
     case 'check':
-      check(message.paths);
+      check(message.paths, message.allowedDiff);
       break;
   }
 })

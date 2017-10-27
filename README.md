@@ -405,6 +405,14 @@ screenshots:
     # An array of different screen widths for taking screenshots
     sizes: [400, 650, 960]
 
+    # OR: use the alternative object syntax to control the allowed percentage for each screenshot
+    # This will bypass the default percentages (see below)
+    # The syntax is `screenshot-width: allowed-difference-percentage`
+    sizes:
+      400: 10
+      650: 10
+      960: 8
+
     # If there are multiple screenshots of the same path the label is required to distinguish them (it’s used in the filenames)
     # It can also be used to add a little extra information to the check list
     label: 'Clicked'

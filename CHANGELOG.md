@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added new templates for checking the focus state of navigation links and main body content links.
 - Added the ability to confirm the dimensions of `favicon.ico` files—always forcing both `16` and `32` pixels sizes.
 - Added the ability to confirm the dimensions of `.svg` files.
+- Added the ability to define a minimum percentage for each screenshot with a new screenshot object syntax.
 
 ### Changed
 

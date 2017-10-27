@@ -204,7 +204,9 @@ const removeDuplicateScreenshotSizes = function (markbotFile) {
   if (!markbotFile.screenshots) return markbotFile;
 
   markbotFile.screenshots.forEach((item, i) => {
-    markbotFile.screenshots[i].sizes = [...new Set(markbotFile.screenshots[i].sizes)];
+    if (Array.isArray(markbotFile.screenshots[i].sizes)) {
+      markbotFile.screenshots[i].sizes = [...new Set(markbotFile.screenshots[i].sizes)];
+    }
   });
 
   return markbotFile;

@@ -32,7 +32,9 @@ const lockFiles = function (locker, currentFolderPath, files) {
 
 const lockScreenshots = function (locker, currentFolderPath, files) {
   files.forEach(function (file) {
-    file.sizes.forEach(function (size) {
+    let screenshotSizes = (Array.isArray(file.sizes)) ? file.sizes.slice(0) : Object.keys(file.sizes);
+
+    screenshotSizes.forEach(function (size) {
       let screenshotFileName = screenshotNamingService.getScreenshotFilename(screenshotNamingService.makeScreenshotBasename(file), size);
       let screenshotPath = path.resolve(currentFolderPath + '/' + screenshotNamingService.REFERENCE_SCREENSHOT_FOLDER + '/' + screenshotFileName);
 

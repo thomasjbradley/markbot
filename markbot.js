@@ -437,11 +437,14 @@ exports.enableSignOut = function (username) {
 
 exports.copyReferenceScreenshots = function () {
   markbotFile.screenshots.forEach(function (file) {
+    let screenshotSizes;
+
     if (!file.sizes) return;
 
+    screenshotSizes = (Array.isArray(file.sizes)) ? file.sizes.slice(0) : Object.keys(file.sizes);
     mkdirp.sync(path.resolve(currentFolderPath + '/' + screenshotNamingService.REFERENCE_SCREENSHOT_FOLDER));
 
-    file.sizes.forEach(function (width) {
+    screenshotSizes.forEach(function (width) {
       fs.rename(
         screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width),
         screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width, true)

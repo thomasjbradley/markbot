@@ -73,7 +73,7 @@
     win.capturePage({x: 0, y:0, width: width, height: getCropHeight(height)}, next);
   };
 
-  const diffScreenshot = function (fullPath, group, filename, width, next) {
+  const diffScreenshot = function (fullPath, file, group, filename, width, next) {
     let differ = fork(`${__dirname}/checks/screenshots/differ`);
 
     differ.on('message', function (message) {
@@ -107,7 +107,8 @@
       paths: {
         new: screenshotNamingService.getScreenshotPath(fullPath, filename, width, false),
         ref: screenshotNamingService.getScreenshotPath(fullPath, filename, width, true)
-      }
+      },
+      allowedDiff: (Array.isArray(file.sizes)) ? false : (parseInt(file.sizes[width], 10) / 100),
     });
   };
 
@@ -120,7 +121,7 @@
     const screenshotFilename = screenshotNamingService.makeScreenshotBasename(file);
     const listenerId = function (size) { return `${screenshotFilename}-${size}`; };
     const listenerLabel = function (size) { return `${file.path}: ${size}px${labelExtra}`; };
-    let screenshotSizes = file.sizes.slice(0);
+    let screenshotSizes = (Array.isArray(file.sizes)) ? file.sizes.slice(0) : Object.keys(file.sizes);
     let screenshotSizesDiffing = [];
     let screenshotSizesDone = [];
 
@@ -131,7 +132,7 @@
     };
 
     const nextScreenshot = function (windowId) {
-      let nextSize = screenshotSizes.shift();
+      let nextSize = parseInt(screenshotSizes.shift(), 10);
 
       if (nextSize) {
         markbotMain.send('check-group:item-computing', group, listenerId(nextSize), listenerLabel(nextSize));
@@ -149,7 +150,8 @@
     };
 
     const checkAllDiffsDone = function () {
-      if (screenshotSizesDone.length >= file.sizes.length) next();
+      let allScreenshotSizes = (Array.isArray(file.sizes)) ? file.sizes.slice(0) : Object.keys(file.sizes);
+      if (screenshotSizesDone.length >= allScreenshotSizes.length) next();
     };
 
     const cleanup = function (windowId) {
@@ -175,7 +177,7 @@
 
         saveScreenshot(imagePath, width, img, function () {
           if (fileExists.check(screenshotNamingService.getScreenshotPath(fullPath, screenshotFilename, width, true))) {
-            diffScreenshot(fullPath, group, screenshotFilename, width, function (f, w) {
+            diffScreenshot(fullPath, file, group, screenshotFilename, width, function (f, w) {
               if (screenshotSizesDone.indexOf(f + w) < 0) screenshotSizesDone.push(f + w);
               checkAllDiffsDone();
             });
