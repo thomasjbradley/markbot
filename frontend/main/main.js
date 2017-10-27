@@ -567,7 +567,7 @@ const reset = function () {
   $messageHeader.dataset.state = 'computing';
   $robotLogo.setAttribute('aria-label', 'Computing…');
   $submit.dataset.state = 'hidden';
-  $allGoodCheck.style.animationName = 'none';
+  $allGoodCheck.dataset.state = '';
   $messageNoCanvas.removeAttribute('hidden');
   $messageCanvas.setAttribute('hidden', true);
   [].map.call(document.querySelectorAll('.success-fail-message-warning'), (elem) => elem.setAttribute('hidden', true));
@@ -773,6 +773,7 @@ const submitAssignment = function (e) {
 
   if (!hasErrors() && !isRunning()) {
     $canvasBtn.dataset.state = 'processing';
+    $allGoodCheck.dataset.state = 'processing';
     $canvasBtnText.innerHTML = 'Submitting…';
     markbot.disableSubmitAssignment();
 
@@ -780,11 +781,11 @@ const submitAssignment = function (e) {
       if (!err && data.code == 200) {
         $canvasBtn.dataset.state = 'done';
         $canvasBtnText.innerHTML = 'Submitted';
-        $allGoodCheck.style.animationName = 'bounce-check';
+        $allGoodCheck.dataset.state = 'done';
       } else {
         $canvasBtn.dataset.state = '';
         $canvasBtnText.innerHTML = 'Submit';
-        $allGoodCheck.style.animationName = 'none';
+        $allGoodCheck.dataset.state = '';
         markbot.enableSubmitAssignment();
         if (data.message) displayAlert(data.message);
       }

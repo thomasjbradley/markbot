@@ -1004,14 +1004,67 @@ samp {
 }
 
 #all-good-check {
-  animation: none 200ms cubic-bezier(.54, -0.37, .42, 1.78);
+  height: 150px;
+  width: 150px;
+}
+
+#all-good-check[data-state="done"] {
+  animation: bounce-check 200ms cubic-bezier(.54, -0.37, .42, 1.78) forwards;
 }
 
 @keyframes bounce-check {
   0% {
     transform: scale(1);
   }
+  70% {
+    transform: scale(1.4);
+  }
   100% {
     transform: scale(1.2);
   }
+}
+
+#all-good-check[data-state="done"] #all-good-check-bg-filled {
+  opacity: 1;
+  animation: scale-bg 200ms ease-in forwards;
+  transform-origin: 128px 128px;
+}
+
+@keyframes scale-bg {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+#all-good-check-loader-inside {
+  transform-origin: 128px 128px;
+  animation: check-rotate 4s linear infinite;
+  opacity: 0;
+}
+
+#all-good-check-loader-outside {
+  transform-origin: 128px 128px;
+  animation: check-rotate 5s linear infinite reverse;
+  opacity: 0;
+}
+
+#all-good-check[data-state="processing"] #all-good-check-loader-inside,
+#all-good-check[data-state="processing"] #all-good-check-loader-outside {
+  opacity: .5;
+}
+
+@keyframes check-rotate {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+#all-good-check-mark {
+  transform: translateX(-4px);
 }

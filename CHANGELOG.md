@@ -15,6 +15,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added the ability to confirm the dimensions of `favicon.ico` files—always forcing both `16` and `32` pixels sizes.
 - Added the ability to confirm the dimensions of `.svg` files.
 - Added the ability to define a minimum percentage for each screenshot with a new screenshot object syntax.
+- Fancified the submission checkmark graphic to make it a little more user friendly.
 
 ### Changed
 
