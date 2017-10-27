@@ -215,17 +215,22 @@ const checkForCheating = function () {
 };
 
 const hasFilesToCheck = function () {
+  const noGit = (typeof markbotFile.git === 'undefined');
   const noHtmlFiles = (typeof markbotFile.html === 'undefined' || markbotFile.html.length < 1);
   const noCssFiles = (typeof markbotFile.css === 'undefined' || markbotFile.css.length < 1);
   const noJsFiles = (typeof markbotFile.js === 'undefined' || markbotFile.js.length < 1);
   const noMdFiles = (typeof markbotFile.md === 'undefined' || markbotFile.md.length < 1);
   const noYmlFiles = (typeof markbotFile.yml === 'undefined' || markbotFile.yml.length < 1);
+  const noFiles = (typeof markbotFile.files === 'undefined' || markbotFile.files.length < 1);
+  const noFunctionality = (typeof markbotFile.functionality === 'undefined' || markbotFile.functionality.length < 1);
+  const noScreeshots = (typeof markbotFile.screenshots === 'undefined' || markbotFile.screenshots.length < 1);
+  const noPerformance = (typeof markbotFile.performance === 'undefined' || markbotFile.performance.length < 1);
 
-  if (noHtmlFiles && noCssFiles && noJsFiles && noMdFiles && noYmlFiles) {
+  if (noGit && noHtmlFiles && noCssFiles && noJsFiles && noMdFiles && noYmlFiles && noFiles && noFunctionality && noScreeshots && noPerformance) {
     markbotMain.send('app:file-missing');
 
     setTimeout(function () {
-      markbotMain.send('alert', 'There are no HTML, CSS, Javascript, Markdown, or YAML files for Markbot to check');
+      markbotMain.send('alert', 'Markbot cannot find any files or checks to run');
     }, 75);
 
     return false;
