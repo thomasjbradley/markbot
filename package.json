@@ -30,6 +30,7 @@
     "git-state": "^4.0.0",
     "glob": "^7.1.1",
     "htmlcs": "^0.4.1",
+    "image-size": "^0.6.1",
     "jimp": "^0.2.27",
     "js-beautify": "^1.6.4",
     "js-yaml": "^3.10.0",

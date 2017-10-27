@@ -7,6 +7,7 @@
   const calipers = require('calipers')('png', 'jpeg');
   const exif = require('exif').ExifImage;
   const pngitxt = require('png-itxt');
+  const imageSize = require('image-size');
   const merge = require('merge-objects');
   const markbotMain = require('electron').remote.require('./app/markbot-main');
   const stripPath = require(__dirname + '/strip-path');
@@ -21,11 +22,15 @@
   };
 
   const isGif = function (fileName) {
-    return fileName.match(/\.gif$/);
+    return /\.gif$/.test(fileName);
   };
 
+  const isFavicon = function (fileName) {
+    return /\.ico$/.test(fileName);
+  }
+
   const isImage = function (fileName) {
-    return fileName.match(/\.(jpg|jpeg|png)$/);
+    return /\.(jpg|jpeg|png|ico)$/.test(fileName);
   };
 
   const checkFileSize = function (file, fullPath, next) {
@@ -39,32 +44,71 @@
     });
   };
 
+  const handleImageDimensionsResults = function (width, height, file) {
+    let errors = [];
+
+    if (file.maxWidth) {
+      if (width > file.maxWidth) errors.push(`The width of \`${file.path}\` is too large (expecting: ${file.maxWidth}px, actual: ${width}px)`);
+    }
+
+    if (file.minWidth) {
+      if (width < file.minWidth) errors.push(`The width of \`${file.path}\` is too small (expecting: ${file.minWidth}px, actual: ${width}px)`);
+    }
+
+    if (file.maxHeight) {
+      if (height > file.maxHeight) errors.push(`The height of \`${file.path}\` is too large (expecting: ${file.maxHeight}px, actual: ${height}px)`);
+    }
+
+    if (file.minHeight) {
+      if (height < file.minHeight) errors.push(`The height of \`${file.path}\` is too small (expecting: ${file.minHeight}px, actual: ${height}px)`);
+    }
+
+    return errors;
+  };
+
+  const handleFaviconDimensionsResults = function (dimensions, file) {
+    let errors = [];
+    let icoSizes = {
+      size16: false,
+      size32: false,
+    };
+
+    if (dimensions.images) {
+      for (let img of dimensions.images) {
+        if (img.width == 16) icoSizes.size16 = true;
+        if (img.width == 32) icoSizes.size32 = true;
+      }
+    } else {
+      if (dimensions.width == 16) icoSizes.size16 = true;
+      if (dimensions.width == 32) icoSizes.size32 = true;
+    }
+
+    if (!icoSizes.size16) errors.push(`The favicon, \`${file.path}\`, is missing the \`16 × 16\` icon size`);
+    if (!icoSizes.size32) errors.push(`The favicon, \`${file.path}\`, is missing the \`32 × 32\` icon size`);
+
+    return errors;
+  };
+
   const checkImageDimensions = function (file, fullPath, next) {
     let errors = [];
 
-    if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors);
+    if (!isFavicon(file.path)) {
+      if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors);
+    }
 
-    calipers.measure(fullPath, function (err, result) {
-      if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
-
-      if (file.maxWidth) {
-        if (result.pages[0].width > file.maxWidth) errors.push(`The width of \`${file.path}\` is too large (expecting: ${file.maxWidth}px, actual: ${result.pages[0].width}px)`);
-      }
-
-      if (file.minWidth) {
-        if (result.pages[0].width < file.minWidth) errors.push(`The width of \`${file.path}\` is too small (expecting: ${file.minWidth}px, actual: ${result.pages[0].width}px)`);
-      }
-
-      if (file.maxHeight) {
-        if (result.pages[0].height > file.maxHeight) errors.push(`The height of \`${file.path}\` is too large (expecting: ${file.maxHeight}px, actual: ${result.pages[0].height}px)`);
-      }
-
-      if (file.minHeight) {
-        if (result.pages[0].height < file.minHeight) errors.push(`The height of \`${file.path}\` is too small (expecting: ${file.minHeight}px, actual: ${result.pages[0].height}px)`);
-      }
-
-      next(errors);
-    });
+    if (isFavicon(file.path)) {
+      imageSize(fullPath, (err, dimensions) => {
+        if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
+        errors = errors.concat(handleFaviconDimensionsResults(dimensions, file));
+        return next(errors);
+      });
+    } else {
+      calipers.measure(fullPath, (err, result) => {
+        if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
+        errors = errors.concat(handleImageDimensionsResults(result.pages[0].width, result.pages[0].height, file));
+        return next(errors);
+      });
+    }
   };
 
   const checkExif = function (file, fullPath, next) {
