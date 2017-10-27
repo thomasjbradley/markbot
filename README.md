@@ -673,8 +673,10 @@ yml:
 
 Markbot can check random plain text files and images for specific features.
 
-- **Images:** compare dimensions, compare file size, check if metadata has been removed by smushing.
-- **Text files:** compare file size, check if it’s empty, search/not with regexes.
+- **Images (`.jpg`, `.png`):** compare dimensions, compare file size, check if metadata has been removed by smushing.
+- **Text files:** compare file size, check if it’s empty, search/not with regexes, check for smushing with removal of line-breaks.
+- **Favicons (`.ico`):** — Favicons can be checked but they won’t be checked for smushing or dimensions—Markbot always enforces `16` & `32` pixels sizes in favicons.
+- **SVG (`.svg`)** — SVG are treated as hybrids: dimensions can be checked even though they’re technically text files (Markbot will look at the `width`, `height`, and `viewBox` attributes) and smushing only checks for line breaks.
 
 Use the `files` entry to test images and text files, it’s an array of objects, each representing a file to test.
 
