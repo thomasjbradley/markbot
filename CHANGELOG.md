@@ -30,6 +30,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a small bug in one of the templates: the `has` property was missing.
 - Fixed a bug in the `allFiles.functionality` tests where only the last functionality test was actually run, causing the requirements to be easier than they should be.
 - Fixed a bug when Markbot isn’t running and a folder is dropped onto the Dock icon—it wouldn’t load the project properly.
+- Fixed a bug where the CSS validator wouldn’t run when there were invalid characters in the path—it now just stops and alerts the student to the problem.
 
 ---
 

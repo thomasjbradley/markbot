@@ -7,6 +7,8 @@ const xmlParser = require('xml2js').parseString;
 const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
+const cssValidatorInvalidChars = ['#'];
+
 /**
  * This function is mainly to work around Windows issues
  * The CSS validator doesn’t accept Windows paths because of back slashes
@@ -75,10 +77,17 @@ const bypass = function (checkGroup, checkId, checkLabel) {
 const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents, lines, next) {
   const validatorPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../../../vendor/css-validator');
   const execPath = 'java -jar ' + escapeShell(validatorPath + '/css-validator.jar') + ' --output=soap12 --profile=css3svg ' + escapeShell('file://' + convertToUrl(fullPath));
+  let errors = [];
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);
   markbotMain.debug(`@@${validatorPath}@@`);
   markbotMain.debug(`\`${execPath}\``);
+
+  if ((new RegExp(`[${cssValidatorInvalidChars.join('')}]`)).test(fullPath)) {
+    errors = [`The CSS file, found at this location: \`${fullPath}\`, cannot be validated because the CSS validator doesn’t allow the following characters in file & folder names: \`${cssValidatorInvalidChars.join('\`, \`')}\``];
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+    return next(errors);
+  }
 
   exec(execPath, function (err, data) {
     var xml = data.trim().replace(/^\{.*\}/, '').trim();
@@ -87,7 +96,6 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
       let results;
       let errorCount;
       let errorsList;
-      let errors = [];
 
       if (!result) {
         errors.push('There was a problem with the CSS validator — please try again');
