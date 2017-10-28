@@ -6,6 +6,8 @@ const electron = require('electron');
 const shell = electron.shell;
 const markbot = electron.remote.require('./markbot');
 const listener = electron.ipcRenderer;
+const timeEstimator = require('./time-estimator');
+const config = require('../../config.json');
 const classify = require('../../app/classify');
 const successMessages = require('./success-messages.json');
 const robotBeeps = require('./robot-beeps.json');
@@ -28,6 +30,8 @@ const $messageHeading = document.querySelector('h2.no-errors');
 const $signin = document.getElementById('sign-in');
 const $submit = document.getElementById('submit');
 const $allGoodCheck = document.getElementById('all-good-check');
+const $statsTime = document.getElementById('stats-time');
+const $statsCommits = document.getElementById('stats-commits');
 const $messageCanvas = document.querySelector('.success-fail-message.with-canvas');
 const $messageNoCanvas = document.querySelector('.success-fail-message.no-canvas');
 
@@ -568,6 +572,8 @@ const reset = function () {
   $robotLogo.setAttribute('aria-label', 'Computing…');
   $submit.dataset.state = 'hidden';
   $allGoodCheck.dataset.state = '';
+  $statsTime.dataset.state = '';
+  $statsCommits.dataset.state = '';
   $messageNoCanvas.removeAttribute('hidden');
   $messageCanvas.setAttribute('hidden', true);
   [].map.call(document.querySelectorAll('.success-fail-message-warning'), (elem) => elem.setAttribute('hidden', true));
@@ -629,6 +635,13 @@ const triggerDoneState = function () {
     $submit.dataset.state = 'visible';
     $messages.dataset.state = 'hidden';
     $canvasBtn.removeAttribute('disabled');
+
+    timeEstimator.getTimeEstimate(fullPath, config.ignoreCommitEmails, (stats) => {
+      $statsTime.innerHTML = `~${stats.estimatedTime} h`;
+      $statsCommits.innerHTML = stats.numCommits;
+      $statsTime.dataset.state = 'done';
+      $statsCommits.dataset.state = 'done';
+    });
 
     if (hasWarnings()) {
       $messageHeading.innerHTML = successMessages[Math.floor(Math.random() * successMessages.length)] + '-ish!';
