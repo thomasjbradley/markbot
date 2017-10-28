@@ -30,6 +30,8 @@ const $messageHeading = document.querySelector('h2.no-errors');
 const $signin = document.getElementById('sign-in');
 const $submit = document.getElementById('submit');
 const $allGoodCheck = document.getElementById('all-good-check');
+const $statsStart = document.getElementById('stats-start');
+const $statsEnd = document.getElementById('stats-end');
 const $statsTime = document.getElementById('stats-time');
 const $statsCommits = document.getElementById('stats-commits');
 const $messageCanvas = document.querySelector('.success-fail-message.with-canvas');
@@ -57,6 +59,15 @@ let groups = {};
 let checks = {};
 let fullPath = false;
 let isMarkbotDoneYet;
+
+const dateFormatter = new Intl.DateTimeFormat('en-CA', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: false,
+});
 
 const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../app/error-message-status`);
 
@@ -572,6 +583,8 @@ const reset = function () {
   $robotLogo.setAttribute('aria-label', 'Computing…');
   $submit.dataset.state = 'hidden';
   $allGoodCheck.dataset.state = '';
+  $statsStart.dataset.state = '';
+  $statsEnd.dataset.state = '';
   $statsTime.dataset.state = '';
   $statsCommits.dataset.state = '';
   $messageNoCanvas.removeAttribute('hidden');
@@ -637,8 +650,12 @@ const triggerDoneState = function () {
     $canvasBtn.removeAttribute('disabled');
 
     timeEstimator.getTimeEstimate(fullPath, config.ignoreCommitEmails, (stats) => {
+      $statsStart.innerHTML = dateFormatter.format(stats.start);
+      $statsEnd.innerHTML = dateFormatter.format(stats.end);
       $statsTime.innerHTML = `~${stats.estimatedTime} h`;
       $statsCommits.innerHTML = stats.numCommits;
+      $statsStart.dataset.state = 'done';
+      $statsEnd.dataset.state = 'done';
       $statsTime.dataset.state = 'done';
       $statsCommits.dataset.state = 'done';
     });

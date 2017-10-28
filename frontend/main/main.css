@@ -1077,13 +1077,14 @@ samp {
 #success-stats dt,
 #success-stats dd {
   display: inline-block;
-  width: 10em;
+  width: 11em;
   text-align: right;
+  margin: 0;
+  padding: 0;
 }
 
 #success-stats dd {
   margin-left: .5em;
-  width: 5em;
   font-weight: bold;
   text-align: left;
   background-color: #f5f2f0;
