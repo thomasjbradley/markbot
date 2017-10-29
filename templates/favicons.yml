@@ -1,0 +1,21 @@
+allFiles:
+  html:
+    has:
+      - check: 'link[rel="shortcut icon"][href$="favicon.ico"]'
+        message: 'Double check that the `favicon.ico` file is linked in the top of every HTML file using `rel="shortcut icon"`'
+      - check: 'link[rel="apple-touch-icon"][href$="favicon-196.png"]'
+        message: 'Double check that the `favicon-196.png` file is linked in the top of every HTML file using `rel="apple-touch-icon"`'
+    hasNot:
+      - check: 'link[rel="apple-touch-icon-precomposed"]'
+        message: 'The `rel="apple-touch-icon-precomposed"` relationship should only be `apple-touch-icon`, `-precomposed` is outdated an unnecessary'
+      - check: 'link[rel^="apple-touch-icon"][sizes], link[rel^="shortcut icon"][sizes]'
+        message: 'The `sizes` attribute on favicon `link` tags is unnecessary'
+
+files:
+  - path: 'favicon.ico'
+  - path: 'favicon-196.png'
+    minWidth: 196
+    maxWidth: 196
+    minHeight: 196
+    maxHeight: 196
+    smushed: true

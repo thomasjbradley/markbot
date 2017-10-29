@@ -12,7 +12,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added a new template for checking to make sure the standard `.img-flex` class exists.
 - Added another new template to confirm `modules.css` comes before `main.css`
 - Added new templates for checking the focus state of navigation links and main body content links.
-- Added the ability to confirm the dimensions of `favicon.ico` files—always forcing both `16` and `32` pixels sizes.
+- Added the ability to confirm the dimensions of `favicon.ico` files—always forcing both `16` and `32` pixels sizes—and a template for checking favicon best practices.
 - Added the ability to confirm the dimensions of `.svg` files.
 - Added the ability to define a minimum percentage for each screenshot with a new screenshot object syntax.
 - Fancified the submission checkmark graphic to make it a little more user friendly.
