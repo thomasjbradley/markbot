@@ -42,6 +42,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug when Markbot isn’t running and a folder is dropped onto the Dock icon—it wouldn’t load the project properly.
 - Fixed a bug where the CSS validator wouldn’t run when there were invalid characters in the path—it now just stops and alerts the student to the problem.
 - Fixed a bug where text files would throw an error when they weren’t smushed even if the property was missing from the MarkbotFile.
+- When the `files` MarkbotFile property is empty an error message is now thrown.
+- Fixed a bug in the `files.directory` property where the directory was discarded when the MarkbotFile was generated.
 
 ---
 

@@ -217,6 +217,7 @@ const mergeDuplicateFiles = function (markbotFile) {
 
   keys.forEach((key) => {
     let paths = {};
+    let dirs = {};
 
     if (!markbotFile[key]) return;
 
@@ -230,10 +231,24 @@ const mergeDuplicateFiles = function (markbotFile) {
       }
     });
 
+    markbotFile[key].forEach((item, i) => {
+      if (!item.directory) return;
+
+      if (item.directory in dirs) {
+        dirs[item.directory] = merge(dirs[item.directory], item);
+      } else {
+        dirs[item.directory] = item;
+      }
+    });
+
     markbotFile[key] = [];
 
     Object.keys(paths).forEach((path) => {
       markbotFile[key].push(paths[path]);
+    });
+
+    Object.keys(dirs).forEach((path) => {
+      markbotFile[key].push(dirs[path]);
     });
   });
 
