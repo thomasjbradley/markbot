@@ -3,3 +3,52 @@ allFiles:
     unique:
       - ['meta[name="description"][content]', 'meta description']
       - 'h1'
+    has:
+      # Location information
+      - 'meta[name="ICBM"][content]'
+      - 'meta[name="geo.position"][content]'
+      - 'meta[name="geo.region"][content]'
+      - 'meta[name="geo.placename"][content]'
+      # Facebook metadata
+      - 'meta[property="og:type"][content]'
+      - 'meta[property="og:locale"][content]'
+      - 'meta[property="og:title"][content]'
+      - 'meta[property="og:url"][content]'
+      - 'meta[property="og:image"][content]'
+      - 'meta[property="og:site_name"][content]'
+      - 'meta[property="og:description"][content]'
+      # Twitter metadata
+      - 'meta[name="twitter:card"][content]'
+      - 'meta[name="twitter:site"][content]'
+      - 'meta[name="twitter:title"][content]'
+      - 'meta[name="twitter:url"][content]'
+      - 'meta[name="twitter:description"][content]'
+      - 'meta[name="twitter:image"][content]'
+      - check: 'script[type="application/ld+json]'
+        message: 'Consider using JSON-LD metadata to add more search engine accessible information to your website'
+        type: warning
+    search:
+      - check: 'https?\:\/\/schema\.org'
+        message: 'Consider using @@https://schema.org@@ metadata to add more search engine accessible information to your website'
+        type: warning
+
+files:
+  - path: 'sitemap.xml'
+    search:
+      - '\<\?xml version\=\"1\.0\" encoding\=\"UTF-8\"\?\>'
+      - '\<urlset xmlns\=\"http\:\/\/www\.sitemaps\.org\/schemas\/sitemap\/0\.9\"\>'
+      - '\<url\>'
+      - '\<loc\>'
+
+  - path: 'robots.txt'
+    search:
+      - '\# (www\.)?robotstxt\.org'
+      - 'Sitemap: https?://[^/]+/sitemap.xml'
+      - 'User-Agent\: \*'
+      - 'Disallow\:'
+
+  - path: 'humans.txt'
+    search:
+      - '\# humanstxt\.org'
+      - '\# TEAM'
+      - '\# THANKS'
