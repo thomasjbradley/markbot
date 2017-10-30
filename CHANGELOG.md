@@ -19,6 +19,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added some fun little stats to the success screen: start, end and completion times & number of commits.
 - A template for checking basic SEO recommendations.
 - Added more checks to the responsive CSS template & create a template for checking responsive font sizes.
+- Added a new template named `border-box` that is exactly the same as `box-sizing` because I can never remember the `box-sizing` name.
 
 ### Changed
 
