@@ -1,0 +1,21 @@
+allFiles:
+  css:
+    has:
+      - ['html', 'text-size-adjust', '100%']
+      - ['html', '-moz-text-size-adjust', '100%']
+      - ['html', '-ms-text-size-adjust', '100%']
+      - ['html', '-webkit-text-size-adjust', '100%']
+      - ['@38em', 'html', 'font-size', '110%']
+      - ['@38em', 'html', 'line-height', '1.4']
+      - ['@60em', 'html', 'font-size', '120%']
+      - ['@60em', 'html', 'line-height', '1.5']
+      - ['@90em', 'html', 'font-size', '130%']
+    hasNot:
+      - check: ['@90em', 'html', ['line-height']]
+        message: 'The `line-height` is not necessary in the `90em` media query because it should inherit the `1.5` from the `60em` media query'
+    search:
+      - '@-moz-viewport'
+      - '@-ms-viewport'
+      - '@-o-viewport'
+      - '@-webkit-viewport'
+      - '@viewport'

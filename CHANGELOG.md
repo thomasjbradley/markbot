@@ -18,6 +18,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fancified the submission checkmark graphic to make it a little more user friendly.
 - Added some fun little stats to the success screen: start, end and completion times & number of commits.
 - A template for checking basic SEO recommendations.
+- Added more checks to the responsive CSS template.
 
 ### Changed
 
