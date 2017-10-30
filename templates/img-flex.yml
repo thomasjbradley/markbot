@@ -1,4 +1,7 @@
 allFiles:
+  html:
+    has:
+      - '.img-flex'
   css:
     has:
       - ['.img-flex', 'display', 'block']
