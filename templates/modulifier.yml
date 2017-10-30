@@ -26,4 +26,4 @@ css:
     valid: true
     bestPractices: true
     search:
-      - ['https://modulifier.web-dev.tools/#responsive;images;list-group;embed;media-object;icons;hidden;positioning;nice-lists;forms;buttons;accessibility;print', 'Select all the different modules when adding Modulifier.']
+      - ['https://modulifier.web-dev.tools/#responsive;images;list-group;embed;media-object;icons;hidden;positioning;nice-lists;forms;buttons;accessibility;print', 'Select all the different modules when adding Modulifier']
