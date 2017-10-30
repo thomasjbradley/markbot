@@ -3,6 +3,13 @@ allFiles:
     valid: true
     bestPractices: true
     searchNot:
-      - ['@media.+\(.*max-width', 'Media queries with `max-width` should not be used — use `min-width` instead']
-      - ['@media.+\(.*px', 'Pixel units should not be used in media queries — use `em` instead']
-      - ['font-size\s*:\s*.+px', 'Pixel units should not be used for `font-size` — use `rem` instead']
+      - check: '@media.+\(.*max-width'
+        message: 'Media queries with `max-width` should not be used — use `min-width` instead'
+      - check: '@media.+\(.*px'
+        message: 'Pixel units should not be used in media queries — use `em` instead'
+      - check: 'font-size\s*:\s*.+px'
+        message: 'Pixel units should not be used for `font-size` — use `rem` instead'
+      - check: '@import'
+        message: 'The `@import` CSS declaration should not be used because it’s bad for performance'
+      - check: '@charset'
+        message: 'The `@charset` CSS declaration isn’t necessary if the HTML file specifies a `charset` or if the server is configured properly'

@@ -29,6 +29,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Adjusted the HTTPS certificate creation to put the domains into the `subjectAltName` field instead of the `CN` field.
 - Switched to a white list of commit verbs to be more strict on commit message conventions.
 - Relaxed the requirements for running Markbot tests to allow just files or functionality or performance tests too.
+- Added checks for `@import` and `@charset` to CSS to avoid their use.
 
 ### Fixed
 
