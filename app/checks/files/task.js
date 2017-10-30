@@ -209,6 +209,8 @@
   };
 
   const checkFileSmushed = function (file, fullPath, next) {
+    if (!file.smushed) return next([]);
+
     fs.readFile(fullPath, 'utf8', (err, data) => {
       if (!err && !data) next([]);
       if (/[\n\r\u0085\u2028\u2029]/.test(data)) return next([`The \`${file.path}\` file needs to be smushed`]);
