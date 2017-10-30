@@ -311,9 +311,14 @@
 
   const checkIfDone = function () {
     totalFiles--;
-
     if (totalFiles <= 0) done();
   };
+
+  if (taskDetails.options.files.length <= 0) {
+    markbotMain.send('check-group:item-new', group, 'files', `Files`);
+    markbotMain.send('check-group:item-complete', group, 'files', `Files`, [`There are no files to check`]);
+    return done();
+  }
 
   taskDetails.options.files.forEach(function (file) {
     if (file.directory) {
