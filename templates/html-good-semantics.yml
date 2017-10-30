@@ -6,5 +6,4 @@ allFiles:
       - 'header nav li a'
       - 'main'
       - 'footer'
-    search:
-      - '\<(section|article)'
+      - 'section, article'
