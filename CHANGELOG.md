@@ -17,6 +17,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added the ability to define a minimum percentage for each screenshot with a new screenshot object syntax.
 - Fancified the submission checkmark graphic to make it a little more user friendly.
 - Added some fun little stats to the success screen: start, end and completion times & number of commits.
+- A template for checking basic SEO recommendations.
 
 ### Changed
 
@@ -37,6 +38,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug in the `allFiles.functionality` tests where only the last functionality test was actually run, causing the requirements to be easier than they should be.
 - Fixed a bug when Markbot isn’t running and a folder is dropped onto the Dock icon—it wouldn’t load the project properly.
 - Fixed a bug where the CSS validator wouldn’t run when there were invalid characters in the path—it now just stops and alerts the student to the problem.
+- Fixed a bug where text files would throw an error when they weren’t smushed even if the property was missing from the MarkbotFile.
 
 ---
 
