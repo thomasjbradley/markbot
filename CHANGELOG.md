@@ -20,6 +20,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - A template for checking basic SEO recommendations.
 - Added more checks to the responsive CSS template & create a template for checking responsive font sizes.
 - Added a new template named `border-box` that is exactly the same as `box-sizing` because I can never remember the `box-sizing` name.
+- Added unrestricted Web Dev Tools templates to allow students to choose their own settings.
 
 ### Changed
 

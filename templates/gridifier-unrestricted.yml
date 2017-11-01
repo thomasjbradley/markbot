@@ -1,0 +1,25 @@
+allFiles:
+  html:
+    has:
+      - ['link[href*="grid.css"]', 'The `grid.css` file isn’t included']
+      - '.grid'
+      - '.grid > .unit'
+      - '[class*="xs-"]'
+      - '[class*="s-"]'
+      - '[class*="m-"]'
+      - '[class*="l-"]'
+    hasNot:
+      - ['.grid > :not(.unit)', 'There should be nothing directly inside `.grid` except elements with the class `.unit`']
+  css:
+    except:
+      - 'css/grid.css'
+    hasNot:
+      - ['.grid', false, 'There’s no need to have a duplicate class of `.grid` in your CSS because Gridifier defines the class already']
+      - ['.unit', false, 'There’s no need to have a duplicate class of `.unit` in your CSS because Gridifier defines the class already']
+
+css:
+  - path: 'css/grid.css'
+    valid: true
+    bestPractices: true
+    search:
+      - 'https://gridifier.web-dev.tools/#'

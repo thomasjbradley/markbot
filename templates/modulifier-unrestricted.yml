@@ -1,0 +1,29 @@
+allFiles:
+  html:
+    has:
+      - ['link[href*="modules.css"]', 'The `modules.css` file isn’t included']
+  css:
+    except:
+      - 'css/modules.css'
+    hasNot:
+      - ['html', ['box-sizing'], 'The `box-sizing: border-box` isn’t necessary because Modulifier includes it for you']
+      - ['html', ['text-size-adjust'], 'The `text-size-adjust` isn’t necessary because Modulifier includes it for you']
+      - ['html', ['-moz-text-size-adjust'], 'The `text-size-adjust` isn’t necessary because Modulifier includes it for you']
+      - ['html', ['-ms-text-size-adjust'], 'The `text-size-adjust` isn’t necessary because Modulifier includes it for you']
+      - ['html', ['-webkit-text-size-adjust'], 'The `text-size-adjust` isn’t necessary because Modulifier includes it for you']
+      - ['*', ['box-sizing'], 'The `box-sizing: border-box` isn’t necessary because Modulifier includes it for you']
+      - ['body', ['margin'], 'The `body` `margin` isn’t necessary because Modulifier includes it for you']
+      - ['.img-flex', false, 'The `.img-flex` class isn’t necessary because Modulifier includes it for you']
+    searchNot:
+      - ['@-moz-viewport', 'The `@viewport` doesn’t need to be specified because Modulifier includes it for you']
+      - ['@-ms-viewport', 'The `@viewport` doesn’t need to be specified because Modulifier includes it for you']
+      - ['@-o-viewport', 'The `@viewport` doesn’t need to be specified because Modulifier includes it for you']
+      - ['@-webkit-viewport', 'The `@viewport` doesn’t need to be specified because Modulifier includes it for you']
+      - ['@viewport', 'The `@viewport` doesn’t need to be specified because Modulifier includes it for you']
+
+css:
+  - path: 'css/modules.css'
+    valid: true
+    bestPractices: true
+    search:
+      - 'https://modulifier.web-dev.tools/#'
