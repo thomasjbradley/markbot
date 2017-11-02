@@ -45,6 +45,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Fixed a bug where text files would throw an error when they weren’t smushed even if the property was missing from the MarkbotFile.
 - When the `files` MarkbotFile property is empty an error message is now thrown.
 - Fixed a bug in the `files.directory` property where the directory was discarded when the MarkbotFile was generated.
+- Fixed the performance testing to properly test multiple files one at a time.
 
 ---
 

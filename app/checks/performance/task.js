@@ -7,14 +7,15 @@
   const ipcRenderer = require('electron').ipcRenderer;
   const markbotMain = require('electron').remote.require('./app/markbot-main');
   const serverManager = require('electron').remote.require('./app/server-manager');
-  const exists = require(__dirname + '/file-exists');
-  const webLoader = require(__dirname + '/web-loader');
-  const adviceIgnoreIds = require(__dirname + '/checks/performance/ignore-advice-ids.json');
+  const classify = require(`${__dirname}/classify`);
+  const exists = require(`${__dirname}/file-exists`);
+  const webLoader = require(`${__dirname}/web-loader`);
+  const adviceIgnoreIds = require(`${__dirname}/checks/performance/ignore-advice-ids.json`);
 
   const group = taskDetails.group;
   const fullPath = taskDetails.cwd;
 
-  let totalFiles = 0;
+  let allFilesToCheck = taskDetails.options.files.slice(0);
 
   const perfDefaults = {
     speed: 'WIFI',
@@ -39,13 +40,13 @@
     return num;
   };
 
-  const makeJs = function () {
+  const makeJs = function (ipcListenerLabel) {
     return `
       (function () {
         const webcoach = window.__markbot.getTestingService('perf');
 
         webcoach.getDomAdvice().then(function (data) {
-          window.__markbot.sendMessageToWindow(${taskRunnerId}, '__markbot-hidden-browser-perf-dom-advice', JSON.stringify(eval(data)));
+          window.__markbot.sendMessageToWindow(${taskRunnerId}, '__markbot-hidden-browser-perf-dom-advice-${ipcListenerLabel}', JSON.stringify(eval(data)));
         });
       }());
     `;
@@ -122,16 +123,22 @@
     return true;
   };
 
-  const check = function (file, next) {
+  const checkNextPath = function () {
+    if (allFilesToCheck.length <= 0) done();
+    check(allFilesToCheck.shift());
+  };
+
+  const check = function (file) {
+    const perf = getPerformanceSettings(file);
+    const label = `${file.path} — ${perf.speed}`
+    const ipcListenerLabel = classify(`${file.path}-${Date.now()}`);
     let win;
     let har;
-    let perf = getPerformanceSettings(file);
-    let label = `${file.path} — ${perf.speed}`
 
-    ipcRenderer.on('__markbot-hidden-browser-perf-dom-advice', function (event, data) {
+    ipcRenderer.on('__markbot-hidden-browser-perf-dom-advice-' + ipcListenerLabel, function (event, data) {
       var domAdvice = JSON.parse(data);
 
-      ipcRenderer.removeAllListeners('__markbot-hidden-browser-perf-dom-advice');
+      ipcRenderer.removeAllListeners('__markbot-hidden-browser-perf-dom-advice-' + ipcListenerLabel);
       webLoader.destroy(win);
       win = null;
 
@@ -166,7 +173,7 @@
           markbotMain.send('check-group:item-complete', group, file.path, label, errors, messages);
         }
 
-        next();
+        checkNextPath();
       });
     });
 
@@ -175,7 +182,7 @@
 
     if (!exists.check(path.resolve(fullPath + '/' + file.path))) {
       markbotMain.send('check-group:item-complete', group, file.path, label, [`Performance metrics couldn’t be calculated — \`${file.path}\` is missing or misspelled`]);
-      return done();
+      return checkNextPath();
     }
 
     webLoader.load(taskRunnerId, file.path, {speed: perf.speed}, function (theWindow, theHar) {
@@ -184,21 +191,12 @@
 
       if (typeof theHar !== 'object' || !theHar.log || !theHar.log.pages || theHar.log.pages <= 0) {
         markbotMain.send('check-group:item-complete', group, file.path, label, [`Performance metrics couldn’t be calculated — \`${file.path}\` is missing or misspelled`]);
-        return done();
+        return checkNextPath();
       }
 
-      win.webContents.executeJavaScript(makeJs());
+      win.webContents.executeJavaScript(makeJs(ipcListenerLabel));
     });
   };
 
-  const checkIfDone = function () {
-    totalFiles--;
-
-    if (totalFiles <= 0) done();
-  };
-
-  taskDetails.options.files.forEach(function (file) {
-    totalFiles++;
-    check(file, checkIfDone);
-  });
+  checkNextPath()
 }());
