@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-ca">
+<head>
+  <meta charset="utf-8">
+  <title>HTTP/{{errno}} · Markbot Web Server</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    @font-face { font-family: "SF Mono"; font-weight: 200; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Light.otf"); }
+    @font-face { font-family: "SF Mono"; font-weight: 200; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-LightItalic.otf"); }
+    @font-face { font-family: "SF Mono"; font-weight: 400; font-style: normal; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-Regular.otf"); }
+    @font-face { font-family: "SF Mono"; font-weight: 400; font-style: italic; src: url("file:///Applications/Utilities/Terminal.app/Contents/Resources/Fonts/SFMono-RegularItalic.otf"); }
+
+    html {
+      box-sizing: border-box;
+      overflow: hidden;
+      text-rendering: optimizeLegibility;
+
+      background-color: #f6f6f6;
+
+      color: #333;
+      font-size: 100%;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+      line-height: 1.5;
+    }
+
+    *, *::before, *::after {
+      box-sizing: inherit;
+    }
+
+    a {
+      color: #4484c2;
+    }
+
+    a:hover {
+      color: #2262a0;
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      align-items: center;
+    }
+
+    main {
+      margin: 0 auto;
+      padding: 1.5rem;
+      width: 25em;
+
+      background-color: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+    }
+
+    .logo {
+      display: block;
+      margin: 0 auto 1.5rem;
+      height: 100px;
+      width: 100px;
+    }
+
+    h1 {
+      margin: 0 0 1.5rem;
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    p {
+      margin: 0 0 1.5rem;
+      padding: 0;
+    }
+
+    small {
+      color: #666;
+    }
+
+    .error-message {
+      display: none;
+    }
+
+    .error-message-big {
+      font-size: 1.125rem;
+    }
+
+    .error-404 ~ .error-message-404 {
+      display: block;
+    }
+
+    .error-500 ~ .error-message-500 {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <main>
+    <svg class="logo" width="512" height="512" viewBox="0 0 512 512">
+      <defs>
+        <linearGradient id="linear-gradient" x1="256" x2="256" y1="15.55" y2="496.45" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#e6e3ff"/>
+          <stop offset="1" stop-color="#9d98c7"/>
+        </linearGradient>
+        <linearGradient id="linear-gradient-2" x1="256" x2="256" y1="33.22" y2="478.78" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#5e54af"/>
+          <stop offset="1" stop-color="#3c3670"/>
+        </linearGradient>
+        <clipPath id="clip-path">
+          <polygon fill="none" points="98.5 413.5 33.2 256 98.5 98.5 256 33.2 413.5 98.5 478.8 256 413.5 413.5 256 478.8 98.5 413.5"/>
+        </clipPath>
+      </defs>
+      <polygon fill="url(#linear-gradient)" points="86 426 15.5 256 86 86 256 15.5 426 86 496.5 256 426 426 256 496.5 86 426"/>
+      <polygon fill="url(#linear-gradient-2)" points="98.5 413.5 33.2 256 98.5 98.5 256 33.2 413.5 98.5 478.8 256 413.5 413.5 256 478.8 98.5 413.5"/>
+      <g fill="#fff" clip-path="url(#clip-path)">
+        <rect width="139.4" height="22.44" x="186.7" y="311"/>
+        <polygon points="82 366 128 366 128 430 73 430 73 374.8 82 366"/>
+        <rect width="18.1" height="79.75" x="127.1" y="357.9"/>
+        <polygon points="430.6 366 384 366 384 430 439 430 439 374.8 430.6 366"/>
+        <rect width="18.1" height="79.75" x="367.6" y="357.9" transform="rotate(180 376.65 397.75)"/>
+        <path d="M345 338H167a17 17 0 0 0-17 17v118a17 17 0 0 0 17 17h178a17 17 0 0 0 17-17V355a17 17 0 0 0-17-17zm-151 33.5a8.5 8.5 0 0 1-8.5 8.5h-14a8.5 8.5 0 0 1-8.5-8.5v-12a8.5 8.5 0 0 1 8.5-8.5h14a8.5 8.5 0 0 1 8.5 8.5zm43 0a8.5 8.5 0 0 1-8.5 8.5h-14a8.5 8.5 0 0 1-8.5-8.5v-12a8.5 8.5 0 0 1 8.5-8.5h14a8.5 8.5 0 0 1 8.5 8.5zM350 422a7 7 0 0 1-7 7h-68a7 7 0 0 1-7-7v-63a7 7 0 0 1 7-7h68a7 7 0 0 1 7 7z"/>
+        <path d="M340.8 356h-62.6a5.2 5.2 0 0 0-5.2 5.2v57.6a5.2 5.2 0 0 0 5.2 5.2h62.6a5.2 5.2 0 0 0 5.2-5.2v-57.6a5.2 5.2 0 0 0-5.2-5.2zm-57.3 14.9a5.5 5.5 0 0 1-5.6-5.5 5.6 5.6 0 0 1 11.1 0 5.5 5.5 0 0 1-5.5 5.5zm50.9 0a5.5 5.5 0 0 1-5.5-5.5 5.5 5.5 0 0 1 5.5-5.5 5.5 5.5 0 0 1 5.5 5.5 5.4 5.4 0 0 1-5.5 5.5z"/>
+        <ellipse cx="256" cy="187.2" rx="38.9" ry="21.3"/>
+        <path d="M369.1 250.5a5.4 5.4 0 0 1-5.5-5.3 5.4 5.4 0 0 1 5.4-5.4c11.1 0 13-2 13-13.2v-106a5.5 5.5 0 0 1 11 0v106c0 17-7 23.9-23.9 23.9z"/>
+        <rect width="39.9" height="9.87" x="367.2" y="136.6" rx="4.1" ry="4.1" transform="rotate(-180 387.1 141.55)"/>
+        <rect width="25.1" height="9.87" x="374.6" y="150.8" rx="4.1" ry="4.1" transform="rotate(-180 387.1 155.7)"/>
+        <rect width="25.1" height="9.87" x="374.6" y="122.4" rx="4.1" ry="4.1" transform="rotate(180 387.1 127.35)"/>
+        <rect width="10.5" height="46.33" x="352" y="221.3" transform="rotate(180 357.25 244.45)"/>
+        <rect width="10.5" height="36.66" x="362.5" y="226.1" transform="rotate(180 367.8 244.45)"/>
+        <path d="M144.2 251.3c-16.8 0-23.2-6.9-23.2-23.9v-106c0-3 2-5.4 5-5.4s5 2.4 5 5.4v106c0 11.2 1.8 13.1 12.9 13.1a5.5 5.5 0 0 1 5.5 5.4 5.2 5.2 0 0 1-5.2 5.4z"/>
+        <rect width="39.9" height="9.87" x="104.9" y="137.8" rx="4.1" ry="4.1"/>
+        <rect width="25.1" height="9.87" x="112.3" y="152" rx="4.1" ry="4.1"/>
+        <rect width="25.1" height="9.87" x="112.3" y="123.7" rx="4.1" ry="4.1"/>
+        <rect width="10.5" height="46.33" x="149.5" y="222.4"/>
+        <rect width="10.5" height="36.66" x="139" y="227.2"/>
+        <path d="M298.9 204a20.1 20.1 0 1 0 20 20 20 20 0 0 0-20-20zm0 30.6a10.6 10.6 0 1 1 10.6-10.6 10.5 10.5 0 0 1-10.6 10.6z"/>
+        <path d="M335.9 184H175.7c-5.9 0-10.7 5.4-10.7 11.3v100.8c0 6 4.8 9.9 10.7 9.9h160.2c6 0 11.1-4.7 11.1-10.6V194.6c0-5.9-5.1-10.6-11.1-10.6zm-148.4 40a25.3 25.3 0 1 1 25.2 25.3 25.2 25.2 0 0 1-25.2-25.3zM305 286h-98v-14h98zm-6.1-36.7a25.3 25.3 0 1 1 25.2-25.3 25.2 25.2 0 0 1-25.2 25.3z"/>
+        <path d="M212.7 204a20.1 20.1 0 1 0 20.1 20 20.1 20.1 0 0 0-20.1-20zm0 30.6a10.6 10.6 0 1 1 10.7-10.6 10.6 10.6 0 0 1-10.7 10.6z"/>
+      </g>
+    </svg>
+    <h1 class="error-{{errno}}">HTTP/{{errno}}</h1>
+    <p class="error-message error-message-big error-message-404"><strong>File Not Found</strong></p>
+    <p class="error-message error-message-big error-message-500"><strong>Internal Server Error</strong></p>
+    <p class="error-message error-message-404"><em>Markbot’s web server was unable to locate the requested file.</em> Double check that the filename is spelled properly.</p>
+    <p class="error-message error-message-500"><em>Markbot’s web server was ran into an internal server error.</em> Please try refreshing the browser.</p>
+    <small>Markbot/{{markbotversion}}</small>
+  </main>
+
+</body>
+</html>

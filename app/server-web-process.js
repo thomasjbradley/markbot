@@ -11,9 +11,20 @@ const https = require('https');
 const mimeTypes = require('mime-types');
 const finalhandler = require('finalhandler');
 const exists = require('./file-exists');
+const pkg = require('../package');
+
+const errorView = path.resolve(`${__dirname}/server-web-error.html`);
 
 let webServer;
 let staticDir = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../http-public');
+
+const getErrorPage = function (errcode) {
+  return fs
+    .readFileSync(errorView, 'utf-8')
+    .replace(/{{errno}}/g, errcode)
+    .replace(/{{markbotversion}}/g, pkg.version)
+    ;
+};
 
 const isRunning = function () {
   return !!(webServer && webServer.listening);
@@ -43,8 +54,8 @@ const start = function (port) {
 
           fs.readFile(filePath, (error, content) => {
             if (error) {
-              response.writeHead(500);
-              response.end();
+              response.writeHead(404);
+              response.end(getErrorPage(404), 'utf-8');
             } else {
               let raw = fs.createReadStream(filePath);
 
@@ -64,7 +75,7 @@ const start = function (port) {
           });
         } else {
           response.writeHead(404);
-          response.end();
+          response.end(getErrorPage(404), 'utf-8');
         }
       });
 
