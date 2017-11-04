@@ -1145,4 +1145,4 @@ Markbot will send its current version number to Markbot Server to help prevent s
 
 ## License & copyright
 
-© 2016 Thomas J Bradley — [GPL](LICENSE).
+© 2016–2017 Thomas J Bradley — [GPL](LICENSE).
