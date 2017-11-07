@@ -34,6 +34,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Switched to a white list of commit verbs to be more strict on commit message conventions.
 - Relaxed the requirements for running Markbot tests to allow just files or functionality or performance tests too.
 - Added checks for `@import` and `@charset` to CSS to avoid their use.
+- Updated a bunch of dependencies to their newest versions.
 
 ### Fixed
 
@@ -47,6 +48,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - When the `files` MarkbotFile property is empty an error message is now thrown.
 - Fixed a bug in the `files.directory` property where the directory was discarded when the MarkbotFile was generated.
 - Fixed the performance testing to properly test multiple files one at a time.
+
+### Removed
+
+- Removed the dependency logging because it wasn’t helping anything.
 
 ---
 
