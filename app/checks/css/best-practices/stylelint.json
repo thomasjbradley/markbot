@@ -80,6 +80,9 @@
     "declaration-block-semicolon-space-after": "always-single-line",
     "declaration-block-semicolon-space-before": "never",
     "declaration-block-trailing-semicolon": "always",
+    "block-closing-brace-empty-line-before": ["never", {
+      "except": ["after-closing-brace"]
+    }],
     "block-closing-brace-newline-after": "always",
     "block-closing-brace-newline-before": "always-multi-line",
     "block-closing-brace-space-before": "always-single-line",
