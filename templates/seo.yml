@@ -27,9 +27,6 @@ allFiles:
       - check: 'script[type="application/ld+json]'
         message: 'Consider using JSON-LD metadata to add more search engine accessible information to your website'
         type: warning
-    hasNot:
-      - check: 'meta[name="keywords"]'
-        message: 'The `keywords` meta tag should not be included because it’s not used by any search engines'
     search:
       - check: 'https?\:\/\/schema\.org'
         message: 'Consider using @@https://schema.org@@ metadata to add more search engine accessible information to your website'
