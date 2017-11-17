@@ -4,8 +4,6 @@ const exec = require('child_process').exec;
 
 let previousCheck = false;
 
-// log.transports.file.level = 'silly';
-
 const hasGit = function () {
   return new Promise((resolve, reject) => {
     exec('git --version', (err, data, stderr) => {
