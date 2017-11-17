@@ -18,7 +18,6 @@
     "css": "^2.2.1",
     "css-select": "^1.3.0-rc0",
     "electron-is": "^2.3.0",
-    "electron-log": "^2.2.9",
     "entities": "^1.1.1",
     "es6-promisify": "^5.0.0",
     "eslint": "^3.19.0",
