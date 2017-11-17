@@ -35,6 +35,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Relaxed the requirements for running Markbot tests to allow just files or functionality or performance tests too.
 - Added checks for `@import` and `@charset` to CSS to avoid their use.
 - Updated a bunch of dependencies to their newest versions.
+- When no MarkbotFile is found a warning is emitted with details instead of showing a green all-clear check.
 
 ### Fixed
 

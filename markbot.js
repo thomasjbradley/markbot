@@ -247,12 +247,11 @@ const startChecks = function () {
   markbotFile.username = menuOptions.signOutUsername;
 
   markbotMain.send('app:file-exists', repoOrFolder);
-
   markbotMain.send('check-group:new', markbotGroup, 'Markbot file');
 
   if (markbotFile.internalTemplate) {
     markbotMain.send('check-group:item-new', markbotGroup, 'file', 'Not found');
-    markbotMain.send('check-group:item-complete', markbotGroup, 'file', 'Not found');
+    markbotMain.send('check-group:item-complete', markbotGroup, 'file', 'Not found', [], [], ['**No MarkbotFile was found**, default settings are being used to check the website; you will not be able to submit this for grades—double-check that the original assignment was forked']);
     markbotMain.send('check-group:item-new', markbotGroup, 'settings', 'Using default settings');
     markbotMain.send('check-group:item-complete', markbotGroup, 'settings', 'Using default settings');
   } else {
