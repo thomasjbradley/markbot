@@ -34,6 +34,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Switched to a white list of commit verbs to be more strict on commit message conventions.
 - Relaxed the requirements for running Markbot tests to allow just files or functionality or performance tests too.
 - Added checks for `@import` and `@charset` to CSS to avoid their use.
+- When no MarkbotFile is found a warning is emitted with details instead of showing a green all-clear check.
+- Removed some logging that wasn’t helping debug problems—plan to add better logging systems later.
 
 ### Fixed
 
