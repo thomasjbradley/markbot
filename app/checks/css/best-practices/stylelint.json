@@ -1,7 +1,5 @@
 {
-  "plugins": [
-    "stylelint-declaration-block-no-ignored-properties"
-  ],
+  "plugins": [],
   "rules": {
     "color-no-invalid-hex": true,
     "font-family-no-duplicate-names": true,
@@ -41,7 +39,7 @@
     "selector-max-compound-selectors": 4,
     "selector-max-empty-lines": 0,
     "selector-max-id": 2,
-    "selector-max-universal": true,
+    "selector-max-universal": 2,
     "max-nesting-depth": 1,
     "color-hex-case": "lower",
     "color-hex-length": "short",
@@ -52,7 +50,7 @@
     "function-comma-space-after": "always-single-line",
     "function-comma-space-before": "never",
     "function-max-empty-lines": 0,
-    "function-name-case": true,
+    "function-name-case": "lower",
     "function-parentheses-newline-inside": "always-multi-line",
     "function-parentheses-space-inside": "never",
     "function-url-quotes": "always",
@@ -84,7 +82,6 @@
     "block-closing-brace-newline-before": "always-multi-line",
     "block-closing-brace-space-before": "always-single-line",
     "block-opening-brace-newline-after": "always-multi-line",
-    "block-opening-brace-newline-before": "never",
     "block-opening-brace-space-after": "always-single-line",
     "block-opening-brace-space-before": "always",
     "selector-attribute-brackets-space-inside": "never",
@@ -115,7 +112,6 @@
     "media-query-list-comma-space-after": "always",
     "media-query-list-comma-space-before": "never",
     "at-rule-empty-line-before": "always",
-    "at-rule-name-newline-after": "never",
     "at-rule-name-case": "lower",
     "at-rule-name-space-after": "always",
     "at-rule-semicolon-newline-after": "always",

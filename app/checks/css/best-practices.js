@@ -7,6 +7,14 @@ const viewportChecker = require(__dirname + '/best-practices/viewport');
 
 const ERROR_MESSAGE_STATUS = require(`${__dirname}/../../error-message-status`);
 
+const getStyleLintConfig = function () {
+  const stylelintConfig = require(`${__dirname}/best-practices/stylelint.json`);
+
+  stylelintConfig.plugins.push(`${__dirname}/../../../node_modules/stylelint-declaration-block-no-ignored-properties`);
+
+  return stylelintConfig;
+};
+
 const shouldIncludeError = function (message, line, lines, fileContents) {
   /* SVG overflow: hidden CSS */
   if (message.match(/selector-root-no-composition/) && lines[line - 1] && lines[line - 1].match(/svg/)) return false;
@@ -24,6 +32,7 @@ const bypass = function (checkGroup, checkId, checkLabel) {
 const check = function (checkGroup, checkId, checkLabel, fileContents, lines, next) {
   let errors = [];
   let checkViewport;
+  const stylelintConfig = getStyleLintConfig();
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);
 
@@ -34,9 +43,9 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, lines, ne
     return next();
   }
 
-  linter.lint({code: fileContents, config: require('./best-practices/stylelint.json')})
+  linter.lint({code: fileContents, config: stylelintConfig})
     .then(function (data) {
-      if (data.results) {
+      if (data.results && data.results[0]) {
         data.results[0].warnings.forEach(function (item) {
           if (shouldIncludeError(item.text, item.line, lines, fileContents)) {
             errors.push(util.format('Line %d: %s', item.line, item.text.replace(/\(.+?\)$/, '').replace(/"/g, '`')));
@@ -50,9 +59,12 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, lines, ne
     .catch(function (err) {
       if (err.reason && err.line) {
         errors.push(`Line ${err.line}: ${err.reason}`);
-        markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
-        next();
+      } else {
+        errors.push('There was an error running the test—please refresh and try again');
       }
+
+      markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);
+      next();
     })
   ;
 };
