@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "1.7.6",
+    "electron": "1.7.9",
     "electron-builder": "^19.35.0"
   },
   "scripts": {
