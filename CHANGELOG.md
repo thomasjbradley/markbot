@@ -36,6 +36,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added checks for `@import` and `@charset` to CSS to avoid their use.
 - Updated a bunch of dependencies to their newest versions.
 - When no MarkbotFile is found a warning is emitted with details instead of showing a green all-clear check.
+- Upgraded to the most recent version of Electron.
 
 ### Fixed
 
