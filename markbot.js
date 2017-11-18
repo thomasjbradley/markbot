@@ -86,7 +86,7 @@ const createMainWindow = function (next) {
     height: 600,
     show: false,
     minHeight: 550,
-    titleBarStyle: 'hidden-inset',
+    titleBarStyle: 'hiddenInset',
     vibrancy: 'light',
   });
 
