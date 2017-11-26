@@ -16,7 +16,7 @@ const escapeShell = require(`${__dirname}/../../escape-shell`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const serverManager = require('electron').remote.require('./app/server-manager');
 const userAgentService = require(`${__dirname}/../../user-agent-service`);
-const verbsWhiteList = require(`${__dirname}/best-practices/verb-white-list.json`);
+const verbsWhiteList = require(`${__dirname}/best-practices/verb-whitelist.json`);
 
 let app;
 

@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Added some more words to the dictionary.
+- Added another noun to the allowed commit words whitelist.
 
 ---
 
