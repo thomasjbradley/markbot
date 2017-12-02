@@ -1,19 +1,22 @@
 ##
 # Extra English words
 ##
+blockquote
+blockquotes
+center
+centers
+centered
+div
+divs
 mistype
 mistyped
 mistypes
-unclosed
 polaroid
 smush
 smushed
 smushing
 smushes
-blockquote
-blockquotes
-div
-divs
+unclosed
 ##
 # Markbot specific
 ##
