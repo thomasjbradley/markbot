@@ -17,6 +17,8 @@ smushed
 smushing
 smushes
 unclosed
+webpage
+webpages
 ##
 # Markbot specific
 ##
