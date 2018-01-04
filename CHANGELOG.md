@@ -12,6 +12,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added some more words to the dictionary.
 - Added more verbs to the allowed commit words whitelist.
 
+### Fixed
+
+- Added some major performance improvements when there are many functionality tests running by queuing the tests.
+
 ---
 
 ## [7.4.0] — 2017-11-20

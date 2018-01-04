@@ -12,12 +12,12 @@
   const group = taskDetails.group;
   const fullPath = taskDetails.cwd;
 
-  let totalFiles = 0;
+  let filesToCheck = JSON.parse(JSON.stringify(taskDetails.options.files));
 
   const check = function (file, next) {
     const pagePath = path.resolve(fullPath + '/' + file.path);
-    const listenerLabel = classify(`${file.path}-${Date.now()}`);
-    const displayLabel = (file.label) ? `${file.path} — ${file.label}` : file.path;
+    const listenerLabel = file.listenerLabel;
+    const displayLabel = file.displayLabel;
     let currentTestIndex = 1;
     let hasErrors = false;
     let win;
@@ -35,7 +35,6 @@
       win = null;
     };
 
-    markbotMain.send('check-group:item-new', group, listenerLabel, displayLabel);
 
     if (!fileExists.check(pagePath)) {
       markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel, [`The file \`${file.path}\` is missing or misspelled`]);
@@ -92,14 +91,18 @@
     });
   };
 
-  const checkIfDone = function () {
-    totalFiles--;
+  const checkNext = function () {
+    if (filesToCheck.length <= 0) return done();
 
-    if (totalFiles <= 0) done();
+    check(filesToCheck.shift(), checkNext);
   };
 
-  taskDetails.options.files.forEach(function (file) {
-    totalFiles++;
-    check(file, checkIfDone);
+  filesToCheck.forEach((file, i) => {
+    filesToCheck[i].listenerLabel = classify(`${file.path}-${Date.now()}`);
+    filesToCheck[i].displayLabel = (file.label) ? `${file.path} — ${file.label}` : file.path;
+
+    markbotMain.send('check-group:item-new', group, filesToCheck[i].listenerLabel, filesToCheck[i].displayLabel);
   });
+
+  checkNext();
 }());
