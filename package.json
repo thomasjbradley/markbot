@@ -9,7 +9,7 @@
   "private": true,
   "main": "markbot.js",
   "dependencies": {
-    "axe-core": "^2.4.1",
+    "axe-core": "^2.6.1",
     "calipers": "^2.0.0",
     "calipers-jpeg": "^2.0.0",
     "calipers-png": "^2.0.0",
@@ -20,7 +20,7 @@
     "electron-is": "^2.3.0",
     "entities": "^1.1.1",
     "es6-promisify": "^5.0.0",
-    "eslint": "^4.10.0",
+    "eslint": "^4.14.0",
     "exif": "^0.6.0",
     "finalhandler": "^1.0.4",
     "fix-path": "^2.1.0",
@@ -30,11 +30,11 @@
     "git-state": "^4.0.0",
     "glob": "^7.1.1",
     "htmlcs": "^0.4.1",
-    "image-size": "^0.6.1",
+    "image-size": "^0.6.2",
     "jimp": "^0.2.27",
-    "js-beautify": "^1.7.4",
+    "js-beautify": "^1.7.5",
     "js-yaml": "^3.10.0",
-    "markdownlint": "^0.6.1",
+    "markdownlint": "^0.6.4",
     "merge-objects": "^1.0.5",
     "mime-types": "^2.1.17",
     "mkdirp": "^0.5.1",
@@ -43,15 +43,15 @@
     "png-itxt": "^1.3.0",
     "portfinder": "^1.0.10",
     "string": "^3.3.3",
-    "stylelint": "^8.2.0",
+    "stylelint": "^8.4.0",
     "stylelint-declaration-block-no-ignored-properties": "^1.0.1",
-    "webcoach": "^0.38.0",
+    "webcoach": "^1.1.2",
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "1.7.9",
-    "electron-builder": "^19.35.0"
+    "electron": "1.7.10",
+    "electron-builder": "^19.52.1"
   },
   "scripts": {
     "debug": "NODE_ENV=development electron markbot.js",
