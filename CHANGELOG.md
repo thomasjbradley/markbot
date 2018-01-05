@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- More verbs to the allow commit starting words whitelist.
+
+---
+
 ## [7.4.2] — 2018-01-05
 
 ### Changed
