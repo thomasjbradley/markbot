@@ -35,7 +35,7 @@
     "declaration-block-single-line-max-declarations": 2,
     "selector-class-pattern": "[a-z][\\w\\-]*",
     "selector-max-attribute": 2,
-    "selector-max-class": 2,
+    "selector-max-class": 3,
     "selector-max-compound-selectors": 4,
     "selector-max-empty-lines": 0,
     "selector-max-id": 2,
