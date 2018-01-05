@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [7.4.2] — 2018-01-05
+
+### Changed
+
+- Updated a whole bunch of dependencies, specifically for the [Stylelint patch for media queries](https://github.com/stylelint/stylelint/pull/3011).
+- Changed the max number of class selectors to 3 to support my example toggle navigation.
+
+---
+
 ## [7.4.1] — 2018-01-04
 
 ### Added
