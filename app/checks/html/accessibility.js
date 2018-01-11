@@ -152,6 +152,7 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
     }
 
     a11yResults.violations.forEach((item) => {
+      // DEBUG!
       if (shouldIgnoreError(item)) {
         numPasses++;
         numFails--;
