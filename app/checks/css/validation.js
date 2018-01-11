@@ -67,6 +67,9 @@ const shouldIncludeError = function (context, message, skippedstring, line, line
   // clip-path: inset
   if (message && /inset\(.+\%.+clip-path/i.test(message)) return false;
 
+  // Ignore ::selection selectors
+  if (/\:\:(-moz-)?selection/.test(message)) return false;
+
   return true;
 };
 
