@@ -878,7 +878,7 @@ document.getElementById('username-form').addEventListener('submit', (e) => {
 });
 
 document.addEventListener('click', (e) => {
-  if (e.target.matches('#messages a') || e.target.matches('#messages-positive a')) {
+  if (e.target.matches('#messages a') || e.target.matches('#messages-positive a') || e.target.matches('#messages-warning a')) {
     e.preventDefault();
     shell.openExternal(e.target.href);
   }
