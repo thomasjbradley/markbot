@@ -8,6 +8,7 @@
   const exif = require('exif').ExifImage;
   const pngitxt = require('png-itxt');
   const imageSize = require('image-size');
+  const cheerio = require('cheerio');
   const merge = require('merge-objects');
   const markbotMain = require('electron').remote.require('./app/markbot-main');
   const stripPath = require(__dirname + '/strip-path');
@@ -117,9 +118,17 @@
 
   const checkSVGImageDimensions = function (file, fullPath, next) {
     let errors = [];
+    let fileContents, code, results;
 
     if (!isSVG(file.path)) return next(errors);
     if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors);
+
+    fileContents = fs.readFileSync(fullPath, 'utf8');
+    code = cheerio.load(fileContents);
+
+    // Ignore SVG spritesheets
+    results = code('svg > :not(symbol)');
+    if (results.length <= 0) return next(errors);
 
     calipers.measure(fullPath, (err, result) => {
       if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
