@@ -38,13 +38,17 @@ const isErrorWarning = function (err) {
   return false;
 };
 
+const isValidSkipLink = function (node) {
+  return /\<a[^>]+href\=\"\#.+(skip|jump)/i.test(node.html);
+};
+
 const shouldIgnoreError = function (err) {
   // Ignore aria-details warnings while they're not supported by axe-core
   if (err.id === 'aria-valid-attr') {
     let numNodes = err.nodes.length;
 
     err.nodes.forEach((node) => {
-      if (node.failureSummary.match(/aria-details/)) {
+      if (/aria-details/.test(node.failureSummary)) {
         numNodes--;
       }
     });
@@ -54,14 +58,14 @@ const shouldIgnoreError = function (err) {
 
   // Ignore region warnings when they're only concerned with the skip links outside a region
   if (err.id === 'region') {
-    if (err.nodes.length > 0 && err.nodes[0].html.match(/\<html/)) {
+    if (err.nodes.length > 0 && /\<html/.test(err.nodes[0].html)) {
       let numNodes = 0;
 
       if (err.nodes[0].any.length > 0 && err.nodes[0].any[0].relatedNodes.length > 0){
         numNodes = err.nodes[0].any[0].relatedNodes.length;
 
         err.nodes[0].any[0].relatedNodes.forEach((node) => {
-          if (node.html.match(/\<a[^>]+href\=\"\#.+(skip|jump)/i)) numNodes--;
+          if (isValidSkipLink(node)) numNodes--;
         });
 
         if (numNodes <= 0) return true;
@@ -73,7 +77,9 @@ const shouldIgnoreError = function (err) {
 };
 
 const shouldIncludeNode = function (node) {
-  if (node.failureSummary.match(/aria-details/)) return false;
+  if (/aria-details/.test(node.failureSummary)) return false;
+  if (/\<html/.test(node.html)) return false;
+  if (isValidSkipLink(node)) return false;
 
   return true;
 };
@@ -84,11 +90,24 @@ const constructErrorMessage = function (err) {
   });
   let errMsg = err.help;
   let message = '';
+  let relatedNodes = [];
+
+  if (/\<html/.test(err.nodes[0].html)) {
+    err.nodes[0].any[0].relatedNodes.forEach((node) => {
+      if (shouldIncludeNode(node)) relatedNodes.push(`\`${node.html}\``);
+    });
+
+    allTheNodes = allTheNodes.concat(relatedNodes);
+  }
 
   switch (err.id) {
     // Helpfully remind users that `tabindex="0"` is necessary on the element skip links point to
     case 'skip-link':
       errMsg += ', the element the skip link points must be focusable, try adding `tabindex="0"` to the element with the matching `id`';
+      break;
+
+    case 'region':
+      errMsg += ', if the element is a skip link double check the text inside the `<a>` tag starts with exactly “skip” or “jump” (case insensitive)';
       break;
   }
 
@@ -153,6 +172,7 @@ const check = function (checkGroup, checkId, checkLabel, taskRunnerId, file, nex
 
     a11yResults.violations.forEach((item) => {
       // DEBUG!
+console.log(item);
       if (shouldIgnoreError(item)) {
         numPasses++;
         numFails--;
