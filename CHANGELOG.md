@@ -5,11 +5,22 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [7.4.3] — 2018-01-11
 
 ### Added
 
 - More verbs to the allow commit starting words whitelist.
+
+### Changed
+
+- Removed the “descendent-selectors” rule from Stylelint because it causes more problems than necessary.
+
+### Fixed
+
+- Added a rule ignore for the CSS `::selection` selector.
+- SVG image dimension checking will now attempt to ignore SVG spritesheets by checking to see if the only child elements are `<symbol>` tags.
+- Attempted to clarify some of the ARIA role error messages.
+- Fixed external links within warning messages because they weren’t opening in the external browser.
 
 ---
 
