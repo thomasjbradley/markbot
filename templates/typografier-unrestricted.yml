@@ -7,12 +7,6 @@ allFiles:
   css:
     except:
       - 'css/type.css'
-    hasNot:
-      - ['@38em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
-      - ['@38em', 'html', ['line-height'], 'Typografier provides correct `line-height` values for each media query so you don’t have to repeat the code']
-      - ['@60em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
-      - ['@60em', 'html', ['line-height'], 'Typografier provides correct `line-height` values for each media query so you don’t have to repeat the code']
-      - ['@90em', 'html', ['font-size'], 'Typografier provides correct `font-size` values for each media query so you don’t have to repeat the code']
     searchNot:
       - 'font-size'
       - 'font-style'

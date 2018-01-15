@@ -4,10 +4,6 @@ allFiles:
       - ['link[href*="grid.css"]', 'The `grid.css` file isn’t included']
       - '.grid'
       - '.grid > .unit'
-      - '[class*="xs-"]'
-      - '[class*="s-"]'
-      - '[class*="m-"]'
-      - '[class*="l-"]'
     hasNot:
       - ['.grid > :not(.unit)', 'There should be nothing directly inside `.grid` except elements with the class `.unit`']
   css:
