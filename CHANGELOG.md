@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added more verbs to the allowed commit starting words whitelist.
 
+### Changed
+
+- Make the unrestricted modular CSS templates even more open.
+
 ---
 
 ## [7.4.3] — 2018-01-11
