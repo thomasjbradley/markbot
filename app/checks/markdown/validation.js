@@ -18,7 +18,6 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
   let errors = [];
   let markdownlintOpts = {
     config: markdownLintConfig,
-    resultVersion: 1,
     strings: {},
   };
 
