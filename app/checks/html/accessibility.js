@@ -100,6 +100,8 @@ const constructErrorMessage = function (err) {
     allTheNodes = allTheNodes.concat(relatedNodes);
   }
 
+  allTheNodes = allTheNodes.filter((item) => item != undefined);
+
   switch (err.id) {
     // Helpfully remind users that `tabindex="0"` is necessary on the element skip links point to
     case 'skip-link':
@@ -111,7 +113,11 @@ const constructErrorMessage = function (err) {
       break;
   }
 
-  message = `${errMsg}; the following elements are affected: ---+++${allTheNodes.join('+++')}---`;
+  if (allTheNodes.length > 0) {
+    message = `${errMsg}; the following elements are affected: ---+++${allTheNodes.join('+++')}---`;
+  } else {
+    message = errMsg;
+  }
 
   return message;
 };
