@@ -14,6 +14,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Make the unrestricted modular CSS templates even more open.
+- Update some dependencies. Especially Electron to fix the security problem.
+
+### Fixed
+
+- Removed the extraneous bullet point and text when no elements are shown in the accessibility related elements list.
 
 ---
 
