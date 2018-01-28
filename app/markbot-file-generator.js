@@ -75,7 +75,7 @@ const bindAccessibilityProperties = function (markbotFile) {
 const findCompatibleFiles = function (folderpath, ignore, ext) {
   const fullPath = path.resolve(folderpath);
   const minFileExts = new RegExp(`min\.(${ext})$`);
-  const ignoreRegExps = ignore.map((item) => new RegExp(item));
+  const ignoreRegExps = ignore.map((item) => new RegExp(`^${item}`));
   const totalIgnores = ignoreRegExps.length;
   let files = glob.sync(`${fullPath}/**/*.+(${ext})`);
 

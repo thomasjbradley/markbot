@@ -20,7 +20,6 @@
   "lowercase-id-with-hyphen": true,
   "rel-stylesheet": true,
   "script-content": true,
-  "script-in-tail": true,
   "self-close": "no-close",
   "spec-char-escape": true,
   "style-content": true,

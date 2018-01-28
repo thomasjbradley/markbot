@@ -5,10 +5,17 @@
   "wrap_line_length": 0,
   "end_with_newline": true,
   "extra_liners": [],
+  "indent_scripts": "normal",
+  "space_in_paren": false,
+  "space_in_empty_paren": false,
+  "space_after_anon_function": true,
   "unformatted": [
     "a", "span", "img", "bdo", "em", "strong", "dfn", "code", "samp", "kbd", "data", "time",
     "cite", "abbr", "acronym", "q", "sub", "sup", "tt", "i", "b", "small", "u", "s", "strike",
     "var", "ins", "del", "pre", "address", "dt", "h1", "h2", "h3", "h4", "h5", "h6", "textarea",
     "path", "use", "ruby", "rt", "rp", "mark", "bdi", "br", "wbr"
-  ]
+  ],
+  "js": {
+    "end_with_newline": false
+  }
 }
