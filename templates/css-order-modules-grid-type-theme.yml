@@ -1,0 +1,11 @@
+allFiles:
+  html:
+    has:
+      - check: 'link[href*="modules.css"]:first-of-type'
+        message: 'No CSS files should be above the `modules.css` `<link>` tag—all CSS files should come afterwards'
+      - check: 'link[href*="modules.css"] + link[href*="grid.css"]'
+        message: 'The `modules.css` file must come before the `grid.css` file'
+      - check: 'link[href*="grid.css"] + link[href*="type.css"]'
+        message: 'The `grid.css` file must come before the `type.css` file'
+      - check: 'link[href*="type.css"] + link[href*="theme.css"]'
+        message: 'The `type.css` file must come before the `theme.css` file'
