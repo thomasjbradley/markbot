@@ -5,6 +5,22 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added a new template for working with Patternbot.
+
+### Changed
+
+- Made some small compatibility adjustments to better work with Patternbot.
+
+### Fixed
+
+- Fixed a bug in the MarkbotIgnoreFile matching system where the file paths weren’t restricted to the beginning of paths and would match inside any directory.
+
+---
+
 ## [7.4.4] — 2018-01-23
 
 ### Added
