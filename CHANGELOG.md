@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a new template for when not using the grid system.
+
 ### Fixed
 
 - When the functionality testing `noErrors` option was used an error message was triggered because Markbot was still trying to run and empty array of tests.

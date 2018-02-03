@@ -1,0 +1,5 @@
+allFiles:
+  html:
+    has:
+      - ['link[href*="modules.css"] + link[href*="type.css"]', 'The `modules.css` file must come before the `type.css` file']
+      - ['link[href*="type.css"] + link[href*="main.css"]', 'The `type.css` file must come before the `main.css` file']
