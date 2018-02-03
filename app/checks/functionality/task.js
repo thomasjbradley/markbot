@@ -82,11 +82,13 @@
     webLoader.load(taskRunnerId, file.path, {}, (file.setup) ? file.setup : false, function (theWindow) {
       win = theWindow;
 
-      if (file.tests && Array.isArray(file.tests)) functionalityInjector.runCode(win, file.tests.shift(), currentTestIndex, listenerLabel);
-
       if (file.noErrors && !hasErrors) {
         markbotMain.send('check-group:item-complete', group, listenerLabel, displayLabel);
         next();
+      } else {
+        if (file.tests && Array.isArray(file.tests) && file.tests.length > 0) {
+          functionalityInjector.runCode(win, file.tests.shift(), currentTestIndex, listenerLabel);
+        }
       }
     });
   };

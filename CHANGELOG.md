@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- When the functionality testing `noErrors` option was used an error message was triggered because Markbot was still trying to run and empty array of tests.
+
+---
+
 ## [7.5.0] — 2018-01-28
 
 ### Added
