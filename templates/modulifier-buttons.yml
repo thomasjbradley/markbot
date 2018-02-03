@@ -2,9 +2,6 @@ allFiles:
   html:
     has:
       - '.btn'
-    search:
-      - check: 'btn\-(ghost|light)'
-        message: 'Expected to see a button style modifier: `.btn-ghost` or `.btn-light`'
 
   functionality:
     label: 'Button hover'

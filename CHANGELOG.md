@@ -11,6 +11,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 - Added a new template for when not using the grid system.
 
+### Changed
+
+- Removed the requirement for the button modifier class in the Modulifier template.
+
 ### Fixed
 
 - When the functionality testing `noErrors` option was used an error message was triggered because Markbot was still trying to run and empty array of tests.
