@@ -336,11 +336,16 @@
       if (!exists.check(fullPath)) {
         markbotMain.send('check-group:item-new', group, file.directory, `${file.directory}/`);
         markbotMain.send('check-group:item-complete', group, file.directory, `${file.directory}/`, [`The \`${file.directory}/\` folder is missing or misspelled`]);
-
         return checkIfDone();
       }
 
       listDir(fullPath, function(dirFiles) {
+        if (!dirFiles || dirFiles.length <= 0) {
+          markbotMain.send('check-group:item-new', group, file.directory, `${file.directory}/`);
+          markbotMain.send('check-group:item-complete', group, file.directory, `${file.directory}/`, false, false, [`The \`${file.directory}/\` folder is empty`]);
+          return checkIfDone();
+        }
+
         dirFiles.forEach(function (singleFile) {
           let newFileObj = merge(Object.assign({}, file), {path: stripPath(singleFile, taskDetails.cwd)});
 

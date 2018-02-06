@@ -9,7 +9,9 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Allow empty lines before custom properties to allow for organization.
+- Markbot will now allow empty lines before custom properties to allow for organization.
+- Fixed a bug when the CSS contained only `:root` an error message was displayed.
+- Fix a bug when the `files.directory` option is used and the directory was empty Markbot would never finish loading.
 
 ---
 
