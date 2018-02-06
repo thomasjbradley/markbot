@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Allow empty lines before custom properties to allow for organization.
+
+---
+
 ## [7.6.0]
 
 ### Added
