@@ -30,6 +30,9 @@ const cleanMessage = function (message) {
 const shouldIncludeError = function (context, message, skippedstring, line, lines, fileContents) {
   var nonExistingPropMatch = null;
 
+  // Ignore :root variable declarations
+  if (context && /\:root/.test(context)) return false;
+
   // Parse error at bottom of CSS, usually extra closing brace
   if (line > lines.length - 1) return true;
 
@@ -54,9 +57,6 @@ const shouldIncludeError = function (context, message, skippedstring, line, line
 
   // Appearance
   if (message.match(/property appearance/i)) return false;
-
-  // Ignore :root variable declarations
-  if (context && /\:root/.test(context)) return false;
 
   // Ignore var() values
   if (skippedstring && /var\(/.test(skippedstring)) return false;
