@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- More new commit message starting imperative verbs.
+
+---
+
 ## [7.6.1] — 2018-02-06
 
 ### Fixed
