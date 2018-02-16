@@ -344,6 +344,13 @@ button.toolbar-button-green:focus {
   margin-bottom: 2px;
 }
 
+.folder-name .icon-label {
+  max-width: 14.7em;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
 .toolbar-status-pill {
   display: inline-block;
   min-width: 3.3em;
