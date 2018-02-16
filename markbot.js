@@ -302,12 +302,13 @@ const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
 if (shouldQuit) app.quit();
 
 app.on('window-all-closed', function () {
-  if (process.platform !== 'darwin') app.quit();
+  app.exit();
 });
 
 app.on('will-quit', () => {
   serverManager.stop();
   app.releaseSingleInstance();
+  app.exit();
 });
 
 exports.relaunch = function () {
