@@ -257,6 +257,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
         type: 'separator'
       },
       {
+        role: 'quit'
       }
     );
 
