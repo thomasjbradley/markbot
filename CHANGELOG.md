@@ -5,7 +5,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [7.6.2] — 2018-02-16
 
 ### Added
 
@@ -14,6 +14,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Updated a bunch of application dependencies.
+- Made some changes to the app quitting—when the main window is closed the app quits. It’s not what I ideally want but I can figure out the MacOS-like way.
+- Changed the build process to remove MacOS extended attributes files from within the folder.
+
+### Fixed
+
+- Prevented the folder name from overflowing when it is really long.
+- Added the missing “Exit” menu item on Windows.
+- Fixed the path stripping method on Windows to better support finding files & folders.
 
 ---
 
