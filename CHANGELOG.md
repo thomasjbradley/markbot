@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Finally fixed the rounded corners on the top of the window by using `border-radius`
+
+---
+
 ## [7.6.2] — 2018-02-16
 
 ### Added

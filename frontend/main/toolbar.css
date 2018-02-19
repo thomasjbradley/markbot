@@ -69,6 +69,7 @@ svg:not(:root) {
   background-image: linear-gradient(to bottom, #ececec, #d3d3d3);
   border-bottom: 1px solid #b3b3b3;
   border-top: 1px solid #f6f6f6;
+  border-radius: 6px 6px 0 0;
   height: 38px;
 }
 

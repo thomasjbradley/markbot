@@ -37,6 +37,7 @@ html {
   box-sizing: border-box;
   overflow: hidden;
   text-rendering: optimizeLegibility;
+  border-radius: 6px 6px 0 0;
 
   font-size: 12px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -54,6 +55,7 @@ body {
   padding: 0;
   width: 100vw;
 
+  border-radius: 6px 6px 0 0;
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   -webkit-perspective: 1000;
