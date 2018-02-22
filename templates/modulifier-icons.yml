@@ -1,0 +1,6 @@
+allFiles:
+  html:
+    has:
+      - 'i.icon'
+      - check: '[class*="i-"]'
+        message: 'The `.icon` dimension class is missing, e.g. `.i-32`'

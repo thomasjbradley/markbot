@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added a new template for Modulifier icons.
+
 ### Fixed
 
 - Finally fixed the rounded corners on the top of the window by using `border-radius`
