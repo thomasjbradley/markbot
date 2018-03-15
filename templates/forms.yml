@@ -85,6 +85,8 @@ allFiles:
         for (let elem of elems) {
           let theLabel;
 
+          if (elem.getAttribute('type') === 'hidden') continue;
+
           if (!elem.id) return fail('Some form input fields (`<input>`, `<select>` or `<textarea>`) are missing `id` attributes');
 
           theLabel = document.querySelector(`label[for="${elem.id}"]`);

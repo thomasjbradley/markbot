@@ -5,6 +5,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+### Fixed
+
+- Fixed a bug where Markbot for enforcing `id` attributes onto `<input>` tags that were `hidden`
+
+---
+
 ## [7.7.0] — 2018-02-24
 
 ### Added
