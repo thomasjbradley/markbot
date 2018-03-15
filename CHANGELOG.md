@@ -8,6 +8,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fixed a bug where Markbot for enforcing `id` attributes onto `<input>` tags that were `hidden`
+- Fixed the `<thead>`, `<tbody>`, `<tfoot>` order checking to force `<tfoot>` after the `<tbody>` as per the HTML specification.
 
 ---
 

@@ -62,7 +62,7 @@ allFiles:
         message: 'The `<table>` tag should not be nested'
       - check: 'table > caption:not(:first-child), table > *:first-child:not(caption)'
         message: 'Every data `<table>` must have a `<caption>` as it’s first child'
-      - check: 'table > tfoot ~ thead, table > tbody ~ tfoot, table > tbody ~ thead, table > tfoot ~ colgroup, table > tbody ~ colgroup, table > tbody ~ colgroup'
+      - check: 'table > tfoot ~ tbody, table > tfoot ~ thead, table > tbody ~ thead, table > tfoot ~ colgroup, table > thead ~ colgroup, table > tbody ~ colgroup'
         message: 'The `<thead>` `<tbody>` & `<tfoot>` elements must be in the correct order'
       - check: 'th:not([scope])'
         message: 'The `<th>` tag must have a `scope` attribute'
