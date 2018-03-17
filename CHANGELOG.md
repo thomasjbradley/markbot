@@ -5,6 +5,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [7.7.1] — 2018-03-17
+
 ### Changed
 
 - The extra space error messages are now clearer because they highlight the spaces using the red spelling error squiggle underline.
