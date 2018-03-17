@@ -7,9 +7,10 @@ module.exports.check = function (fileContents, lines) {
     let lineTrim = line.trim();
 
     if (lineTrim.match(/ \>/)) {
-      let codeHunk = lineTrim.match(/.{0,15} \>.{0,15}/);
+      let codeHunk = lineTrim.match(/.{0,15} \>.{0,15}/)[0];
+      codeHunk = codeHunk.replace(/( \>)/, '~~$1~~');
 
-      errors.push(`Line ${i + 1}: There are extra spaces before the closing \`>\` in this tag: \`…${codeHunk[0]}…\``);
+      errors.push(`Line ${i + 1}: There are extra spaces before the closing \`>\` in this tag: \`…${codeHunk}…\``);
     }
   });
 

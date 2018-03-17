@@ -5,6 +5,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+### Changed
+
+- The extra space error messages are now clearer because they highlight the spaces using the red spelling error squiggle underline.
+
 ### Fixed
 
 - Fixed a bug where Markbot for enforcing `id` attributes onto `<input>` tags that were `hidden`
