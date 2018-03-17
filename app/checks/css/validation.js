@@ -60,6 +60,8 @@ const shouldIncludeError = function (context, message, skippedstring, line, line
 
   // Ignore var() values
   if (skippedstring && /var\(/.test(skippedstring)) return false;
+  // Ignore custom property declarations within a CSS block
+  if (/parse error/i.test(message) && /\-\-[a-z0-9-]+\:/.test(skippedstring)) return false;
 
   // Ignore CSS4 form selectors
   if (message && /pseudo.+\:(invalid|valid|required|optional|in-range|out-of-range)/.test(message)) return false;
