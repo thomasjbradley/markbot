@@ -11,6 +11,8 @@ divs
 mistype
 mistyped
 mistypes
+nav
+navigations
 polaroid
 smush
 smushed
