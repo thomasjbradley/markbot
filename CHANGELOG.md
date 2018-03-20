@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [7.7.2] — 2018-03-20
+
+### Fixed
+
+- Add more CSS variable `var()` error ignore messages into the CSS validation.
+
+---
+
 ## [7.7.1] — 2018-03-17
 
 ### Changed
