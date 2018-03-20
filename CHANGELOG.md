@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added a few more words to the dictionary.
+
+---
+
 ## [7.7.2] — 2018-03-20
 
 ### Fixed
