@@ -5,11 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [7.7.3] — 2018-03-22
 
 ### Added
 
 - Added a few more words to the dictionary.
+
+### Fixed
+
+- A huge bug when related to the backwards compatibility of `.has_not` it was clobbering all the checks from the templates.
 
 ---
 

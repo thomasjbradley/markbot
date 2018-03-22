@@ -32,8 +32,15 @@
     let contentChecker;
 
     // Backwards compatibility
-    if (file.has_not) file.hasNot = file.has_not;
-    if (file.search_not) file.searchNot = file.search_not;
+    if (file.has_not) {
+      if (!file.hasNot || !Array.isArray(file.hasNot)) file.hasNot = [];
+      file.hasNot = file.hasNot.concat(file.has_not);
+    }
+
+    if (file.search_not) {
+      if (!file.searchNot || !Array.isArray(file.searchNot)) file.searchNot = [];
+      file.searchNot = file.searchNot.concat(file.search_not);
+    }
 
     const bypassAllChecks = function (f) {
       checksToComplete = 0;
