@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed a bug in the accessibility testing when there are no landmark regions at all.
+
+---
+
 ## [7.7.3] — 2018-03-22
 
 ### Added

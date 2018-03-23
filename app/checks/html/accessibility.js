@@ -93,11 +93,13 @@ const constructErrorMessage = function (err) {
   let relatedNodes = [];
 
   if (/\<html/.test(err.nodes[0].html)) {
-    err.nodes[0].any[0].relatedNodes.forEach((node) => {
-      if (shouldIncludeNode(node)) relatedNodes.push(`\`${node.html}\``);
-    });
+    if (err.nodes[0].any[0] && err.nodes[0].any[0].relatedNodes) {
+      err.nodes[0].any[0].relatedNodes.forEach((node) => {
+        if (shouldIncludeNode(node)) relatedNodes.push(`\`${node.html}\``);
+      });
 
-    allTheNodes = allTheNodes.concat(relatedNodes);
+      allTheNodes = allTheNodes.concat(relatedNodes);
+    }
   }
 
   allTheNodes = allTheNodes.filter((item) => item != undefined);
