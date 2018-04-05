@@ -50,11 +50,18 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
   };
 
   const req = http.request(requestOpts, (res) => {
+    let data = [];
+
     res.setEncoding('utf8');
-    res.on('data', (data) => {
-      if (data) {
+
+    res.on('data', (chunk) => {
+      data.push(chunk);
+    });
+
+    res.on('end', (chunk) => {
+      if (data.length > 0) {
         try {
-          messages = JSON.parse(data);
+          messages = JSON.parse(data.join(''));
         } catch (e) {
           errors.push(crashMessage);
           markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, errors);

@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Fixed a bug in the HTML validation when the amount of validation errors was so long the response was chunked. Markbot would only grab the first part of the chunk.
+
+---
+
 ## [7.7.4] — 2018-04-03
 
 ### Fixed
