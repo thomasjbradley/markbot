@@ -6,8 +6,21 @@ allFiles:
         const headerLink = $('header nav:last-of-type a:not(.current)');
         const oldBg = css(headerLink).backgroundColor;
         const oldColor = css(headerLink).color;
+        const oldBorders = JSON.stringify({
+          top: css(headerLink).borderTopColor,
+          right: css(headerLink).borderRightColor,
+          bottom: css(headerLink).borderBottomColor,
+          left: css(headerLink).borderLeftColor,
+        });
 
         hover(headerLink, function () {
-          if (css(headerLink).backgroundColor == oldBg && css(headerLink).color == oldColor) return fail('The `background-color` or `color` of the navigation links don’t change when hovered')
+          const newBorders = JSON.stringify({
+            top: css(headerLink).borderTopColor,
+            right: css(headerLink).borderRightColor,
+            bottom: css(headerLink).borderBottomColor,
+            left: css(headerLink).borderLeftColor,
+          });
+
+          if (css(headerLink).backgroundColor == oldBg && css(headerLink).color == oldColor && oldBorders === newBorders) return fail('The `background-color`, `color` or `border-color` of the navigation links don’t change when hovered')
           pass();
         });
