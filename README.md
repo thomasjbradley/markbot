@@ -121,6 +121,7 @@ Here are the properties that you can use in the Markbot file for testing:
 - `repo` — used as an indicator in the app screen, for `liveWebsite`, & as part of the [Canvas integration](https://github.com/thomasjbradley/travis-canvas-proxy) to make nice URLs in grading comments.
 - `canvasCourse` — used as part of the Canvas integration.
 - `naming` — will confirm every file & folder follows [our naming conventions](http://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/).
+- `namingIgnore` — an array of paths that allows certain filenames to bypass the naming conventions check.
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
 - `liveWebsite` — whether to make a `HEAD` request to the GitHub URL to check that it’s accessible or not. Requires the `repo` entry. If the repo isn’t set up with `gh-pages` or the student hasn’t synced any commits a 404 will be issued, failing the test.
 - `restrictFileTypes` — will disallow specific extensions and file names from existing in the folder—[see `app/checks/restricted-file-types` for a list](app/checks/restrict-file-types/).

@@ -12,6 +12,7 @@ module.exports.generateTaskList = function (markbotFile) {
 
     if (markbotFile.naming) task.options.naming = true;
     if (markbotFile.restrictFileTypes) task.options.restrictFileTypes = true;
+    if (markbotFile.namingIgnore) task.options.namingIgnore = markbotFile.namingIgnore;
 
     tasks.push(task);
   }

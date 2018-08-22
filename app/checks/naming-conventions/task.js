@@ -64,6 +64,16 @@
     };
 
     files.forEach(function (file) {
+      let ignore = false;
+
+      if (taskDetails.options.namingIgnore) {
+        taskDetails.options.namingIgnore.forEach(function (ignoreFile) {
+          if (file.endsWith(ignoreFile)) ignore = true;
+        })
+      }
+
+      if (ignore) return;
+
       if (taskDetails.options.naming) namingErrors = namingErrors.concat(checkNaming(file));
       if (taskDetails.options.restrictFileTypes) restrictedErrors = restrictedErrors.concat(checkRestrictedFiles(file));
     });
