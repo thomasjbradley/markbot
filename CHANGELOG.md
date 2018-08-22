@@ -7,6 +7,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Add the ability to ignore certain files when checking naming conventions with the new `namingIgnore` property in MarkbotFiles.
+
+### Changed
+
+- Allow nav hovers to include just a border change.
+
 ### Fixed
 
 - Fixed a bug in the HTML validation when the amount of validation errors was so long the response was chunked. Markbot would only grab the first part of the chunk.
