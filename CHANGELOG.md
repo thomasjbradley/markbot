@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Allow nav hovers to include just a border change.
+- Update the dependencies and fix any associated issues.
 
 ### Fixed
 
