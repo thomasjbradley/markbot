@@ -34,17 +34,19 @@ const start = function (port) {
     server.unref();
 
     server.stderr.on('data', (data) => {
-      if (process.platform === 'darwin') {
+      // if (process.platform === 'darwin') {
         let message = data.toString('utf8');
-        let info = /INFO/;
+        // let info = /INFO/;
+        let started = /Started @\d+m?s/i;
 
-        if (!info.test(message)) reject('There was an error starting the HTML validator');
-      }
+        // if (!info.test(message)) reject('There was an error starting the HTML validator');
+        if (started.test(message)) resolve();
+      // }
     });
 
     server.stdout.on('data', (data) => {
       let message = data.toString('utf8');
-      let started = /initialization complete/i;
+      let started = /Started @\d+m?s/i;
 
       if (started.test(message)) resolve();
     });

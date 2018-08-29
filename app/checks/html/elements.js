@@ -3,6 +3,7 @@
 const util = require('util');
 const cheerio = require('cheerio');
 const parse5 = require('parse5');
+const htmlparser2Adapter = require('parse5-htmlparser2-tree-adapter');
 const merge = require('merge-objects');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 const messageGroup = require(`${__dirname}/../message-group`);
@@ -113,8 +114,8 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, hasSels, 
   let code = {};
   let allMessages;
   const parsedHtml = parse5.parse(fileContents, {
-    treeAdapter: parse5.treeAdapters.htmlparser2,
-    locationInfo: true,
+    treeAdapter: htmlparser2Adapter,
+    sourceCodeLocationInfo: true,
   });
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);

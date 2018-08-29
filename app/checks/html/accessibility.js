@@ -42,6 +42,26 @@ const isValidSkipLink = function (node) {
   return /\<a[^>]+href\=\"\#.+(skip|jump)/i.test(node.html);
 };
 
+const isAriaRoleRedudant = function (node) {
+  const roleTests = [
+    /\<header[^>]+role\s*=\s*"\s*banner/i,
+    /\<nav[^>]+role\s*=\s*"\s*navigation/i,
+    /\<main[^>]+role\s*=\s*"\s*main/i,
+    /\<footer[^>]+role\s*=\s*"\s*contentinfo/i,
+  ];
+  let isRoleRedudant = false;
+  let i = 0, t = roleTests.length;
+
+  for (i; i < t; i++) {
+    if (roleTests[i].test(node.html)) {
+      isRoleRedudant = true;
+      break;
+    }
+  }
+
+  return isRoleRedudant;
+};
+
 const shouldIgnoreError = function (err) {
   // Ignore aria-details warnings while they're not supported by axe-core
   if (err.id === 'aria-valid-attr') {
@@ -51,6 +71,17 @@ const shouldIgnoreError = function (err) {
       if (/aria-details/.test(node.failureSummary)) {
         numNodes--;
       }
+    });
+
+    if (numNodes <= 0) return true;
+  }
+
+  // Ignore role warnings when they denote roles are redundant
+  if (err.id === 'aria-allowed-role') {
+    let numNodes = err.nodes.length;
+
+    err.nodes.forEach((node) => {
+      if (isAriaRoleRedudant(node)) numNodes--;
     });
 
     if (numNodes <= 0) return true;
@@ -80,6 +111,7 @@ const shouldIncludeNode = function (node) {
   if (/aria-details/.test(node.failureSummary)) return false;
   if (/\<html/.test(node.html)) return false;
   if (isValidSkipLink(node)) return false;
+  if (isAriaRoleRedudant(node)) return false;
 
   return true;
 };

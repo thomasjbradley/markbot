@@ -2,6 +2,7 @@
 
 const util = require('util');
 const parse5 = require('parse5');
+const htmlparser2Adapter = require('parse5-htmlparser2-tree-adapter');
 const cheerio = require('cheerio');
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
@@ -22,8 +23,8 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
   let lastLevel = 1;
   let lastLevelText = '';
   const parsedHtml = parse5.parse(fileContents, {
-    treeAdapter: parse5.treeAdapters.htmlparser2,
-    locationInfo: true,
+    treeAdapter: htmlparser2Adapter,
+    sourceCodeLocationInfo: true,
   });
 
   markbotMain.send('check-group:item-computing', checkGroup, checkId);
