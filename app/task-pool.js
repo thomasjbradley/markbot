@@ -43,9 +43,6 @@ const spawnTaskRunner = function () {
     show: false,
     x: -100,
     y: -100,
-    webPreferences: {
-      webSecurity: false
-    }
   });
 
   bw.loadURL('file://' + path.resolve(__dirname + '/task-pool.html'));
