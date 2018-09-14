@@ -2,8 +2,8 @@
   'use strict';
 
   const MIN_WINDOW_HEIGHT = 400;
-  const MAX_WINDOW_HEIGHT = 6000;
-  const MAX_WINDOW_WIDTH = 3000;
+  const MAX_WINDOW_HEIGHT = 4000;
+  const MAX_WINDOW_WIDTH = 2500;
 
   const fs = require('fs');
   const path = require('path');
