@@ -5,6 +5,18 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Reduced the max size of screenshots to increase performance.
+
+### Fixed
+
+- Closed a security hole by re-enabling `webSecurity` in the task pool.
+
+---
+
 ## [7.8.0] — 2018-09-03
 
 ### Added
