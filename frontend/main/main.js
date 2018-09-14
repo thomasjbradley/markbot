@@ -192,7 +192,7 @@ const buildCodeDiffErrorMessage = function (err, li) {
 
     tag.textContent = line;
 
-    if (i == err.code.line) tag.classList.add('error-sample-line');
+    if (err.code.line && i == err.code.line) tag.classList.add('error-sample-line');
 
     sawPre.innerHTML += tag.outerHTML;
   });
@@ -202,7 +202,7 @@ const buildCodeDiffErrorMessage = function (err, li) {
 
     tag.textContent = line;
 
-    if (i == err.code.line) tag.classList.add('error-sample-line');
+    if (err.code.line && i == err.code.line) tag.classList.add('error-sample-line');
 
     expectedPre.innerHTML += tag.outerHTML;
   });
