@@ -559,6 +559,7 @@ exports.submitToCanvas = function (apiToken, details, next) {
     'url': config.ltwProgressSubmissionUrl,
     'headers': {
       'Authorization': `Token ${apiToken}`,
+      'User-Agent': `Markbot/${appPkg.version}`,
     },
     'json': true,
     'body': {
