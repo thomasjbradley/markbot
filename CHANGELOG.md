@@ -7,6 +7,10 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Add a few more acceptable commit starting verbs.
+
 ### Changed
 
 - Reduced the max size of screenshots to increase performance.
