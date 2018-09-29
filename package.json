@@ -42,6 +42,7 @@
     "parse5-htmlparser2-tree-adapter": "^5.1.0",
     "png-itxt": "^2.0.0",
     "portfinder": "^1.0.17",
+    "request": "^2.88.0",
     "string": "^3.3.3",
     "stylelint": "^9.5.0",
     "stylelint-declaration-block-no-ignored-properties": "^1.1.0",

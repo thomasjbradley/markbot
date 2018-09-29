@@ -1,5 +1,5 @@
 {
-  "proxyUrl": "https://your-markbot-server.com/grade?%s",
+  "ltwProgressSubmissionUrl": "https://progress.learn-the-web.algonquindesign.ca/api/v1/submit-assessment",
   "ignoreCommitEmails": [
     "your-git@email-address.ca"
   ]

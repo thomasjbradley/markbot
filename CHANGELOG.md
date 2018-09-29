@@ -10,6 +10,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Changed
 
 - Reduced the max size of screenshots to increase performance.
+- Moved to submitting assignments on the new Progressbot app on Learn the Web directly.
 
 ### Fixed
 

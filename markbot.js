@@ -11,6 +11,7 @@ const path = require('path');
 const util = require('util');
 const https = require('https');
 const crypto = require('crypto');
+const request = require('request');
 const mkdirp = require('mkdirp');
 const fixPath = require('fix-path');
 
@@ -553,25 +554,30 @@ exports.focusErrorList = function () {
 };
 menuCallbacks.focusErrorList = exports.focusErrorList;
 
-exports.submitToCanvas = function (ghUsername, next) {
-  let getVars = [
-    util.format('gh_repo=%s', encodeURI(markbotFile.repo)),
-    util.format('gh_username=%s', encodeURI(ghUsername)),
-    util.format('canvas_course=%s', markbotFile.canvasCourse),
-    util.format('markbot_version=%s', appPkg.version),
-    util.format('cheater=%d', (isCheater.cheated) ? 1 : 0)
-  ];
+exports.submitToCanvas = function (apiToken, details, next) {
+  let requestOptions = {
+    'url': config.ltwProgressSubmissionUrl,
+    'headers': {
+      'Authorization': `Token ${apiToken}`,
+    },
+    'json': true,
+    'body': {
+      'submitted_by': `Markbot/${appPkg.version}`,
+      'assessment_uri': `ca.learn-the-web.exercises.${markbotFile.repo}`,
+      'grade': 1,
+      'cheated': isCheater.cheated,
+    }
+  };
   let hash = crypto.createHash('sha512');
-  let sig = hash.update(getVars.join('&') + config.passcodeHash, 'utf8').digest('hex');
+  let bodyForSig = Object.assign({}, requestOptions.body);
 
-  getVars.push(`sig=${sig}`);
-  markbotMain.debug(getVars.join('&'));
+  bodyForSig.passcode_hash = config.passcodeHash;
 
-  https.get(util.format(config.proxyUrl, getVars.join('&')), function (res) {
-    res.on('data', function (data) {
-      next(false, JSON.parse(data.toString('utf8')));
-    });
-  }).on('error', function (e) {
-    next(true);
+  requestOptions.body.details = details;
+  requestOptions.body.signature = hash.update(JSON.stringify(bodyForSig), 'ascii').digest('hex');
+
+  request.post(requestOptions, function (err, res, body) {
+    if (err) next(true);
+    next(false, res.statusCode, body);
   });
-};
+}

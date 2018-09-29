@@ -650,6 +650,7 @@ const triggerDoneState = function () {
     $canvasBtn.removeAttribute('disabled');
 
     timeEstimator.getTimeEstimate(fullPath, config.ignoreCommitEmails, (stats) => {
+      sessionStorage.setItem('current-stats', JSON.stringify(stats));
       $statsStart.innerHTML = dateFormatter.format(stats.start);
       $statsEnd.innerHTML = dateFormatter.format(stats.end);
       $statsTime.innerHTML = `~${stats.estimatedTime} h`;
@@ -806,9 +807,16 @@ const submitAssignment = function (e) {
     $allGoodCheck.dataset.state = 'processing';
     $canvasBtnText.innerHTML = 'Submitting…';
     markbot.disableSubmitAssignment();
+    let stats = JSON.parse(sessionStorage.getItem('current-stats'));
+    let details = {
+      started: stats.start,
+      finished: stats.end,
+      estimated_time: stats.estimatedTime,
+      number_of_commits: stats.numCommits,
+    };
 
-    markbot.submitToCanvas(localStorage.getItem('github-username'), function (err, data) {
-      if (!err && data.code == 200) {
+    markbot.submitToCanvas(localStorage.getItem('api-token'), details, function (err, code, data) {
+      if (!err && code >= 200 && code < 300) {
         $canvasBtn.dataset.state = 'done';
         $canvasBtnText.innerHTML = 'Submitted';
         $allGoodCheck.dataset.state = 'done';
@@ -817,7 +825,7 @@ const submitAssignment = function (e) {
         $canvasBtnText.innerHTML = 'Submit';
         $allGoodCheck.dataset.state = '';
         markbot.enableSubmitAssignment();
-        if (data.message) displayAlert(data.message);
+        if (data.detail) displayAlert(data.detail);
       }
     });
   }
