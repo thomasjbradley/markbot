@@ -8,15 +8,23 @@ const matchesProfEmail = function (email, profEmails) {
   return profEmails.includes(email);
 };
 
+const getFolderStartTime = function (stats) {
+  return Math.round(stats.birthtimeMs / 1000);
+};
+
+const getFolderEndTime = function (stats) {
+  return Math.round(stats.mtimeMs / 1000);
+}
+
 const getStartTime = function (stats, commits = []) {
-  const folderStart = Math.round(new Date(stats.ctime).getTime() / 1000);
+  const folderStart = getFolderStartTime(stats);
   const firstCommit = (commits.length > 0) ? commits[0].author.timestamp : Math.round(Date.now() / 1000);
 
   return new Date(((folderStart < firstCommit) ? folderStart : firstCommit) * 1000);
 };
 
 const getEndTime = function (stats, commits = []) {
-  const folderEnd = Math.round(new Date(stats.mtime).getTime() / 1000);
+  const folderEnd = getFolderEndTime(stats);
   const lastCommit = (commits.length > 0) ? commits[commits.length - 1].author.timestamp : false;
 
   return new Date(((lastCommit !== false) ? lastCommit : folderEnd) * 1000);
@@ -48,18 +56,26 @@ const calculateCommitTimes = function (commits, hoursThreshold = 2) {
 
 const getTimeEstimate = function (repo, ignoreCommitEmails, next) {
   let allCommits = [];
+  let errorResults = {
+    start: new Date(),
+    end: new Date(),
+    estimatedTime: 1,
+    numCommits: false,
+  };
 
   const throwErrorResults = function () {
-    next({
-      start: new Date(),
-      end: new Date(),
-      estimatedTime: 1,
-      numCommits: 2,
-    });
+    next(errorResults);
   };
 
   fs.stat(repo, (err, stats) => {
     if (err) return throwErrorResults();
+
+    const repoBirthtime = getFolderStartTime(stats);
+    const repoMtime = getFolderEndTime(stats);
+
+    errorResults.start = new Date(repoBirthtime * 1000);
+    errorResults.end = new Date(repoMtime * 1000);
+    errorResults.estimatedTime = parseFloat(Math.round((repoMtime - repoBirthtime) / 60 / 60 * 100) / 100).toFixed(2);
 
     gitCommits(path.resolve(`${repo}/.git`))
       .on('data', (commit) => {
