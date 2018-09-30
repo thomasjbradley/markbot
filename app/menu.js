@@ -96,6 +96,16 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
       ]
     },
     {
+      label: 'Edit',
+      submenu: [
+        {role: 'cut'},
+        {role: 'copy'},
+        {role: 'paste'},
+        {role: 'delete'},
+        {role: 'selectall'},
+      ],
+    },
+    {
       label: 'Window',
       role: 'window',
       submenu: [
@@ -230,7 +240,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
     });
 
     // Window menu
-    template[2].submenu.push(
+    template[3].submenu.push(
       {
         type: 'separator'
       },
@@ -262,7 +272,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
     );
 
     // Help menu
-    template[2].submenu.push(
+    template[3].submenu.push(
       {
         type: 'separator'
       },
