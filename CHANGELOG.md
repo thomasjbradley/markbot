@@ -9,7 +9,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
-- Add a few more acceptable commit starting verbs.
+- Added a few more acceptable commit starting verbs.
+- Added back in the “Edit” menu to allow for copying-and-pasting of the API token.
 
 ### Changed
 
@@ -19,6 +20,8 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Closed a security hole by re-enabling `webSecurity` in the task pool.
+- Fixed a bug when retrieving the line location when using Parse5.
+- Fixed a bug with the Git commit checking and time calculation when the folder wasn’t a repository.
 
 ---
 
