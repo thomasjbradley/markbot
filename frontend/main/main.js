@@ -39,6 +39,7 @@ const $messageNoCanvas = document.querySelector('.success-fail-message.no-canvas
 
 // TOOLBAR
 const $toolbar = document.getElementById('toolbar');
+const $openProgressBtn = document.getElementById('open-progress');
 const $openEditorBtn = document.getElementById('open-editor');
 const $openBrowserBtn = document.getElementById('open-browser');
 const $openRepoBtn = document.getElementById('open-repo');
@@ -87,9 +88,11 @@ const appReady = function () {
     $signin.dataset.state = 'hidden';
     $dropbox.dataset.state = 'visible';
     markbot.enableSignOut(localStorage.getItem('github-username'));
+    $openProgressBtn.removeAttribute('disabled');
   } else {
     $signin.dataset.state = 'visible';
     $dropbox.dataset.state = 'hidden';
+    $openProgressBtn.setAttribute('disabled', true);
   }
 };
 
@@ -884,6 +887,7 @@ document.getElementById('sign-in-form').addEventListener('submit', (e) => {
   markbot.enableSignOut(localStorage.getItem('github-username'));
   $signin.dataset.state = 'hidden';
   $dropbox.dataset.state = 'visible';
+  $openProgressBtn.setAttribute('disabled', true);
 });
 
 document.addEventListener('click', (e) => {
@@ -926,6 +930,7 @@ $repoName.addEventListener('click', (e) => {
 });
 
 $robotLogo.addEventListener('click', () => refresh());
+$openProgressBtn.addEventListener('click', () => markbot.openProgressinator());
 $refreshBtn.addEventListener('click', () => refresh());
 $openBrowserBtn.addEventListener('click', () => markbot.openBrowserToServer());
 $createIssueBtn.addEventListener('click', () => markbot.createGitHubIssue());

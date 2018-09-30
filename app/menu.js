@@ -86,6 +86,14 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           type: 'separator'
         },
         {
+          label: 'View Your Progress',
+          enabled: (opts && opts.openProgressinator) ? true : false,
+          accelerator: 'CmdOrCtrl+P',
+          click: function (item, focusedWindow) {
+            cbs.openProgressinator();
+          }
+        },
+        {
           label: 'Submit Assignment',
           enabled: (opts && opts.submitAssignment) ? true : false,
           accelerator: 'CmdOrCtrl+S',

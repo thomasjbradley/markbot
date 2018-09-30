@@ -5,12 +5,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [8.0.0] — 2018-09-30
 
 ### Added
 
 - Added a few more acceptable commit starting verbs.
 - Added back in the “Edit” menu to allow for copying-and-pasting of the API token.
+- Added a toolbar button and menu item to access Progressinator.
 
 ### Changed
 
