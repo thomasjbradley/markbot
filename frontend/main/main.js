@@ -83,7 +83,7 @@ const appReady = function () {
   $loader.dataset.state = 'hidden';
   $dependencies.dataset.state = 'hidden';
 
-  if (localStorage.getItem('github-username')) {
+  if (localStorage.getItem('github-username') && localStorage.getItem('progressbot-api-token')) {
     $signin.dataset.state = 'hidden';
     $dropbox.dataset.state = 'visible';
     markbot.enableSignOut(localStorage.getItem('github-username'));
@@ -726,7 +726,7 @@ const startChecks = function () {
 };
 
 const fileDropped = function (path) {
-  if (localStorage.getItem('github-username')) {
+  if (localStorage.getItem('github-username') && localStorage.getItem('progressbot-api-token')) {
     reset();
     fullPath = path;
     startChecks();
@@ -815,7 +815,7 @@ const submitAssignment = function (e) {
       number_of_commits: stats.numCommits,
     };
 
-    markbot.submitToCanvas(localStorage.getItem('api-token'), details, function (err, code, data) {
+    markbot.submitAssessment(localStorage.getItem('github-username'), localStorage.getItem('progressbot-api-token'), details, function (err, code, data) {
       if (!err && code >= 200 && code < 300) {
         $canvasBtn.dataset.state = 'done';
         $canvasBtnText.innerHTML = 'Submitted';
@@ -877,9 +877,10 @@ $body.ondrop = (e) => {
   return false;
 };
 
-document.getElementById('username-form').addEventListener('submit', (e) => {
+document.getElementById('sign-in-form').addEventListener('submit', (e) => {
   e.preventDefault();
   localStorage.setItem('github-username', document.getElementById('username').value);
+  localStorage.setItem('progressbot-api-token', document.getElementById('api-token').value);
   markbot.enableSignOut(localStorage.getItem('github-username'));
   $signin.dataset.state = 'hidden';
   $dropbox.dataset.state = 'visible';
@@ -887,6 +888,11 @@ document.getElementById('username-form').addEventListener('submit', (e) => {
 
 document.addEventListener('click', (e) => {
   if (e.target.matches('#messages a') || e.target.matches('#messages-positive a') || e.target.matches('#messages-warning a')) {
+    e.preventDefault();
+    shell.openExternal(e.target.href);
+  }
+
+  if (e.target.matches('#sign-in-form a')) {
     e.preventDefault();
     shell.openExternal(e.target.href);
   }

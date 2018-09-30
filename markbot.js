@@ -554,28 +554,38 @@ exports.focusErrorList = function () {
 };
 menuCallbacks.focusErrorList = exports.focusErrorList;
 
-exports.submitToCanvas = function (apiToken, details, next) {
+exports.submitAssessment = function (ghUsername, apiToken, details, next) {
   let requestOptions = {
-    'url': config.ltwProgressSubmissionUrl,
+    'url': `${config.progressbotApi}/submit-assessment`,
     'headers': {
       'Authorization': `Token ${apiToken}`,
       'User-Agent': `Markbot/${appPkg.version}`,
     },
     'json': true,
     'body': {
+      'github_username': ghUsername,
       'submitted_by': `Markbot/${appPkg.version}`,
       'assessment_uri': `ca.learn-the-web.exercises.${markbotFile.repo}`,
       'grade': 1,
       'cheated': isCheater.cheated,
+      'details': details,
     }
   };
   let hash = crypto.createHash('sha512');
-  let bodyForSig = Object.assign({}, requestOptions.body);
+  let bodyForSig = [
+    ghUsername,
+    requestOptions.body.submitted_by,
+    requestOptions.body.assessment_uri,
+    requestOptions.body.grade,
+    isCheater.cheated,
+    config.passcodeHash,
+  ];
+  const markbotMouth = isCheater.cheated ? '〜' : '◡';
+  const possibleQuotes = require('./frontend/main/success-messages.json');
+  const quote = isCheater.cheated ? 'Cheater' : possibleQuotes[Math.floor(Math.random() * possibleQuotes.length)];
 
-  bodyForSig.passcode_hash = config.passcodeHash;
-
-  requestOptions.body.details = details;
   requestOptions.body.signature = hash.update(JSON.stringify(bodyForSig), 'ascii').digest('hex');
+  requestOptions.body.details.comment = `└[ ◕ ${markbotMouth} ◕ ]┘ Markbot says, “${quote}!”`;
 
   request.post(requestOptions, function (err, res, body) {
     if (err) next(true);

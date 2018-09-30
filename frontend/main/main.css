@@ -124,16 +124,21 @@
   opacity: .16;
 }
 
-.username-label {
+.sign-in-label {
   display: block;
-  margin-bottom: 20px;
+  margin-bottom: .2em;
+  font-size: 14px;
 }
 
-.username-label h1 {
+.sign-in-heading {
   opacity: .7;
 }
 
-.username-input {
+.sign-in-inputs {
+  padding-top: 20px;
+}
+
+.sign-in-input {
   display: block;
   margin: 0 auto 10px;
   padding: .3em;
@@ -147,10 +152,23 @@
   text-align: center;
 }
 
-.username-input:focus {
+.sign-in-input:focus {
   outline: none;
   background-color: #fff;
   border-color: #999;
+}
+
+.sign-in-input-wide  {
+  width: 25em;
+}
+
+.sign-in-input-with-desc {
+  margin-bottom: 6px;
+}
+
+.input-desc {
+  margin-top: 0;
+  font-size: 13px;
 }
 
 .btn-hidden {

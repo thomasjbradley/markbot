@@ -1,5 +1,5 @@
 {
-  "ltwProgressSubmissionUrl": "https://progress.learn-the-web.algonquindesign.ca/api/v1/submit-assessment",
+  "progressbotApi": "https://progressbot.learn-the-web.algonquindesign.ca/api/v1",
   "ignoreCommitEmails": [
     "your-git@email-address.ca"
   ]

@@ -325,12 +325,16 @@
           <path d="M212.7 204a20 20 0 1 0 20 20 20 20 0 0 0-20-20zm0 30.6a10.6 10.6 0 1 1 10.7-10.6 10.6 10.6 0 0 1-10.7 10.6z"/>
         </g>
       </svg>
-      <form id="username-form">
-        <label class="username-label" for="username">
-          <h1>Enter your GitHub username:</h1>
-        </label>
-        <input class="username-input" id="username" autofocus>
-        <button class="btn btn-hidden" id="username-go" type="submit">Go</button>
+      <form id="sign-in-form">
+        <h1 class="sign-in-heading">Sign in to submit assignments</h1>
+        <div class="sign-in-inputs">
+          <label class="sign-in-label" for="username">GitHub Username</label>
+          <input class="sign-in-input" id="username" autofocus>
+          <label class="sign-in-label" for="api-token">Progressbot API Token</label>
+          <input class="sign-in-input sign-in-input-wide sign-in-input-with-desc" id="api-token" autofocus>
+          <p class="input-desc sign-in-progressbot-url">Go to your <strong><a href="https://progressbot.learn-the-web.algonquindesign.ca/profile/">Progressbot profile</a></strong> to find the API token.</p>
+        </div>
+        <button class="btn btn-hidden" id="sign-in-go" type="submit">Go</button>
       </form>
     </div>
   </div>
