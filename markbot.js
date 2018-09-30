@@ -285,23 +285,27 @@ const handleMarkbotFile = function (mf, ignores, mfOriginal) {
   if (hasFilesToCheck()) startChecks();
 };
 
+const gotTheLock = app.requestSingleInstanceLock();
+
+if (!gotTheLock) {
+  app.quit()
+} else {
+  app.on('second-instance', (event, commandLine, workingDirectory) => {
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
+    }
+  })
+  app.on('ready', () => {
+    fixPath();
+    updateAppMenu();
+    createWindows();
+  });
+}
+
 menuCallbacks.showDebugWindow = function () {
   debugWindow.show();
 };
-
-app.on('ready', function () {
-  fixPath();
-  updateAppMenu();
-  createWindows();
-});
-
-const shouldQuit = app.makeSingleInstance((commandLine, workingDirectory) => {
-  if (mainWindow) {
-    if (mainWindow.isMinimized()) mainWindow.restore()
-    mainWindow.focus()
-  }
-});
-if (shouldQuit) app.quit();
 
 app.on('window-all-closed', function () {
   app.exit();
