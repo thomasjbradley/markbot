@@ -119,7 +119,7 @@ All the tests are set up and ready to go and inside the Markbot application. The
 Here are the properties that you can use in the Markbot file for testing:
 
 - `repo` — used as an indicator in the app screen, for `liveWebsite`, & as part of the automatic grade submission
-- `canvasCourse` — used as part of the Canvas integration. **This option will be deprecated in the future but is currently used as a trigger for submissions to Progressbot.**
+- `canvasCourse` — used as part of the Canvas integration. **This option will be deprecated in the future but is currently used as a trigger for submissions to Progressinator.**
 - `naming` — will confirm every file & folder follows [our naming conventions](http://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/).
 - `namingIgnore` — an array of paths that allows certain filenames to bypass the naming conventions check.
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
@@ -1007,9 +1007,9 @@ Rename `config.example.json` to just `config.json` and change the following opti
 
 - `ignoreCommitEmails` — (array) the list of email addresses to ignore when counting commits.
 
-You should probably leave this setting alone unless you choose to host your own copy of Learn the Web’s Progressbot.
+You should probably leave this setting alone unless you choose to host your own copy of Learn the Web’s Progressinator.
 
-- `progressbotApi` — (string) the URL to the Progressbot instance hosted on Learn the Web.
+- `progressinatorApi` — (string) the URL to the Progressinator instance hosted on Learn the Web.
 
 #### 3. Passcode hashing & embedding
 
@@ -1019,7 +1019,7 @@ The `hash-passcode` script will generate a `secret` key and hash your password, 
 
 *The hashed passcode isn’t really for security, it only uses HMAC-SHA512. The purpose is really to be sufficiently annoying that students will do their work instead of figuring out how to cheat Markbot.*
 
-**Don’t forget to copy this hashed passcode into Progressbot.**
+**Don’t forget to copy this hashed passcode into Progressinator.**
 
 #### 4. HTTPS certificate generation
 

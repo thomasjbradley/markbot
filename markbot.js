@@ -556,7 +556,7 @@ menuCallbacks.focusErrorList = exports.focusErrorList;
 
 exports.submitAssessment = function (ghUsername, apiToken, details, next) {
   let requestOptions = {
-    'url': `${config.progressbotApi}/submit-assessment`,
+    'url': `${config.progressinatorApi}/submit-assessment`,
     'headers': {
       'Authorization': `Token ${apiToken}`,
       'User-Agent': `Markbot/${appPkg.version}`,
