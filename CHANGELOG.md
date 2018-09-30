@@ -12,11 +12,13 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 - Added a few more acceptable commit starting verbs.
 - Added back in the “Edit” menu to allow for copying-and-pasting of the API token.
 - Added a toolbar button and menu item to access Progressinator.
+- Added a local `.npmrc` to allow for configuring the Python version for NodeGyp.
 
 ### Changed
 
 - Reduced the max size of screenshots to increase performance.
 - Moved to submitting assignments on the new Progressinator app on Learn the Web directly.
+- Update many of the dependencies.
 
 ### Fixed
 
