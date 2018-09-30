@@ -67,9 +67,9 @@ Having the desktop app allows all the tests to be run locally and much more effi
 
 ## Use cases
 
-Students will fork assignment repositories from GitHub, make their changes, and drop it into Markbot. Markbot will run a battery of tests on the code and report back with the results, allowing the finalized work to be submitted to the Canvas LMS.
+Students will fork assignment repositories from GitHub, make their changes, and drop it into Markbot. Markbot will run a battery of tests on the code and report back with the results, allowing the finalized work to be submitted & graded.
 
-This is great for code assignments that are pass/fail—I use it in my courses. If they pass the tests then the system automatically sets their grade to complete in Canvas.
+This is great for code assignments that are pass/fail—I use it in my courses. If they pass the tests then the system automatically sets their grade to complete.
 
 It also works for non-pass/fail assignments but the grade submission component will only assign 1 point to their assignment—which I think makes sense because, I as the teacher, would then go in and do a complete assessment of their work.
 
@@ -118,8 +118,8 @@ All the tests are set up and ready to go and inside the Markbot application. The
 
 Here are the properties that you can use in the Markbot file for testing:
 
-- `repo` — used as an indicator in the app screen, for `liveWebsite`, & as part of the [Canvas integration](https://github.com/thomasjbradley/travis-canvas-proxy) to make nice URLs in grading comments.
-- `canvasCourse` — used as part of the Canvas integration.
+- `repo` — used as an indicator in the app screen, for `liveWebsite`, & as part of the automatic grade submission
+- `canvasCourse` — used as part of the Canvas integration. **This option will be deprecated in the future but is currently used as a trigger for submissions to Progressbot.**
 - `naming` — will confirm every file & folder follows [our naming conventions](http://learn-the-web.algonquindesign.ca/topics/naming-paths-cheat-sheet/).
 - `namingIgnore` — an array of paths that allows certain filenames to bypass the naming conventions check.
 - `commits` — the minimum number of commits students need—will automatically subtract your commits.
@@ -136,8 +136,6 @@ Here are the properties that you can use in the Markbot file for testing:
 - `files` — [for checking images & plain text files.](#file--image-tests)
 - `performance` — [for checking website performance against simulated networks.](#performance-testing)
 - `allFiles` — [for common requirements between all files of a specific type.](#targeting-all-files)
-
-**If you plan on using the Canvas auto-grading feature, check out [Markbot Server](#markbot-server).**
 
 Here’s a basic Markbot file:
 
@@ -1007,8 +1005,11 @@ To configure your installation of Markbot you’ll need to adjust the config fil
 
 Rename `config.example.json` to just `config.json` and change the following options:
 
-- `proxyUrl` — (string) the URL to your [Markbot Server](#markbot-server) instance.
 - `ignoreCommitEmails` — (array) the list of email addresses to ignore when counting commits.
+
+You should probably leave this setting alone unless you choose to host your own copy of Learn the Web’s Progressbot.
+
+- `progressbotApi` — (string) the URL to the Progressbot instance hosted on Learn the Web.
 
 #### 3. Passcode hashing & embedding
 
@@ -1017,6 +1018,8 @@ After you’ve created your `config.json` file *and* created the two environment
 The `hash-passcode` script will generate a `secret` key and hash your password, embedding both into your `config.json`.
 
 *The hashed passcode isn’t really for security, it only uses HMAC-SHA512. The purpose is really to be sufficiently annoying that students will do their work instead of figuring out how to cheat Markbot.*
+
+**Don’t forget to copy this hashed passcode into Progressbot.**
 
 #### 4. HTTPS certificate generation
 
@@ -1129,18 +1132,6 @@ The “Develop” menu will only show when these two conditions are met:
 
 1. The `MARKBOT_DEVELOP_MENU` env var exists.
 2. The hashed version of the `MARKBOT_LOCK_PASSCODE` is the same as the hashed version in the `config.json` file.
-
----
-
-## Markbot server
-
-**Markbot Server is a companion server-side component to the desktop application.**
-
-It’s used for the purpose of connecting Markbot to Canvas. Everything is on a separate server to keep my own personal Canvas API key secret, and to create a mapping for student GitHub usernames to Canvas student IDs.
-
-Markbot will send its current version number to Markbot Server to help prevent students from using outdated versions of Markbot.
-
-[**Find out more about Markbot Server.**](https://github.com/thomasjbradley/markbot-server)
 
 ---
 
