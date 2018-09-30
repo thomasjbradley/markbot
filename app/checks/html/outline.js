@@ -38,7 +38,7 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
   }
 
   if (getLevel(headings[0]) != 1) {
-    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, [`Line ${headings[0].__location.line}: The first heading in the document is an \`<h${getLevel(headings[0])}>\` — but documents must start with an \`<h1>\``]);
+    markbotMain.send('check-group:item-complete', checkGroup, checkId, checkLabel, [`Line ${headings[0].sourceCodeLocation.startLine}: The first heading in the document is an \`<h${getLevel(headings[0])}>\` — but documents must start with an \`<h1>\``]);
     return next();
   }
 
@@ -53,20 +53,19 @@ const check = function (checkGroup, checkId, checkLabel, fileContents, next) {
       hasError: false,
     };
 
-
     if (i === 0) {
       outline.push(outlineItem);
       return;
     }
 
     if (level == 1) {
-      errors.push(`Line ${elem.__location.line}: Another \`<h1>\` was found, \`<h1>${text}</h1>\` — there can only be one \`<h1>\` per page`);
+      errors.push(`Line ${elem.sourceCodeLocation.startLine}: Another \`<h1>\` was found, \`<h1>${text}</h1>\` — there can only be one \`<h1>\` per page`);
       outlineItem.text = `\`<h${level}>\` ***${text}***`;
       outlineItem.hasError = true;
     }
 
     if (level > lastLevel + 1) {
-      errors.push(`Line ${elem.__location.line}: Heading, \`<h${level}>${text}</h${level}>\`, is level ${level} but the previous heading was level ${lastLevel} \`<h${lastLevel}>${lastLevelText}</h${lastLevel}>\``);
+      errors.push(`Line ${elem.sourceCodeLocation.startLine}: Heading, \`<h${level}>${text}</h${level}>\`, is level ${level} but the previous heading was level ${lastLevel} \`<h${lastLevel}>${lastLevelText}</h${lastLevel}>\``);
       outlineItem.text = `\`<h${level}>\` ***${text}***`;
       outlineItem.hasError = true;
     }

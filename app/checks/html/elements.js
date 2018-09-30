@@ -97,7 +97,7 @@ const checkHasNotElements = function (code, sels) {
       if (results.length > 0) {
         let lines = [];
 
-        results.each((i, elem) => lines.push(elem.__location.line));
+        results.each((i, elem) => lines.push(elem.sourceCodeLocation.startLine));
         check.lines = lines;
         allMessages = messageGroup.bind(check, allMessages);
       }
