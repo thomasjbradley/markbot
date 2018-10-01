@@ -600,7 +600,7 @@ exports.submitAssessment = function (ghUsername, apiToken, details, next) {
   requestOptions.body.details.comment = `└[ ◕ ${markbotMouth} ◕ ]┘ Markbot says, “${quote}!”`;
 
   request.post(requestOptions, function (err, res, body) {
-    if (err) next(true);
+    if (err) return next(true);
     next(false, res.statusCode, body);
   });
 }

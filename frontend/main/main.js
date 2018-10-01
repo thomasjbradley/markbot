@@ -828,7 +828,7 @@ const submitAssignment = function (e) {
         $canvasBtnText.innerHTML = 'Submit';
         $allGoodCheck.dataset.state = '';
         markbot.enableSubmitAssignment();
-        if (data.detail) displayAlert(data.detail);
+        if (data && data.detail) displayAlert(data.detail);
       }
     });
   }
