@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.0.1] — 2018-10-02
+
+### Fixed
+
+- Downgraded to an older version of JS-Beautify to fix some improper indentation bugs.
+
+---
+
 ## [8.0.0] — 2018-09-30
 
 ### Added

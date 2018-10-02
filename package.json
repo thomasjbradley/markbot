@@ -31,7 +31,7 @@
     "htmlcs": "^0.4.1",
     "image-size": "^0.6.3",
     "jimp": "^0.5.3",
-    "js-beautify": "^1.8.6",
+    "js-beautify": "1.7.5",
     "js-yaml": "^3.12.0",
     "markdownlint": "^0.11.0",
     "merge-objects": "^1.0.5",
