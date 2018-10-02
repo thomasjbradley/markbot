@@ -1,6 +1,11 @@
+html {
+  border-radius: 0 0 6px 6px;
+}
+
 body {
   overflow: hidden;
   background: url("../images/transparency-grid.svg") repeat 0 0 / 24px 24px #ccc;
+  border-radius: 0 0 6px 6px;
 }
 
 img,
