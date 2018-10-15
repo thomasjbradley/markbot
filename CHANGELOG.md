@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Fixed
+
+- Removed the extra `.` on Markbot’s cheater comment.
+
+---
+
 ## [8.0.1] — 2018-10-02
 
 ### Fixed

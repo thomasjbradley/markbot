@@ -594,7 +594,7 @@ exports.submitAssessment = function (ghUsername, apiToken, details, next) {
   ];
   const markbotMouth = isCheater.cheated ? '〜' : '◡';
   const possibleQuotes = require('./frontend/main/success-messages.json');
-  const quote = isCheater.cheated ? 'Cheater.' : possibleQuotes[Math.floor(Math.random() * possibleQuotes.length)];
+  const quote = isCheater.cheated ? 'Cheater' : possibleQuotes[Math.floor(Math.random() * possibleQuotes.length)];
 
   requestOptions.body.signature = hash.update(JSON.stringify(bodyForSig), 'ascii').digest('hex');
   requestOptions.body.details.comment = `└[ ◕ ${markbotMouth} ◕ ]┘ Markbot says, “${quote}!”`;
