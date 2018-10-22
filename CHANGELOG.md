@@ -5,11 +5,16 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [8.0.2] — 2018-10-22
+
+### Changed
+
+- Added a few more allowed verbs to Markbot’s commit checking.
 
 ### Fixed
 
 - Removed the extra `.` on Markbot’s cheater comment.
+- Fixed a bug that caused the colour profile to shift when screenshots were taken.
 
 ---
 
