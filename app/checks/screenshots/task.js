@@ -49,15 +49,11 @@
 
     // Handle screenshots taken on retina displays
     if (imgSize.width > width) {
-      jimp.read(img.toPNG()).then((image) => {
-        image
-          .resize(width, jimp.AUTO)
-          // .rgba(false)
-          .write(fullPath, function () {
-            next(fullPath);
-          })
-          ;
+      let resiezdImage = img.resize({
+        width: width,
+        quality: 'best',
       });
+      fs.writeFile(fullPath, resiezdImage.toPNG(), () => { next(fullPath); });
     } else {
       fs.writeFile(fullPath, img.toPNG(), function () {
         next(fullPath);
