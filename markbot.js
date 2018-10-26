@@ -462,7 +462,8 @@ exports.copyReferenceScreenshots = function () {
     screenshotSizes.forEach(function (width) {
       fs.rename(
         screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width),
-        screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width, true)
+        screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width, true),
+        (e) => {}
       );
     });
   });

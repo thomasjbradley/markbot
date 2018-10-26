@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.0.3] — 2018-10-26
+
+### Fixed
+
+- Fixed a bug when generating reference screenshots for assessments.
+
+---
+
 ## [8.0.2] — 2018-10-22
 
 ### Changed
