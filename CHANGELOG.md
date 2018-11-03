@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.0.4] — 2017-11-03
+
+### Changed
+
+- Adjusted the favicon template requirements to match current best practices & lesson requirements.
+
+---
+
 ## [8.0.3] — 2018-10-26
 
 ### Fixed

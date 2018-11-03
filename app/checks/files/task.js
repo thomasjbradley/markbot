@@ -76,20 +76,24 @@
     let icoSizes = {
       size16: false,
       size32: false,
+      size48: false,
     };
 
     if (dimensions.images) {
       for (let img of dimensions.images) {
         if (img.width == 16) icoSizes.size16 = true;
         if (img.width == 32) icoSizes.size32 = true;
+        if (img.width == 48) icoSizes.size48 = true;
       }
     } else {
       if (dimensions.width == 16) icoSizes.size16 = true;
       if (dimensions.width == 32) icoSizes.size32 = true;
+      if (dimensions.width == 48) icoSizes.size48 = true;
     }
 
     if (!icoSizes.size16) errors.push(`The favicon, \`${file.path}\`, is missing the \`16 × 16\` icon size`);
     if (!icoSizes.size32) errors.push(`The favicon, \`${file.path}\`, is missing the \`32 × 32\` icon size`);
+    if (!icoSizes.size48) errors.push(`The favicon, \`${file.path}\`, is missing the \`48 × 48\` icon size`);
 
     return errors;
   };
