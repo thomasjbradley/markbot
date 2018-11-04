@@ -5,7 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [8.0.4] — 2017-11-03
+## [8.0.5] — 2018-11-04
+
+### Changed
+
+- Moved the favicon `48px` size to a warning instead of an error message.
+
+---
+
+## [8.0.4] — 2018-11-03
 
 ### Changed
 

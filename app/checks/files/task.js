@@ -42,15 +42,16 @@
     fs.stat(fullPath, function (err, stats) {
       let fsize = Math.ceil(stats.size / 1000);
 
-      if (fsize <= 0) return next([`The \`${file.path}\` file appears empty — there should be content inside`]);
-      if (file.maxSize && fsize > file.maxSize) return next([`The file size of \`${file.path}\` is too large (expecting: ${file.maxSize}kB, actual: ${fsize}kB)`]);
+      if (fsize <= 0) return next([`The \`${file.path}\` file appears empty — there should be content inside`], []);
+      if (file.maxSize && fsize > file.maxSize) return next([`The file size of \`${file.path}\` is too large (expecting: ${file.maxSize}kB, actual: ${fsize}kB)`], []);
 
-      next([]);
+      next([], []);
     });
   };
 
   const handleImageDimensionsResults = function (width, height, file) {
     let errors = [];
+    let warnings = [];
 
     if (file.maxWidth) {
       if (width > file.maxWidth) errors.push(`The width of \`${file.path}\` is too large (expecting: ${file.maxWidth}px, actual: ${width}px)`);
@@ -68,11 +69,15 @@
       if (height < file.minHeight) errors.push(`The height of \`${file.path}\` is too small (expecting: ${file.minHeight}px, actual: ${height}px)`);
     }
 
-    return errors;
+    return {
+      errors: errors,
+      warnings: warnings,
+    };
   };
 
   const handleFaviconDimensionsResults = function (dimensions, file) {
     let errors = [];
+    let warnings = [];
     let icoSizes = {
       size16: false,
       size32: false,
@@ -93,29 +98,37 @@
 
     if (!icoSizes.size16) errors.push(`The favicon, \`${file.path}\`, is missing the \`16 × 16\` icon size`);
     if (!icoSizes.size32) errors.push(`The favicon, \`${file.path}\`, is missing the \`32 × 32\` icon size`);
-    if (!icoSizes.size48) errors.push(`The favicon, \`${file.path}\`, is missing the \`48 × 48\` icon size`);
+    if (!icoSizes.size48) warnings.push(`The favicon, \`${file.path}\`, is missing the \`48 × 48\` icon size`);
 
-    return errors;
+    return {
+      errors: errors,
+      warnings: warnings,
+    };
   };
 
   const checkImageDimensions = function (file, fullPath, next) {
     let errors = [];
+    let warnings = [];
 
     if (!isFavicon(file.path)) {
-      if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors);
+      if (!file.maxWidth && !file.maxHeight && !file.minWidth && !file.minHeight) return next(errors, warnings);
     }
 
     if (isFavicon(file.path)) {
       imageSize(fullPath, (err, dimensions) => {
-        if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
-        errors = errors.concat(handleFaviconDimensionsResults(dimensions, file));
-        return next(errors);
+        if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`], warnings);
+        let errWarn = handleFaviconDimensionsResults(dimensions, file);
+        errors = errors.concat(errWarn.errors);
+        warnings = warnings.concat(errWarn.warnings);
+        return next(errors, warnings);
       });
     } else {
       calipers.measure(fullPath, (err, result) => {
-        if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
-        errors = errors.concat(handleImageDimensionsResults(result.pages[0].width, result.pages[0].height, file));
-        return next(errors);
+        if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`], warnings);
+        let errWarn = handleImageDimensionsResults(result.pages[0].width, result.pages[0].height, file);
+        errors = errors.concat(errWarn.errors);
+        warnings = warnings.concat(errWarn.warnings);
+        return next(errors, warnings);
       });
     }
   };
@@ -143,29 +156,29 @@
 
   const checkExif = function (file, fullPath, next) {
     new exif({image:fullPath}, function (err, data) {
-      if (err && err.code == 'NO_EXIF_SEGMENT' && !data) return next([]);
-      if (data) return next([`The \`${file.path}\` image needs to be smushed`]);
-      next([`The JPG, \`${file.path}\`, seems to be corrupt—try exporting it again`]);
+      if (err && err.code == 'NO_EXIF_SEGMENT' && !data) return next([], []);
+      if (data) return next([`The \`${file.path}\` image needs to be smushed`], []);
+      next([`The JPG, \`${file.path}\`, seems to be corrupt—try exporting it again`], []);
     });
   };
 
   const checkPngChunks = function (file, fullPath, next) {
     fs.createReadStream(fullPath).pipe(pngitxt.get(function (err, data) {
-      if (!err && !data) return next([]);
+      if (!err && !data) return next([], []);
 
-      if (data) next([`The \`${file.path}\` image needs to be smushed`]);
+      if (data) next([`The \`${file.path}\` image needs to be smushed`], []);
     })).on('error', (err) => {
-      next([`The PNG, \`${file.path}\`, seems to be corrupt—try exporting it again`]);
+      next([`The PNG, \`${file.path}\`, seems to be corrupt—try exporting it again`], []);
     });
   };
 
   const checkImageMetadata = function (file, fullPath, next) {
-    if (!file.smushed) return next([]);
+    if (!file.smushed) return next([], []);
 
     if (/\.jpe?g$/.test(file.path)) return checkExif(file, fullPath, next);
     if (/\.png$/.test(file.path)) return checkPngChunks(file, fullPath, next);
 
-    next([]);
+    next([], []);
   };
 
   const findSearchErrors = function (fileContents, search) {
@@ -234,17 +247,21 @@
 
   const checkImage = function (file, fullPath, next) {
     let errors = [];
+    let warnings = [];
 
-    checkFileSize(file, fullPath, (err) => {
+    checkFileSize(file, fullPath, (err, warn) => {
       errors = errors.concat(err);
+      warnings = warnings.concat(warn);
 
-      checkImageDimensions(file, fullPath, (err) => {
+      checkImageDimensions(file, fullPath, (err, warn) => {
         errors = errors.concat(err);
+        warnings = warnings.concat(warn);
 
-        checkImageMetadata(file, fullPath, (err) => {
+        checkImageMetadata(file, fullPath, (err, warn) => {
           errors = errors.concat(err);
+          warnings = warnings.concat(warn);
 
-          next(errors);
+          next(errors, warnings);
         });
       });
     });
@@ -300,11 +317,11 @@
     }
 
     if (isImage(file.path)) {
-      checkImage(file, fullPath, function (err) {
+      checkImage(file, fullPath, function (err, warnings) {
         if (err) {
-          markbotMain.send('check-group:item-complete', group, file.path, file.path, err);
+          markbotMain.send('check-group:item-complete', group, file.path, file.path, err, false, warnings);
         } else {
-          markbotMain.send('check-group:item-complete', group, file.path, file.path);
+          markbotMain.send('check-group:item-complete', group, file.path, file.path, false, false, warnings);
         }
 
         next();
