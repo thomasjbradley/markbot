@@ -5,6 +5,15 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Changed
+
+- Removed a duplicated reference to `role="contentinfo"` in the ARIA template.
+- All the `role="main"` to be on more than just the `<main>` tag: `<article>`, `<section>` & `<div>`
+
+---
+
 ## [8.0.5] — 2018-11-04
 
 ### Changed
