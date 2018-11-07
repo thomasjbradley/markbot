@@ -13,6 +13,7 @@ mistyped
 mistypes
 nav
 navigations
+nitty
 polaroid
 smush
 smushed
@@ -77,6 +78,7 @@ samp
 br
 hr
 wbr
+img
 ##
 # All the weirdly spelled SVG tags
 ##
