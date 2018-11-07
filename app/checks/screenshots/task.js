@@ -8,6 +8,7 @@
   const fs = require('fs');
   const path = require('path');
   const fork = require('child_process').fork;
+  const exec = require('child_process').exec;
   const jimp = require('jimp');
   const BrowserWindow = require('electron').remote.BrowserWindow;
   const ipcRenderer = require('electron').ipcRenderer;
@@ -15,6 +16,8 @@
   const fileExists = require(__dirname + '/file-exists');
   const webLoader = require(__dirname + '/web-loader');
   const classify = require(__dirname + '/classify');
+  const escapeShell = require(`${__dirname}/escape-shell`);
+  const convertToUrl = require(`${__dirname}/convert-path-to-url`);
   const functionalityInjector = require(__dirname + '/functionality-injector');
   const screenshotNamingService = require(__dirname + '/checks/screenshots/naming-service');
   const defaultsService = require(__dirname + '/checks/screenshots/defaults-service');
@@ -45,19 +48,31 @@
   };
 
   const saveScreenshot = function (fullPath, width, img, next) {
-    let imgSize = img.getSize();
+    if (width === 'print') {
+      const pdfFullPath = fullPath.replace(/png$/, 'pdf');
+      fs.writeFile(pdfFullPath, img, () => {
+        const pdfHelperPath = path.resolve(__dirname.replace(/app.asar[\/\\]/, 'app.asar.unpacked/') + '/../vendor/pdfbox');
+        const execPath = 'java -jar ' + escapeShell(pdfHelperPath + '/pdfbox-app.jar') + ' PDFToImage -imageType png -page 1 -outputPrefix ' + convertToUrl(fullPath.replace(/\.png$/, '')) + ' ' + pdfFullPath;
 
-    // Handle screenshots taken on retina displays
-    if (imgSize.width > width) {
-      let resiezdImage = img.resize({
-        width: width,
-        quality: 'best',
+        exec(execPath, function (err, data) {
+          fs.rename(fullPath.replace(/\.png$/, '1.png'), fullPath, (err) => {
+            next(fullPath);
+          });
+        });
       });
-      fs.writeFile(fullPath, resiezdImage.toPNG(), () => { next(fullPath); });
     } else {
-      fs.writeFile(fullPath, img.toPNG(), function () {
-        next(fullPath);
-      });
+      let imgSize = img.getSize();
+
+      // Handle screenshots taken on retina displays
+      if (imgSize.width > width) {
+        let resiezdImage = img.resize({
+          width: width,
+          quality: 'best',
+        });
+        fs.writeFile(fullPath, resiezdImage.toPNG(), () => { next(fullPath); });
+      } else {
+        fs.writeFile(fullPath, img.toPNG(), function () { next(fullPath); });
+      }
     }
   };
 
@@ -66,7 +81,11 @@
 
     // win.setContentSize(width, height);
     // win.capturePage(next);
-    win.capturePage({x: 0, y:0, width: width, height: getCropHeight(height)}, next);
+    if (width === 'print') {
+      win.webContents.printToPDF({printBackground: true}, (err, data) => { next(data); });
+    } else {
+      win.capturePage({x: 0, y:0, width: width, height: getCropHeight(height)}, next);
+    }
   };
 
   const diffScreenshot = function (fullPath, file, group, filename, width, next) {
@@ -120,6 +139,8 @@
     let screenshotSizes = (Array.isArray(file.sizes)) ? file.sizes.slice(0) : Object.keys(file.sizes);
     let screenshotSizesDiffing = [];
     let screenshotSizesDone = [];
+    let printingPage = false;
+    let printResizeWidthIgnore = 1900;
 
     const getWindowHeight = function (width) {
       const aspectRatio = 0.5625;
@@ -128,11 +149,26 @@
     };
 
     const nextScreenshot = function (windowId) {
-      let nextSize = parseInt(screenshotSizes.shift(), 10);
+      let nextScreenshot = screenshotSizes.shift();
+      let nextSize;
+
+      printingPage = false;
+
+      if (nextScreenshot === 'print') {
+        printingPage = true;
+        nextSize = 'print';
+      } else {
+        nextSize = parseInt(nextScreenshot, 10);
+      }
 
       if (nextSize) {
         markbotMain.send('check-group:item-computing', group, listenerId(nextSize), listenerLabel(nextSize));
-        BrowserWindow.fromId(windowId).setSize(nextSize, MAX_WINDOW_HEIGHT);
+
+        if (nextSize === 'print') {
+          handleResizedBrowserWindow(windowId, 'print', MAX_WINDOW_HEIGHT);
+        } else {
+          BrowserWindow.fromId(windowId).setSize(nextSize, MAX_WINDOW_HEIGHT);
+        }
         // BrowserWindow.fromId(windowId).setSize(nextSize, getWindowHeight(nextSize));
       } else {
         cleanup(windowId);
@@ -163,7 +199,7 @@
       win = null;
     };
 
-    ipcRenderer.on(ipcListenerResizeChannel, function (event, windowId, width, height) {
+    const handleResizedBrowserWindow = function (windowId, width, height) {
       if (screenshotSizesDiffing.indexOf(width) >= 0) return;
 
       screenshotSizesDiffing.push(width);
@@ -189,6 +225,12 @@
           }
         });
       });
+    }
+
+    ipcRenderer.on(ipcListenerResizeChannel, function (event, windowId, width, height) {
+      // This is a super hack to work around the fact that the resize event is fired when a document is printed
+      if (printingPage && width === printResizeWidthIgnore) return;
+      handleResizedBrowserWindow(windowId, width, height);
     });
 
     ipcRenderer.on('__markbot-functionality-error', function (event, message, line, filename) {

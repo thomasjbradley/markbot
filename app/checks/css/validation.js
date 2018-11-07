@@ -5,22 +5,10 @@ const util = require('util');
 const exec = require('child_process').exec;
 const xmlParser = require('xml2js').parseString;
 const escapeShell = require(`${__dirname}/../../escape-shell`);
+const convertToUrl = require(`${__dirname}/../../convert-path-to-url`);
 const markbotMain = require('electron').remote.require('./app/markbot-main');
 
 const cssValidatorInvalidChars = ['#'];
-
-/**
- * This function is mainly to work around Windows issues
- * The CSS validator doesn’t accept Windows paths because of back slashes
- *   the path needs to be a valid URL
- */
-const convertToUrl = function (path) {
-  let urlPath = path.replace(/\\/g, '/');
-
-  if (urlPath[0] !== '/') urlPath = '/' + urlPath;
-
-  return urlPath;
-};
 
 const cleanMessage = function (message) {
   message = message.replace(/\s+/g, ' ');
