@@ -12,6 +12,7 @@ vendor/languagetool/*
 !vendor/languagetool/words-to-add.txt
 !vendor/languagetool/languagetool.properties
 build/background.tiff
+vendor/pdfbox/*
 
 app/*.cert
 app/*.pem
