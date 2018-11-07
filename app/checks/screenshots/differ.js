@@ -155,8 +155,9 @@ const check = function (paths, allowedDiff = false) {
 };
 
 const init = function (filename, width) {
+  const suffix = (width === 'print') ? '' : 'px';
   checkId = `${filename}-${width}`;
-  checkLabel = `${filename} — ${width}px`;
+  checkLabel = `${filename} — ${width}${suffix}`;
 };
 
 process.on('message', function (message) {

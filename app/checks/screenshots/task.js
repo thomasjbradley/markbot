@@ -134,13 +134,20 @@
     const ipcListenerLabel = classify(`${file.path}-${Date.now()}`);
     const ipcListenerResizeChannel = `__markbot-screenshots-resized-${ipcListenerLabel}`;
     const screenshotFilename = screenshotNamingService.makeScreenshotBasename(file);
-    const listenerId = function (size) { return `${screenshotFilename}-${size}`; };
-    const listenerLabel = function (size) { return `${file.path}: ${size}px${labelExtra}`; };
     let screenshotSizes = (Array.isArray(file.sizes)) ? file.sizes.slice(0) : Object.keys(file.sizes);
     let screenshotSizesDiffing = [];
     let screenshotSizesDone = [];
     let printingPage = false;
     let printResizeWidthIgnore = 1900;
+
+    const listenerId = function (size) {
+      return `${screenshotFilename}-${size}`;
+    };
+
+    const listenerLabel = function (size) {
+      const suffix = (size === 'print') ? '' : 'px';
+      return `${file.path}: ${size}${suffix}${labelExtra}`;
+    };
 
     const getWindowHeight = function (width) {
       const aspectRatio = 0.5625;
