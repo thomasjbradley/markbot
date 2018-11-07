@@ -577,7 +577,7 @@ Your injected code will have access to a few functions to simplify what you have
   - `selector/element` a pre-selected DOM element object or the CSS selector of the target for your event.
   - `callback` is a function that will be executed when the hover has triggered.
 - **`activate(selector/element, callback)`** — A specialized event dispatch that “activates” an element triggering the CSS `:active` styles.
-  - Allows for testing to make sure student’s apply actives states to elements in CSS.
+  - Allows for testing to make sure student’s apply active states to elements in CSS.
   - `selector/element` a pre-selected DOM element object or the CSS selector of the target for your event.
   - `callback` is a function that will be executed when the hover has triggered.
 - **`send(eventname[, options[, callback]])`** — sends trusted input events to the browser window. This is what `hover()` and `activate()` do internally.
