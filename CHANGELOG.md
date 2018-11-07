@@ -7,6 +7,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Added the ability to screenshot printed versions of websites.
+- Added a few more words to the commit verb list and the language dictionary.
+
 ### Changed
 
 - Removed a duplicated reference to `role="contentinfo"` in the ARIA template.

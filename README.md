@@ -46,6 +46,7 @@ Built with Javascript, Node.js & Electron.
         - [Compiling the CSS validator](#compiling-the-css-validator)
       - [LanguageTool](#languagetool)
         - [Add more words to the dictionary](#add-more-words-to-the-dictionary)
+      - [PDFBox](#pdfbox)
   - [Running Markbot](#running-markbot)
 - [Debugging Markbot](#debugging-markbot)
 - [Markbot Server](#markbot-server)
@@ -411,6 +412,9 @@ screenshots:
       400: 10
       650: 10
       960: 8
+
+    # If you’d like to capture the printed version of the website, send `print` as one of the sizes
+    sizes: ['print']
 
     # If there are multiple screenshots of the same path the label is required to distinguish them (it’s used in the filenames)
     # It can also be used to add a little extra information to the check list
@@ -1092,6 +1096,18 @@ The LanguageTool is used to check spelling and grammar of commit messages. It’
 2. Copy all the text from `words-to-add.txt` (it’s inside the `vendor` folder) into the bottom of `ignore.txt`
 
     **Make sure there are no blank lines between the words.**
+
+##### PDFBox
+
+The PDFBox application is used primarily for checking screenshots of printed versions of websites—used to convert printed PDFs into PNGs for comparison. It’s another Java JAR to install in the `vendor` folder.
+
+1. Go here and download the “Command line tools” `pdfbox-app-0.0.0.jar` package:
+
+    [**https://pdfbox.apache.org/download.cgi**](https://pdfbox.apache.org/download.cgi)
+
+2. Copy the following items into the `vendor/pdfbox` folder:
+
+    - `pdfbox-app.jar` **Rename it without the version number.**
 
 ### Running Markbot
 
