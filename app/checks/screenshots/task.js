@@ -12,6 +12,7 @@
   const jimp = require('jimp');
   const BrowserWindow = require('electron').remote.BrowserWindow;
   const ipcRenderer = require('electron').ipcRenderer;
+  const nativeImage = require('electron').nativeImage;
   const markbotMain = require('electron').remote.require('./app/markbot-main');
   const fileExists = require(__dirname + '/file-exists');
   const webLoader = require(__dirname + '/web-loader');
@@ -56,23 +57,12 @@
 
         exec(execPath, function (err, data) {
           fs.rename(fullPath.replace(/\.png$/, '1.png'), fullPath, (err) => {
-            next(fullPath);
+            return next(fullPath);
           });
         });
       });
     } else {
-      let imgSize = img.getSize();
-
-      // Handle screenshots taken on retina displays
-      if (imgSize.width > width) {
-        let resiezdImage = img.resize({
-          width: width,
-          quality: 'best',
-        });
-        fs.writeFile(fullPath, resiezdImage.toPNG(), () => { next(fullPath); });
-      } else {
-        fs.writeFile(fullPath, img.toPNG(), function () { next(fullPath); });
-      }
+      fs.writeFile(fullPath, img.toPNG(), function () { next(fullPath); });
     }
   };
 
@@ -88,42 +78,65 @@
     }
   };
 
+  const resizeRetinaScreenshots = function (fullPath, filename, width, next) {
+    const imgRefPath = screenshotNamingService.getScreenshotPath(fullPath, filename, width, true);
+    const imgRef = nativeImage.createFromPath(imgRefPath);
+    const imgSizeRef = imgRef.getSize();
+    const imgNewPath = screenshotNamingService.getScreenshotPath(fullPath, filename, width, false);
+    const imgNew = nativeImage.createFromPath(imgNewPath);
+    const imgSizeNew = imgNew.getSize();
+
+    if (imgSizeNew.width > imgSizeRef.width) {
+      let resizedImageNew = imgNew.resize({
+        width: imgSizeRef.width,
+        quality: 'best',
+      });
+      fs.writeFile(imgNewPath, resizedImageNew.toPNG(), () => {
+        next();
+      });
+    } else {
+      next();
+    }
+  };
+
   const diffScreenshot = function (fullPath, file, group, filename, width, next) {
-    let differ = fork(`${__dirname}/checks/screenshots/differ`);
+    resizeRetinaScreenshots(fullPath, filename, width, () => {
+      let differ = fork(`${__dirname}/checks/screenshots/differ`);
 
-    differ.on('message', function (message) {
-      switch (message.type) {
-        case 'kill':
-          differ.kill();
-          differ = null;
-          break;
-        case 'debug':
-          markbotMain.debug(message.debug.join(' '));
-          break;
-        default:
-          if (message.messages) {
-            markbotMain.send(message.id, group, message.checkId, message.checkLabel, false, message.messages);
-          } else {
-            markbotMain.send(message.id, group, message.checkId, message.checkLabel, message.errors);
-          }
-          next(filename, width);
-          break;
-      }
-    });
+      differ.on('message', function (message) {
+        switch (message.type) {
+          case 'kill':
+            differ.kill();
+            differ = null;
+            break;
+          case 'debug':
+            markbotMain.debug(message.debug.join(' '));
+            break;
+          default:
+            if (message.messages) {
+              markbotMain.send(message.id, group, message.checkId, message.checkLabel, false, message.messages);
+            } else {
+              markbotMain.send(message.id, group, message.checkId, message.checkLabel, message.errors);
+            }
+            next(filename, width);
+            break;
+        }
+      });
 
-    differ.send({
-      type: 'init',
-      filename: filename,
-      width: width
-    });
+      differ.send({
+        type: 'init',
+        filename: filename,
+        width: width
+      });
 
-    differ.send({
-      type: 'check',
-      paths: {
-        new: screenshotNamingService.getScreenshotPath(fullPath, filename, width, false),
-        ref: screenshotNamingService.getScreenshotPath(fullPath, filename, width, true)
-      },
-      allowedDiff: (Array.isArray(file.sizes)) ? false : (parseInt(file.sizes[width], 10) / 100),
+      differ.send({
+        type: 'check',
+        paths: {
+          new: screenshotNamingService.getScreenshotPath(fullPath, filename, width, false),
+          ref: screenshotNamingService.getScreenshotPath(fullPath, filename, width, true)
+        },
+        allowedDiff: (Array.isArray(file.sizes)) ? false : (parseInt(file.sizes[width], 10) / 100),
+      });
     });
   };
 
@@ -236,7 +249,7 @@
 
     ipcRenderer.on(ipcListenerResizeChannel, function (event, windowId, width, height) {
       // This is a super hack to work around the fact that the resize event is fired when a document is printed
-      if (printingPage && width === printResizeWidthIgnore) return;
+      if (printingPage && (width === printResizeWidthIgnore || width === MAX_WINDOW_WIDTH)) return;
       handleResizedBrowserWindow(windowId, width, height);
     });
 
