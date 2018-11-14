@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.1.2] — 2018-11-14
+
+### Fixed
+
+- The previous responsive screenshot update broke the ability to generate reference screenshots—this fixes it.
+
+---
+
 ## [8.1.1] — 2018-11-14
 
 ### Changed

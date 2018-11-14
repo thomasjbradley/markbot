@@ -1,6 +1,7 @@
 'use strict';
 
 const electron = require('electron');
+const nativeImage = require('electron').nativeImage;
 const app = electron.app;
 const Menu = electron.Menu;
 const BrowserWindow = electron.BrowserWindow;
@@ -467,7 +468,19 @@ exports.copyReferenceScreenshots = function () {
       fs.rename(
         screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width),
         screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width, true),
-        (e) => {}
+        (e) => {
+          const imgRefPath = screenshotNamingService.getScreenshotPath(currentFolderPath, screenshotNamingService.makeScreenshotBasename(file), width, true);
+          const imgRef = nativeImage.createFromPath(imgRefPath);
+          const imgSizeRef = imgRef.getSize();
+
+          if (imgSizeRef.width > width) {
+            let resizedImageNew = imgRef.resize({
+              width: width,
+              quality: 'best',
+            });
+            fs.writeFile(imgRefPath, resizedImageNew.toPNG(), () => {});
+          }
+        }
       );
     });
   });
