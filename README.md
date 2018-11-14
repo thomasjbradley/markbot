@@ -49,7 +49,6 @@ Built with Javascript, Node.js & Electron.
       - [PDFBox](#pdfbox)
   - [Running Markbot](#running-markbot)
 - [Debugging Markbot](#debugging-markbot)
-- [Markbot Server](#markbot-server)
 - [License & copyright](#license--copyright)
 
 ---
