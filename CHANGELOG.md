@@ -14,6 +14,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Fixed a bug with retina screens when comparing print screenshots captured on retina devices.
+- Trim the GitHub username & Progressinator API token to help prevent unnecessary problems.
 
 ---
 

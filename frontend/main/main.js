@@ -881,8 +881,8 @@ $body.ondrop = (e) => {
 };
 
 document.getElementById('sign-in-form').addEventListener('submit', (e) => {
-  let username = document.getElementById('username').value;
-  let apitoken = document.getElementById('api-token').value;
+  let username = document.getElementById('username').value.trim();
+  let apitoken = document.getElementById('api-token').value.trim();
 
   e.preventDefault();
   $openProgressBtn.setAttribute('disabled', true);
