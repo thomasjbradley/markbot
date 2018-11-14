@@ -135,6 +135,7 @@
 }
 
 .sign-in-inputs {
+  padding-bottom: 10px;
   padding-top: 20px;
 }
 
@@ -174,6 +175,17 @@
 .btn-hidden {
   position: absolute;
   left: -10em;
+}
+
+.btn-text {
+  background-color: transparent;
+  border: 0;
+  border-radius: 0;
+  text-decoration: underline;
+}
+
+.btn-push-r {
+  margin-right: 6px;
 }
 
 #checks {

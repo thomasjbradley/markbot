@@ -220,7 +220,7 @@ module.exports.getMenuTemplate = function (app, cbs, opts) {
           type: 'separator'
         },
         {
-          label: (opts && opts.signOutUsername) ? 'Sign Out (' + opts.signOutUsername + ')' : 'Sign Out',
+          label: (opts && opts.signOutUsername) ? 'Sign Out (' + opts.signOutUsername + ')' : 'Sign In',
           enabled: (opts && opts.signOut) ? true : false,
           click:  function(item, focusedWindow) {
             markbotMain.send('app:sign-out');

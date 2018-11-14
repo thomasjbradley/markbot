@@ -195,6 +195,25 @@ button.toolbar-button:focus {
   fill: #666;
 }
 
+.toolbar-button-purple {
+  padding: var(--control-padding-huge);
+  height: auto;
+  background-color: #5e54af;
+  color: #fff;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, .3);
+  font-size: var(--control-font-size-huge);
+  font-weight: bold;
+}
+
+button.toolbar-button-purple:active,
+button.toolbar-button-purple:focus {
+  box-shadow: 0 0 0 2px rgba(61, 104, 22, .5);
+}
+
+.toolbar-button-purple > span {
+  padding-bottom: .07em;
+}
+
 .toolbar-button-green {
   background-color: #6dd110;
   color: #fff;

@@ -5,7 +5,11 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased] — 2018-11-14
+## [8.1.1] — 2018-11-14
+
+### Changed
+
+- Add a cancel & submit button to the initial sign-in for to allow Markbot use without Progressinator.
 
 ### Fixed
 

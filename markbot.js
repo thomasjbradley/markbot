@@ -445,8 +445,12 @@ exports.disableSignOut = function () {
 exports.enableSignOut = function (username) {
   menuOptions.openRepo = true;
   menuOptions.signOut = true;
-  menuOptions.signOutUsername = username;
-  menuOptions.openProgressinator = true;
+
+  if (username && username !== 'false') {
+    menuOptions.signOutUsername = username;
+    menuOptions.openProgressinator = true;
+  }
+
   updateAppMenu();
 };
 

@@ -881,13 +881,28 @@ $body.ondrop = (e) => {
 };
 
 document.getElementById('sign-in-form').addEventListener('submit', (e) => {
+  let username = document.getElementById('username').value;
+  let apitoken = document.getElementById('api-token').value;
+
   e.preventDefault();
-  localStorage.setItem('github-username', document.getElementById('username').value);
-  localStorage.setItem('progressinator-api-token', document.getElementById('api-token').value);
+  $openProgressBtn.setAttribute('disabled', true);
+
+  if (username) {
+    localStorage.setItem('github-username', username);
+    $openProgressBtn.removeAttribute('disabled');
+  } else {
+    localStorage.setItem('github-username', false);
+  }
+
+  if (apitoken) {
+    localStorage.setItem('progressinator-api-token', apitoken);
+  } else {
+    localStorage.setItem('progressinator-api-token',false);
+  }
+
   markbot.enableSignOut(localStorage.getItem('github-username'));
   $signin.dataset.state = 'hidden';
   $dropbox.dataset.state = 'visible';
-  $openProgressBtn.setAttribute('disabled', true);
 });
 
 document.addEventListener('click', (e) => {
@@ -1074,7 +1089,13 @@ listener.on('app:with-github', () => {
 });
 
 listener.on('app:with-canvas', () => {
-  $canvasBtn.dataset.canSubmit = true;
+  const username = localStorage.getItem('github-username');
+  const apitoken = localStorage.getItem('progressinator-api-token');
+
+  if (username && username !== 'false' && apitoken && apitoken !== 'false') {
+    $canvasBtn.dataset.canSubmit = true;
+  }
+
   $canvasBtn.removeAttribute('tabindex');
   $messageNoCanvas.setAttribute('hidden', true);
   $messageCanvas.removeAttribute('hidden');

@@ -12,8 +12,10 @@
 
   --control-font-size: .875rem;
   --control-font-size-larger: 1.1rem;
+  --control-font-size-huge: 1.4rem;
   --control-border-radius: .4rem;
   --control-padding: 0 .875rem;
+  --control-padding-huge: .2em .875rem;
   --control-border-color: rgba(0, 0, 0, .2);
   --control-border-color-darker: rgba(0, 0, 0, .3);
   --control-border-color-lighter: rgba(0, 0, 0, .1);
