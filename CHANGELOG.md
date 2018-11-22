@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.1.3] — 2018-11-22
+
+### Fixed
+
+- Fixed a bug related to warnings inside the SVG image checking system.
+
+---
+
 ## [8.1.2] — 2018-11-14
 
 ### Fixed

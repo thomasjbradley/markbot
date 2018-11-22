@@ -135,6 +135,7 @@
 
   const checkSVGImageDimensions = function (file, fullPath, next) {
     let errors = [];
+    let warnings = [];
     let fileContents, code, results;
 
     if (!isSVG(file.path)) return next(errors);
@@ -148,8 +149,14 @@
     if (results.length <= 0) return next(errors);
 
     calipers.measure(fullPath, (err, result) => {
+      let errWarn;
+
       if (err) return next([`Unable to read the image: \`${file.path}\`—try exporting it again`]);
-      errors = errors.concat(handleImageDimensionsResults(result.pages[0].width, result.pages[0].height, file));
+
+      errWarn = handleImageDimensionsResults(result.pages[0].width, result.pages[0].height, file);
+      errors = errors.concat(errWarn.errors);
+      warnings = warnings.concat(errWarn.warnings);
+
       return next(errors);
     });
   };
