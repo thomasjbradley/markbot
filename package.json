@@ -55,6 +55,7 @@
     "electron-builder": "^20.28.4"
   },
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "debug": "NODE_ENV=development electron markbot.js",
     "start": "electron markbot.js",
     "pack-files": "xattr -cr .",
