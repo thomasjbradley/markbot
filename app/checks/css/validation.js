@@ -15,11 +15,16 @@ const cleanMessage = function (message) {
   return message;
 };
 
-const shouldIncludeError = function (context, message, skippedstring, line, lines, fileContents) {
+const shouldIncludeError = function (context, message, skippedstring, line, lines, fileContents, prevErrorDetails) {
   var nonExistingPropMatch = null;
 
   // Ignore :root variable declarations
   if (context && /\:root/.test(context)) return false;
+  // Ignore } parse errors in media queries immediate after :root errors
+  // THIS IS SO HACKY—trying to work around the out-dated CSS validator
+  if (/parse error/i.test(message) && /\}/.test(skippedstring) && prevErrorDetails && /\:root/.test(prevErrorDetails.context)) {
+    return false
+  }
 
   // Parse error at bottom of CSS, usually extra closing brace
   if (line > lines.length - 1) return true;
@@ -103,14 +108,15 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
 
       if (errorCount > 0) {
         errorsList = results['m:errorlist'][0]['m:error'];
+        let prevErrorDetails = false;
 
-        errorsList.forEach(function (error) {
+        errorsList.forEach(function (error, errorIndex) {
           let context = (error['m:context'] && error['m:context'][0]) ? error['m:context'][0].trim() : false;
           let line = error['m:line'][0];
           let message = error['m:message'][0].trim().replace(/\s*\:$/, '.').replace(/\s*\:/, ':').replace(/\(.*?\#.*?\)/, '—');
           let skippedstring = (error['m:skippedstring'] && error['m:skippedstring'][0]) ? error['m:skippedstring'][0].trim() : false;
 
-          if (shouldIncludeError(context, message, skippedstring, line, lines, fileContents)) {
+          if (shouldIncludeError(context, message, skippedstring, line, lines, fileContents, prevErrorDetails)) {
             let contextMessage = '';
             let skipMessage = '';
 
@@ -119,6 +125,13 @@ const check = function (checkGroup, checkId, checkLabel, fullPath, fileContents,
 
             errors.push(`Line ${line}: ${message}${contextMessage}${skipMessage}`);
           }
+
+          prevErrorDetails = {
+            context: context,
+            message: message,
+            skippedstring: skippedstring,
+            line: line
+          };
         });
       }
 
