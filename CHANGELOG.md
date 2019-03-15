@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [Unreleased]
+
+### Added
+
+- Added “formspree” to the Markbot dictionary.
+
+---
+
 ## [8.1.4] — 2019-01-18
 
 ### Fixed
