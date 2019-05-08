@@ -17,7 +17,7 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 
-- Made a horrible, hack to work around the CSS validator’s parse errors for the `:root` selector and CSS variables within media queries.
+- Made a horrible hack to work around the CSS validator’s parse errors for the `:root` selector and CSS variables within media queries.
 
 ---
 
