@@ -1,6 +1,6 @@
 {
   "name": "Markbot",
-  "version": "8.1.3",
+  "version": "8.2.0",
   "license": "GPL",
   "description": "An automated marking application for code projects in the Algonquin College Graphic Design program.",
   "author": "Thomas J Bradley <hey@thomasjbradley.ca>",
