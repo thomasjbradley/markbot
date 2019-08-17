@@ -5,11 +5,12 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
-## [Unreleased]
+## [8.2.0] — 2019-08-17
 
 ### Added
 
 - Added “formspree” to the Markbot dictionary.
+- Allow `@2x` in file names for `.jpg` and `.png` only.
 
 ---
 

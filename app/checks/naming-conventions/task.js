@@ -16,8 +16,13 @@
   const fullPath = path.resolve(taskDetails.cwd);
 
   const checkNaming = function (file) {
-    const cleanFile = stripPath(file, fullPath);
+    const retinaGraphics = /\@2x\.(jpg|png)$/g;
+    let cleanFile = stripPath(file, fullPath);
     let errors = [];
+
+    if (retinaGraphics.test(cleanFile)) {
+      cleanFile = cleanFile.replace(retinaGraphics, '');
+    }
 
     if (cleanFile !== cleanFile.replace(/[^a-z0-9\-\.\/\\]/g, '')) {
       errors.push(`\`${cleanFile.replace(/\\/, '/')}\`: Doesn’t follow naming conventions`);
