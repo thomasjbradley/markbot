@@ -4,7 +4,7 @@
 
 **The Java Development Kit allows Markbot to run the HTML validator, CSS validator & and the language checker.**
 
-Go to the JDK download page on [Oracle’s Java Downloads](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) website.
+Go to the JDK download page on [Oracle’s Java Downloads](https://www.oracle.com/technetwork/java/javase/downloads/jdk12-downloads-5295953.html) website.
 
 ![](images/jdk-license.jpg)
 
