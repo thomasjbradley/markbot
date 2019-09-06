@@ -39,7 +39,7 @@ const hasGit = function () {
 const hasJava = function () {
   return new Promise((resolve, reject) => {
     exec('java -version', (err, data, stderr) => {
-      if ((data && data.match(/java version/i)) || (stderr && stderr.match(/java version/i))) {
+      if ((data && data.match(/(java|openjdk) version/i)) || (stderr && stderr.match(/(java|openjdk) version/i))) {
         // log.info('### Dependency: Java; found');
         return resolve(true);
       }

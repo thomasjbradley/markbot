@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.2.1] — 2019-09-06
+
+### Changed
+
+- Allow the OpenJDK as a dependency for Markbot’s Java requirements.
+
+---
+
 ## [8.2.0] — 2019-08-17
 
 ### Added
