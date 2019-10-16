@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.2.2] — 2019-10-16
+
+### Changed
+
+- Relaxed the requirements for Twitter Cards in the SEO template because Twitter now defaults to OpenGraph.
+
+---
+
 ## [8.2.1] — 2019-09-06
 
 ### Changed

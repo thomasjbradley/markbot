@@ -9,7 +9,7 @@ allFiles:
       - 'meta[name="geo.position"][content]'
       - 'meta[name="geo.region"][content]'
       - 'meta[name="geo.placename"][content]'
-      # Facebook metadata
+      # OpenGraph metadata
       - 'meta[property="og:type"][content]'
       - 'meta[property="og:locale"][content]'
       - 'meta[property="og:title"][content]'
@@ -20,10 +20,6 @@ allFiles:
       # Twitter metadata
       - 'meta[name="twitter:card"][content]'
       - 'meta[name="twitter:site"][content]'
-      - 'meta[name="twitter:title"][content]'
-      - 'meta[name="twitter:url"][content]'
-      - 'meta[name="twitter:description"][content]'
-      - 'meta[name="twitter:image"][content]'
       - check: 'script[type="application/ld+json]'
         message: 'Consider using JSON-LD metadata to add more search engine accessible information to your website'
         type: warning
