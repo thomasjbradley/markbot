@@ -57,6 +57,7 @@ ip
 url
 wikipedia
 formspree
+favicon
 ##
 # All the weirdly spelled HTML tags
 ##

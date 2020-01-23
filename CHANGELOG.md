@@ -5,6 +5,14 @@ Markbot adheres to [Semantic Versioning](http://semver.org/).
 
 ---
 
+## [8.2.3] — 2020-01-23
+
+### Changed
+
+- Added `favicon` to the internal dictionary.
+
+---
+
 ## [8.2.2] — 2019-10-16
 
 ### Changed
